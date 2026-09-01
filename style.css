@@ -555,6 +555,199 @@ h1 span {
 
 
 /* ==================================================
+   EDITORES — PÁGINA
+================================================== */
+
+.editors-page {
+  padding: 140px 24px 96px;
+  position: relative;
+}
+
+.editors-page .hero-glow {
+  top: -220px;
+}
+
+.editors-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  position: relative;
+}
+
+.editors-heading {
+  max-width: 640px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.editors-heading p {
+  margin: 0 auto;
+}
+
+.editor-tools {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.search-box::placeholder {
+  color: var(--text-muted);
+}
+
+.search-box:focus {
+  border-color: var(--accent-line);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.filter-button:hover,
+.filter-button.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent);
+}
+
+.editors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.editor-profile {
+  padding: 27px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  position: relative;
+}
+
+.editor-status {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.editor-profile .editor-avatar {
+  margin-bottom: 20px;
+}
+
+.editor-profile h2 {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.editor-role {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+}
+
+.editor-description {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.editor-tags {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.editor-tag {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.no-results {
+  display: none;
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+}
+
+.no-results.visible {
+  display: block;
+}
+
+.editors-cta {
+  margin-top: 64px;
+  padding: 56px 28px;
+  text-align: center;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.editors-cta h2 {
+  font-size: 1.6rem;
+}
+
+.editors-cta p {
+  max-width: 520px;
+  margin: 0 auto 24px;
+}
+
+
+@media (max-width: 900px) {
+
+  .editors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+/* ==================================================
    ADMIN / FUNDADOR
 ================================================== */
 
@@ -762,7 +955,25 @@ footer small {
     padding: 16px 20px;
   }
 
+  .editor-tools {
+    flex-direction: column;
+  }
+
+  .filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .filter-button {
+    white-space: nowrap;
+  }
+
   .editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editors-grid {
     grid-template-columns: 1fr;
   }
 
@@ -770,4 +981,4 @@ footer small {
     grid-template-columns: 1fr;
   }
 
-}
+   }
