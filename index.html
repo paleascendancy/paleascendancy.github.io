@@ -35,7 +35,7 @@
 
     <link
         rel="preconnect"
-        href="https://fonts.googleapis.com"
+        href="https://fonts.gstatic.com"
         crossorigin
     >
 
@@ -54,6 +54,10 @@
 
 <body>
 
+
+<!-- ==================================================
+     HEADER
+================================================== -->
 
 <header class="header">
 
@@ -104,18 +108,16 @@
     </nav>
 
 
-
-    <!-- ==========================================
-         CONTA
-    =========================================== -->
+    <!-- ==================================================
+         ÁREA DA CONTA — DESKTOP
+    ================================================== -->
 
     <div
         class="account-area"
         id="accountArea"
     >
 
-
-        <!-- USUÁRIO NÃO LOGADO -->
+        <!-- NÃO LOGADO -->
 
         <div
             id="loggedOutArea"
@@ -129,7 +131,6 @@
                 Entrar
             </a>
 
-
             <a
                 href="cadastro.html"
                 class="account-register"
@@ -140,8 +141,7 @@
         </div>
 
 
-
-        <!-- USUÁRIO LOGADO -->
+        <!-- LOGADO -->
 
         <div
             id="loggedInArea"
@@ -165,7 +165,6 @@
                         ?
                     </span>
 
-
                     <img
                         id="headerProfileImage"
                         src=""
@@ -174,7 +173,6 @@
                     >
 
                 </span>
-
 
                 <span>
                     Perfil
@@ -187,8 +185,9 @@
     </div>
 
 
-
-    <!-- MENU MOBILE -->
+    <!-- ==================================================
+         BOTÃO MENU MOBILE
+    ================================================== -->
 
     <button
         class="menu-button"
@@ -209,10 +208,9 @@
 </header>
 
 
-
-<!-- ==============================================
+<!-- ==================================================
      MENU MOBILE
-================================================ -->
+================================================== -->
 
 <div
     class="mobile-menu"
@@ -245,9 +243,9 @@
         id="mobileAccount"
     >
 
-        <div
-            id="mobileLoggedOut"
-        >
+        <!-- MOBILE NÃO LOGADO -->
+
+        <div id="mobileLoggedOut">
 
             <a href="login.html">
                 Entrar
@@ -259,6 +257,8 @@
 
         </div>
 
+
+        <!-- MOBILE LOGADO -->
 
         <div
             id="mobileLoggedIn"
@@ -276,52 +276,92 @@
 </div>
 
 
-
-<!-- ==============================================
-     HERO
-================================================ -->
+<!-- ==================================================
+     MAIN
+================================================== -->
 
 <main>
 
 
+    <!-- ==================================================
+         HERO
+    ================================================== -->
+
     <section class="hero">
 
-        <div class="hero-content">
+        <div class="hero-glow"></div>
 
-            <p class="eyebrow">
-                PALE ASCENDANCY
-            </p>
+        <div class="hero-grid">
 
+            <div class="hero-content">
 
-            <h1>
-                Onde editores
-                <span>transformam ideias.</span>
-            </h1>
+                <p class="eyebrow">
+                    PALE ASCENDANCY
+                </p>
 
 
-            <p class="hero-description">
-                Uma rede de profissionais de edição e
-                produção audiovisual para conectar talentos,
-                criadores e projetos.
-            </p>
+                <h1>
+                    Onde editores
+                    <span>transformam ideias.</span>
+                </h1>
 
 
-            <div class="hero-buttons">
-
-                <a
-                    href="editores.html"
-                    class="primary-button"
-                >
-                    Encontrar editores
-                </a>
+                <p class="hero-lead">
+                    Uma rede de profissionais de edição e
+                    produção audiovisual para conectar talentos,
+                    criadores e projetos.
+                </p>
 
 
-                <a
-                    href="cadastro.html"
-                    class="secondary-button"
-                >
-                    Quero ser editor
-                </a>
+                <div class="hero-buttons">
+
+                    <a
+                        href="editores.html"
+                        class="primary-button"
+                    >
+                        Encontrar editores
+                    </a>
+
+
+                    <a
+                        href="cadastro.html"
+                        class="secondary-button"
+                    >
+                        Quero ser editor
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-visual">
+
+                <div class="reel-window">
+
+                    <div class="reel-window-bar">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+
+                    <div class="reel-window-body">
+
+                        <p>
+                            PALE ASCENDANCY
+                        </p>
+
+                        <span>
+                            Editores, criadores e projetos
+                            conectados em um só lugar.
+                        </span>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -330,10 +370,9 @@
     </section>
 
 
-
-    <!-- ==========================================
+    <!-- ==================================================
          SOBRE
-    =========================================== -->
+    ================================================== -->
 
     <section
         class="section"
@@ -363,10 +402,9 @@
         </div>
 
 
-        <div class="cards">
+        <div class="bento-grid">
 
-
-            <article class="card">
+            <article class="bento-card large">
 
                 <h3>
                     Profissionais
@@ -380,7 +418,7 @@
             </article>
 
 
-            <article class="card">
+            <article class="bento-card">
 
                 <h3>
                     Projetos
@@ -394,7 +432,21 @@
             </article>
 
 
-            <article class="card">
+            <article class="bento-card">
+
+                <h3>
+                    Qualidade
+                </h3>
+
+                <p>
+                    Conectamos pessoas que valorizam
+                    criatividade, técnica e profissionalismo.
+                </p>
+
+            </article>
+
+
+            <article class="bento-card wide">
 
                 <h3>
                     Evolução
@@ -407,19 +459,17 @@
 
             </article>
 
-
         </div>
 
     </section>
 
 
-
-    <!-- ==========================================
+    <!-- ==================================================
          SERVIÇOS
-    =========================================== -->
+    ================================================== -->
 
     <section
-        class="section section-dark"
+        class="section"
         id="servicos"
     >
 
@@ -435,77 +485,244 @@
                 <span>projetos.</span>
             </h2>
 
+
+            <p>
+                Encontre profissionais preparados
+                para diferentes tipos de produção.
+            </p>
+
         </div>
 
 
-        <div class="cards">
+        <div class="service-preview">
 
+            <div class="service-preview-content">
 
-            <article class="card">
-
-                <h3>
-                    Promos
-                </h3>
-
-                <p>
-                    Edições promocionais para destacar
-                    projetos, produtos e conteúdos.
-                </p>
-
-            </article>
-
-
-            <article class="card">
-
-                <h3>
-                    Trailers
-                </h3>
+                <h2>
+                    Transforme sua ideia
+                    em <span>resultado.</span>
+                </h2>
 
                 <p>
-                    Construção de ritmo, narrativa,
-                    impacto e identidade visual.
+                    Escolha o estilo de edição que melhor
+                    combina com seu projeto e encontre
+                    profissionais especializados.
                 </p>
 
-            </article>
+
+                <div class="section-action">
+
+                    <a
+                        href="servicos.html"
+                        class="primary-button"
+                    >
+                        Ver serviços
+                    </a>
+
+                </div>
+
+            </div>
 
 
-            <article class="card">
+            <div class="service-preview-list">
 
-                <h3>
-                    Highlights
-                </h3>
+                <div>
 
-                <p>
-                    Momentos marcantes transformados
-                    em vídeos dinâmicos.
-                </p>
+                    <strong>
+                        Promos
+                    </strong>
 
-            </article>
+                    <span>
+                        Conteúdo promocional e comercial.
+                    </span>
+
+                </div>
 
 
-            <article class="card">
+                <div>
 
-                <h3>
-                    Motion Design
-                </h3>
+                    <strong>
+                        Trailers
+                    </strong>
 
-                <p>
-                    Tipografia, animações, efeitos
-                    e composição visual.
-                </p>
+                    <span>
+                        Ritmo, narrativa e impacto visual.
+                    </span>
 
-            </article>
+                </div>
 
+
+                <div>
+
+                    <strong>
+                        Highlights
+                    </strong>
+
+                    <span>
+                        Os melhores momentos em destaque.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Motion Design
+                    </strong>
+
+                    <span>
+                        Tipografia, animações e composição.
+                    </span>
+
+                </div>
+
+            </div>
 
         </div>
 
     </section>
 
 
+    <!-- ==================================================
+         EDITORES
+    ================================================== -->
 
-    <!-- ==========================================
+    <section class="section">
+
+        <div class="section-heading">
+
+            <p class="eyebrow">
+                Rede de profissionais
+            </p>
+
+
+            <h2>
+                Conheça nossos
+                <span>editores.</span>
+            </h2>
+
+
+            <p>
+                Explore profissionais conectados
+                à Pale Ascendancy.
+            </p>
+
+        </div>
+
+
+        <div class="editor-grid">
+
+            <article class="editor-card">
+
+                <div class="editor-icon">
+                    S
+                </div>
+
+                <span class="tag">
+                    Disponível
+                </span>
+
+                <h3>
+                    Smookecut
+                </h3>
+
+                <div class="editor-specialty">
+                    RITMO &amp; CORTES
+                </div>
+
+                <p>
+                    Edições focadas em ritmo, cortes
+                    precisos e conteúdo de jogos.
+                </p>
+
+                <a
+                    href="editores.html"
+                    class="card-link"
+                >
+                    Ver especialidade →
+                </a>
+
+            </article>
+
+
+            <article class="editor-card">
+
+                <div class="editor-icon">
+                    M
+                </div>
+
+                <span class="tag">
+                    Disponível
+                </span>
+
+                <h3>
+                    MANGAKÁ
+                </h3>
+
+                <div class="editor-specialty">
+                    ANIME &amp; MOTION
+                </div>
+
+                <p>
+                    Edições com referência em anime,
+                    tipografia animada e transições.
+                </p>
+
+                <a
+                    href="editores.html"
+                    class="card-link"
+                >
+                    Ver especialidade →
+                </a>
+
+            </article>
+
+
+            <article class="editor-card editor-card-placeholder">
+
+                <div class="editor-icon placeholder-icon">
+                    +
+                </div>
+
+                <h3>
+                    Seu perfil pode estar aqui.
+                </h3>
+
+                <p>
+                    Crie sua conta e faça parte
+                    da rede de profissionais.
+                </p>
+
+                <a
+                    href="cadastro.html"
+                    class="card-link"
+                >
+                    Criar perfil →
+                </a>
+
+            </article>
+
+        </div>
+
+
+        <div class="section-action">
+
+            <a
+                href="editores.html"
+                class="secondary-button"
+            >
+                Ver todos os editores
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
          CONTATO
-    =========================================== -->
+    ================================================== -->
 
     <section
         class="section"
@@ -548,10 +765,9 @@
 </main>
 
 
-
-<!-- ==============================================
+<!-- ==================================================
      FOOTER
-================================================ -->
+================================================== -->
 
 <footer>
 
@@ -583,306 +799,18 @@
 </footer>
 
 
-
-<!-- ==============================================
-     JAVASCRIPT DO SITE
-================================================ -->
-
-<script src="script.js"></script>
-
-
-
-<!-- ==============================================
+<!-- ==================================================
      SUPABASE
-================================================ -->
+================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-<script>
-
-
-const SUPABASE_URL =
-    "https://fnyellunugdfesprmvzm.supabase.co";
-
-
-const SUPABASE_KEY =
-    "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
-
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-            auth: {
-
-                persistSession: true,
-
-                autoRefreshToken: true,
-
-                detectSessionInUrl: true
-
-            }
-        }
-    );
-
-
-
-/* ================================================
-   ELEMENTOS
-================================================ */
-
-const loggedOutArea =
-    document.getElementById(
-        "loggedOutArea"
-    );
-
-
-const loggedInArea =
-    document.getElementById(
-        "loggedInArea"
-    );
-
-
-const headerProfileImage =
-    document.getElementById(
-        "headerProfileImage"
-    );
-
-
-const headerProfileInitial =
-    document.getElementById(
-        "headerProfileInitial"
-    );
-
-
-const mobileLoggedOut =
-    document.getElementById(
-        "mobileLoggedOut"
-    );
-
-
-const mobileLoggedIn =
-    document.getElementById(
-        "mobileLoggedIn"
-    );
-
-
-
-/* ================================================
-   ATUALIZAR MENU DA CONTA
-================================================ */
-
-async function updateAccountMenu() {
-
-    try {
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
-
-
-        if (error) {
-
-            console.error(
-                "Erro ao verificar sessão:",
-                error
-            );
-
-            return;
-
-        }
-
-
-        const session =
-            data.session;
-
-
-
-        /* ==========================================
-           NÃO LOGADO
-        ========================================== */
-
-        if (!session) {
-
-            loggedOutArea.hidden =
-                false;
-
-            loggedInArea.hidden =
-                true;
-
-
-            mobileLoggedOut.hidden =
-                false;
-
-            mobileLoggedIn.hidden =
-                true;
-
-
-            return;
-
-        }
-
-
-
-        /* ==========================================
-           LOGADO
-        ========================================== */
-
-        loggedOutArea.hidden =
-            true;
-
-        loggedInArea.hidden =
-            false;
-
-
-        mobileLoggedOut.hidden =
-            true;
-
-        mobileLoggedIn.hidden =
-            false;
-
-
-
-        const user =
-            session.user;
-
-
-
-        /* ==========================================
-           BUSCAR PERFIL
-        ========================================== */
-
-        const {
-            data: profile,
-            error: profileError
-        } =
-            await supabaseClient
-                .from("profile")
-                .select(
-                    "nome,nome_artistico,avatar_url"
-                )
-                .eq(
-                    "id",
-                    user.id
-                )
-                .maybeSingle();
-
-
-        if (profileError) {
-
-            console.error(
-                "Erro ao buscar profile:",
-                profileError
-            );
-
-        }
-
-
-
-        /* ==========================================
-           DEFINIR INICIAL
-        ========================================== */
-
-        const nomeArtistico =
-            profile?.nome_artistico || "";
-
-
-        const nome =
-            profile?.nome || "";
-
-
-        const email =
-            user.email || "";
-
-
-        const text =
-            nomeArtistico ||
-            nome ||
-            email ||
-            "?";
-
-
-        headerProfileInitial.textContent =
-            text
-                .charAt(0)
-                .toUpperCase();
-
-
-
-        /* ==========================================
-           FOTO
-        ========================================== */
-
-        if (
-            profile &&
-            profile.avatar_url
-        ) {
-
-            headerProfileImage.src =
-                profile.avatar_url;
-
-
-            headerProfileImage.hidden =
-                false;
-
-
-            headerProfileInitial.hidden =
-                true;
-
-        } else {
-
-            headerProfileImage.hidden =
-                true;
-
-
-            headerProfileInitial.hidden =
-                false;
-
-        }
-
-
-    } catch (error) {
-
-        console.error(
-            "Erro no sistema de conta:",
-            error
-        );
-
-    }
-
-}
-
-
-
-/* ================================================
-   CARREGAR AO ABRIR
-================================================ */
-
-updateAccountMenu();
-
-
-
-/* ================================================
-   MONITORAR LOGIN / LOGOUT
-================================================ */
-
-supabaseClient.auth.onAuthStateChange(
-    function() {
-
-        updateAccountMenu();
-
-    }
-);
-
-
-</script>
+<!-- ==================================================
+     JAVASCRIPT
+================================================== -->
+
+<script src="script.js"></script>
 
 
 </body>
