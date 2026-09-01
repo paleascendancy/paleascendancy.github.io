@@ -40,7 +40,7 @@
         rel="stylesheet"
     >
 
-    <!-- CSS PRINCIPAL -->
+    <!-- CSS -->
 
     <link
         rel="stylesheet"
@@ -220,7 +220,6 @@
         <form
             class="auth-form"
             id="registerForm"
-            novalidate
         >
 
 
@@ -428,6 +427,7 @@
             <button
                 type="submit"
                 class="primary-button auth-submit"
+                id="registerButton"
             >
                 Criar conta
             </button>
@@ -494,144 +494,344 @@
 
 
 <!-- ==================================================
-     JAVASCRIPT
+     SUPABASE
 ================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
 
 <script src="script.js"></script>
 
 
+
+<!-- ==================================================
+     SISTEMA DE CADASTRO
+================================================== -->
+
 <script>
 
-/* ==================================================
-   CADASTRO — INTERFACE
-================================================== */
+const registerForm = document.getElementById("registerForm");
 
-const registerForm =
-    document.getElementById("registerForm");
+const registerMessage = document.getElementById("registerMessage");
 
-const registerMessage =
-    document.getElementById("registerMessage");
+const registerButton = document.getElementById("registerButton");
+
+
+function showMessage(message, type) {
+
+    registerMessage.textContent = message;
+
+    registerMessage.className = "auth-message";
+
+    if (type) {
+        registerMessage.classList.add(type);
+    }
+
+}
 
 
 if (registerForm) {
 
-    registerForm.addEventListener(
-        "submit",
-        function (event) {
+    registerForm.addEventListener("submit", async function(event) {
 
-            event.preventDefault();
+        event.preventDefault();
 
 
-            const nome =
-                document.getElementById("nome").value.trim();
+        const nome =
+            document.getElementById("nome").value.trim();
 
-            const nomeArtistico =
-                document.getElementById("nomeArtistico").value.trim();
+        const nomeArtistico =
+            document.getElementById("nomeArtistico").value.trim();
 
-            const email =
-                document.getElementById("email").value.trim();
+        const email =
+            document.getElementById("email").value.trim();
 
-            const senha =
-                document.getElementById("senha").value;
+        const senha =
+            document.getElementById("senha").value;
 
-            const confirmarSenha =
-                document.getElementById("confirmarSenha").value;
+        const confirmarSenha =
+            document.getElementById("confirmarSenha").value;
 
-            const especialidade =
-                document.getElementById("especialidade").value;
+        const especialidade =
+            document.getElementById("especialidade").value;
 
-            const termos =
-                document.getElementById("termos").checked;
-
-
-            registerMessage.textContent = "";
-            registerMessage.className = "auth-message";
+        const termos =
+            document.getElementById("termos").checked;
 
 
-            /* VALIDAÇÕES */
+        showMessage("", "");
 
-            if (
-                !nome ||
-                !nomeArtistico ||
-                !email ||
-                !senha ||
-                !confirmarSenha ||
-                !especialidade
-            ) {
+        registerButton.disabled = true;
 
-                registerMessage.textContent =
-                    "Preencha todos os campos.";
+        registerButton.textContent = "Criando conta...";
 
-                registerMessage.classList.add(
-                    "error"
-                );
 
-                return;
+        /* ==========================================
+           VALIDAÇÕES
+        ========================================== */
+
+
+        if (
+            !nome ||
+            !nomeArtistico ||
+            !email ||
+            !senha ||
+            !confirmarSenha ||
+            !especialidade
+        ) {
+
+            showMessage(
+                "Preencha todos os campos.",
+                "error"
+            );
+
+            registerButton.disabled = false;
+
+            registerButton.textContent = "Criar conta";
+
+            return;
+
+        }
+
+
+        if (senha.length < 8) {
+
+            showMessage(
+                "A senha precisa ter pelo menos 8 caracteres.",
+                "error"
+            );
+
+            registerButton.disabled = false;
+
+            registerButton.textContent = "Criar conta";
+
+            return;
+
+        }
+
+
+        if (senha !== confirmarSenha) {
+
+            showMessage(
+                "As senhas não são iguais.",
+                "error"
+            );
+
+            registerButton.disabled = false;
+
+            registerButton.textContent = "Criar conta";
+
+            return;
+
+        }
+
+
+        if (!termos) {
+
+            showMessage(
+                "Você precisa aceitar as regras da comunidade.",
+                "error"
+            );
+
+            registerButton.disabled = false;
+
+            registerButton.textContent = "Criar conta";
+
+            return;
+
+        }
+
+
+
+        /* ==========================================
+           VERIFICAR SUPABASE
+        ========================================== */
+
+        if (
+            typeof supabaseClient === "undefined"
+        ) {
+
+            showMessage(
+                "Erro de conexão com o sistema. Verifique o arquivo supabase.js.",
+                "error"
+            );
+
+            registerButton.disabled = false;
+
+            registerButton.textContent = "Criar conta";
+
+            return;
+
+        }
+
+
+
+        try {
+
+
+            /* ==========================================
+               CRIAR USUÁRIO NO SUPABASE AUTH
+            ========================================== */
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: senha,
+
+                options: {
+
+                    data: {
+
+                        nome: nome,
+
+                        nome_artistico: nomeArtistico,
+
+                        especialidade: especialidade
+
+                    }
+
+                }
+
+            });
+
+
+            if (error) {
+
+                throw error;
 
             }
 
 
-            if (senha.length < 8) {
+            if (!data.user) {
 
-                registerMessage.textContent =
-                    "A senha precisa ter pelo menos 8 caracteres.";
-
-                registerMessage.classList.add(
-                    "error"
+                throw new Error(
+                    "Não foi possível criar o usuário."
                 );
-
-                return;
 
             }
 
 
-            if (senha !== confirmarSenha) {
 
-                registerMessage.textContent =
-                    "As senhas não são iguais.";
+            /* ==========================================
+               CRIAR PERFIL
+            ========================================== */
 
-                registerMessage.classList.add(
-                    "error"
-                );
+            if (data.session) {
 
-                return;
+                const {
+                    error: profileError
+                } = await supabaseClient
+                    .from("profiles")
+                    .insert({
+
+                        id: data.user.id,
+
+                        email: email,
+
+                        nome: nome,
+
+                        nome_artistico: nomeArtistico,
+
+                        especialidade: especialidade
+
+                    });
+
+
+                if (profileError) {
+
+                    console.error(
+                        "Erro ao criar perfil:",
+                        profileError
+                    );
+
+                    throw new Error(
+                        "A conta foi criada, mas houve um problema ao criar o perfil."
+                    );
+
+                }
 
             }
 
 
-            if (!termos) {
 
-                registerMessage.textContent =
-                    "Você precisa aceitar as regras da comunidade.";
+            /* ==========================================
+               SUCESSO
+            ========================================== */
 
-                registerMessage.classList.add(
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * IMPORTANTE:
-             *
-             * Neste momento o cadastro ainda NÃO é enviado
-             * para um banco de dados.
-             *
-             * Isso será conectado ao backend posteriormente.
-             */
-
-
-            registerMessage.textContent =
-                "Cadastro validado. O sistema de contas será conectado ao servidor na próxima etapa.";
-
-            registerMessage.classList.add(
+            showMessage(
+                "Conta criada com sucesso! Verifique seu e-mail para confirmar a conta, caso a confirmação esteja ativada.",
                 "success"
             );
 
+
+            registerForm.reset();
+
+
+        } catch (error) {
+
+
+            console.error(
+                "Erro no cadastro:",
+                error
+            );
+
+
+            let message =
+                "Não foi possível criar sua conta.";
+
+
+            if (
+                error.message &&
+                error.message.toLowerCase().includes("already registered")
+            ) {
+
+                message =
+                    "Este e-mail já possui uma conta.";
+
+            }
+
+
+            else if (
+                error.message &&
+                error.message.toLowerCase().includes("password")
+            ) {
+
+                message =
+                    "A senha não atende aos requisitos.";
+
+            }
+
+
+            else if (
+                error.message
+            ) {
+
+                message =
+                    error.message;
+
+            }
+
+
+            showMessage(
+                message,
+                "error"
+            );
+
+
         }
-    );
+
+
+        registerButton.disabled = false;
+
+        registerButton.textContent = "Criar conta";
+
+
+    });
 
 }
 
@@ -640,4 +840,4 @@ if (registerForm) {
 
 </body>
 
-  </html>
+    </html>
