@@ -28,14 +28,11 @@
         type="image/svg+xml"
     >
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link
         rel="preconnect"
-        href="https://fonts.googleapis.com"
+        href="https://fonts.gstatic.com"
         crossorigin
     >
 
@@ -48,6 +45,331 @@
         rel="stylesheet"
         href="style.css"
     >
+
+    <!-- ==================================================
+         ESTILO DO CELULAR ANIMADO
+    ================================================== -->
+
+    <style>
+
+        .phone-scene {
+            width: 100%;
+            min-height: 500px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            perspective: 1200px;
+
+            cursor: pointer;
+
+            user-select: none;
+        }
+
+
+        .phone {
+            position: relative;
+
+            width: 245px;
+            height: 490px;
+
+            padding: 8px;
+
+            border-radius: 38px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #35312b,
+                    #11100e 45%,
+                    #29251f
+                );
+
+            box-shadow:
+                0 40px 90px rgba(0, 0, 0, 0.55),
+                0 0 50px rgba(217, 192, 138, 0.08);
+
+            transform:
+                rotateY(-12deg)
+                rotateX(4deg)
+                rotateZ(1deg);
+
+            transition:
+                transform 0.55s cubic-bezier(.2,.8,.2,1),
+                box-shadow 0.55s ease;
+
+            animation:
+                phoneFloat 4s ease-in-out infinite;
+        }
+
+
+        .phone-scene:hover .phone {
+            transform:
+                rotateY(0deg)
+                rotateX(0deg)
+                rotateZ(0deg)
+                translateY(-8px);
+
+            box-shadow:
+                0 50px 100px rgba(0, 0, 0, 0.62),
+                0 0 65px rgba(217, 192, 138, 0.13);
+        }
+
+
+        .phone.active {
+            transform:
+                rotateY(0deg)
+                rotateX(0deg)
+                rotateZ(0deg)
+                scale(0.96);
+        }
+
+
+        @keyframes phoneFloat {
+
+            0%,
+            100% {
+                transform:
+                    rotateY(-12deg)
+                    rotateX(4deg)
+                    rotateZ(1deg)
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    rotateY(-12deg)
+                    rotateX(4deg)
+                    rotateZ(1deg)
+                    translateY(-10px);
+            }
+
+        }
+
+
+        .phone-frame {
+            position: relative;
+
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+
+            border-radius: 31px;
+
+            background: #050505;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.16);
+        }
+
+
+        .phone-frame::before {
+            content: "";
+
+            position: absolute;
+
+            z-index: 5;
+
+            top: 7px;
+            left: 50%;
+
+            width: 82px;
+            height: 22px;
+
+            transform: translateX(-50%);
+
+            border-radius: 999px;
+
+            background: #050505;
+        }
+
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            object-position: center;
+
+            background: #111;
+
+            transition:
+                transform 0.7s cubic-bezier(.2,.8,.2,1),
+                filter 0.4s ease;
+        }
+
+
+        .phone-scene:hover .phone-screen {
+            transform: scale(1.035);
+        }
+
+
+        .phone-reflection {
+            position: absolute;
+
+            z-index: 4;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            border-radius: 31px;
+
+            background:
+                linear-gradient(
+                    115deg,
+                    rgba(255,255,255,0.12),
+                    transparent 24%,
+                    transparent 70%,
+                    rgba(255,255,255,0.035)
+                );
+
+            opacity: 0.7;
+        }
+
+
+        .phone-side-button {
+            position: absolute;
+
+            z-index: 10;
+
+            right: -4px;
+
+            width: 4px;
+
+            border-radius: 0 3px 3px 0;
+
+            background: #24211d;
+        }
+
+
+        .phone-side-button.one {
+            top: 110px;
+            height: 48px;
+        }
+
+
+        .phone-side-button.two {
+            top: 174px;
+            height: 30px;
+        }
+
+
+        .phone-side-button.three {
+            top: 216px;
+            height: 30px;
+        }
+
+
+        .phone-camera {
+            position: absolute;
+
+            z-index: 10;
+
+            top: 14px;
+            left: 50%;
+
+            width: 7px;
+            height: 7px;
+
+            transform: translateX(32px);
+
+            border-radius: 50%;
+
+            background: #151515;
+
+            box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+
+
+        .phone-hint {
+            position: absolute;
+
+            z-index: 20;
+
+            left: 50%;
+            bottom: -42px;
+
+            transform: translateX(-50%);
+
+            width: max-content;
+
+            color: var(--text-muted);
+
+            font-family: var(--font-display);
+
+            font-size: 0.7rem;
+
+            letter-spacing: 0.04em;
+
+            opacity: 0.75;
+
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+        }
+
+
+        .phone-scene:hover .phone-hint {
+            opacity: 1;
+
+            transform:
+                translateX(-50%)
+                translateY(-2px);
+        }
+
+
+        @media (max-width: 820px) {
+
+            .phone-scene {
+                min-height: 470px;
+            }
+
+            .phone {
+                width: 215px;
+                height: 430px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .phone-scene {
+                min-height: 430px;
+            }
+
+            .phone {
+                width: 195px;
+                height: 390px;
+
+                border-radius: 32px;
+            }
+
+            .phone-frame {
+                border-radius: 26px;
+            }
+
+            .phone-frame::before {
+                width: 70px;
+                height: 19px;
+            }
+
+            .phone-hint {
+                bottom: -34px;
+
+                font-size: 0.65rem;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -117,8 +439,6 @@
         id="accountArea"
     >
 
-        <!-- NÃO LOGADO -->
-
         <div
             id="loggedOutArea"
             class="logged-out-area"
@@ -140,8 +460,6 @@
 
         </div>
 
-
-        <!-- LOGADO -->
 
         <div
             id="loggedInArea"
@@ -327,31 +645,50 @@
             </div>
 
 
+            <!-- ==================================================
+                 CELULAR ANIMADO
+            ================================================== -->
+
             <div class="hero-visual">
 
-                <div class="reel-window">
+                <div
+                    class="phone-scene"
+                    id="phoneScene"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Interagir com o celular"
+                >
 
-                    <div class="reel-window-bar">
+                    <div class="phone">
 
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <span class="phone-side-button one"></span>
+                        <span class="phone-side-button two"></span>
+                        <span class="phone-side-button three"></span>
+
+                        <div class="phone-frame">
+
+                            <img
+                                class="phone-screen"
+                                src="https://n.uguu.se/dirBlgZJ.jpg"
+                                alt="Perfis da Pale Ascendancy"
+                                loading="eager"
+                            >
+
+                            <span class="phone-camera"></span>
+
+                            <span
+                                class="phone-reflection"
+                                aria-hidden="true"
+                            ></span>
+
+                        </div>
 
                     </div>
 
 
-                    <div class="reel-window-body">
-
-                        <p>
-                            PALE ASCENDANCY
-                        </p>
-
-                        <span>
-                            Editores, criadores e projetos
-                            conectados em um só lugar.
-                        </span>
-
-                    </div>
+                    <span class="phone-hint">
+                        Toque para interagir
+                    </span>
 
                 </div>
 
@@ -881,10 +1218,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const session = data.session;
 
 
-            /* ==========================================
-               USUÁRIO NÃO ESTÁ LOGADO
-            ========================================== */
-
             if (!session || !session.user) {
 
                 showLoggedOut();
@@ -893,10 +1226,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
-
-            /* ==========================================
-               USUÁRIO ESTÁ LOGADO
-            ========================================== */
 
             const user = session.user;
 
@@ -930,10 +1259,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* ==========================================
-               DEFINIR NOME
-            ========================================== */
-
             const displayName =
                 profile?.nome_artistico ||
                 profile?.nome ||
@@ -953,7 +1278,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             /* ==========================================
-               DEFINIR FOTO
+               FOTO DO PERFIL
             ========================================== */
 
             if (
@@ -973,7 +1298,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             } else {
 
-                headerProfileImage.src = "";
+                headerProfileImage.src =
+                    "";
 
                 headerProfileImage.hidden =
                     true;
@@ -1009,7 +1335,6 @@ document.addEventListener("DOMContentLoaded", function () {
         loggedInArea.hidden =
             false;
 
-
         mobileLoggedOut.hidden =
             true;
 
@@ -1031,13 +1356,11 @@ document.addEventListener("DOMContentLoaded", function () {
         loggedInArea.hidden =
             true;
 
-
         mobileLoggedOut.hidden =
             false;
 
         mobileLoggedIn.hidden =
             true;
-
 
         headerProfileInitial.textContent =
             "?";
@@ -1055,7 +1378,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* ==================================================
-       LOGIN / LOGOUT / ALTERAÇÕES DE SESSÃO
+       AUTENTICAÇÃO
     ================================================== */
 
     supabaseClient.auth.onAuthStateChange(
@@ -1078,12 +1401,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /*
-             * Pequeno atraso para permitir que o Supabase
-             * termine de atualizar a sessão antes de
-             * buscarmos os dados do perfil.
-             */
-
             setTimeout(
                 updateAccountMenu,
                 100
@@ -1092,10 +1409,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     );
 
-
-    /* ==================================================
-       VERIFICAR SESSÃO AO ABRIR A PÁGINA
-    ================================================== */
 
     updateAccountMenu();
 
@@ -1156,6 +1469,68 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
             });
+
+    }
+
+
+    /* ==================================================
+       ANIMAÇÃO DO CELULAR
+    ================================================== */
+
+    const phoneScene =
+        document.getElementById("phoneScene");
+
+
+    if (phoneScene) {
+
+        function activatePhone() {
+
+            const phone =
+                phoneScene.querySelector(".phone");
+
+            if (!phone) {
+                return;
+            }
+
+            phone.classList.remove("active");
+
+            void phone.offsetWidth;
+
+            phone.classList.add("active");
+
+
+            setTimeout(function () {
+
+                phone.classList.remove("active");
+
+            }, 550);
+
+        }
+
+
+        phoneScene.addEventListener(
+            "click",
+            activatePhone
+        );
+
+
+        phoneScene.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    activatePhone();
+
+                }
+
+            }
+        );
 
     }
 
