@@ -16,32 +16,113 @@
         name="description"
         content="Pale Ascendancy é a comunidade que conecta editores de vídeo especializados a contratantes que precisam de promos, trailers, highlights e motion design."
     >
-    <link rel="canonical" href="https://paleascendancy.com/">
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Pale Ascendancy">
-    <meta property="og:title" content="Pale Ascendancy — Rede de Editores e Produção Audiovisual">
-    <meta property="og:description" content="Conectamos editores especializados a contratantes para projetos de promo, trailer, highlights e motion design.">
-    <meta property="og:image" content="https://paleascendancy.com/og-image.png">
-    <meta property="og:url" content="https://paleascendancy.com/">
-    <meta property="og:locale" content="pt_BR">
+    <link
+        rel="canonical"
+        href="https://paleascendancy.com/"
+    >
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Pale Ascendancy — Rede de Editores e Produção Audiovisual">
-    <meta name="twitter:description" content="Conectamos editores especializados a contratantes para projetos de promo, trailer, highlights e motion design.">
-    <meta name="twitter:image" content="https://paleascendancy.com/og-image.png">
+    <!-- OPEN GRAPH -->
 
-    <meta name="theme-color" content="#0d0c0b">
+    <meta
+        property="og:type"
+        content="website"
+    >
 
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta
+        property="og:site_name"
+        content="Pale Ascendancy"
+    >
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta
+        property="og:title"
+        content="Pale Ascendancy — Rede de Editores e Produção Audiovisual"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <meta
+        property="og:description"
+        content="Conectamos editores especializados a contratantes para projetos de promo, trailer, highlights e motion design."
+    >
+
+    <meta
+        property="og:image"
+        content="https://paleascendancy.com/og-image.png"
+    >
+
+    <meta
+        property="og:url"
+        content="https://paleascendancy.com/"
+    >
+
+    <meta
+        property="og:locale"
+        content="pt_BR"
+    >
+
+
+    <!-- TWITTER -->
+
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    >
+
+    <meta
+        name="twitter:title"
+        content="Pale Ascendancy — Rede de Editores e Produção Audiovisual"
+    >
+
+    <meta
+        name="twitter:description"
+        content="Conectamos editores especializados a contratantes para projetos de promo, trailer, highlights e motion design."
+    >
+
+    <meta
+        name="twitter:image"
+        content="https://paleascendancy.com/og-image.png"
+    >
+
+
+    <meta
+        name="theme-color"
+        content="#0d0c0b"
+    >
+
+
+    <!-- FAVICON -->
+
+    <link
+        rel="icon"
+        href="favicon.svg"
+        type="image/svg+xml"
+    >
+
+
+    <!-- FONTES -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
@@ -55,7 +136,12 @@
 
 <header class="header">
 
-    <a href="index.html" class="brand">
+
+    <a
+        href="index.html"
+        class="brand"
+        aria-label="Pale Ascendancy — Página inicial"
+    >
 
         <img
             src="1 Sem Título_20260901004747.png"
@@ -71,9 +157,18 @@
     </a>
 
 
-    <nav class="nav" aria-label="Navegação principal">
 
-        <a href="index.html" class="active">
+    <!-- NAVEGAÇÃO -->
+
+    <nav
+        class="nav"
+        aria-label="Navegação principal"
+    >
+
+        <a
+            href="index.html"
+            class="active"
+        >
             Home
         </a>
 
@@ -96,15 +191,30 @@
     </nav>
 
 
-    <a
-        class="discord-button"
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        Entrar no Discord
-    </a>
 
+    <!-- AÇÕES DA CONTA -->
+
+    <div class="header-actions">
+
+        <a
+            href="login.html"
+            class="header-login"
+        >
+            Entrar
+        </a>
+
+        <a
+            href="cadastro.html"
+            class="discord-button"
+        >
+            Criar conta
+        </a>
+
+    </div>
+
+
+
+    <!-- MENU MOBILE -->
 
     <button
         class="menu-button"
@@ -114,8 +224,14 @@
         aria-expanded="false"
         aria-controls="mobileMenu"
     >
-        <span class="menu-icon" aria-hidden="true"></span>
+
+        <span
+            class="menu-icon"
+            aria-hidden="true"
+        ></span>
+
     </button>
+
 
 </header>
 
@@ -130,25 +246,46 @@
     id="mobileMenu"
 >
 
+
     <a href="index.html">
         Home
     </a>
+
 
     <a href="#sobre">
         Sobre
     </a>
 
+
     <a href="servicos.html">
         Serviços
     </a>
+
 
     <a href="editores.html">
         Editores
     </a>
 
+
     <a href="#contato">
         Contato
     </a>
+
+
+    <div class="mobile-account-links">
+
+        <a href="login.html">
+            Entrar
+        </a>
+
+        <a
+            href="cadastro.html"
+            class="mobile-discord"
+        >
+            Criar conta
+        </a>
+
+    </div>
 
 
     <a
@@ -160,11 +297,17 @@
         Entrar no Discord
     </a>
 
+
 </div>
 
 
 
+<!-- ==================================================
+     CONTEÚDO PRINCIPAL
+================================================== -->
+
 <main>
+
 
 
 <!-- ==================================================
@@ -176,11 +319,18 @@
     id="home"
 >
 
-    <div class="hero-glow" aria-hidden="true"></div>
+
+    <div
+        class="hero-glow"
+        aria-hidden="true"
+    ></div>
+
 
 
     <div class="hero-grid">
 
+
+        <!-- TEXTO -->
 
         <div class="hero-content">
 
@@ -190,56 +340,103 @@
             </p>
 
 
+
             <h1>
+
                 Seu projeto encontra o editor certo,
                 <span>sem achismo.</span>
+
             </h1>
 
 
+
             <p class="hero-lead">
+
                 A Pale Ascendancy reúne editores de vídeo com
-                especialidades diferentes num único lugar. Você diz
-                o que precisa — promo, trailer, highlight ou motion —
-                e conversa direto com quem já faz esse tipo de trabalho.
+                especialidades diferentes num único lugar.
+                Você diz o que precisa — promo, trailer,
+                highlight ou motion — e conversa diretamente
+                com quem trabalha nesse tipo de projeto.
+
             </p>
 
 
+
+            <!-- BOTÕES -->
+
             <div class="hero-buttons">
 
+
                 <a
-                    href="https://discord.gg/H3mnq7Nfp"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="cadastro.html"
                     class="primary-button"
                 >
-                    Entrar no Discord
+                    Criar conta
                 </a>
 
-                <a href="#editores" class="secondary-button">
+
+                <a
+                    href="login.html"
+                    class="secondary-button"
+                >
+                    Entrar
+                </a>
+
+
+                <a
+                    href="#editores"
+                    class="secondary-button"
+                >
                     Ver editores
                 </a>
 
+
             </div>
+
 
         </div>
 
 
+
+        <!-- VISUAL -->
+
         <div class="hero-visual">
 
+
             <div class="reel-window">
+
+
                 <div class="reel-window-bar">
-                    <span></span><span></span><span></span>
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
                 </div>
+
+
                 <div class="reel-window-body">
-                    <p>Portfólio em produção</p>
-                    <span>Em breve: cases reais dos editores da rede</span>
+
+                    <p>
+                        Portfólio em produção
+                    </p>
+
+                    <span>
+                        Em breve: cases reais dos editores
+                        da rede.
+                    </span>
+
                 </div>
+
+
             </div>
+
 
         </div>
 
 
     </div>
+
 
 </section>
 
@@ -264,15 +461,19 @@
 
 
         <h2>
+
             Uma ponte direta entre
             <span>quem edita e quem contrata.</span>
+
         </h2>
 
 
         <p>
-            Sem agência no meio, sem intermediário cobrando em cima.
-            Você fala com o editor, combina o projeto e acompanha
-            o trabalho dentro do próprio Discord da comunidade.
+
+            Sem agência no meio, sem intermediário cobrando
+            em cima. Você fala com o editor, combina o projeto
+            e acompanha o trabalho dentro da comunidade.
+
         </p>
 
 
@@ -286,12 +487,20 @@
         <article class="bento-card large">
 
             <div>
-                <h3>Editores com especialidade real</h3>
+
+                <h3>
+                    Editores com especialidade real
+                </h3>
+
                 <p>
+
                     Cada editor da rede tem um estilo definido —
-                    ritmo de corte, motion, tipografia ou storytelling —
-                    em vez de "fazer um pouco de tudo".
+                    ritmo de corte, motion, tipografia ou
+                    storytelling — em vez de fazer um pouco
+                    de tudo.
+
                 </p>
+
             </div>
 
         </article>
@@ -300,10 +509,15 @@
 
         <article class="bento-card">
 
-            <h3>Contratantes</h3>
+            <h3>
+                Contratantes
+            </h3>
+
             <p>
-                Descreva o projeto uma vez e receba indicação
-                de quem já tem esse tipo de trabalho no portfólio.
+
+                Descreva o projeto e encontre profissionais
+                que trabalham com esse tipo de conteúdo.
+
             </p>
 
         </article>
@@ -312,10 +526,15 @@
 
         <article class="bento-card">
 
-            <h3>Curadoria manual</h3>
+            <h3>
+                Curadoria manual
+            </h3>
+
             <p>
-                Cada editor entra na rede depois de ser avaliado
-                pela administração — não é uma lista aberta.
+
+                Cada editor entra na rede depois de ser
+                avaliado pela administração.
+
             </p>
 
         </article>
@@ -324,10 +543,15 @@
 
         <article class="bento-card wide">
 
-            <h3>Tudo dentro do Discord</h3>
+            <h3>
+                Tudo dentro da comunidade
+            </h3>
+
             <p>
-                Pedido, negociação e entrega acontecem no mesmo
-                servidor, sem trocar de plataforma no meio do processo.
+
+                Pedido, negociação e comunicação acontecem
+                dentro do ambiente da Pale Ascendancy.
+
             </p>
 
         </article>
@@ -335,12 +559,13 @@
 
     </div>
 
+
 </section>
 
 
 
 <!-- ==================================================
-     ACESSO A SERVIÇOS
+     SERVIÇOS
 ================================================== -->
 
 <section class="section">
@@ -358,14 +583,18 @@
 
 
             <h2>
+
                 Encontre o formato
                 <span>certo para o seu conteúdo.</span>
+
             </h2>
 
 
             <p>
-                Cada categoria de serviço tem editores dedicados a ela —
-                veja exemplos e escolha a que combina com seu projeto.
+
+                Cada categoria possui profissionais com
+                diferentes estilos e especialidades.
+
             </p>
 
 
@@ -380,30 +609,59 @@
         </div>
 
 
+
         <div class="service-preview-list">
 
 
             <div>
-                <strong>Promo</strong>
-                <span>Divulgação de conteúdo e canais</span>
+
+                <strong>
+                    Promo
+                </strong>
+
+                <span>
+                    Divulgação de conteúdo e canais
+                </span>
+
             </div>
 
 
             <div>
-                <strong>Trailers</strong>
-                <span>Anúncio de vídeos e séries</span>
+
+                <strong>
+                    Trailers
+                </strong>
+
+                <span>
+                    Anúncios e apresentações
+                </span>
+
             </div>
 
 
             <div>
-                <strong>Highlights</strong>
-                <span>Melhores momentos de gameplay/lives</span>
+
+                <strong>
+                    Highlights
+                </strong>
+
+                <span>
+                    Melhores momentos de gameplay e lives
+                </span>
+
             </div>
 
 
             <div>
-                <strong>Motion Design</strong>
-                <span>Animações e identidade visual</span>
+
+                <strong>
+                    Motion Design
+                </strong>
+
+                <span>
+                    Animações e identidade visual
+                </span>
+
             </div>
 
 
@@ -411,6 +669,7 @@
 
 
     </div>
+
 
 </section>
 
@@ -435,14 +694,18 @@
 
 
         <h2>
+
             Conheça alguns editores
             <span>já conectados à rede.</span>
+
         </h2>
 
 
         <p>
-            Uma amostra dos profissionais disponíveis — a lista
-            completa está sempre crescendo dentro do Discord.
+
+            Uma amostra dos profissionais disponíveis.
+            A rede continua crescendo com novos talentos.
+
         </p>
 
 
@@ -453,6 +716,8 @@
     <div class="editor-grid">
 
 
+        <!-- SMOOKECUT -->
+
         <article class="editor-card">
 
 
@@ -461,14 +726,22 @@
             </div>
 
 
-            <h3>Smookecut</h3>
-            <p class="editor-specialty">Edição ritmada e cortes dinâmicos</p>
+            <h3>
+                Smookecut
+            </h3>
+
+
+            <p class="editor-specialty">
+                Edição ritmada e cortes dinâmicos
+            </p>
 
 
             <p>
-                Trabalha principalmente com conteúdo de jogos e
-                edições cortadas no beat, focadas em prender atenção
-                nos primeiros segundos.
+
+                Trabalha principalmente com conteúdo de
+                jogos e edições cortadas no beat, focadas
+                em prender atenção nos primeiros segundos.
+
             </p>
 
 
@@ -482,12 +755,16 @@
             </a>
 
 
-            <span class="tag">Ritmo &amp; Cortes</span>
+            <span class="tag">
+                Ritmo &amp; Cortes
+            </span>
 
 
         </article>
 
 
+
+        <!-- MANGAKÁ -->
 
         <article class="editor-card">
 
@@ -497,13 +774,22 @@
             </div>
 
 
-            <h3>MANGAKÁ</h3>
-            <p class="editor-specialty">Estética anime e motion gráfico</p>
+            <h3>
+                MANGAKÁ
+            </h3>
+
+
+            <p class="editor-specialty">
+                Estética anime e motion gráfico
+            </p>
 
 
             <p>
-                Especializado em edições com referência de anime/mangá,
-                tipografia animada e transições estilizadas.
+
+                Especializado em edições com referência
+                de anime/mangá, tipografia animada
+                e transições estilizadas.
+
             </p>
 
 
@@ -517,36 +803,55 @@
             </a>
 
 
-            <span class="tag">Anime &amp; Motion</span>
+            <span class="tag">
+                Anime &amp; Motion
+            </span>
 
 
         </article>
 
 
+
+        <!-- NOVO EDITOR -->
 
         <article class="editor-card editor-card-placeholder">
 
-            <div class="editor-icon placeholder-icon" aria-hidden="true">+</div>
 
-            <h3>Seu espaço aqui</h3>
-            <p class="editor-specialty">Vagas abertas na rede</p>
+            <div
+                class="editor-icon placeholder-icon"
+                aria-hidden="true"
+            >
+                +
+            </div>
 
-            <p>
-                Reservado para novos editores e para o portfólio
-                em vídeo de cada um, em breve nesta seção.
+
+            <h3>
+                Seu espaço aqui
+            </h3>
+
+
+            <p class="editor-specialty">
+                Faça parte da rede
             </p>
 
+
+            <p>
+
+                Crie sua conta de editor e apresente
+                seu trabalho para a comunidade.
+
+            </p>
+
+
             <a
-                href="https://discord.gg/H3mnq7Nfp"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="cadastro.html"
                 class="card-link"
             >
-                Entrar no Discord
+                Criar perfil
             </a>
 
-        </article>
 
+        </article>
 
 
     </div>
@@ -589,14 +894,22 @@
         <div class="admin-info">
 
 
-            <p class="eyebrow">Fundador</p>
+            <p class="eyebrow">
+                Fundador
+            </p>
 
 
-            <h3>Rarison Keven</h3>
+            <h3>
+                Rarison Keven
+            </h3>
+
 
             <p>
-                Responsável pela curadoria dos editores, administração
-                da rede e ponto de contato para parcerias e dúvidas.
+
+                Responsável pela curadoria dos editores,
+                administração da rede e contato para
+                parcerias e dúvidas.
+
             </p>
 
 
@@ -637,24 +950,30 @@
 
 
         <h2>
+
             Vamos falar sobre
             <span>o seu projeto.</span>
+
         </h2>
 
 
         <p>
-            Prefere Discord, e-mail ou formulário — escolha o
-            caminho mais confortável para você.
+
+            Entre na comunidade ou envie uma mensagem
+            diretamente para nossa equipe.
+
         </p>
 
 
     </div>
 
 
+
     <div class="contact-grid">
 
 
         <div class="contact-options">
+
 
             <a
                 href="https://discord.gg/H3mnq7Nfp"
@@ -665,11 +984,25 @@
                 Entrar no Discord
             </a>
 
-            <a href="mailto:rarison1908@gmail.com" class="secondary-button">
+
+            <a
+                href="mailto:rarison1908@gmail.com"
+                class="secondary-button"
+            >
                 rarison1908@gmail.com
             </a>
 
+
+            <a
+                href="cadastro.html"
+                class="secondary-button"
+            >
+                Criar conta de editor
+            </a>
+
+
         </div>
+
 
 
         <form
@@ -679,42 +1012,114 @@
             method="POST"
         >
 
-            <input type="hidden" name="_subject" value="Novo contato — Pale Ascendancy">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_next" value="https://paleascendancy.com/index.html?enviado=1#contato">
+
+            <input
+                type="hidden"
+                name="_subject"
+                value="Novo contato — Pale Ascendancy"
+            >
+
+
+            <input
+                type="hidden"
+                name="_captcha"
+                value="false"
+            >
+
+
+            <input
+                type="hidden"
+                name="_template"
+                value="table"
+            >
+
+
+            <input
+                type="hidden"
+                name="_next"
+                value="https://paleascendancy.com/index.html?enviado=1#contato"
+            >
+
+
 
             <div class="form-row">
 
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="Nome" required autocomplete="name">
+
+                <label for="nome">
+                    Nome
+                </label>
+
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="Nome"
+                    required
+                    autocomplete="name"
+                >
+
 
             </div>
 
 
+
             <div class="form-row">
 
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="E-mail" required autocomplete="email">
+
+                <label for="email">
+                    E-mail
+                </label>
+
+
+                <input
+                    type="email"
+                    id="email"
+                    name="E-mail"
+                    required
+                    autocomplete="email"
+                >
+
 
             </div>
 
 
+
             <div class="form-row">
 
-                <label for="mensagem">Sobre o projeto</label>
-                <textarea id="mensagem" name="Mensagem" rows="4" required></textarea>
+
+                <label for="mensagem">
+                    Sobre o projeto
+                </label>
+
+
+                <textarea
+                    id="mensagem"
+                    name="Mensagem"
+                    rows="4"
+                    required
+                ></textarea>
+
 
             </div>
 
 
-            <button type="submit" class="primary-button form-submit">
+
+            <button
+                type="submit"
+                class="primary-button form-submit"
+            >
                 Enviar mensagem
             </button>
 
 
-            <p class="form-note" id="formNote" hidden>
-                Mensagem enviada. Obrigado — respondemos por e-mail em breve.
+
+            <p
+                class="form-note"
+                id="formNote"
+                hidden
+            >
+                Mensagem enviada. Obrigado — respondemos
+                por e-mail em breve.
             </p>
 
 
@@ -722,6 +1127,7 @@
 
 
     </div>
+
 
 </section>
 
@@ -779,4 +1185,4 @@
 
 </body>
 
-</html>
+    </html>
