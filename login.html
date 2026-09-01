@@ -137,6 +137,7 @@
 </header>
 
 
+
 <!-- ==================================================
      MENU MOBILE
 ================================================== -->
@@ -179,6 +180,7 @@
 </div>
 
 
+
 <!-- ==================================================
      LOGIN
 ================================================== -->
@@ -194,8 +196,6 @@
     <section class="auth-container">
 
 
-        <!-- CABEÇALHO -->
-
         <div class="auth-heading">
 
             <p class="eyebrow">
@@ -207,11 +207,12 @@
             </h1>
 
             <p>
-                Entre na sua conta para acessar seu perfil
-                de editor.
+                Entre na sua conta para acessar
+                seu perfil de editor.
             </p>
 
         </div>
+
 
 
         <!-- FORMULÁRIO -->
@@ -242,6 +243,7 @@
             </div>
 
 
+
             <!-- SENHA -->
 
             <div class="form-row">
@@ -262,6 +264,7 @@
             </div>
 
 
+
             <!-- MENSAGEM -->
 
             <p
@@ -269,6 +272,7 @@
                 id="loginMessage"
                 aria-live="polite"
             ></p>
+
 
 
             <!-- BOTÃO -->
@@ -283,6 +287,7 @@
 
 
         </form>
+
 
 
         <!-- CADASTRO -->
@@ -303,6 +308,7 @@
     </section>
 
 </main>
+
 
 
 <!-- ==================================================
@@ -339,11 +345,13 @@
 </footer>
 
 
+
 <!-- ==================================================
-     JAVASCRIPT PRINCIPAL
+     SCRIPT PRINCIPAL
 ================================================== -->
 
 <script src="script.js"></script>
+
 
 
 <!-- ==================================================
@@ -369,7 +377,14 @@ const SUPABASE_KEY =
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY
+        SUPABASE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
     );
 
 
@@ -393,10 +408,7 @@ const loginButton =
    MENSAGEM
 ================================================== */
 
-function showLoginMessage(
-    text,
-    type
-) {
+function showMessage(text, type) {
 
     loginMessage.textContent =
         text;
@@ -441,19 +453,9 @@ loginForm.addEventListener(
                 .value;
 
 
-        showLoginMessage(
-            "",
-            ""
-        );
-
-
-        /* ==========================================
-           VALIDAÇÃO
-        ========================================== */
-
         if (!email || !senha) {
 
-            showLoginMessage(
+            showMessage(
                 "Preencha seu e-mail e sua senha.",
                 "error"
             );
@@ -463,10 +465,6 @@ loginForm.addEventListener(
         }
 
 
-        /* ==========================================
-           BOTÃO
-        ========================================== */
-
         loginButton.disabled =
             true;
 
@@ -474,54 +472,73 @@ loginForm.addEventListener(
             "Entrando...";
 
 
+        showMessage(
+            "",
+            ""
+        );
+
+
         try {
 
 
             /* ======================================
-               AUTENTICAÇÃO SUPABASE
+               LOGIN SUPABASE
             ====================================== */
 
-            const result =
-                await supabaseClient.auth.signInWithPassword({
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth
+                    .signInWithPassword({
 
-                    email: email,
+                        email: email,
 
-                    password: senha
+                        password: senha
 
-                });
+                    });
 
 
-            if (result.error) {
+            if (error) {
 
-                throw result.error;
+                throw error;
+
+            }
+
+
+            if (!data || !data.session) {
+
+                throw new Error(
+                    "Sessão não foi criada."
+                );
 
             }
 
 
             /* ======================================
-               LOGIN REALIZADO
+               SUCESSO
             ====================================== */
 
-            showLoginMessage(
+            showMessage(
                 "Login realizado com sucesso!",
                 "success"
             );
 
 
             /*
-             * Aguarda um pequeno momento
-             * para o usuário visualizar
-             * a mensagem.
+             * A sessão será mantida pelo Supabase.
+             * O usuário será levado para o perfil.
              */
 
             setTimeout(
                 function() {
 
-                    window.location.href =
-                        "perfil.html";
+                    window.location.replace(
+                        "perfil.html"
+                    );
 
                 },
-                700
+                500
             );
 
 
@@ -533,7 +550,7 @@ loginForm.addEventListener(
             );
 
 
-            let message =
+            let mensagem =
                 "Não foi possível entrar na conta.";
 
 
@@ -541,10 +558,12 @@ loginForm.addEventListener(
                 error.message &&
                 error.message
                     .toLowerCase()
-                    .includes("invalid login credentials")
+                    .includes(
+                        "invalid login credentials"
+                    )
             ) {
 
-                message =
+                mensagem =
                     "E-mail ou senha incorretos.";
 
             }
@@ -554,17 +573,19 @@ loginForm.addEventListener(
                 error.message &&
                 error.message
                     .toLowerCase()
-                    .includes("email not confirmed")
+                    .includes(
+                        "email not confirmed"
+                    )
             ) {
 
-                message =
+                mensagem =
                     "Seu e-mail ainda não foi confirmado.";
 
             }
 
 
-            showLoginMessage(
-                message,
+            showMessage(
+                mensagem,
                 "error"
             );
 
@@ -581,6 +602,65 @@ loginForm.addEventListener(
 
     }
 );
+
+
+
+/* ==================================================
+   VERIFICAR SESSÃO EXISTENTE
+================================================== */
+
+async function checkExistingSession() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth
+                .getSession();
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+
+        }
+
+
+        /*
+         * Se já estiver logado e abrir
+         * novamente a página de login,
+         * vai direto para o perfil.
+         */
+
+        if (
+            data &&
+            data.session &&
+            data.session.user
+        ) {
+
+            window.location.replace(
+                "perfil.html"
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao verificar sessão:",
+            error
+        );
+
+    }
+
+}
+
+
+checkExistingSession();
 
 </script>
 
