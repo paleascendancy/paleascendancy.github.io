@@ -10,12 +10,36 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Pale Ascendancy — Produção Profissional</title>
+    <title>Pale Ascendancy — Rede de Editores e Produção Audiovisual</title>
 
     <meta
         name="description"
-        content="Pale Ascendancy — Conectando estratégia audiovisual e produção profissional."
+        content="Pale Ascendancy é a comunidade que conecta editores de vídeo especializados a contratantes que precisam de promos, trailers, highlights e motion design."
     >
+    <link rel="canonical" href="https://paleascendancy.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Pale Ascendancy">
+    <meta property="og:title" content="Pale Ascendancy — Rede de Editores e Produção Audiovisual">
+    <meta property="og:description" content="Conectamos editores especializados a contratantes para projetos de promo, trailer, highlights e motion design.">
+    <meta property="og:image" content="https://paleascendancy.com/og-image.png">
+    <meta property="og:url" content="https://paleascendancy.com/">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pale Ascendancy — Rede de Editores e Produção Audiovisual">
+    <meta name="twitter:description" content="Conectamos editores especializados a contratantes para projetos de promo, trailer, highlights e motion design.">
+    <meta name="twitter:image" content="https://paleascendancy.com/og-image.png">
+
+    <meta name="theme-color" content="#0d0c0b">
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 
@@ -35,7 +59,9 @@
 
         <img
             src="1 Sem Título_20260901004747.png"
-            alt="Logo Pale Ascendancy"
+            alt="Pale Ascendancy"
+            width="36"
+            height="36"
         >
 
         <span>
@@ -45,7 +71,7 @@
     </a>
 
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navegação principal">
 
         <a href="index.html" class="active">
             Home
@@ -84,9 +110,11 @@
         class="menu-button"
         id="menuButton"
         type="button"
-        aria-label="Abrir menu"
+        aria-label="Abrir menu de navegação"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
     >
-        ☰
+        <span class="menu-icon" aria-hidden="true"></span>
     </button>
 
 </header>
@@ -148,133 +176,70 @@
     id="home"
 >
 
-    <div class="hero-glow"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
 
 
-    <div class="hero-content">
+    <div class="hero-grid">
 
 
-        <div class="eyebrow">
+        <div class="hero-content">
 
-            CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
+
+            <p class="eyebrow">
+                Rede de editores e produção audiovisual
+            </p>
+
+
+            <h1>
+                Seu projeto encontra o editor certo,
+                <span>sem achismo.</span>
+            </h1>
+
+
+            <p class="hero-lead">
+                A Pale Ascendancy reúne editores de vídeo com
+                especialidades diferentes num único lugar. Você diz
+                o que precisa — promo, trailer, highlight ou motion —
+                e conversa direto com quem já faz esse tipo de trabalho.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="https://discord.gg/H3mnq7Nfp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="primary-button"
+                >
+                    Entrar no Discord
+                </a>
+
+                <a href="#editores" class="secondary-button">
+                    Ver editores
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-visual">
+
+            <div class="reel-window">
+                <div class="reel-window-bar">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="reel-window-body">
+                    <p>Portfólio em produção</p>
+                    <span>Em breve: cases reais dos editores da rede</span>
+                </div>
+            </div>
 
         </div>
 
 
-        <img
-            class="hero-logo"
-            src="1 Sem Título_20260901004747.png"
-            alt="Logo Pale Ascendancy"
-        >
-
-
-        <h1>
-
-            Conectando Estratégia Audiovisual
-
-            <span>
-                e Produção Profissional.
-            </span>
-
-        </h1>
-
-
-        <p>
-
-            Uma comunidade exclusiva dedicada a viabilizar
-            parcerias de alto valor entre editores especializados,
-            criadores de conteúdo e contratantes.
-
-        </p>
-
-
-        <div class="hero-buttons">
-
-
-            <a
-                href="https://discord.gg/H3mnq7Nfp"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="primary-button"
-            >
-                Entrar no Discord
-            </a>
-
-
-            <a
-                href="#sobre"
-                class="secondary-button"
-            >
-                Conhecer a Pale Ascendancy
-            </a>
-
-
-        </div>
-
     </div>
-
-</section>
-
-
-
-<!-- ==================================================
-     MÉTRICAS
-================================================== -->
-
-<section class="metrics">
-
-
-    <div class="metric">
-
-        <strong data-target="0">
-            0
-        </strong>
-
-        <span>
-            Editores conectados
-        </span>
-
-    </div>
-
-
-    <div class="metric">
-
-        <strong data-target="0">
-            0
-        </strong>
-
-        <span>
-            Projetos entregues
-        </span>
-
-    </div>
-
-
-    <div class="metric">
-
-        <strong data-target="0">
-            0
-        </strong>
-
-        <span>
-            Especialidades
-        </span>
-
-    </div>
-
-
-    <div class="metric">
-
-        <strong data-target="100">
-            0
-        </strong>
-
-        <span>
-            Foco profissional
-        </span>
-
-    </div>
-
 
 </section>
 
@@ -293,28 +258,21 @@
     <div class="section-heading">
 
 
-        <span>
-            01 — SOBRE
-        </span>
+        <p class="eyebrow">
+            Como funciona
+        </p>
 
 
         <h2>
-
-            Uma rede criada para
-
-            <span>
-                produzir melhor.
-            </span>
-
+            Uma ponte direta entre
+            <span>quem edita e quem contrata.</span>
         </h2>
 
 
         <p>
-
-            A Pale Ascendancy conecta profissionais criativos,
-            criadores de conteúdo e contratantes em um ambiente
-            voltado para colaboração, projetos e produção audiovisual.
-
+            Sem agência no meio, sem intermediário cobrando em cima.
+            Você fala com o editor, combina o projeto e acompanha
+            o trabalho dentro do próprio Discord da comunidade.
         </p>
 
 
@@ -327,27 +285,14 @@
 
         <article class="bento-card large">
 
-
-            <div class="card-number">
-                01
-            </div>
-
-
             <div>
-
-                <h3>
-                    Editores
-                </h3>
-
+                <h3>Editores com especialidade real</h3>
                 <p>
-
-                    Profissionais especializados em diferentes
-                    áreas da produção audiovisual.
-
+                    Cada editor da rede tem um estilo definido —
+                    ritmo de corte, motion, tipografia ou storytelling —
+                    em vez de "fazer um pouco de tudo".
                 </p>
-
             </div>
-
 
         </article>
 
@@ -355,23 +300,11 @@
 
         <article class="bento-card">
 
-
-            <div class="card-number">
-                02
-            </div>
-
-
-            <h3>
-                Contratantes
-            </h3>
-
+            <h3>Contratantes</h3>
             <p>
-
-                Encontre profissionais preparados para atender
-                às necessidades do seu projeto.
-
+                Descreva o projeto uma vez e receba indicação
+                de quem já tem esse tipo de trabalho no portfólio.
             </p>
-
 
         </article>
 
@@ -379,23 +312,11 @@
 
         <article class="bento-card">
 
-
-            <div class="card-number">
-                03
-            </div>
-
-
-            <h3>
-                Projetos
-            </h3>
-
+            <h3>Curadoria manual</h3>
             <p>
-
-                Conectamos necessidades reais a profissionais
-                preparados para executar diferentes projetos.
-
+                Cada editor entra na rede depois de ser avaliado
+                pela administração — não é uma lista aberta.
             </p>
-
 
         </article>
 
@@ -403,23 +324,11 @@
 
         <article class="bento-card wide">
 
-
-            <div class="card-number">
-                04
-            </div>
-
-
-            <h3>
-                Produção Profissional
-            </h3>
-
+            <h3>Tudo dentro do Discord</h3>
             <p>
-
-                Uma rede voltada para conexões,
-                colaboração e produção audiovisual.
-
+                Pedido, negociação e entrega acontecem no mesmo
+                servidor, sem trocar de plataforma no meio do processo.
             </p>
-
 
         </article>
 
@@ -443,27 +352,20 @@
         <div class="service-preview-content">
 
 
-            <span>
-                02 — SERVIÇOS
-            </span>
+            <p class="eyebrow">
+                Serviços
+            </p>
 
 
             <h2>
-
-                Encontre o serviço
-                <span>
-                    ideal para seu projeto.
-                </span>
-
+                Encontre o formato
+                <span>certo para o seu conteúdo.</span>
             </h2>
 
 
             <p>
-
-                Explore nossa área de serviços e conheça
-                as diferentes possibilidades de produção
-                disponíveis através da rede Pale Ascendancy.
-
+                Cada categoria de serviço tem editores dedicados a ela —
+                veja exemplos e escolha a que combina com seu projeto.
             </p>
 
 
@@ -482,46 +384,26 @@
 
 
             <div>
-                <strong>
-                    01
-                </strong>
-
-                <span>
-                    Promo
-                </span>
+                <strong>Promo</strong>
+                <span>Divulgação de conteúdo e canais</span>
             </div>
 
 
             <div>
-                <strong>
-                    02
-                </strong>
-
-                <span>
-                    Trailers
-                </span>
+                <strong>Trailers</strong>
+                <span>Anúncio de vídeos e séries</span>
             </div>
 
 
             <div>
-                <strong>
-                    03
-                </strong>
-
-                <span>
-                    Highlights
-                </span>
+                <strong>Highlights</strong>
+                <span>Melhores momentos de gameplay/lives</span>
             </div>
 
 
             <div>
-                <strong>
-                    04
-                </strong>
-
-                <span>
-                    Motion Design
-                </span>
+                <strong>Motion Design</strong>
+                <span>Animações e identidade visual</span>
             </div>
 
 
@@ -547,27 +429,20 @@
     <div class="section-heading">
 
 
-        <span>
-            03 — REDE CRIATIVA
-        </span>
+        <p class="eyebrow">
+            Rede criativa
+        </p>
 
 
         <h2>
-
-            Profissionais.
-
-            <span>
-                Especializados.
-            </span>
-
+            Conheça alguns editores
+            <span>já conectados à rede.</span>
         </h2>
 
 
         <p>
-
-            Conheça alguns dos profissionais conectados
-            à rede Pale Ascendancy.
-
+            Uma amostra dos profissionais disponíveis — a lista
+            completa está sempre crescendo dentro do Discord.
         </p>
 
 
@@ -586,16 +461,14 @@
             </div>
 
 
-            <h3>
-                Smookecut
-            </h3>
+            <h3>Smookecut</h3>
+            <p class="editor-specialty">Edição ritmada e cortes dinâmicos</p>
 
 
             <p>
-
-                Editor conectado à rede Pale Ascendancy,
-                especializado em produção e edição audiovisual.
-
+                Trabalha principalmente com conteúdo de jogos e
+                edições cortadas no beat, focadas em prender atenção
+                nos primeiros segundos.
             </p>
 
 
@@ -605,13 +478,11 @@
                 rel="noopener noreferrer"
                 class="card-link"
             >
-                Ver TikTok →
+                Ver TikTok
             </a>
 
 
-            <span class="tag">
-                EDITOR
-            </span>
+            <span class="tag">Ritmo &amp; Cortes</span>
 
 
         </article>
@@ -626,16 +497,13 @@
             </div>
 
 
-            <h3>
-                MANGAKÁ
-            </h3>
+            <h3>MANGAKÁ</h3>
+            <p class="editor-specialty">Estética anime e motion gráfico</p>
 
 
             <p>
-
-                Profissional conectado à rede Pale Ascendancy
-                para projetos e produção audiovisual.
-
+                Especializado em edições com referência de anime/mangá,
+                tipografia animada e transições estilizadas.
             </p>
 
 
@@ -645,14 +513,37 @@
                 rel="noopener noreferrer"
                 class="card-link"
             >
-                Ver TikTok →
+                Ver TikTok
             </a>
 
 
-            <span class="tag">
-                EDITOR
-            </span>
+            <span class="tag">Anime &amp; Motion</span>
 
+
+        </article>
+
+
+
+        <article class="editor-card editor-card-placeholder">
+
+            <div class="editor-icon placeholder-icon" aria-hidden="true">+</div>
+
+            <h3>Seu espaço aqui</h3>
+            <p class="editor-specialty">Vagas abertas na rede</p>
+
+            <p>
+                Reservado para novos editores e para o portfólio
+                em vídeo de cada um, em breve nesta seção.
+            </p>
+
+            <a
+                href="https://discord.gg/H3mnq7Nfp"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card-link"
+            >
+                Entrar no Discord
+            </a>
 
         </article>
 
@@ -669,7 +560,7 @@
             href="editores.html"
             class="secondary-button"
         >
-            Conhecer todos os editores →
+            Conhecer todos os editores
         </a>
 
 
@@ -681,7 +572,7 @@
 
 
 <!-- ==================================================
-     ADMINISTRADOR
+     FUNDADOR
 ================================================== -->
 
 <section class="section">
@@ -691,29 +582,21 @@
 
 
         <div class="admin-icon">
-            A
+            R
         </div>
 
 
         <div class="admin-info">
 
 
-            <span>
-                ADMINISTRADOR • PROPRIETÁRIO
-            </span>
+            <p class="eyebrow">Fundador</p>
 
 
-            <h3>
-                Asmophel
-            </h3>
-
+            <h3>Rarison Keven</h3>
 
             <p>
-
-                Responsável pela administração da
-                Pale Ascendancy, gerenciamento da rede
-                e conexão com os editores.
-
+                Responsável pela curadoria dos editores, administração
+                da rede e ponto de contato para parcerias e dúvidas.
             </p>
 
 
@@ -721,10 +604,10 @@
 
 
         <a
-            href="tel:+5595991501077"
+            href="mailto:rarison1908@gmail.com"
             class="primary-button"
         >
-            Entrar em contato
+            Falar com Rarison
         </a>
 
 
@@ -748,32 +631,30 @@
     <div class="section-heading">
 
 
-        <span>
-            04 — CONTATO
-        </span>
+        <p class="eyebrow">
+            Contato
+        </p>
 
 
         <h2>
-
-            Vamos criar algo
-
-            <span>
-                relevante.
-            </span>
-
+            Vamos falar sobre
+            <span>o seu projeto.</span>
         </h2>
 
 
         <p>
-
-            Entre na comunidade e conheça a rede
-            Pale Ascendancy.
-
+            Prefere Discord, e-mail ou formulário — escolha o
+            caminho mais confortável para você.
         </p>
 
 
-        <div class="hero-buttons">
+    </div>
 
+
+    <div class="contact-grid">
+
+
+        <div class="contact-options">
 
             <a
                 href="https://discord.gg/H3mnq7Nfp"
@@ -784,16 +665,60 @@
                 Entrar no Discord
             </a>
 
-
-            <a
-                href="tel:+5595991501077"
-                class="secondary-button"
-            >
-                Falar com Asmophel
+            <a href="mailto:rarison1908@gmail.com" class="secondary-button">
+                rarison1908@gmail.com
             </a>
 
-
         </div>
+
+
+        <form
+            class="contact-form"
+            id="contactForm"
+            action="https://formsubmit.co/rarison1908@gmail.com"
+            method="POST"
+        >
+
+            <input type="hidden" name="_subject" value="Novo contato — Pale Ascendancy">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://paleascendancy.com/index.html?enviado=1#contato">
+
+            <div class="form-row">
+
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="Nome" required autocomplete="name">
+
+            </div>
+
+
+            <div class="form-row">
+
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="E-mail" required autocomplete="email">
+
+            </div>
+
+
+            <div class="form-row">
+
+                <label for="mensagem">Sobre o projeto</label>
+                <textarea id="mensagem" name="Mensagem" rows="4" required></textarea>
+
+            </div>
+
+
+            <button type="submit" class="primary-button form-submit">
+                Enviar mensagem
+            </button>
+
+
+            <p class="form-note" id="formNote" hidden>
+                Mensagem enviada. Obrigado — respondemos por e-mail em breve.
+            </p>
+
+
+        </form>
 
 
     </div>
@@ -817,7 +742,9 @@
 
         <img
             src="1 Sem Título_20260901004747.png"
-            alt="Logo Pale Ascendancy"
+            alt="Pale Ascendancy"
+            width="28"
+            height="28"
         >
 
 
@@ -830,17 +757,12 @@
 
 
     <p>
-
-        CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
-
+        Rede de editores e produção audiovisual.
     </p>
 
 
     <small>
-
-        © 2026 Pale Ascendancy.
-        Todos os direitos reservados.
-
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
 
 
@@ -853,65 +775,6 @@
 ================================================== -->
 
 <script src="script.js"></script>
-
-
-<script>
-
-
-/* =========================================
-   MENU MOBILE
-========================================= */
-
-const menuButton =
-    document.getElementById("menuButton");
-
-const mobileMenu =
-    document.getElementById("mobileMenu");
-
-
-if (menuButton && mobileMenu) {
-
-    menuButton.addEventListener(
-        "click",
-        function () {
-
-            mobileMenu.classList.toggle(
-                "active"
-            );
-
-        }
-    );
-
-}
-
-
-/* Fecha o menu ao clicar em um link */
-
-const mobileLinks =
-    document.querySelectorAll(
-        ".mobile-menu a"
-    );
-
-
-mobileLinks.forEach(
-    function(link) {
-
-        link.addEventListener(
-            "click",
-            function() {
-
-                mobileMenu.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-    }
-);
-
-
-</script>
 
 
 </body>
