@@ -66,3 +66,66 @@ if (contactForm && formNote) {
   });
 
 }
+
+
+/* =========================================
+   BUSCA E FILTRO DE EDITORES (editores.html)
+========================================= */
+
+const searchInput = document.getElementById("searchInput");
+const filterButtons = document.querySelectorAll(".filter-button");
+const editorCards = document.querySelectorAll(".editor-profile");
+const noResults = document.getElementById("noResults");
+
+if (searchInput && editorCards.length) {
+
+  let activeFilter = "todos";
+
+  function applyFilters() {
+
+    const term = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    editorCards.forEach(function (card) {
+
+      const category = card.dataset.category || "";
+      const searchable = card.dataset.search || "";
+
+      const matchesFilter = activeFilter === "todos" || category === activeFilter;
+      const matchesSearch = term === "" || searchable.includes(term);
+      const visible = matchesFilter && matchesSearch;
+
+      card.style.display = visible ? "" : "none";
+
+      if (visible) {
+        visibleCount += 1;
+      }
+
+    });
+
+    if (noResults) {
+      noResults.classList.toggle("visible", visibleCount === 0);
+    }
+
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+
+  filterButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+      filterButtons.forEach(function (btn) {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+      activeFilter = button.dataset.filter || "todos";
+
+      applyFilters();
+
+    });
+
+  });
+
+}
