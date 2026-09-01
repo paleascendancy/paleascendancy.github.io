@@ -35,7 +35,7 @@
 
     <link
         rel="preconnect"
-        href="https://fonts.gstatic.com"
+        href="https://fonts.googleapis.com"
         crossorigin
     >
 
@@ -109,7 +109,7 @@
 
 
     <!-- ==================================================
-         ÁREA DA CONTA — DESKTOP
+         ÁREA DA CONTA
     ================================================== -->
 
     <div
@@ -155,13 +155,9 @@
                 aria-label="Abrir meu perfil"
             >
 
-                <span
-                    class="profile-avatar-small"
-                >
+                <span class="profile-avatar-small">
 
-                    <span
-                        id="headerProfileInitial"
-                    >
+                    <span id="headerProfileInitial">
                         ?
                     </span>
 
@@ -174,7 +170,7 @@
 
                 </span>
 
-                <span>
+                <span class="profile-link-text">
                     Perfil
                 </span>
 
@@ -186,7 +182,7 @@
 
 
     <!-- ==================================================
-         BOTÃO MENU MOBILE
+         MENU MOBILE
     ================================================== -->
 
     <button
@@ -243,8 +239,6 @@
         id="mobileAccount"
     >
 
-        <!-- MOBILE NÃO LOGADO -->
-
         <div id="mobileLoggedOut">
 
             <a href="login.html">
@@ -257,8 +251,6 @@
 
         </div>
 
-
-        <!-- MOBILE LOGADO -->
 
         <div
             id="mobileLoggedIn"
@@ -806,11 +798,370 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-<!-- ==================================================
-     JAVASCRIPT
-================================================== -->
+<script>
 
-<script src="script.js"></script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ==================================================
+       CONFIGURAÇÃO SUPABASE
+    ================================================== */
+
+    const SUPABASE_URL =
+        "https://fnyellunugdfesprmvzm.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY,
+            {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
+                }
+            }
+        );
+
+
+    /* ==================================================
+       ELEMENTOS DO HEADER
+    ================================================== */
+
+    const loggedOutArea =
+        document.getElementById("loggedOutArea");
+
+    const loggedInArea =
+        document.getElementById("loggedInArea");
+
+    const headerProfileInitial =
+        document.getElementById("headerProfileInitial");
+
+    const headerProfileImage =
+        document.getElementById("headerProfileImage");
+
+    const mobileLoggedOut =
+        document.getElementById("mobileLoggedOut");
+
+    const mobileLoggedIn =
+        document.getElementById("mobileLoggedIn");
+
+
+    /* ==================================================
+       ATUALIZAR MENU DA CONTA
+    ================================================== */
+
+    async function updateAccountMenu() {
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.getSession();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao recuperar sessão:",
+                    error
+                );
+
+                showLoggedOut();
+
+                return;
+
+            }
+
+
+            const session = data.session;
+
+
+            /* ==========================================
+               USUÁRIO NÃO ESTÁ LOGADO
+            ========================================== */
+
+            if (!session || !session.user) {
+
+                showLoggedOut();
+
+                return;
+
+            }
+
+
+            /* ==========================================
+               USUÁRIO ESTÁ LOGADO
+            ========================================== */
+
+            const user = session.user;
+
+
+            showLoggedIn();
+
+
+            /* ==========================================
+               BUSCAR PERFIL
+            ========================================== */
+
+            const {
+                data: profile,
+                error: profileError
+            } = await supabaseClient
+                .from("profile")
+                .select(
+                    "nome,nome_artistico,avatar_url"
+                )
+                .eq("id", user.id)
+                .maybeSingle();
+
+
+            if (profileError) {
+
+                console.error(
+                    "Erro ao buscar perfil:",
+                    profileError
+                );
+
+            }
+
+
+            /* ==========================================
+               DEFINIR NOME
+            ========================================== */
+
+            const displayName =
+                profile?.nome_artistico ||
+                profile?.nome ||
+                user.email ||
+                "U";
+
+
+            const initial =
+                displayName
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase() || "U";
+
+
+            headerProfileInitial.textContent =
+                initial;
+
+
+            /* ==========================================
+               DEFINIR FOTO
+            ========================================== */
+
+            if (
+                profile &&
+                profile.avatar_url &&
+                profile.avatar_url.trim() !== ""
+            ) {
+
+                headerProfileImage.src =
+                    profile.avatar_url;
+
+                headerProfileImage.hidden =
+                    false;
+
+                headerProfileInitial.hidden =
+                    true;
+
+            } else {
+
+                headerProfileImage.src = "";
+
+                headerProfileImage.hidden =
+                    true;
+
+                headerProfileInitial.hidden =
+                    false;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado no sistema de conta:",
+                error
+            );
+
+            showLoggedOut();
+
+        }
+
+    }
+
+
+    /* ==================================================
+       MOSTRAR LOGADO
+    ================================================== */
+
+    function showLoggedIn() {
+
+        loggedOutArea.hidden =
+            true;
+
+        loggedInArea.hidden =
+            false;
+
+
+        mobileLoggedOut.hidden =
+            true;
+
+        mobileLoggedIn.hidden =
+            false;
+
+    }
+
+
+    /* ==================================================
+       MOSTRAR NÃO LOGADO
+    ================================================== */
+
+    function showLoggedOut() {
+
+        loggedOutArea.hidden =
+            false;
+
+        loggedInArea.hidden =
+            true;
+
+
+        mobileLoggedOut.hidden =
+            false;
+
+        mobileLoggedIn.hidden =
+            true;
+
+
+        headerProfileInitial.textContent =
+            "?";
+
+        headerProfileInitial.hidden =
+            false;
+
+        headerProfileImage.src =
+            "";
+
+        headerProfileImage.hidden =
+            true;
+
+    }
+
+
+    /* ==================================================
+       LOGIN / LOGOUT / ALTERAÇÕES DE SESSÃO
+    ================================================== */
+
+    supabaseClient.auth.onAuthStateChange(
+        function (event, session) {
+
+            console.log(
+                "Estado da autenticação:",
+                event
+            );
+
+
+            if (session) {
+
+                showLoggedIn();
+
+            } else {
+
+                showLoggedOut();
+
+            }
+
+
+            /*
+             * Pequeno atraso para permitir que o Supabase
+             * termine de atualizar a sessão antes de
+             * buscarmos os dados do perfil.
+             */
+
+            setTimeout(
+                updateAccountMenu,
+                100
+            );
+
+        }
+    );
+
+
+    /* ==================================================
+       VERIFICAR SESSÃO AO ABRIR A PÁGINA
+    ================================================== */
+
+    updateAccountMenu();
+
+
+    /* ==================================================
+       MENU MOBILE
+    ================================================== */
+
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const mobileMenu =
+        document.getElementById("mobileMenu");
+
+
+    if (
+        menuButton &&
+        mobileMenu
+    ) {
+
+        menuButton.addEventListener(
+            "click",
+            function () {
+
+                const isOpen =
+                    mobileMenu.classList.toggle(
+                        "is-open"
+                    );
+
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    isOpen ? "true" : "false"
+                );
+
+            }
+        );
+
+
+        mobileMenu
+            .querySelectorAll("a")
+            .forEach(function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        mobileMenu.classList.remove(
+                            "is-open"
+                        );
+
+                        menuButton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+                );
+
+            });
+
+    }
+
+});
+
+</script>
 
 
 </body>
