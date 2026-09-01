@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pale Ascendancy — Comunidade de Edição</title>
-
-    <meta
-        name="description"
-        content="Pale Ascendancy — Conectando Estratégia Audiovisual e Produção Profissional. Uma comunidade exclusiva para editores especializados, criadores de conteúdo e contratantes."
-    >
+    <title>Pale Ascendancy | Comunidade de Edição</title>
+    <meta name="description" content="Pale Ascendancy — conectando estratégia audiovisual e produção profissional. Uma comunidade para editores, criadores e contratantes.">
+    <meta name="keywords" content="Pale Ascendancy, comunidade de edição, edição de vídeo, editores, produção audiovisual, Smookecut">
+    <meta name="author" content="Pale Ascendancy">
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -28,794 +22,476 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: #050507;
-            color: white;
+            background: #07080d;
+            color: #f5f5f7;
+            line-height: 1.6;
         }
 
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
-        /* =========================
-           MENU
-        ========================= */
+        .container {
+            width: min(1120px, 92%);
+            margin: 0 auto;
+        }
 
-        nav {
+        /* NAVBAR */
+        header {
             position: fixed;
-
             top: 0;
             left: 0;
-
             width: 100%;
+            z-index: 1000;
+            background: rgba(7, 8, 13, 0.86);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(14px);
+        }
 
+        nav {
+            min-height: 76px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            padding: 20px 6%;
-
-            background: rgba(5, 5, 7, 0.88);
-
-            backdrop-filter: blur(12px);
-
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-
-            z-index: 1000;
-        }
-
-
-        .brand {
-            font-size: 18px;
-
-            font-weight: 800;
-
-            letter-spacing: 2px;
-        }
-
-
-        .menu {
-            display: flex;
-
-            align-items: center;
-
-            gap: 30px;
-        }
-
-
-        .menu a {
-            color: #aaaab5;
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            transition: 0.3s;
-        }
-
-
-        .menu a:hover {
-            color: white;
-        }
-
-
-        .discord-nav {
-            padding: 11px 18px;
-
-            background: #5865F2;
-
-            border-radius: 7px;
-
-            color: white !important;
-
-            font-weight: bold;
-        }
-
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-
-            min-height: 100vh;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            text-align: center;
-
-            padding: 140px 20px 80px;
-
-            position: relative;
-
-            overflow: hidden;
-        }
-
-
-        .hero::before {
-
-            content: "";
-
-            position: absolute;
-
-            width: 700px;
-
-            height: 700px;
-
-            background: #3535ff;
-
-            opacity: 0.08;
-
-            filter: blur(180px);
-
-            border-radius: 50%;
-
-            z-index: -1;
-        }
-
-
-        .hero-content {
-
-            max-width: 1000px;
-
-            width: 100%;
-        }
-
-
-        /* =========================
-           TEXTO SUPERIOR
-        ========================= */
-
-        .eyebrow {
-
-            color: #7d7dff;
-
-            font-size: 12px;
-
-            font-weight: bold;
-
-            letter-spacing: 5px;
-
-            margin-bottom: 30px;
-        }
-
-
-        /* =========================
-           LOGO
-        ========================= */
-
-        .logo {
-
-            width: min(750px, 95%);
-
-            max-height: 300px;
-
-            object-fit: contain;
-
-            margin-bottom: 25px;
-
-            filter:
-                drop-shadow(
-                    0 0 20px
-                    rgba(255,255,255,0.08)
-                );
-        }
-
-
-        /* =========================
-           TÍTULO
-        ========================= */
-
-        h1 {
-
-            font-size: clamp(
-                32px,
-                5vw,
-                56px
-            );
-
-            margin-bottom: 10px;
-
-            letter-spacing: -1px;
-        }
-
-
-        .headline {
-
-            color: #9a9aaa;
-
-            font-size: clamp(
-                17px,
-                3vw,
-                24px
-            );
-
-            font-style: italic;
-
-            margin-bottom: 25px;
-        }
-
-
-        .description {
-
-            max-width: 720px;
-
-            margin: 0 auto 35px;
-
-            color: #a7a7b3;
-
-            font-size: 16px;
-
-            line-height: 1.8;
-        }
-
-
-        /* =========================
-           BOTÕES
-        ========================= */
-
-        .buttons {
-
-            display: flex;
-
-            justify-content: center;
-
-            gap: 15px;
-
-            flex-wrap: wrap;
-        }
-
-
-        .button {
-
-            display: inline-block;
-
-            padding: 15px 28px;
-
-            border-radius: 8px;
-
-            text-decoration: none;
-
-            font-size: 14px;
-
-            font-weight: bold;
-
-            transition: 0.3s;
-        }
-
-
-        .primary {
-
-            background: #5865F2;
-
-            color: white;
-
-            box-shadow:
-                0 10px 35px
-                rgba(88,101,242,0.22);
-        }
-
-
-        .primary:hover {
-
-            transform: translateY(-3px);
-
-            background: #6975ff;
-        }
-
-
-        .secondary {
-
-            border: 1px solid #30303b;
-
-            color: #ddd;
-
-            background: rgba(
-                255,
-                255,
-                255,
-                0.02
-            );
-        }
-
-
-        .secondary:hover {
-
-            border-color: #6666ff;
-
-            transform: translateY(-3px);
-        }
-
-
-        /* =========================
-           SEÇÕES
-        ========================= */
-
-        .section {
-
-            padding: 100px 6%;
-
-            text-align: center;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,0.06);
-        }
-
-
-        .section-title {
-
-            font-size: 34px;
-
-            margin-bottom: 15px;
-        }
-
-
-        .section-subtitle {
-
-            color: #858592;
-
-            max-width: 650px;
-
-            margin: auto;
-
-            line-height: 1.7;
-        }
-
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .cards {
-
-            max-width: 950px;
-
-            margin: 50px auto 0;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
             gap: 25px;
         }
 
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .brand span {
+            font-size: 15px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #b8bac5;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .nav-discord {
+            padding: 11px 18px;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 8px;
+            background: #5865f2;
+            color: #fff !important;
+            font-weight: 700;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 35%, rgba(88,101,242,0.15), transparent 38%),
+                linear-gradient(180deg, #090a10 0%, #07080d 100%);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: linear-gradient(to bottom, black, transparent 80%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logotipo {
+            width: 430px;
+            max-width: 88%;
+            height: auto;
+            display: block;
+            margin: 0 auto 28px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(255,255,255,0.08));
+        }
+
+        .eyebrow {
+            color: #aeb4ff;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 6vw, 68px);
+            line-height: 1.05;
+            margin-bottom: 18px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            color: #ffffff;
+        }
+
+        .hero-subtitle {
+            max-width: 760px;
+            margin: 0 auto 32px;
+            color: #aeb0bb;
+            font-size: clamp(15px, 2vw, 18px);
+        }
+
+        .hero-subtitle strong {
+            color: #fff;
+        }
+
+        .tagline {
+            color: #d7d8df;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            margin-bottom: 34px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 190px;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: 0.25s;
+        }
+
+        .btn-primary {
+            background: #5865f2;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(88,101,242,0.22);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #6975f5;
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            color: #8d94ff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(30px, 5vw, 48px);
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .section-text {
+            max-width: 720px;
+            color: #aeb0bb;
+            margin-bottom: 45px;
+        }
+
+        .about {
+            background: #0a0b11;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .about-box {
+            max-width: 850px;
+        }
+
+        .about-box h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .about-box p {
+            color: #b8bac5;
+        }
+
+        /* CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
 
         .card {
-
-            padding: 40px 30px;
-
-            background: #0c0c11;
-
-            border:
-                1px solid
-                #1c1c25;
-
-            border-radius: 12px;
-
-            text-align: left;
-
-            transition: 0.3s;
+            padding: 34px;
+            background: #0d0f16;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            transition: 0.25s;
         }
-
 
         .card:hover {
-
-            transform: translateY(-6px);
-
-            border-color: #4545ff;
+            transform: translateY(-4px);
+            border-color: rgba(255,255,255,0.18);
         }
-
 
         .card-number {
-
-            color: #6868ff;
-
+            color: #7e86ff;
             font-size: 12px;
-
-            font-weight: bold;
-
-            margin-bottom: 25px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
         }
-
 
         .card h3 {
-
+            font-size: 25px;
             margin-bottom: 12px;
-
-            font-size: 21px;
         }
-
 
         .card p {
-
-            color: #858592;
-
-            font-size: 14px;
-
-            line-height: 1.7;
+            color: #aeb0bb;
         }
 
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        footer {
-
-            padding: 35px 20px;
-
+        /* CONTACT */
+        .contact {
             text-align: center;
-
-            border-top:
-                1px solid
-                #15151c;
-
-            color: #555560;
-
-            font-size: 12px;
+            background: #090a0f;
         }
 
+        .contact .section-text {
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-        /* =========================
-           CELULAR
-        ========================= */
+        /* FOOTER */
+        footer {
+            padding: 35px 0;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            color: #777b88;
+            font-size: 12px;
+            text-align: center;
+        }
 
-        @media (max-width: 800px) {
-
-            nav {
-
-                justify-content: center;
-            }
-
-
-            .brand {
-
-                font-size: 15px;
-            }
-
-
-            .menu {
-
+        @media (max-width: 760px) {
+            .nav-links {
                 display: none;
             }
 
+            nav {
+                min-height: 68px;
+            }
+
+            .brand img {
+                width: 42px;
+                height: 42px;
+            }
 
             .hero {
-
-                padding-top: 120px;
+                padding-top: 105px;
             }
 
-
-            .logo {
-
-                width: 100%;
-
-                max-height: 230px;
+            .logotipo {
+                width: 340px;
             }
 
-
-            .description {
-
-                font-size: 15px;
+            section {
+                padding: 75px 0;
             }
-
 
             .cards {
-
                 grid-template-columns: 1fr;
             }
 
-
-            .button {
-
-                width: 90%;
-
-                max-width: 330px;
+            .card {
+                padding: 27px;
             }
 
+            .btn {
+                width: 100%;
+                max-width: 330px;
+            }
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-    <!-- =========================
-         MENU
-    ========================= -->
-
-    <nav>
-
-        <div class="brand">
-            PALE ASCENDANCY
-        </div>
-
-
-        <div class="menu">
-
-            <a href="#home">
-                HOME
+<header>
+    <div class="container">
+        <nav>
+            <a href="#home" class="brand">
+                <img src="1000319979.png" alt="Logo da Pale Ascendancy">
+                <span>PALE ASCENDANCY</span>
             </a>
 
-            <a href="#editores">
-                EDITORES
-            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#editores">Editores</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li>
+                    <a class="nav-discord" href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener">
+                        Entrar no Discord
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-            <a href="#contratantes">
-                CONTRATANTES
-            </a>
+<main>
 
-            <a
-                class="discord-nav"
-                href="https://discord.gg/H3mnq7Nfp"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                DISCORD
-            </a>
-
-        </div>
-
-    </nav>
-
-
-    <!-- =========================
-         HOME
-    ========================= -->
-
-    <section
-        class="hero"
-        id="home"
-    >
-
-        <div class="hero-content">
-
-
-            <div class="eyebrow">
-
-                CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
-
-            </div>
-
-
-            <!-- LOGO NOVA -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
 
             <img
-                class="logo"
-                src="/mnt/data/1000319979.png"
+                class="logotipo"
+                src="1000319979.png"
                 alt="Logo da Pale Ascendancy"
             >
 
+            <div class="eyebrow">CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL</div>
 
-            <h1>
-                Pale Ascendancy
-            </h1>
+            <h1>Pale Ascendancy</h1>
 
-
-            <div class="headline">
-
-                Conectando Estratégia Audiovisual
-                e Produção Profissional
-
-            </div>
-
-
-            <p class="description">
-
-                Uma comunidade exclusiva dedicada a
-                viabilizar parcerias de alto valor entre
-                editores especializados, criadores de
-                conteúdo e contratantes.
-
+            <p class="hero-subtitle">
+                <strong>Conectando Estratégia Audiovisual e Produção Profissional.</strong><br>
+                Uma comunidade exclusiva dedicada a viabilizar parcerias de alto valor
+                entre editores especializados, criadores de conteúdo e contratantes.
             </p>
 
+            <div class="buttons">
+                <a class="btn btn-primary" href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener">
+                    Entrar no Discord
+                </a>
+
+                <a class="btn btn-secondary" href="#sobre">
+                    Conhecer a Pale Ascendancy
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="about" id="sobre">
+        <div class="container">
+            <div class="section-label">PALE ASCENDANCY</div>
+            <h2 class="section-title">Estratégia, conexão e produção.</h2>
+
+            <div class="about-box">
+                <p>
+                    A Pale Ascendancy é uma comunidade voltada à construção de conexões
+                    profissionais dentro do universo audiovisual, aproximando talentos,
+                    projetos e oportunidades de colaboração.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos">
+        <div class="container">
+            <div class="section-label">REDE CRIATIVA</div>
+            <h2 class="section-title">Encontre a conexão certa.</h2>
+            <p class="section-text">
+                Nossa estrutura aproxima profissionais especializados de pessoas e
+                projetos que precisam de produção audiovisual.
+            </p>
+
+            <div class="cards" id="editores">
+
+                <article class="card">
+                    <div class="card-number">01 / EDITORES</div>
+                    <h3>EDITORES</h3>
+                    <p>
+                        Profissionais especializados em diferentes áreas da produção audiovisual.
+                    </p>
+                </article>
+
+                <article class="card">
+                    <div class="card-number">02 / CONTRATANTES</div>
+                    <h3>CONTRATANTES</h3>
+                    <p>
+                        Encontre profissionais preparados para atender às necessidades do seu projeto.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contato">
+        <div class="container">
+            <div class="section-label">CONTATO</div>
+            <h2 class="section-title">Faça parte da rede.</h2>
+            <p class="section-text">
+                Entre na comunidade e conheça novos profissionais, projetos e oportunidades.
+            </p>
 
             <div class="buttons">
-
-
-                <a
-                    class="button primary"
-                    href="https://discord.gg/H3mnq7Nfp"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-
-                    ENTRAR NO DISCORD
-
+                <a class="btn btn-primary" href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener">
+                    Entrar no Discord
                 </a>
-
-
-                <a
-                    class="button secondary"
-                    href="#editores"
-                >
-
-                    CONHECER A REDE
-
-                </a>
-
-
             </div>
-
-
         </div>
-
     </section>
 
-
-    <!-- =========================
-         EDITORES
-    ========================= -->
-
-    <section
-        class="section"
-        id="editores"
-    >
-
-        <h2 class="section-title">
-
-            EDITORES
-
-        </h2>
-
-
-        <p class="section-subtitle">
-
-            Profissionais especializados em diferentes
-            áreas da produção audiovisual.
-
-        </p>
-
-
-        <div class="cards">
-
-
-            <div class="card">
-
-                <div class="card-number">
-                    01
-                </div>
-
-
-                <h3>
-                    EDITORES ESPECIALIZADOS
-                </h3>
-
-
-                <p>
-
-                    Conecte-se com profissionais
-                    preparados para diferentes
-                    necessidades de produção audiovisual.
-
-                </p>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="card-number">
-                    02
-                </div>
-
-
-                <h3>
-                    NOVOS PROJETOS
-                </h3>
-
-
-                <p>
-
-                    Encontre oportunidades para
-                    desenvolver projetos e ampliar
-                    sua rede profissional.
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         CONTRATANTES
-    ========================= -->
-
-    <section
-        class="section"
-        id="contratantes"
-    >
-
-        <h2 class="section-title">
-
-            CONTRATANTES
-
-        </h2>
-
-
-        <p class="section-subtitle">
-
-            Encontre profissionais preparados para
-            atender às necessidades do seu projeto.
-
-        </p>
-
-
-        <div class="cards">
-
-
-            <div class="card">
-
-                <div class="card-number">
-                    01
-                </div>
-
-
-                <h3>
-                    ENCONTRE PROFISSIONAIS
-                </h3>
-
-
-                <p>
-
-                    Acesse uma rede de editores
-                    especializados para diferentes
-                    projetos audiovisuais.
-
-                </p>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="card-number">
-                    02
-                </div>
-
-
-                <h3>
-                    DESENVOLVA SEU PROJETO
-                </h3>
-
-
-                <p>
-
-                    Encontre o profissional adequado
-                    para transformar sua ideia em
-                    uma produção profissional.
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         RODAPÉ
-    ========================= -->
-
-    <footer>
-
-        © 2026 Pale Ascendancy.
-        Todos os direitos reservados.
-
-    </footer>
-
+</main>
+
+<footer>
+    <div class="container">
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
+    </div>
+</footer>
 
 </body>
-
 </html>
