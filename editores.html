@@ -16,23 +16,52 @@
         name="description"
         content="Conheça os editores de vídeo conectados à rede Pale Ascendancy, cada um com sua especialidade em produção audiovisual."
     >
-    <link rel="canonical" href="https://paleascendancy.com/editores.html">
+
+    <link
+        rel="canonical"
+        href="https://paleascendancy.com/editores.html"
+    >
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Pale Ascendancy">
     <meta property="og:title" content="Editores — Pale Ascendancy">
-    <meta property="og:description" content="Conheça os editores de vídeo conectados à rede Pale Ascendancy.">
-    <meta property="og:url" content="https://paleascendancy.com/editores.html">
+    <meta
+        property="og:description"
+        content="Conheça os editores de vídeo conectados à rede Pale Ascendancy."
+    >
+    <meta
+        property="og:url"
+        content="https://paleascendancy.com/editores.html"
+    >
     <meta property="og:locale" content="pt_BR">
 
-    <meta name="theme-color" content="#0d0c0b">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta
+        name="theme-color"
+        content="#0d0c0b"
+    >
+
+    <link
+        rel="icon"
+        href="favicon.svg"
+        type="image/svg+xml"
+    >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
@@ -46,7 +75,10 @@
 
 <header class="header">
 
-    <a href="index.html" class="brand">
+    <a
+        href="index.html"
+        class="brand"
+    >
 
         <img
             src="1 Sem Título_20260901004747.png"
@@ -62,7 +94,10 @@
     </a>
 
 
-    <nav class="nav" aria-label="Navegação principal">
+    <nav
+        class="nav"
+        aria-label="Navegação principal"
+    >
 
         <a href="index.html">
             Home
@@ -76,7 +111,10 @@
             Serviços
         </a>
 
-        <a href="editores.html" class="active">
+        <a
+            href="editores.html"
+            class="active"
+        >
             Editores
         </a>
 
@@ -105,7 +143,12 @@
         aria-expanded="false"
         aria-controls="mobileMenu"
     >
-        <span class="menu-icon" aria-hidden="true"></span>
+
+        <span
+            class="menu-icon"
+            aria-hidden="true"
+        ></span>
+
     </button>
 
 </header>
@@ -141,7 +184,6 @@
         Contato
     </a>
 
-
     <a
         href="https://discord.gg/H3mnq7Nfp"
         target="_blank"
@@ -161,12 +203,18 @@
 
 <main class="editors-page">
 
-    <div class="hero-glow" aria-hidden="true"></div>
+    <div
+        class="hero-glow"
+        aria-hidden="true"
+    ></div>
+
 
     <div class="editors-container">
 
 
-        <!-- CABEÇALHO -->
+        <!-- ==================================================
+             CABEÇALHO
+        ================================================== -->
 
         <section class="editors-heading">
 
@@ -179,17 +227,23 @@
             </h1>
 
             <p>
-                Cada editor tem uma especialidade diferente —
-                use a busca ou os filtros para achar quem combina
-                com o seu projeto.
+                Conheça os profissionais conectados à Pale Ascendancy.
+                Encontre especialistas para diferentes estilos,
+                projetos e necessidades de edição.
             </p>
 
         </section>
 
 
-        <!-- FERRAMENTAS -->
 
-        <section class="editor-tools">
+        <!-- ==================================================
+             BUSCA E FILTROS
+        ================================================== -->
+
+        <section
+            class="editor-tools"
+            aria-label="Pesquisar e filtrar editores"
+        >
 
             <input
                 type="text"
@@ -199,25 +253,50 @@
                 aria-label="Pesquisar editor ou especialidade"
             >
 
-            <div class="filters">
 
-                <button class="filter-button active" data-filter="todos" type="button">
+            <div
+                class="filters"
+                role="group"
+                aria-label="Filtrar por especialidade"
+            >
+
+                <button
+                    class="filter-button active"
+                    data-filter="todos"
+                    type="button"
+                >
                     Todos
                 </button>
 
-                <button class="filter-button" data-filter="promo" type="button">
+                <button
+                    class="filter-button"
+                    data-filter="promo"
+                    type="button"
+                >
                     Promo
                 </button>
 
-                <button class="filter-button" data-filter="trailer" type="button">
+                <button
+                    class="filter-button"
+                    data-filter="trailer"
+                    type="button"
+                >
                     Trailers
                 </button>
 
-                <button class="filter-button" data-filter="highlight" type="button">
+                <button
+                    class="filter-button"
+                    data-filter="highlight"
+                    type="button"
+                >
                     Highlights
                 </button>
 
-                <button class="filter-button" data-filter="motion" type="button">
+                <button
+                    class="filter-button"
+                    data-filter="motion"
+                    type="button"
+                >
                     Motion Design
                 </button>
 
@@ -226,12 +305,21 @@
         </section>
 
 
-        <!-- EDITORES -->
 
-        <section class="editors-grid" id="editorsGrid">
+        <!-- ==================================================
+             EDITORES
+        ================================================== -->
+
+        <section
+            class="editors-grid"
+            id="editorsGrid"
+            aria-label="Lista de editores"
+        >
 
 
-            <!-- SMOOKECUT -->
+            <!-- ==================================================
+                 SMOOKECUT
+            ================================================== -->
 
             <article
                 class="editor-profile"
@@ -240,32 +328,76 @@
             >
 
                 <div class="editor-status">
-                    <span class="status-dot"></span>
+                    <span
+                        class="status-dot"
+                        aria-hidden="true"
+                    ></span>
+
                     Disponível
                 </div>
 
-                <div class="editor-avatar">S</div>
 
-                <h2>Smookecut</h2>
+                <div
+                    class="editor-avatar"
+                    aria-hidden="true"
+                >
+                    S
+                </div>
 
-                <div class="editor-role">RITMO &amp; CORTES</div>
+
+                <h2>
+                    Smookecut
+                </h2>
+
+
+                <div class="editor-role">
+                    RITMO &amp; CORTES
+                </div>
+
 
                 <p class="editor-description">
                     Trabalha com conteúdo de jogos e edições
-                    cortadas no beat, feitas pra prender atenção
+                    cortadas no beat, feitas para prender atenção
                     nos primeiros segundos.
                 </p>
 
+
                 <div class="editor-tags">
-                    <span class="editor-tag">Highlights</span>
-                    <span class="editor-tag">Gaming</span>
-                    <span class="editor-tag">TikTok</span>
+
+                    <span class="editor-tag">
+                        Highlights
+                    </span>
+
+                    <span class="editor-tag">
+                        Gaming
+                    </span>
+
+                    <span class="editor-tag">
+                        TikTok
+                    </span>
+
+                </div>
+
+
+                <div class="editor-footer">
+
+                    <span class="editor-specialty-label">
+                        Especialidade
+                    </span>
+
+                    <span class="editor-arrow">
+                        →
+                    </span>
+
                 </div>
 
             </article>
 
 
-            <!-- MANGAKÁ -->
+
+            <!-- ==================================================
+                 MANGAKÁ
+            ================================================== -->
 
             <article
                 class="editor-profile"
@@ -274,15 +406,32 @@
             >
 
                 <div class="editor-status">
-                    <span class="status-dot"></span>
+                    <span
+                        class="status-dot"
+                        aria-hidden="true"
+                    ></span>
+
                     Disponível
                 </div>
 
-                <div class="editor-avatar">M</div>
 
-                <h2>MANGAKÁ</h2>
+                <div
+                    class="editor-avatar"
+                    aria-hidden="true"
+                >
+                    M
+                </div>
 
-                <div class="editor-role">ANIME &amp; MOTION</div>
+
+                <h2>
+                    MANGAKÁ
+                </h2>
+
+
+                <div class="editor-role">
+                    ANIME &amp; MOTION
+                </div>
+
 
                 <p class="editor-description">
                     Especializado em edições com referência de
@@ -290,55 +439,132 @@
                     estilizadas.
                 </p>
 
+
                 <div class="editor-tags">
-                    <span class="editor-tag">Motion Design</span>
-                    <span class="editor-tag">Anime</span>
-                    <span class="editor-tag">Tipografia</span>
+
+                    <span class="editor-tag">
+                        Motion Design
+                    </span>
+
+                    <span class="editor-tag">
+                        Anime
+                    </span>
+
+                    <span class="editor-tag">
+                        Tipografia
+                    </span>
+
+                </div>
+
+
+                <div class="editor-footer">
+
+                    <span class="editor-specialty-label">
+                        Especialidade
+                    </span>
+
+                    <span class="editor-arrow">
+                        →
+                    </span>
+
                 </div>
 
             </article>
 
 
-            <!-- VAGA ABERTA -->
+
+            <!-- ==================================================
+                 VAGA ABERTA
+            ================================================== -->
 
             <article
                 class="editor-profile editor-card-placeholder"
-                data-category="todos"
+                data-category="todos promo trailer"
                 data-search="vaga aberta novo editor promo trailer"
             >
 
-                <div class="editor-avatar placeholder-icon" aria-hidden="true">+</div>
+                <div
+                    class="editor-avatar placeholder-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </div>
 
-                <h2>Seu espaço aqui</h2>
 
-                <div class="editor-role">VAGAS ABERTAS</div>
+                <h2>
+                    Faça parte da rede
+                </h2>
+
+
+                <div class="editor-role">
+                    VAGAS ABERTAS
+                </div>
+
 
                 <p class="editor-description">
-                    Ainda não temos editor fixo pra promo e
-                    trailers — se essa é sua especialidade,
-                    fala com a gente no Discord.
+                    Trabalha com promo, trailers ou outro estilo?
+                    Mostre seu trabalho e conecte-se com novos
+                    projetos através da Pale Ascendancy.
                 </p>
 
+
                 <div class="editor-tags">
-                    <span class="editor-tag">Promo</span>
-                    <span class="editor-tag">Trailers</span>
+
+                    <span class="editor-tag">
+                        Promo
+                    </span>
+
+                    <span class="editor-tag">
+                        Trailers
+                    </span>
+
+                </div>
+
+
+                <div class="editor-footer">
+
+                    <span class="editor-specialty-label">
+                        Quero participar
+                    </span>
+
+                    <span class="editor-arrow">
+                        →
+                    </span>
+
                 </div>
 
             </article>
 
 
-            <p class="no-results" id="noResults">
+
+            <!-- ==================================================
+                 SEM RESULTADOS
+            ================================================== -->
+
+            <p
+                class="no-results"
+                id="noResults"
+            >
                 Nenhum editor encontrado para essa busca.
             </p>
 
         </section>
 
 
-        <!-- CTA -->
+
+        <!-- ==================================================
+             CTA
+        ================================================== -->
 
         <section class="editors-cta">
 
-            <h2>Quer fazer parte da rede?</h2>
+            <p class="eyebrow">
+                Pale Ascendancy
+            </p>
+
+            <h2>
+                Quer fazer parte da rede?
+            </h2>
 
             <p>
                 Entre na comunidade Pale Ascendancy e conecte-se
@@ -395,8 +621,8 @@
 </footer>
 
 
-<script src="script.js"></script>
 
+<script src="script.js"></script>
 
 </body>
 
