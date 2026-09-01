@@ -1,1 +1,488 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Entrar — Pale Ascendancy</title>
+
+    <meta
+        name="description"
+        content="Entre na sua conta da Pale Ascendancy."
+    >
+
+    <meta
+        name="theme-color"
+        content="#0d0c0b"
+    >
+
+    <link
+        rel="icon"
+        href="favicon.svg"
+        type="image/svg+xml"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <a
+        href="index.html"
+        class="brand"
+    >
+
+        <img
+            src="1 Sem Título_20260901004747.png"
+            alt="Pale Ascendancy"
+            width="36"
+            height="36"
+        >
+
+        <span>
+            PALE ASCENDANCY
+        </span>
+
+    </a>
+
+
+    <nav
+        class="nav"
+        aria-label="Navegação principal"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="index.html#sobre">
+            Sobre
+        </a>
+
+        <a href="servicos.html">
+            Serviços
+        </a>
+
+        <a href="editores.html">
+            Editores
+        </a>
+
+        <a href="index.html#contato">
+            Contato
+        </a>
+
+    </nav>
+
+
+    <a
+        class="discord-button"
+        href="https://discord.gg/H3mnq7Nfp"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Entrar no Discord
+    </a>
+
+
+    <button
+        class="menu-button"
+        id="menuButton"
+        type="button"
+        aria-label="Abrir menu de navegação"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
+    >
+
+        <span
+            class="menu-icon"
+            aria-hidden="true"
+        ></span>
+
+    </button>
+
+</header>
+
+
+<div
+    class="mobile-menu"
+    id="mobileMenu"
+>
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="index.html#sobre">
+        Sobre
+    </a>
+
+    <a href="servicos.html">
+        Serviços
+    </a>
+
+    <a href="editores.html">
+        Editores
+    </a>
+
+    <a href="index.html#contato">
+        Contato
+    </a>
+
+    <a
+        href="cadastro.html"
+        class="mobile-register"
+    >
+        Criar conta
+    </a>
+
+    <a
+        href="https://discord.gg/H3mnq7Nfp"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mobile-discord"
+    >
+        Entrar no Discord
+    </a>
+
+</div>
+
+
+<main class="auth-page">
+
+    <div
+        class="hero-glow"
+        aria-hidden="true"
+    ></div>
+
+
+    <section class="auth-container">
+
+
+        <div class="auth-heading">
+
+            <p class="eyebrow">
+                Pale Ascendancy
+            </p>
+
+            <h1>
+                Bem-vindo <span>de volta.</span>
+            </h1>
+
+            <p>
+                Entre na sua conta para acessar
+                seu perfil de editor.
+            </p>
+
+        </div>
+
+
+        <form
+            class="auth-form"
+            id="loginForm"
+        >
+
+
+            <div class="form-row">
+
+                <label for="email">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="seuemail@email.com"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <label for="senha">
+                    Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Sua senha"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <p
+                class="auth-message"
+                id="loginMessage"
+                aria-live="polite"
+            ></p>
+
+
+            <button
+                type="submit"
+                class="primary-button auth-submit"
+                id="loginButton"
+            >
+                Entrar
+            </button>
+
+
+        </form>
+
+
+        <div class="auth-footer">
+
+            <p>
+                Ainda não possui uma conta?
+            </p>
+
+            <a href="cadastro.html">
+                Criar minha conta
+            </a>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="footer-brand">
+
+        <img
+            src="1 Sem Título_20260901004747.png"
+            alt="Pale Ascendancy"
+            width="28"
+            height="28"
+        >
+
+        <span>
+            PALE ASCENDANCY
+        </span>
+
+    </div>
+
+
+    <p>
+        Rede de editores e produção audiovisual.
+    </p>
+
+
+    <small>
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
+    </small>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://fnyellunugdfesprmvzm.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+
+loginForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+
+        const senha =
+            document
+                .getElementById("senha")
+                .value;
+
+
+        loginMessage.textContent = "";
+
+        loginMessage.className =
+            "auth-message";
+
+
+        if (!email || !senha) {
+
+            loginMessage.textContent =
+                "Preencha seu e-mail e sua senha.";
+
+            loginMessage.classList.add(
+                "error"
+            );
+
+            return;
+        }
+
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+            "Entrando...";
+
+
+        try {
+
+            const result =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: email,
+
+                    password: senha
+
+                });
+
+
+            const data =
+                result.data;
+
+            const error =
+                result.error;
+
+
+            if (error) {
+
+                console.error(error);
+
+
+                loginMessage.textContent =
+                    "E-mail ou senha incorretos.";
+
+                loginMessage.classList.add(
+                    "error"
+                );
+
+
+                loginButton.disabled =
+                    false;
+
+                loginButton.textContent =
+                    "Entrar";
+
+                return;
+            }
+
+
+            loginMessage.textContent =
+                "Login realizado com sucesso!";
+
+            loginMessage.classList.add(
+                "success"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "editores.html";
+
+                },
+                800
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            loginMessage.textContent =
+                "Não foi possível conectar ao servidor.";
+
+            loginMessage.classList.add(
+                "error"
+            );
+
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "Entrar";
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
