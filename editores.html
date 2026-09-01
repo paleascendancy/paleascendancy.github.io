@@ -10,559 +10,29 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <title>Editores — Pale Ascendancy</title>
+
     <meta
         name="description"
-        content="Editores da Pale Ascendancy — profissionais especializados em produção audiovisual."
+        content="Conheça os editores de vídeo conectados à rede Pale Ascendancy, cada um com sua especialidade em produção audiovisual."
     >
+    <link rel="canonical" href="https://paleascendancy.com/editores.html">
 
-    <title>Editores | Pale Ascendancy</title>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Pale Ascendancy">
+    <meta property="og:title" content="Editores — Pale Ascendancy">
+    <meta property="og:description" content="Conheça os editores de vídeo conectados à rede Pale Ascendancy.">
+    <meta property="og:url" content="https://paleascendancy.com/editores.html">
+    <meta property="og:locale" content="pt_BR">
+
+    <meta name="theme-color" content="#0d0c0b">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-
-    <style>
-
-        /* =========================
-           PÁGINA DE EDITORES
-        ========================= */
-
-        .editors-page {
-            min-height: 100vh;
-
-            padding:
-                160px 20px 100px;
-
-            position: relative;
-
-            background:
-                radial-gradient(
-                    circle at 50% 15%,
-                    rgba(78, 73, 255, 0.16),
-                    transparent 35%
-                );
-        }
-
-
-        .editors-container {
-            width: min(1100px, 100%);
-
-            margin: auto;
-        }
-
-
-        /* =========================
-           CABEÇALHO
-        ========================= */
-
-        .editors-heading {
-            text-align: center;
-
-            max-width: 750px;
-
-            margin: 0 auto 60px;
-        }
-
-
-        .editors-heading span {
-            color: #7773ff;
-
-            font-size: 11px;
-
-            font-weight: 800;
-
-            letter-spacing: 4px;
-        }
-
-
-        .editors-heading h1 {
-            font-size:
-                clamp(42px, 7vw, 70px);
-
-            letter-spacing: -3px;
-
-            margin: 18px 0;
-        }
-
-
-        .editors-heading h1 strong {
-            color: #7d79ff;
-        }
-
-
-        .editors-heading p {
-            color: #92929e;
-
-            font-size: 16px;
-
-            line-height: 1.8;
-        }
-
-
-        /* =========================
-           PESQUISA
-        ========================= */
-
-        .editor-tools {
-            display: flex;
-
-            gap: 12px;
-
-            margin-bottom: 30px;
-
-            flex-wrap: wrap;
-        }
-
-
-        .search-box {
-            flex: 1;
-
-            min-width: 220px;
-
-            height: 50px;
-
-            padding: 0 18px;
-
-            border-radius: 11px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.09);
-
-            background:
-                rgba(255,255,255,0.035);
-
-            color: white;
-
-            outline: none;
-
-            font-size: 14px;
-        }
-
-
-        .search-box::placeholder {
-            color: #686873;
-        }
-
-
-        .search-box:focus {
-            border-color:
-                rgba(115,110,255,0.5);
-        }
-
-
-        /* =========================
-           FILTROS
-        ========================= */
-
-        .filters {
-            display: flex;
-
-            gap: 8px;
-
-            flex-wrap: wrap;
-        }
-
-
-        .filter-button {
-            height: 42px;
-
-            padding:
-                0 16px;
-
-            border-radius: 9px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
-
-            background:
-                rgba(255,255,255,0.025);
-
-            color: #92929e;
-
-            cursor: pointer;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-            transition: 0.25s;
-        }
-
-
-        .filter-button:hover,
-        .filter-button.active {
-            background:
-                rgba(88,101,242,0.16);
-
-            border-color:
-                rgba(100,105,255,0.4);
-
-            color: white;
-        }
-
-
-        /* =========================
-           GRID
-        ========================= */
-
-        .editors-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 16px;
-        }
-
-
-        /* =========================
-           CARD
-        ========================= */
-
-        .editor-profile {
-            min-height: 300px;
-
-            padding: 27px;
-
-            border-radius: 18px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.055),
-                    rgba(255,255,255,0.018)
-                );
-
-            position: relative;
-
-            overflow: hidden;
-
-            transition:
-                transform 0.3s ease,
-                border-color 0.3s ease,
-                box-shadow 0.3s ease;
-        }
-
-
-        .editor-profile::before {
-            content: "";
-
-            position: absolute;
-
-            width: 150px;
-            height: 150px;
-
-            right: -70px;
-            top: -70px;
-
-            background:
-                rgba(88,101,242,0.16);
-
-            filter: blur(50px);
-
-            border-radius: 50%;
-        }
-
-
-        .editor-profile:hover {
-            transform:
-                translateY(-7px);
-
-            border-color:
-                rgba(111,106,255,0.35);
-
-            box-shadow:
-                0 20px 50px
-                rgba(0,0,0,0.3);
-        }
-
-
-        /* =========================
-           AVATAR
-        ========================= */
-
-        .editor-avatar {
-            width: 58px;
-            height: 58px;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 15px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #25234f,
-                    #141421
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,0.09);
-
-            color: #aaa7ff;
-
-            font-size: 21px;
-
-            font-weight: 800;
-
-            margin-bottom: 22px;
-        }
-
-
-        .editor-profile h2 {
-            font-size: 21px;
-
-            margin-bottom: 8px;
-        }
-
-
-        .editor-role {
-            color: #7773ff;
-
-            font-size: 10px;
-
-            font-weight: 800;
-
-            letter-spacing: 2px;
-
-            margin-bottom: 18px;
-        }
-
-
-        .editor-description {
-            color: #858590;
-
-            font-size: 13px;
-
-            line-height: 1.7;
-
-            margin-bottom: 25px;
-        }
-
-
-        /* =========================
-           TAGS
-        ========================= */
-
-        .editor-tags {
-            display: flex;
-
-            gap: 7px;
-
-            flex-wrap: wrap;
-        }
-
-
-        .editor-tag {
-            padding:
-                6px 9px;
-
-            border-radius: 6px;
-
-            background:
-                rgba(255,255,255,0.05);
-
-            color: #9999a5;
-
-            font-size: 9px;
-
-            font-weight: 700;
-
-            letter-spacing: 1px;
-        }
-
-
-        /* =========================
-           ESTADO
-        ========================= */
-
-        .editor-status {
-            position: absolute;
-
-            top: 25px;
-            right: 25px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 6px;
-
-            color: #777;
-
-            font-size: 9px;
-
-            font-weight: 700;
-        }
-
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-
-            border-radius: 50%;
-
-            background: #555;
-        }
-
-
-        /* =========================
-           VAZIO
-        ========================= */
-
-        .no-results {
-            display: none;
-
-            text-align: center;
-
-            padding: 60px 20px;
-
-            color: #777783;
-
-            grid-column:
-                1 / -1;
-        }
-
-
-        /* =========================
-           CTA
-        ========================= */
-
-        .editors-cta {
-            margin-top: 70px;
-
-            padding: 60px 30px;
-
-            text-align: center;
-
-            border-radius: 22px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
-
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(81,76,255,0.16),
-                    transparent 55%
-                ),
-                rgba(255,255,255,0.025);
-        }
-
-
-        .editors-cta h2 {
-            font-size: 30px;
-
-            margin-bottom: 12px;
-        }
-
-
-        .editors-cta p {
-            max-width: 600px;
-
-            margin:
-                0 auto 25px;
-
-            color: #888894;
-
-            line-height: 1.7;
-
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           RESPONSIVO
-        ========================= */
-
-        @media (max-width: 900px) {
-
-            .editors-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            .editors-page {
-                padding:
-                    130px 15px 70px;
-            }
-
-
-            .editors-heading {
-                margin-bottom: 40px;
-            }
-
-
-            .editors-heading h1 {
-                font-size: 42px;
-
-                letter-spacing: -2px;
-            }
-
-
-            .editors-heading p {
-                font-size: 14px;
-            }
-
-
-            .editors-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .editor-profile {
-                min-height: 270px;
-            }
-
-
-            .editor-tools {
-                display: block;
-            }
-
-
-            .search-box {
-                width: 100%;
-
-                margin-bottom: 12px;
-            }
-
-
-            .filters {
-                overflow-x: auto;
-
-                flex-wrap: nowrap;
-
-                padding-bottom: 5px;
-            }
-
-
-            .filter-button {
-                white-space: nowrap;
-            }
-
-
-            .editors-cta {
-                padding:
-                    45px 20px;
-            }
-
-        }
-
-    </style>
 
 </head>
 
@@ -570,9 +40,9 @@
 <body>
 
 
-<!-- =========================
+<!-- ==================================================
      HEADER
-========================= -->
+================================================== -->
 
 <header class="header">
 
@@ -580,7 +50,9 @@
 
         <img
             src="1 Sem Título_20260901004747.png"
-            alt="Logo Pale Ascendancy"
+            alt="Pale Ascendancy"
+            width="36"
+            height="36"
         >
 
         <span>
@@ -590,7 +62,7 @@
     </a>
 
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navegação principal">
 
         <a href="index.html">
             Home
@@ -600,11 +72,11 @@
             Sobre
         </a>
 
-        <a href="index.html#servicos">
+        <a href="servicos.html">
             Serviços
         </a>
 
-        <a href="editores.html">
+        <a href="editores.html" class="active">
             Editores
         </a>
 
@@ -616,9 +88,10 @@
 
 
     <a
+        class="discord-button"
         href="https://discord.gg/H3mnq7Nfp"
         target="_blank"
-        class="discord-button"
+        rel="noopener noreferrer"
     >
         Entrar no Discord
     </a>
@@ -627,18 +100,26 @@
     <button
         class="menu-button"
         id="menuButton"
+        type="button"
+        aria-label="Abrir menu de navegação"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
     >
-        ☰
+        <span class="menu-icon" aria-hidden="true"></span>
     </button>
 
 </header>
 
 
-<!-- =========================
-     MENU MOBILE
-========================= -->
 
-<div class="mobile-menu" id="mobileMenu">
+<!-- ==================================================
+     MENU MOBILE
+================================================== -->
+
+<div
+    class="mobile-menu"
+    id="mobileMenu"
+>
 
     <a href="index.html">
         Home
@@ -648,7 +129,7 @@
         Sobre
     </a>
 
-    <a href="index.html#servicos">
+    <a href="servicos.html">
         Serviços
     </a>
 
@@ -660,9 +141,11 @@
         Contato
     </a>
 
+
     <a
         href="https://discord.gg/H3mnq7Nfp"
         target="_blank"
+        rel="noopener noreferrer"
         class="mobile-discord"
     >
         Entrar no Discord
@@ -671,11 +154,14 @@
 </div>
 
 
-<!-- =========================
+
+<!-- ==================================================
      CONTEÚDO
-========================= -->
+================================================== -->
 
 <main class="editors-page">
+
+    <div class="hero-glow" aria-hidden="true"></div>
 
     <div class="editors-container">
 
@@ -684,19 +170,18 @@
 
         <section class="editors-heading">
 
-            <span>
-                03 — REDE DE PROFISSIONAIS
-            </span>
+            <p class="eyebrow">
+                Rede de profissionais
+            </p>
 
             <h1>
-                Nossos
-                <strong>Editores.</strong>
+                Nossos <span>editores.</span>
             </h1>
 
             <p>
-                Profissionais especializados em diferentes
-                áreas da produção audiovisual, conectados
-                através da Pale Ascendancy.
+                Cada editor tem uma especialidade diferente —
+                use a busca ou os filtros para achar quem combina
+                com o seu projeto.
             </p>
 
         </section>
@@ -711,43 +196,28 @@
                 id="searchInput"
                 class="search-box"
                 placeholder="Pesquisar editor ou especialidade..."
+                aria-label="Pesquisar editor ou especialidade"
             >
-
 
             <div class="filters">
 
-                <button
-                    class="filter-button active"
-                    data-filter="todos"
-                >
+                <button class="filter-button active" data-filter="todos" type="button">
                     Todos
                 </button>
 
-                <button
-                    class="filter-button"
-                    data-filter="promo"
-                >
+                <button class="filter-button" data-filter="promo" type="button">
                     Promo
                 </button>
 
-                <button
-                    class="filter-button"
-                    data-filter="trailer"
-                >
+                <button class="filter-button" data-filter="trailer" type="button">
                     Trailers
                 </button>
 
-                <button
-                    class="filter-button"
-                    data-filter="highlight"
-                >
+                <button class="filter-button" data-filter="highlight" type="button">
                     Highlights
                 </button>
 
-                <button
-                    class="filter-button"
-                    data-filter="motion"
-                >
+                <button class="filter-button" data-filter="motion" type="button">
                     Motion Design
                 </button>
 
@@ -761,246 +231,105 @@
         <section class="editors-grid" id="editorsGrid">
 
 
-            <!-- EDITOR 1 -->
-
-            <article
-                class="editor-profile"
-                data-category="promo"
-                data-search="promo editor audiovisual"
-            >
-
-                <div class="editor-status">
-
-                    <span class="status-dot"></span>
-
-                    Disponível
-
-                </div>
-
-
-                <div class="editor-avatar">
-                    PA
-                </div>
-
-
-                <h2>
-                    Editor Pale
-                </h2>
-
-
-                <div class="editor-role">
-                    PROMO EDITOR
-                </div>
-
-
-                <p class="editor-description">
-                    Profissional especializado em
-                    produção de promos e conteúdos
-                    promocionais.
-                </p>
-
-
-                <div class="editor-tags">
-
-                    <span class="editor-tag">
-                        PROMO
-                    </span>
-
-                    <span class="editor-tag">
-                        EDITING
-                    </span>
-
-                    <span class="editor-tag">
-                        AUDIOVISUAL
-                    </span>
-
-                </div>
-
-            </article>
-
-
-            <!-- EDITOR 2 -->
-
-            <article
-                class="editor-profile"
-                data-category="trailer"
-                data-search="trailer cinematic editor"
-            >
-
-                <div class="editor-status">
-
-                    <span class="status-dot"></span>
-
-                    Disponível
-
-                </div>
-
-
-                <div class="editor-avatar">
-                    PA
-                </div>
-
-
-                <h2>
-                    Editor Ascend
-                </h2>
-
-
-                <div class="editor-role">
-                    TRAILER EDITOR
-                </div>
-
-
-                <p class="editor-description">
-                    Especialização em trailers,
-                    storytelling visual e edição
-                    cinematográfica.
-                </p>
-
-
-                <div class="editor-tags">
-
-                    <span class="editor-tag">
-                        TRAILER
-                    </span>
-
-                    <span class="editor-tag">
-                        CINEMATIC
-                    </span>
-
-                    <span class="editor-tag">
-                        EDITING
-                    </span>
-
-                </div>
-
-            </article>
-
-
-            <!-- EDITOR 3 -->
+            <!-- SMOOKECUT -->
 
             <article
                 class="editor-profile"
                 data-category="highlight"
-                data-search="highlight gaming editor"
+                data-search="smookecut ritmo cortes highlight gaming tiktok"
             >
 
                 <div class="editor-status">
-
                     <span class="status-dot"></span>
-
                     Disponível
-
                 </div>
 
+                <div class="editor-avatar">S</div>
 
-                <div class="editor-avatar">
-                    PA
-                </div>
+                <h2>Smookecut</h2>
 
-
-                <h2>
-                    Editor Horizon
-                </h2>
-
-
-                <div class="editor-role">
-                    HIGHLIGHT EDITOR
-                </div>
-
+                <div class="editor-role">RITMO &amp; CORTES</div>
 
                 <p class="editor-description">
-                    Edição de highlights, gameplay
-                    e conteúdos focados em ritmo
-                    e impacto visual.
+                    Trabalha com conteúdo de jogos e edições
+                    cortadas no beat, feitas pra prender atenção
+                    nos primeiros segundos.
                 </p>
 
-
                 <div class="editor-tags">
-
-                    <span class="editor-tag">
-                        HIGHLIGHT
-                    </span>
-
-                    <span class="editor-tag">
-                        GAMING
-                    </span>
-
-                    <span class="editor-tag">
-                        EDITING
-                    </span>
-
+                    <span class="editor-tag">Highlights</span>
+                    <span class="editor-tag">Gaming</span>
+                    <span class="editor-tag">TikTok</span>
                 </div>
 
             </article>
 
 
-            <!-- EDITOR 4 -->
+            <!-- MANGAKÁ -->
 
             <article
                 class="editor-profile"
                 data-category="motion"
-                data-search="motion design animation editor"
+                data-search="mangaka anime motion tipografia design"
             >
 
                 <div class="editor-status">
-
                     <span class="status-dot"></span>
-
                     Disponível
-
                 </div>
 
+                <div class="editor-avatar">M</div>
 
-                <div class="editor-avatar">
-                    PA
-                </div>
+                <h2>MANGAKÁ</h2>
 
-
-                <h2>
-                    Editor Motion
-                </h2>
-
-
-                <div class="editor-role">
-                    MOTION DESIGNER
-                </div>
-
+                <div class="editor-role">ANIME &amp; MOTION</div>
 
                 <p class="editor-description">
-                    Motion design, animações e
-                    elementos gráficos para
-                    produções audiovisuais.
+                    Especializado em edições com referência de
+                    anime/mangá, tipografia animada e transições
+                    estilizadas.
                 </p>
 
-
                 <div class="editor-tags">
-
-                    <span class="editor-tag">
-                        MOTION
-                    </span>
-
-                    <span class="editor-tag">
-                        DESIGN
-                    </span>
-
-                    <span class="editor-tag">
-                        ANIMATION
-                    </span>
-
+                    <span class="editor-tag">Motion Design</span>
+                    <span class="editor-tag">Anime</span>
+                    <span class="editor-tag">Tipografia</span>
                 </div>
 
             </article>
 
 
-            <!-- SEM RESULTADOS -->
+            <!-- VAGA ABERTA -->
 
-            <div
-                class="no-results"
-                id="noResults"
+            <article
+                class="editor-profile editor-card-placeholder"
+                data-category="todos"
+                data-search="vaga aberta novo editor promo trailer"
             >
-                Nenhum editor encontrado.
-            </div>
+
+                <div class="editor-avatar placeholder-icon" aria-hidden="true">+</div>
+
+                <h2>Seu espaço aqui</h2>
+
+                <div class="editor-role">VAGAS ABERTAS</div>
+
+                <p class="editor-description">
+                    Ainda não temos editor fixo pra promo e
+                    trailers — se essa é sua especialidade,
+                    fala com a gente no Discord.
+                </p>
+
+                <div class="editor-tags">
+                    <span class="editor-tag">Promo</span>
+                    <span class="editor-tag">Trailers</span>
+                </div>
+
+            </article>
+
+
+            <p class="no-results" id="noResults">
+                Nenhum editor encontrado para essa busca.
+            </p>
 
         </section>
 
@@ -1009,20 +338,17 @@
 
         <section class="editors-cta">
 
-            <h2>
-                Quer fazer parte da rede?
-            </h2>
+            <h2>Quer fazer parte da rede?</h2>
 
             <p>
-                Entre na comunidade Pale Ascendancy e
-                conecte-se com outros profissionais,
-                criadores e contratantes.
+                Entre na comunidade Pale Ascendancy e conecte-se
+                com outros editores, criadores e contratantes.
             </p>
-
 
             <a
                 href="https://discord.gg/H3mnq7Nfp"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="primary-button"
             >
                 Entrar no Discord
@@ -1030,14 +356,16 @@
 
         </section>
 
+
     </div>
 
 </main>
 
 
-<!-- =========================
+
+<!-- ==================================================
      FOOTER
-========================= -->
+================================================== -->
 
 <footer>
 
@@ -1046,6 +374,8 @@
         <img
             src="1 Sem Título_20260901004747.png"
             alt="Pale Ascendancy"
+            width="28"
+            height="28"
         >
 
         <span>
@@ -1055,7 +385,7 @@
     </div>
 
     <p>
-        CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
+        Rede de editores e produção audiovisual.
     </p>
 
     <small>
@@ -1065,162 +395,9 @@
 </footer>
 
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
-
-<script>
-
-    // =========================
-    // MENU MOBILE
-    // =========================
-
-    const menuButton =
-        document.getElementById("menuButton");
-
-    const mobileMenu =
-        document.getElementById("mobileMenu");
-
-
-    menuButton.addEventListener(
-        "click",
-        () => {
-
-            mobileMenu.classList.toggle("active");
-
-        }
-    );
-
-
-    // =========================
-    // PESQUISA
-    // =========================
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-    const editorCards =
-        document.querySelectorAll(".editor-profile");
-
-    const noResults =
-        document.getElementById("noResults");
-
-
-    function filterEditors() {
-
-        const search =
-            searchInput.value
-                .toLowerCase()
-                .trim();
-
-
-        const activeFilter =
-            document.querySelector(
-                ".filter-button.active"
-            );
-
-
-        const category =
-            activeFilter.dataset.filter;
-
-
-        let visible = 0;
-
-
-        editorCards.forEach(card => {
-
-            const text =
-                card.dataset.search
-                    .toLowerCase();
-
-
-            const cardCategory =
-                card.dataset.category;
-
-
-            const matchesSearch =
-                text.includes(search);
-
-
-            const matchesCategory =
-                category === "todos" ||
-                cardCategory === category;
-
-
-            if (
-                matchesSearch &&
-                matchesCategory
-            ) {
-
-                card.style.display = "";
-
-                visible++;
-
-            } else {
-
-                card.style.display = "none";
-
-            }
-
-        });
-
-
-        if (visible === 0) {
-
-            noResults.style.display = "block";
-
-        } else {
-
-            noResults.style.display = "none";
-
-        }
-
-    }
-
-
-    searchInput.addEventListener(
-        "input",
-        filterEditors
-    );
-
-
-    // =========================
-    // FILTROS
-    // =========================
-
-    const filterButtons =
-        document.querySelectorAll(
-            ".filter-button"
-        );
-
-
-    filterButtons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                filterButtons.forEach(
-                    item => {
-                        item.classList.remove(
-                            "active"
-                        );
-                    }
-                );
-
-
-                button.classList.add("active");
-
-
-                filterEditors();
-
-            }
-        );
-
-    });
-
-</script>
+<script src="script.js"></script>
 
 
 </body>
+
 </html>
