@@ -14,7 +14,7 @@
 
     <meta
         name="description"
-        content="Gerencie seu perfil de editor na Pale Ascendancy."
+        content="Visualize seu perfil de editor na Pale Ascendancy."
     >
 
     <meta
@@ -104,6 +104,16 @@
     </nav>
 
 
+    <a
+        class="discord-button"
+        href="https://discord.gg/H3mnq7Nfp"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Entrar no Discord
+    </a>
+
+
     <button
         class="menu-button"
         id="menuButton"
@@ -121,6 +131,7 @@
     </button>
 
 </header>
+
 
 
 <div
@@ -148,7 +159,17 @@
         Contato
     </a>
 
+    <a
+        href="https://discord.gg/H3mnq7Nfp"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mobile-discord"
+    >
+        Entrar no Discord
+    </a>
+
 </div>
+
 
 
 <main class="auth-page">
@@ -173,17 +194,17 @@
             </h1>
 
             <p>
-                Personalize as informações que aparecerão
-                no seu perfil de editor.
+                Visualize as informações do seu perfil
+                de editor.
             </p>
 
         </div>
 
 
-        <form
-            class="auth-form"
-            id="profileForm"
-        >
+
+        <!-- PERFIL -->
+
+        <div class="profile-view">
 
 
             <!-- FOTO -->
@@ -208,200 +229,99 @@
 
                 </div>
 
-
-                <label
-                    for="foto"
-                    class="secondary-button"
-                >
-                    Escolher foto
-                </label>
-
-
-                <input
-                    type="file"
-                    id="foto"
-                    accept="image/png,image/jpeg,image/webp"
-                    hidden
-                >
-
-                <small>
-                    PNG, JPG ou WEBP.
-                </small>
-
             </div>
 
-
-            <!-- NOME -->
-
-            <div class="form-row">
-
-                <label for="nome">
-                    Nome
-                </label>
-
-                <input
-                    type="text"
-                    id="nome"
-                    placeholder="Seu nome"
-                    autocomplete="name"
-                    required
-                >
-
-            </div>
 
 
             <!-- NOME ARTÍSTICO -->
 
-            <div class="form-row">
+            <div class="profile-info">
 
-                <label for="nomeArtistico">
+                <span class="profile-label">
                     Nome artístico
-                </label>
+                </span>
 
-                <input
-                    type="text"
-                    id="nomeArtistico"
-                    placeholder="Nome que aparecerá para os clientes"
-                    required
-                >
+                <strong id="profileNomeArtistico">
+                    Carregando...
+                </strong>
 
             </div>
+
+
+
+            <!-- NOME -->
+
+            <div class="profile-info">
+
+                <span class="profile-label">
+                    Nome
+                </span>
+
+                <strong id="profileNome">
+                    Carregando...
+                </strong>
+
+            </div>
+
+
+
+            <!-- E-MAIL -->
+
+            <div class="profile-info">
+
+                <span class="profile-label">
+                    E-mail
+                </span>
+
+                <strong id="profileEmail">
+                    Carregando...
+                </strong>
+
+            </div>
+
 
 
             <!-- ESPECIALIDADE -->
 
-            <div class="form-row">
+            <div class="profile-info">
 
-                <label for="especialidade">
-                    Especialidade principal
-                </label>
+                <span class="profile-label">
+                    Especialidade
+                </span>
 
-                <select
-                    id="especialidade"
-                    required
-                >
-
-                    <option value="">
-                        Selecione uma especialidade
-                    </option>
-
-                    <option value="promo">
-                        Promo
-                    </option>
-
-                    <option value="trailer">
-                        Trailers
-                    </option>
-
-                    <option value="highlight">
-                        Highlights
-                    </option>
-
-                    <option value="motion">
-                        Motion Design
-                    </option>
-
-                    <option value="anime">
-                        Anime / Mangá
-                    </option>
-
-                    <option value="gaming">
-                        Gaming
-                    </option>
-
-                    <option value="outros">
-                        Outros
-                    </option>
-
-                </select>
+                <strong id="profileEspecialidade">
+                    Carregando...
+                </strong>
 
             </div>
+
 
 
             <!-- BIO -->
 
-            <div class="form-row">
+            <div class="profile-info">
 
-                <label for="bio">
-                    Sobre você
-                </label>
+                <span class="profile-label">
+                    Sobre
+                </span>
 
-                <textarea
-                    id="bio"
-                    rows="5"
-                    maxlength="500"
-                    placeholder="Conte um pouco sobre seu trabalho..."
-                ></textarea>
+                <p id="profileBio">
+                    Nenhuma descrição adicionada.
+                </p>
 
             </div>
 
 
-            <!-- TIKTOK -->
 
-            <div class="form-row">
+            <!-- REDES -->
 
-                <label for="tiktok">
-                    TikTok
-                </label>
-
-                <input
-                    type="url"
-                    id="tiktok"
-                    placeholder="https://www.tiktok.com/@seuusuario"
-                >
+            <div
+                class="profile-socials"
+                id="profileSocials"
+            >
 
             </div>
 
-
-            <!-- INSTAGRAM -->
-
-            <div class="form-row">
-
-                <label for="instagram">
-                    Instagram
-                </label>
-
-                <input
-                    type="url"
-                    id="instagram"
-                    placeholder="https://www.instagram.com/seuusuario"
-                >
-
-            </div>
-
-
-            <!-- YOUTUBE -->
-
-            <div class="form-row">
-
-                <label for="youtube">
-                    YouTube
-                </label>
-
-                <input
-                    type="url"
-                    id="youtube"
-                    placeholder="https://youtube.com/@seucanal"
-                >
-
-            </div>
-
-
-            <!-- DISCORD -->
-
-            <div class="form-row">
-
-                <label for="discord">
-                    Discord
-                </label>
-
-                <input
-                    type="text"
-                    id="discord"
-                    placeholder="seu_usuario"
-                >
-
-            </div>
 
 
             <!-- MENSAGEM -->
@@ -413,15 +333,16 @@
             ></p>
 
 
-            <!-- SALVAR -->
 
-            <button
-                type="submit"
+            <!-- EDITAR -->
+
+            <a
+                href="editar-perfil.html"
                 class="primary-button auth-submit"
-                id="saveButton"
             >
-                Salvar perfil
-            </button>
+                Editar perfil
+            </a>
+
 
 
             <!-- SAIR -->
@@ -435,12 +356,13 @@
             </button>
 
 
-        </form>
+        </div>
 
 
     </section>
 
 </main>
+
 
 
 <footer>
@@ -460,9 +382,11 @@
 
     </div>
 
+
     <p>
         Rede de editores e produção audiovisual.
     </p>
+
 
     <small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
@@ -471,15 +395,22 @@
 </footer>
 
 
+
 <script src="script.js"></script>
 
 
-<!-- SUPABASE -->
+<!-- ==================================================
+     SUPABASE
+================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
+
+/* ==================================================
+   SUPABASE
+================================================== */
 
 const SUPABASE_URL =
     "https://fnyellunugdfesprmvzm.supabase.co";
@@ -491,34 +422,41 @@ const SUPABASE_KEY =
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY
+        SUPABASE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
     );
 
 
-const profileForm =
-    document.getElementById("profileForm");
+
+/* ==================================================
+   ELEMENTOS
+================================================== */
 
 const profileMessage =
-    document.getElementById("profileMessage");
-
-const saveButton =
-    document.getElementById("saveButton");
+    document.getElementById(
+        "profileMessage"
+    );
 
 const logoutButton =
-    document.getElementById("logoutButton");
-
-const fotoInput =
-    document.getElementById("foto");
+    document.getElementById(
+        "logoutButton"
+    );
 
 const profileImage =
-    document.getElementById("profileImage");
+    document.getElementById(
+        "profileImage"
+    );
 
 const profileInitial =
-    document.getElementById("profileInitial");
-
-
-let currentUser = null;
-let selectedPhoto = null;
+    document.getElementById(
+        "profileInitial"
+    );
 
 
 
@@ -528,14 +466,18 @@ let selectedPhoto = null;
 
 function showMessage(text, type) {
 
-    profileMessage.textContent = text;
+    profileMessage.textContent =
+        text;
 
     profileMessage.className =
         "auth-message";
 
+
     if (type) {
 
-        profileMessage.classList.add(type);
+        profileMessage.classList.add(
+            type
+        );
 
     }
 
@@ -544,39 +486,57 @@ function showMessage(text, type) {
 
 
 /* ==================================================
-   CARREGAR USUÁRIO
+   FORMATAR ESPECIALIDADE
 ================================================== */
 
-async function loadUser() {
+function formatSpecialty(value) {
 
-    const result =
-        await supabaseClient.auth.getUser();
+    const specialties = {
 
-    const user =
-        result.data.user;
+        promo: "Promo",
 
-    const error =
-        result.error;
+        trailer: "Trailers",
 
+        highlight: "Highlights",
 
-    if (error || !user) {
+        motion: "Motion Design",
 
-        window.location.href =
-            "login.html";
+        anime: "Anime / Mangá",
 
-        return;
+        gaming: "Gaming",
 
-    }
+        outros: "Outros"
 
-
-    currentUser = user;
+    };
 
 
-    document.getElementById("email").value =
-        user.email || "";
+    return specialties[value] || value || "Não informado";
+
+}
 
 
-    await loadProfile();
+
+/* ==================================================
+   INICIAL
+================================================== */
+
+function updateInitial(
+    nomeArtistico,
+    nome,
+    email
+) {
+
+    const text =
+        nomeArtistico ||
+        nome ||
+        email ||
+        "?";
+
+
+    profileInitial.textContent =
+        text
+            .charAt(0)
+            .toUpperCase();
 
 }
 
@@ -588,428 +548,384 @@ async function loadUser() {
 
 async function loadProfile() {
 
-    const result =
-        await supabaseClient
-            .from("profiles")
-            .select("*")
-            .eq("id", currentUser.id)
-            .maybeSingle();
+    try {
 
 
-    if (result.error) {
+        /* ==========================================
+           PEGAR USUÁRIO LOGADO
+        ========================================== */
 
-        console.error(result.error);
-
-        return;
-
-    }
-
-
-    const profile =
-        result.data;
+        const {
+            data: sessionData,
+            error: sessionError
+        } =
+            await supabaseClient.auth.getSession();
 
 
-    if (!profile) {
+        if (sessionError) {
 
-        updateInitial();
+            throw sessionError;
 
-        return;
-
-    }
+        }
 
 
-    document.getElementById("nome").value =
-        profile.nome || "";
+        const session =
+            sessionData.session;
 
 
-    document.getElementById("nomeArtistico").value =
-        profile.nome_artistico || "";
+        if (!session) {
 
-
-    document.getElementById("especialidade").value =
-        profile.especialidade || "";
-
-
-    document.getElementById("bio").value =
-        profile.bio || "";
-
-
-    document.getElementById("tiktok").value =
-        profile.tiktok || "";
-
-
-    document.getElementById("instagram").value =
-        profile.instagram || "";
-
-
-    document.getElementById("youtube").value =
-        profile.youtube || "";
-
-
-    document.getElementById("discord").value =
-        profile.discord || "";
-
-
-    if (profile.avatar_url) {
-
-        profileImage.src =
-            profile.avatar_url;
-
-        profileImage.hidden =
-            false;
-
-        profileInitial.hidden =
-            true;
-
-    }
-
-
-    updateInitial();
-
-}
-
-
-
-/* ==================================================
-   INICIAL DO PERFIL
-================================================== */
-
-function updateInitial() {
-
-    const nomeArtistico =
-        document.getElementById("nomeArtistico").value.trim();
-
-    const nome =
-        document.getElementById("nome").value.trim();
-
-
-    const text =
-        nomeArtistico ||
-        nome ||
-        currentUser?.email ||
-        "?";
-
-
-    profileInitial.textContent =
-        text.charAt(0).toUpperCase();
-
-}
-
-
-
-/* ==================================================
-   FOTO
-================================================== */
-
-fotoInput.addEventListener(
-    "change",
-    function () {
-
-        const file =
-            fotoInput.files[0];
-
-
-        if (!file) {
-
-            selectedPhoto = null;
+            window.location.replace(
+                "login.html"
+            );
 
             return;
 
         }
 
 
-        if (file.size > 5 * 1024 * 1024) {
+        const user =
+            session.user;
+
+
+
+        /* ==========================================
+           BUSCAR PERFIL
+        ========================================== */
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+                .from("profile")
+                .select("*")
+                .eq("id", user.id)
+                .maybeSingle();
+
+
+        if (profileError) {
+
+            console.error(
+                "Erro ao buscar perfil:",
+                profileError
+            );
+
+            throw profileError;
+
+        }
+
+
+
+        /* ==========================================
+           SE NÃO EXISTIR PERFIL
+        ========================================== */
+
+        if (!profile) {
 
             showMessage(
-                "A imagem deve ter no máximo 5 MB.",
+                "Seu perfil ainda não foi preenchido.",
                 "error"
             );
 
-            fotoInput.value = "";
 
-            selectedPhoto = null;
-
-            return;
-
-        }
-
-
-        selectedPhoto = file;
+            document
+                .getElementById(
+                    "profileNome"
+                )
+                .textContent =
+                    "Não informado";
 
 
-        const preview =
-            URL.createObjectURL(file);
+            document
+                .getElementById(
+                    "profileNomeArtistico"
+                )
+                .textContent =
+                    "Não informado";
 
 
-        profileImage.src =
-            preview;
-
-        profileImage.hidden =
-            false;
-
-        profileInitial.hidden =
-            true;
-
-    }
-);
+            document
+                .getElementById(
+                    "profileEmail"
+                )
+                .textContent =
+                    user.email || "Não informado";
 
 
-
-/* ==================================================
-   SALVAR PERFIL
-================================================== */
-
-profileForm.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
+            document
+                .getElementById(
+                    "profileEspecialidade"
+                )
+                .textContent =
+                    "Não informado";
 
 
-        if (!currentUser) {
+            updateInitial(
+                "",
+                "",
+                user.email
+            );
+
 
             return;
 
         }
 
+
+
+        /* ==========================================
+           PREENCHER PERFIL
+        ========================================== */
 
         const nome =
-            document.getElementById("nome")
-                .value
-                .trim();
-
+            profile.nome || "";
 
         const nomeArtistico =
-            document.getElementById("nomeArtistico")
-                .value
-                .trim();
+            profile.nome_artistico || "";
 
+        const email =
+            profile.email ||
+            user.email ||
+            "";
 
         const especialidade =
-            document.getElementById("especialidade")
-                .value;
-
+            profile.especialidade || "";
 
         const bio =
-            document.getElementById("bio")
-                .value
-                .trim();
+            profile.bio || "";
 
 
-        const tiktok =
-            document.getElementById("tiktok")
-                .value
-                .trim();
 
+        document
+            .getElementById(
+                "profileNome"
+            )
+            .textContent =
+                nome ||
+                "Não informado";
 
-        const instagram =
-            document.getElementById("instagram")
-                .value
-                .trim();
 
+        document
+            .getElementById(
+                "profileNomeArtistico"
+            )
+            .textContent =
+                nomeArtistico ||
+                "Não informado";
 
-        const youtube =
-            document.getElementById("youtube")
-                .value
-                .trim();
 
+        document
+            .getElementById(
+                "profileEmail"
+            )
+            .textContent =
+                email ||
+                "Não informado";
 
-        const discord =
-            document.getElementById("discord")
-                .value
-                .trim();
 
+        document
+            .getElementById(
+                "profileEspecialidade"
+            )
+            .textContent =
+                formatSpecialty(
+                    especialidade
+                );
 
-        if (!nome || !nomeArtistico || !especialidade) {
 
-            showMessage(
-                "Preencha nome, nome artístico e especialidade.",
-                "error"
-            );
+        document
+            .getElementById(
+                "profileBio"
+            )
+            .textContent =
+                bio ||
+                "Nenhuma descrição adicionada.";
 
-            return;
 
-        }
 
+        /* ==========================================
+           INICIAL
+        ========================================== */
 
-        saveButton.disabled =
-            true;
+        updateInitial(
+            nomeArtistico,
+            nome,
+            email
+        );
 
-        saveButton.textContent =
-            "Salvando...";
 
 
-        try {
+        /* ==========================================
+           FOTO
+        ========================================== */
 
+        if (profile.avatar_url) {
 
-            let avatarUrl = null;
+            profileImage.src =
+                profile.avatar_url;
 
-
-            /* ==========================================
-               UPLOAD DA FOTO
-            ========================================== */
-
-            if (selectedPhoto) {
-
-                const extension =
-                    selectedPhoto.name
-                        .split(".")
-                        .pop()
-                        .toLowerCase();
-
-
-                const filePath =
-                    currentUser.id +
-                    "/avatar." +
-                    extension;
-
-
-                const uploadResult =
-                    await supabaseClient
-                        .storage
-                        .from("avatars")
-                        .upload(
-                            filePath,
-                            selectedPhoto,
-                            {
-                                upsert: true,
-                                contentType: selectedPhoto.type
-                            }
-                        );
-
-
-                if (uploadResult.error) {
-
-                    throw uploadResult.error;
-
-                }
-
-
-                const publicResult =
-                    supabaseClient
-                        .storage
-                        .from("avatars")
-                        .getPublicUrl(filePath);
-
-
-                avatarUrl =
-                    publicResult.data.publicUrl;
-
-            }
-
-
-
-            /* ==========================================
-               DADOS DO PERFIL
-            ========================================== */
-
-            const profileData = {
-
-                id: currentUser.id,
-
-                email: currentUser.email,
-
-                nome: nome,
-
-                nome_artistico: nomeArtistico,
-
-                especialidade: especialidade,
-
-                bio: bio,
-
-                tiktok: tiktok,
-
-                instagram: instagram,
-
-                youtube: youtube,
-
-                discord: discord
-
-            };
-
-
-            if (avatarUrl) {
-
-                profileData.avatar_url =
-                    avatarUrl;
-
-            }
-
-
-
-            /* ==========================================
-               SALVAR NO BANCO
-            ========================================== */
-
-            const result =
-                await supabaseClient
-                    .from("profiles")
-                    .upsert(
-                        profileData,
-                        {
-                            onConflict: "id"
-                        }
-                    );
-
-
-            if (result.error) {
-
-                throw result.error;
-
-            }
-
-
-            showMessage(
-                "Perfil salvo com sucesso.",
-                "success"
-            );
-
-
-            selectedPhoto =
-                null;
-
-
-            updateInitial();
-
-
-        } catch (error) {
-
-            console.error(error);
-
-
-            showMessage(
-                "Não foi possível salvar o perfil. Verifique as configurações do Supabase.",
-                "error"
-            );
-
-
-        } finally {
-
-            saveButton.disabled =
+            profileImage.hidden =
                 false;
 
-            saveButton.textContent =
-                "Salvar perfil";
+            profileInitial.hidden =
+                true;
+
+        } else {
+
+            profileImage.hidden =
+                true;
+
+            profileInitial.hidden =
+                false;
 
         }
 
+
+
+        /* ==========================================
+           REDES SOCIAIS
+        ========================================== */
+
+        const socials =
+            document.getElementById(
+                "profileSocials"
+            );
+
+
+        socials.innerHTML = "";
+
+
+
+        if (profile.tiktok) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                profile.tiktok;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "TikTok";
+
+            socials.appendChild(
+                link
+            );
+
+        }
+
+
+        if (profile.instagram) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                profile.instagram;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "Instagram";
+
+            socials.appendChild(
+                link
+            );
+
+        }
+
+
+        if (profile.youtube) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                profile.youtube;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "YouTube";
+
+            socials.appendChild(
+                link
+            );
+
+        }
+
+
+        if (profile.discord) {
+
+            const discord =
+                document.createElement(
+                    "span"
+                );
+
+            discord.textContent =
+                "Discord: " +
+                profile.discord;
+
+            socials.appendChild(
+                discord
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao carregar perfil:",
+            error
+        );
+
+
+        showMessage(
+            "Não foi possível carregar seu perfil: " +
+            (error.message || "erro desconhecido"),
+            "error"
+        );
+
     }
-);
+
+}
 
 
 
 /* ==================================================
-   SAIR
+   LOGOUT
 ================================================== */
 
 logoutButton.addEventListener(
     "click",
-    async function () {
+    async function() {
 
         await supabaseClient.auth.signOut();
 
-        window.location.href =
-            "login.html";
+        window.location.replace(
+            "login.html"
+        );
 
     }
 );
@@ -1020,11 +936,11 @@ logoutButton.addEventListener(
    INICIAR
 ================================================== */
 
-loadUser();
+loadProfile();
 
 </script>
 
 
 </body>
 
-  </html>
+</html>
