@@ -952,3 +952,333 @@ body {
 img {
     max-width: 100%;
 }
+/* =========================================
+   REDE DE CONTATOS
+========================================= */
+
+.contacts-section {
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.contacts-grid {
+    width: min(1100px, 100%);
+
+    margin: 50px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.contact-card {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 28px;
+
+    min-height: 380px;
+
+    border-radius: 20px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.055),
+            rgba(255,255,255,0.018)
+        );
+
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.contact-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -90px;
+    right: -90px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(94,88,255,0.16);
+
+    filter: blur(55px);
+
+    pointer-events: none;
+}
+
+
+.contact-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        rgba(116,110,255,0.35);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,0.35);
+}
+
+
+/* =========================================
+   CARD DO PROPRIETÁRIO
+========================================= */
+
+.owner-card {
+
+    border-color:
+        rgba(116,110,255,0.22);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(88,82,255,0.08),
+            rgba(255,255,255,0.018)
+        );
+}
+
+
+/* =========================================
+   FOTO
+========================================= */
+
+.contact-photo {
+
+    width: 76px;
+    height: 76px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 25px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #37336d,
+            #15151f 70%
+        );
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.3);
+}
+
+
+.contact-initial {
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: #aaa7ff;
+
+    letter-spacing: -1px;
+}
+
+
+/* =========================================
+   INFORMAÇÕES
+========================================= */
+
+.contact-info {
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.contact-role {
+
+    margin-bottom: 10px;
+
+    color: #7773ff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.contact-info h3 {
+
+    margin: 0 0 12px;
+
+    font-size: 24px;
+
+    letter-spacing: -0.5px;
+}
+
+
+.contact-info p {
+
+    margin: 0;
+
+    color: #858590;
+
+    font-size: 13px;
+
+    line-height: 1.75;
+}
+
+
+/* =========================================
+   BOTÃO
+========================================= */
+
+.contact-button {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 45px;
+
+    margin-top: auto;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.09);
+
+    background:
+        rgba(255,255,255,0.04);
+
+    color: #e9e9f0;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .8px;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        transform .25s ease;
+}
+
+
+.contact-button:hover {
+
+    background:
+        rgba(91,86,255,0.18);
+
+    border-color:
+        rgba(112,106,255,0.4);
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 900px) {
+
+    .contacts-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .contacts-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+
+        margin-top: 35px;
+
+    }
+
+
+    .contact-card {
+
+        min-height: 350px;
+
+        padding: 24px;
+
+    }
+
+
+    .contact-photo {
+
+        width: 68px;
+        height: 68px;
+
+    }
+
+
+    .contact-info h3 {
+
+        font-size: 22px;
+
+    }
+
+}
