@@ -3,1087 +3,21 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Pale Ascendancy — Produção Profissional</title>
+    <title>Pale Ascendancy — Produção Profissional</title>
 
-<meta
-name="description"
-content="Pale Ascendancy — Conectando estratégia audiovisual e produção profissional."
->
+    <meta
+        name="description"
+        content="Pale Ascendancy — Conectando estratégia audiovisual e produção profissional."
+    >
 
-<style>
-
-/* =========================
-   BASE
-========================= */
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-html,
-body {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-
-body {
-    background: #08080d;
-    color: #eeeeF4;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-.header {
-    position: fixed;
-
-    top: 15px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: calc(100% - 30px);
-    max-width: 1180px;
-
-    min-height: 68px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 25px;
-
-    padding: 10px 16px;
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    border-radius: 16px;
-
-    background: rgba(12,12,19,0.72);
-
-    backdrop-filter: blur(18px);
-
-    -webkit-backdrop-filter: blur(18px);
-
-    z-index: 1000;
-}
-
-
-/* =========================
-   MARCA
-========================= */
-
-.brand {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    color: white;
-
-    text-decoration: none;
-
-    white-space: nowrap;
-}
-
-.brand img {
-    width: 38px;
-    height: 38px;
-
-    object-fit: contain;
-
-    border-radius: 9px;
-}
-
-.brand span {
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-}
-
-
-/* =========================
-   NAV
-========================= */
-
-.nav {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 25px;
-
-    flex: 1;
-}
-
-.nav a {
-    color: #92929e;
-
-    text-decoration: none;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    transition: 0.25s;
-}
-
-.nav a:hover {
-    color: white;
-}
-
-
-/* =========================
-   BOTÕES
-========================= */
-
-.discord-button,
-.primary-button,
-.secondary-button,
-.contact-button {
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-decoration: none;
-
-    cursor: pointer;
-}
-
-.discord-button {
-    min-height: 40px;
-
-    padding: 0 16px;
-
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    color: #08080d;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    white-space: nowrap;
-}
-
-.primary-button {
-    min-height: 46px;
-
-    padding: 0 22px;
-
-    border-radius: 10px;
-
-    background: #ffffff;
-
-    color: #08080d;
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-.secondary-button {
-    min-height: 46px;
-
-    padding: 0 22px;
-
-    border-radius: 10px;
-
-    border: 1px solid rgba(255,255,255,0.1);
-
-    color: #eeeeF4;
-
-    background: rgba(255,255,255,0.035);
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-
-/* =========================
-   MENU MOBILE
-========================= */
-
-.menu-button {
-    display: none;
-
-    border: 0;
-
-    background: transparent;
-
-    color: white;
-
-    font-size: 25px;
-
-    cursor: pointer;
-}
-
-.mobile-menu {
-    display: none;
-}
-
-
-/* =========================
-   HERO
-========================= */
-
-.hero {
-    min-height: 850px;
-
-    position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 150px 20px 100px;
-
-    text-align: center;
-
-    overflow: hidden;
-}
-
-.hero-glow {
-    position: absolute;
-
-    width: 600px;
-    height: 400px;
-
-    top: 100px;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    background: rgba(79,73,255,0.16);
-
-    filter: blur(100px);
-
-    border-radius: 50%;
-}
-
-.hero-content {
-    position: relative;
-
-    width: min(850px, 100%);
-
-    z-index: 2;
-}
-
-.eyebrow {
-    margin-bottom: 28px;
-
-    color: #7773ff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 4px;
-}
-
-.hero-logo {
-    width: 190px;
-
-    max-width: 70%;
-
-    height: auto;
-
-    margin-bottom: 28px;
-
-    object-fit: contain;
-}
-
-.hero h1 {
-    margin: 0;
-
-    font-size: clamp(42px, 7vw, 76px);
-
-    line-height: 1.02;
-
-    letter-spacing: -4px;
-}
-
-.hero h1 span {
-    display: block;
-
-    color: #7773ff;
-}
-
-.hero p {
-    max-width: 680px;
-
-    margin: 30px auto;
-
-    color: #90909b;
-
-    font-size: 15px;
-
-    line-height: 1.8;
-}
-
-.hero-buttons {
-    display: flex;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-}
-
-
-/* =========================
-   MÉTRICAS
-========================= */
-
-.metrics {
-    width: min(1100px, calc(100% - 30px));
-
-    margin: 0 auto;
-
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    border-top: 1px solid rgba(255,255,255,0.08);
-
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-.metric {
-    padding: 35px 15px;
-
-    text-align: center;
-}
-
-.metric strong {
-    display: block;
-
-    font-size: 30px;
-
-    margin-bottom: 8px;
-}
-
-.metric span {
-    color: #777783;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-}
-
-
-/* =========================
-   SEÇÕES
-========================= */
-
-.section {
-    width: min(1100px, calc(100% - 30px));
-
-    margin: 0 auto;
-
-    padding: 110px 0;
-}
-
-.section-heading {
-    max-width: 750px;
-
-    margin-bottom: 50px;
-}
-
-.section-heading > span {
-    color: #7773ff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 3px;
-}
-
-.section-heading h2 {
-    margin: 18px 0;
-
-    font-size: clamp(34px, 5vw, 52px);
-
-    letter-spacing: -2px;
-}
-
-.section-heading h2 span {
-    color: #7773ff;
-}
-
-.section-heading p {
-    color: #858590;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-}
-
-
-/* =========================
-   BENTO
-========================= */
-
-.bento-grid {
-    display: grid;
-
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 15px;
-}
-
-.bento-card {
-    min-height: 220px;
-
-    padding: 30px;
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    border-radius: 18px;
-
-    background: rgba(255,255,255,0.025);
-
-    transition: 0.3s;
-}
-
-.bento-card:hover {
-    transform: translateY(-5px);
-
-    border-color: rgba(112,106,255,0.35);
-}
-
-.bento-card.large {
-    min-height: 300px;
-}
-
-.bento-card.wide {
-    min-height: 240px;
-}
-
-.card-number {
-    color: #7773ff;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    margin-bottom: 35px;
-}
-
-.bento-card h3 {
-    font-size: 22px;
-
-    margin: 0 0 12px;
-}
-
-.bento-card p {
-    color: #858590;
-
-    font-size: 13px;
-
-    line-height: 1.7;
-}
-
-.card-link {
-    display: inline-block;
-
-    margin-top: 15px;
-
-    color: #8a86ff;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    text-decoration: none;
-}
-
-
-/* =========================
-   EDITORES
-========================= */
-
-.editor-grid {
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 15px;
-}
-
-.editor-card {
-    padding: 25px;
-
-    min-height: 250px;
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    border-radius: 17px;
-
-    background: rgba(255,255,255,0.025);
-
-    transition: 0.3s;
-}
-
-.editor-card:hover {
-    transform: translateY(-6px);
-
-    border-color: rgba(112,106,255,0.35);
-}
-
-.editor-icon {
-    color: #8a86ff;
-
-    font-size: 25px;
-
-    margin-bottom: 30px;
-}
-
-.editor-card h3 {
-    margin-bottom: 10px;
-
-    font-size: 19px;
-}
-
-.editor-card p {
-    color: #858590;
-
-    font-size: 12px;
-
-    line-height: 1.7;
-}
-
-.tag {
-    display: inline-block;
-
-    margin-top: 15px;
-
-    padding: 6px 9px;
-
-    border-radius: 5px;
-
-    background: rgba(255,255,255,0.05);
-
-    color: #8b8b96;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-.section-action {
-    text-align: center;
-
-    margin-top: 40px;
-}
-
-
-/* =========================
-   CONTRATANTES
-========================= */
-
-.contractor-section {
-    width: min(1100px, calc(100% - 30px));
-
-    margin: 0 auto 80px;
-
-    padding: 90px 30px;
-
-    text-align: center;
-
-    border-radius: 22px;
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(81,76,255,0.14),
-            transparent 60%
-        ),
-        rgba(255,255,255,0.025);
-}
-
-.contractor-content {
-    max-width: 700px;
-
-    margin: auto;
-}
-
-.contractor-content > span {
-    color: #7773ff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 3px;
-}
-
-.contractor-content h2 {
-    margin: 18px 0;
-
-    font-size: clamp(34px, 5vw, 55px);
-
-    letter-spacing: -2px;
-}
-
-.contractor-content p {
-    color: #858590;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-
-    margin-bottom: 25px;
-}
-
-
-/* =========================
-   REDE DE CONTATOS
-========================= */
-
-.contacts-section {
-    position: relative;
-}
-
-.contacts-grid {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 18px;
-}
-
-.contact-card {
-    position: relative;
-
-    min-height: 390px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    padding: 28px;
-
-    border-radius: 20px;
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.055),
-            rgba(255,255,255,0.018)
-        );
-
-    overflow: hidden;
-
-    transition: 0.3s;
-}
-
-.contact-card:hover {
-    transform: translateY(-7px);
-
-    border-color: rgba(112,106,255,0.4);
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,0.35);
-}
-
-.owner-card {
-    border-color: rgba(112,106,255,0.3);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(88,82,255,0.09),
-            rgba(255,255,255,0.018)
-        );
-}
-
-.contact-photo {
-    width: 78px;
-    height: 78px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    margin-bottom: 25px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #37336d,
-            #15151f 70%
-        );
-
-    border: 1px solid rgba(255,255,255,0.12);
-
-    overflow: hidden;
-}
-
-.contact-initial {
-    color: #aaa7ff;
-
-    font-size: 25px;
-
-    font-weight: 800;
-}
-
-.contact-info {
-    position: relative;
-
-    z-index: 2;
-}
-
-.contact-role {
-    color: #7773ff;
-
-    font-size: 9px;
-
-    font-weight: 800;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 10px;
-}
-
-.contact-info h3 {
-    margin: 0 0 12px;
-
-    font-size: 24px;
-}
-
-.contact-info p {
-    margin: 0;
-
-    color: #858590;
-
-    font-size: 13px;
-
-    line-height: 1.75;
-}
-
-.contact-button {
-    width: 100%;
-
-    min-height: 45px;
-
-    margin-top: auto;
-
-    border-radius: 10px;
-
-    border: 1px solid rgba(255,255,255,0.09);
-
-    background: rgba(255,255,255,0.04);
-
-    color: white;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    transition: 0.25s;
-}
-
-.contact-button:hover {
-    background: rgba(91,86,255,0.18);
-
-    border-color: rgba(112,106,255,0.4);
-}
-
-
-/* =========================
-   CONTATO
-========================= */
-
-.contact {
-    text-align: center;
-}
-
-.contact .section-heading {
-    margin: auto;
-}
-
-.contact .primary-button {
-    margin-top: 10px;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-    padding: 60px 20px;
-
-    text-align: center;
-
-    border-top: 1px solid rgba(255,255,255,0.08);
-}
-
-.footer-brand {
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-bottom: 15px;
-}
-
-.footer-brand img {
-    width: 35px;
-
-    height: 35px;
-
-    object-fit: contain;
-
-    border-radius: 8px;
-}
-
-.footer-brand span {
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-footer p {
-    color: #777783;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-}
-
-footer small {
-    display: block;
-
-    margin-top: 20px;
-
-    color: #555560;
-
-    font-size: 10px;
-}
-
-
-/* =========================
-   RESPONSIVO
-========================= */
-
-@media (max-width: 900px) {
-
-    .nav {
-        gap: 12px;
-    }
-
-    .nav a {
-        font-size: 10px;
-    }
-
-    .editor-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .contacts-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 650px) {
-
-    .header {
-        width: calc(100% - 20px);
-
-        top: 10px;
-
-        min-height: 58px;
-
-        padding: 8px 12px;
-    }
-
-    .brand span {
-        font-size: 10px;
-    }
-
-    .brand img {
-        width: 34px;
-        height: 34px;
-    }
-
-    .nav,
-    .discord-button {
-        display: none;
-    }
-
-    .menu-button {
-        display: block;
-
-        margin-left: auto;
-    }
-
-    .mobile-menu {
-        position: fixed;
-
-        top: 78px;
-
-        left: 10px;
-        right: 10px;
-
-        padding: 15px;
-
-        border-radius: 15px;
-
-        border: 1px solid rgba(255,255,255,0.08);
-
-        background: rgba(12,12,19,0.95);
-
-        backdrop-filter: blur(20px);
-
-        z-index: 999;
-    }
-
-    .mobile-menu.active {
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 5px;
-    }
-
-    .mobile-menu a {
-        padding: 14px;
-
-        color: #aaaab5;
-
-        text-decoration: none;
-
-        font-size: 12px;
-
-        font-weight: 700;
-
-        border-radius: 8px;
-    }
-
-    .mobile-menu a:hover {
-        background: rgba(255,255,255,0.05);
-
-        color: white;
-    }
-
-    .mobile-discord {
-        margin-top: 8px;
-
-        background: white;
-
-        color: #08080d !important;
-
-        text-align: center;
-    }
-
-    .hero {
-        min-height: 760px;
-
-        padding-top: 130px;
-    }
-
-    .hero h1 {
-        font-size: 43px;
-
-        letter-spacing: -2px;
-    }
-
-    .hero p {
-        font-size: 13px;
-    }
-
-    .metrics {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .metric {
-        padding: 25px 10px;
-    }
-
-    .metric strong {
-        font-size: 25px;
-    }
-
-    .section {
-        padding: 80px 0;
-    }
-
-    .section-heading h2 {
-        font-size: 35px;
-    }
-
-    .bento-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .editor-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .contacts-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-card {
-        min-height: 350px;
-    }
-
-    .contractor-section {
-        padding: 65px 20px;
-    }
-
-}
-
-</style>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -1091,9 +25,9 @@ footer small {
 <body>
 
 
-<!-- =========================
+<!-- ==================================================
      HEADER
-========================= -->
+================================================== -->
 
 <header class="header">
 
@@ -1113,7 +47,7 @@ footer small {
 
     <nav class="nav">
 
-        <a href="index.html">
+        <a href="index.html" class="active">
             Home
         </a>
 
@@ -1121,7 +55,7 @@ footer small {
             Sobre
         </a>
 
-        <a href="#servicos">
+        <a href="servicos.html">
             Serviços
         </a>
 
@@ -1129,7 +63,7 @@ footer small {
             Editores
         </a>
 
-        <a href="#contatos">
+        <a href="#contato">
             Contato
         </a>
 
@@ -1150,6 +84,7 @@ footer small {
         class="menu-button"
         id="menuButton"
         type="button"
+        aria-label="Abrir menu"
     >
         ☰
     </button>
@@ -1157,9 +92,10 @@ footer small {
 </header>
 
 
-<!-- =========================
+
+<!-- ==================================================
      MENU MOBILE
-========================= -->
+================================================== -->
 
 <div
     class="mobile-menu"
@@ -1174,7 +110,7 @@ footer small {
         Sobre
     </a>
 
-    <a href="#servicos">
+    <a href="servicos.html">
         Serviços
     </a>
 
@@ -1182,9 +118,10 @@ footer small {
         Editores
     </a>
 
-    <a href="#contatos">
+    <a href="#contato">
         Contato
     </a>
+
 
     <a
         href="https://discord.gg/H3mnq7Nfp"
@@ -1198,12 +135,13 @@ footer small {
 </div>
 
 
+
 <main>
 
 
-<!-- =========================
+<!-- ==================================================
      HERO
-========================= -->
+================================================== -->
 
 <section
     class="hero"
@@ -1215,15 +153,18 @@ footer small {
 
     <div class="hero-content">
 
+
         <div class="eyebrow">
+
             CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
+
         </div>
 
 
         <img
             class="hero-logo"
             src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
+            alt="Logo Pale Ascendancy"
         >
 
 
@@ -1249,6 +190,7 @@ footer small {
 
         <div class="hero-buttons">
 
+
             <a
                 href="https://discord.gg/H3mnq7Nfp"
                 target="_blank"
@@ -1266,6 +208,7 @@ footer small {
                 Conhecer a Pale Ascendancy
             </a>
 
+
         </div>
 
     </div>
@@ -1273,11 +216,13 @@ footer small {
 </section>
 
 
-<!-- =========================
+
+<!-- ==================================================
      MÉTRICAS
-========================= -->
+================================================== -->
 
 <section class="metrics">
+
 
     <div class="metric">
 
@@ -1320,8 +265,8 @@ footer small {
 
     <div class="metric">
 
-        <strong>
-            100%
+        <strong data-target="100">
+            0
         </strong>
 
         <span>
@@ -1330,19 +275,23 @@ footer small {
 
     </div>
 
+
 </section>
 
 
-<!-- =========================
+
+<!-- ==================================================
      SOBRE
-========================= -->
+================================================== -->
 
 <section
     class="section"
     id="sobre"
 >
 
+
     <div class="section-heading">
+
 
         <span>
             01 — SOBRE
@@ -1352,6 +301,7 @@ footer small {
         <h2>
 
             Uma rede criada para
+
             <span>
                 produzir melhor.
             </span>
@@ -1367,37 +317,9 @@ footer small {
 
         </p>
 
-    </div>
-
-</section>
-
-
-<!-- =========================
-     SERVIÇOS
-========================= -->
-
-<section
-    class="section"
-    id="servicos"
->
-
-    <div class="section-heading">
-
-        <span>
-            02 — RECURSOS
-        </span>
-
-
-        <h2>
-
-            Tudo começa com uma
-            <span>
-                boa conexão.
-            </span>
-
-        </h2>
 
     </div>
+
 
 
     <div class="bento-grid">
@@ -1405,35 +327,34 @@ footer small {
 
         <article class="bento-card large">
 
+
             <div class="card-number">
                 01
             </div>
 
 
-            <h3>
-                Editores
-            </h3>
+            <div>
 
+                <h3>
+                    Editores
+                </h3>
 
-            <p>
+                <p>
 
-                Profissionais especializados em diferentes
-                áreas da produção audiovisual.
+                    Profissionais especializados em diferentes
+                    áreas da produção audiovisual.
 
-            </p>
+                </p>
 
+            </div>
 
-            <a
-                href="editores.html"
-                class="card-link"
-            >
-                Conhecer editores →
-            </a>
 
         </article>
 
 
+
         <article class="bento-card">
+
 
             <div class="card-number">
                 02
@@ -1441,21 +362,23 @@ footer small {
 
 
             <h3>
-                Projetos
+                Contratantes
             </h3>
-
 
             <p>
 
-                Conecte necessidades reais a profissionais
-                preparados para executar seu projeto.
+                Encontre profissionais preparados para atender
+                às necessidades do seu projeto.
 
             </p>
+
 
         </article>
 
 
+
         <article class="bento-card">
+
 
             <div class="card-number">
                 03
@@ -1463,21 +386,23 @@ footer small {
 
 
             <h3>
-                Portfólio
+                Projetos
             </h3>
-
 
             <p>
 
-                Apresente trabalhos, especialidades e
-                experiências de forma profissional.
+                Conectamos necessidades reais a profissionais
+                preparados para executar diferentes projetos.
 
             </p>
+
 
         </article>
 
 
+
         <article class="bento-card wide">
+
 
             <div class="card-number">
                 04
@@ -1485,43 +410,152 @@ footer small {
 
 
             <h3>
-                Contratantes
+                Produção Profissional
             </h3>
-
 
             <p>
 
-                Encontre profissionais preparados para atender
-                às necessidades específicas do seu projeto.
+                Uma rede voltada para conexões,
+                colaboração e produção audiovisual.
 
             </p>
 
+
         </article>
+
 
     </div>
 
 </section>
 
 
-<!-- =========================
+
+<!-- ==================================================
+     ACESSO A SERVIÇOS
+================================================== -->
+
+<section class="section">
+
+
+    <div class="service-preview">
+
+
+        <div class="service-preview-content">
+
+
+            <span>
+                02 — SERVIÇOS
+            </span>
+
+
+            <h2>
+
+                Encontre o serviço
+                <span>
+                    ideal para seu projeto.
+                </span>
+
+            </h2>
+
+
+            <p>
+
+                Explore nossa área de serviços e conheça
+                as diferentes possibilidades de produção
+                disponíveis através da rede Pale Ascendancy.
+
+            </p>
+
+
+            <a
+                href="servicos.html"
+                class="primary-button"
+            >
+                Ver serviços
+            </a>
+
+
+        </div>
+
+
+        <div class="service-preview-list">
+
+
+            <div>
+                <strong>
+                    01
+                </strong>
+
+                <span>
+                    Promo
+                </span>
+            </div>
+
+
+            <div>
+                <strong>
+                    02
+                </strong>
+
+                <span>
+                    Trailers
+                </span>
+            </div>
+
+
+            <div>
+                <strong>
+                    03
+                </strong>
+
+                <span>
+                    Highlights
+                </span>
+            </div>
+
+
+            <div>
+                <strong>
+                    04
+                </strong>
+
+                <span>
+                    Motion Design
+                </span>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
      EDITORES
-========================= -->
+================================================== -->
 
 <section
     class="section"
     id="editores"
 >
 
+
     <div class="section-heading">
 
+
         <span>
-            03 — EDITORES
+            03 — REDE CRIATIVA
         </span>
 
 
         <h2>
 
             Profissionais.
+
             <span>
                 Especializados.
             </span>
@@ -1531,12 +565,14 @@ footer small {
 
         <p>
 
-            Conheça as áreas de produção que podem fazer parte
-            da sua próxima parceria.
+            Conheça alguns dos profissionais conectados
+            à rede Pale Ascendancy.
 
         </p>
 
+
     </div>
+
 
 
     <div class="editor-grid">
@@ -1544,351 +580,183 @@ footer small {
 
         <article class="editor-card">
 
-            <div class="editor-icon">
-                ✦
-            </div>
-
-            <h3>
-                Promo
-            </h3>
-
-            <p>
-                Produção de vídeos promocionais
-                e peças audiovisuais.
-            </p>
-
-            <span class="tag">
-                AUDIOVISUAL
-            </span>
-
-        </article>
-
-
-        <article class="editor-card">
 
             <div class="editor-icon">
-                ◆
+                S
             </div>
+
 
             <h3>
-                Trailers
+                Smookecut
             </h3>
 
-            <p>
-                Edição cinematográfica para
-                apresentações e lançamentos.
-            </p>
-
-            <span class="tag">
-                CINEMATIC
-            </span>
-
-        </article>
-
-
-        <article class="editor-card">
-
-            <div class="editor-icon">
-                ◇
-            </div>
-
-            <h3>
-                Highlights
-            </h3>
 
             <p>
-                Seleção e edição dos melhores
-                momentos de uma produção.
+
+                Editor conectado à rede Pale Ascendancy,
+                especializado em produção e edição audiovisual.
+
             </p>
-
-            <span class="tag">
-                HIGHLIGHTS
-            </span>
-
-        </article>
-
-
-        <article class="editor-card">
-
-            <div class="editor-icon">
-                ✧
-            </div>
-
-            <h3>
-                Motion Design
-            </h3>
-
-            <p>
-                Elementos gráficos e animações
-                para elevar a produção.
-            </p>
-
-            <span class="tag">
-                MOTION
-            </span>
-
-        </article>
-
-    </div>
-
-
-    <div class="section-action">
-
-        <a
-            href="editores.html"
-            class="primary-button"
-        >
-            Ver todos os editores
-        </a>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     CONTRATANTES
-========================= -->
-
-<section class="contractor-section">
-
-    <div class="contractor-content">
-
-        <span>
-            PARA CONTRATANTES
-        </span>
-
-
-        <h2>
-            Seu próximo projeto
-            começa aqui.
-        </h2>
-
-
-        <p>
-            Encontre profissionais especializados e conecte
-            sua necessidade a uma produção de alto nível.
-        </p>
-
-
-        <a
-            href="https://discord.gg/H3mnq7Nfp"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="primary-button"
-        >
-            Solicitar um projeto
-        </a>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     REDE DE CONTATOS
-========================= -->
-
-<section
-    class="section contacts-section"
-    id="contatos"
->
-
-    <div class="section-heading">
-
-        <span>
-            05 — REDE DE CONTATOS
-        </span>
-
-
-        <h2>
-
-            Pessoas por trás da
-            <span>
-                Ascendancy.
-            </span>
-
-        </h2>
-
-
-        <p>
-
-            Conheça os responsáveis e profissionais
-            conectados à Pale Ascendancy.
-
-        </p>
-
-    </div>
-
-
-    <div class="contacts-grid">
-
-
-        <!-- ASMOPHEL -->
-
-        <article class="contact-card owner-card">
-
-            <div class="contact-photo">
-
-                <div class="contact-initial">
-                    A
-                </div>
-
-            </div>
-
-
-            <div class="contact-info">
-
-                <div class="contact-role">
-                    ADMINISTRADOR • PROPRIETÁRIO
-                </div>
-
-
-                <h3>
-                    Asmophel
-                </h3>
-
-
-                <p>
-
-                    Responsável pela administração da
-                    Pale Ascendancy, gerenciamento da rede
-                    e conexão com os editores.
-
-                </p>
-
-            </div>
-
-
-            <a
-                href="https://wa.me/5595991501077"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="contact-button"
-            >
-                Entrar em contato
-            </a>
-
-        </article>
-
-
-        <!-- SMOOKECUT -->
-
-        <article class="contact-card">
-
-            <div class="contact-photo">
-
-                <div class="contact-initial">
-                    S
-                </div>
-
-            </div>
-
-
-            <div class="contact-info">
-
-                <div class="contact-role">
-                    EDITOR
-                </div>
-
-
-                <h3>
-                    Smookecut
-                </h3>
-
-
-                <p>
-
-                    Editor conectado à rede Pale Ascendancy,
-                    especializado em produção e edição audiovisual.
-
-                </p>
-
-            </div>
 
 
             <a
                 href="https://www.tiktok.com/@smookecut"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="contact-button"
+                class="card-link"
             >
-                Ver TikTok
+                Ver TikTok →
             </a>
+
+
+            <span class="tag">
+                EDITOR
+            </span>
+
 
         </article>
 
 
-        <!-- MANGAKÁ -->
 
-        <article class="contact-card">
+        <article class="editor-card">
 
-            <div class="contact-photo">
 
-                <div class="contact-initial">
-                    M
-                </div>
-
+            <div class="editor-icon">
+                M
             </div>
 
 
-            <div class="contact-info">
-
-                <div class="contact-role">
-                    EDITOR
-                </div>
+            <h3>
+                MANGAKÁ
+            </h3>
 
 
-                <h3>
-                    MANGAKÁ
-                </h3>
+            <p>
 
+                Profissional conectado à rede Pale Ascendancy
+                para projetos e produção audiovisual.
 
-                <p>
-
-                    Profissional conectado à rede Pale
-                    Ascendancy para projetos e produção audiovisual.
-
-                </p>
-
-            </div>
+            </p>
 
 
             <a
                 href="https://www.tiktok.com/@mangaka.studio"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="contact-button"
+                class="card-link"
             >
-                Ver TikTok
+                Ver TikTok →
             </a>
+
+
+            <span class="tag">
+                EDITOR
+            </span>
+
 
         </article>
 
+
+
     </div>
+
+
+
+    <div class="section-action">
+
+
+        <a
+            href="editores.html"
+            class="secondary-button"
+        >
+            Conhecer todos os editores →
+        </a>
+
+
+    </div>
+
 
 </section>
 
 
-<!-- =========================
-     CONTATO FINAL
-========================= -->
+
+<!-- ==================================================
+     ADMINISTRADOR
+================================================== -->
+
+<section class="section">
+
+
+    <div class="admin-card">
+
+
+        <div class="admin-icon">
+            A
+        </div>
+
+
+        <div class="admin-info">
+
+
+            <span>
+                ADMINISTRADOR • PROPRIETÁRIO
+            </span>
+
+
+            <h3>
+                Asmophel
+            </h3>
+
+
+            <p>
+
+                Responsável pela administração da
+                Pale Ascendancy, gerenciamento da rede
+                e conexão com os editores.
+
+            </p>
+
+
+        </div>
+
+
+        <a
+            href="tel:+5595991501077"
+            class="primary-button"
+        >
+            Entrar em contato
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ==================================================
+     CONTATO
+================================================== -->
 
 <section
     class="section contact"
     id="contato"
 >
 
+
     <div class="section-heading">
 
+
         <span>
-            06 — CONTATO
+            04 — CONTATO
         </span>
 
 
         <h2>
 
             Vamos criar algo
+
             <span>
                 relevante.
             </span>
@@ -1904,14 +772,29 @@ footer small {
         </p>
 
 
-        <a
-            href="https://discord.gg/H3mnq7Nfp"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="primary-button"
-        >
-            Entrar no Discord
-        </a>
+        <div class="hero-buttons">
+
+
+            <a
+                href="https://discord.gg/H3mnq7Nfp"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="primary-button"
+            >
+                Entrar no Discord
+            </a>
+
+
+            <a
+                href="tel:+5595991501077"
+                class="secondary-button"
+            >
+                Falar com Asmophel
+            </a>
+
+
+        </div>
+
 
     </div>
 
@@ -1921,43 +804,63 @@ footer small {
 </main>
 
 
-<!-- =========================
+
+<!-- ==================================================
      FOOTER
-========================= -->
+================================================== -->
 
 <footer>
 
+
     <div class="footer-brand">
+
 
         <img
             src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
+            alt="Logo Pale Ascendancy"
         >
+
 
         <span>
             PALE ASCENDANCY
         </span>
 
+
     </div>
 
 
     <p>
+
         CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
+
     </p>
 
 
     <small>
-        © 2026 Pale Ascendancy. Todos os direitos reservados.
+
+        © 2026 Pale Ascendancy.
+        Todos os direitos reservados.
+
     </small>
+
 
 </footer>
 
 
-<!-- =========================
+
+<!-- ==================================================
      JAVASCRIPT
-========================= -->
+================================================== -->
+
+<script src="script.js"></script>
+
 
 <script>
+
+
+/* =========================================
+   MENU MOBILE
+========================================= */
 
 const menuButton =
     document.getElementById("menuButton");
@@ -1972,7 +875,9 @@ if (menuButton && mobileMenu) {
         "click",
         function () {
 
-            mobileMenu.classList.toggle("active");
+            mobileMenu.classList.toggle(
+                "active"
+            );
 
         }
     );
@@ -1980,18 +885,24 @@ if (menuButton && mobileMenu) {
 }
 
 
+/* Fecha o menu ao clicar em um link */
+
 const mobileLinks =
-    document.querySelectorAll(".mobile-menu a");
+    document.querySelectorAll(
+        ".mobile-menu a"
+    );
 
 
 mobileLinks.forEach(
-    function (link) {
+    function(link) {
 
         link.addEventListener(
             "click",
-            function () {
+            function() {
 
-                mobileMenu.classList.remove("active");
+                mobileMenu.classList.remove(
+                    "active"
+                );
 
             }
         );
