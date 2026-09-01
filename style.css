@@ -1,1 +1,936 @@
+/* =========================
+   RESET
+========================= */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #050509;
+    color: #f5f5f7;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(1150px, calc(100% - 30px));
+
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 18px;
+
+    background: rgba(10, 10, 18, 0.68);
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    border-radius: 18px;
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    z-index: 1000;
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+}
+
+.brand img {
+    width: 48px;
+    height: 36px;
+
+    object-fit: contain;
+}
+
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    margin-left: auto;
+    margin-right: 28px;
+}
+
+.nav a {
+    color: #9999a8;
+
+    font-size: 13px;
+
+    transition: 0.25s;
+}
+
+.nav a:hover {
+    color: white;
+}
+
+
+.discord-button {
+    padding: 12px 17px;
+
+    border-radius: 10px;
+
+    background: #5865f2;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition: 0.25s;
+}
+
+.discord-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 30px rgba(88,101,242,0.35);
+}
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.menu-button {
+    display: none;
+
+    background: transparent;
+    color: white;
+
+    border: 0;
+
+    font-size: 25px;
+}
+
+.mobile-menu {
+    display: none;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+
+    padding: 150px 20px 100px;
+
+    background:
+        linear-gradient(
+            rgba(5,5,9,0.3),
+            rgba(5,5,9,0.95)
+        ),
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(77,73,255,0.22),
+            transparent 35%
+        );
+}
+
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 55px 55px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+
+.hero-glow {
+    position: absolute;
+
+    width: 600px;
+    height: 400px;
+
+    background: rgba(79,70,229,0.20);
+
+    filter: blur(130px);
+
+    border-radius: 50%;
+}
+
+
+.hero-content {
+    position: relative;
+
+    width: min(850px, 100%);
+
+    z-index: 2;
+}
+
+
+.eyebrow {
+    color: #8d8aff;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 35px;
+}
+
+
+.hero-logo {
+    width: min(620px, 90%);
+
+    max-height: 260px;
+
+    object-fit: contain;
+
+    margin-bottom: 35px;
+
+    filter:
+        drop-shadow(0 0 20px rgba(120,115,255,0.18));
+}
+
+
+.hero h1 {
+    font-size: clamp(30px, 5vw, 58px);
+
+    line-height: 1.08;
+
+    letter-spacing: -2px;
+
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    display: block;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #8580ff
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+.hero p {
+    max-width: 680px;
+
+    margin: auto;
+
+    color: #a5a5b2;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+}
+
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 35px;
+}
+
+
+.primary-button,
+.secondary-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+
+    padding: 0 25px;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: 0.3s;
+}
+
+
+.primary-button {
+    background: #5865f2;
+
+    box-shadow:
+        0 10px 35px rgba(88,101,242,0.25);
+}
+
+
+.primary-button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 40px rgba(88,101,242,0.40);
+}
+
+
+.secondary-button {
+    border: 1px solid rgba(255,255,255,0.12);
+
+    background: rgba(255,255,255,0.03);
+
+    color: #ddd;
+}
+
+
+.secondary-button:hover {
+    background: rgba(255,255,255,0.08);
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================
+   MÉTRICAS
+========================= */
+
+.metrics {
+    width: min(1100px, calc(100% - 30px));
+
+    margin: -35px auto 100px;
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    background: rgba(255,255,255,0.035);
+
+    border: 1px solid rgba(255,255,255,0.09);
+
+    border-radius: 20px;
+
+    backdrop-filter: blur(15px);
+
+    overflow: hidden;
+}
+
+
+.metric {
+    text-align: center;
+
+    padding: 30px 15px;
+
+    border-right:
+        1px solid rgba(255,255,255,0.08);
+}
+
+.metric:last-child {
+    border-right: 0;
+}
+
+
+.metric strong {
+    display: block;
+
+    font-size: 32px;
+
+    margin-bottom: 7px;
+}
+
+
+.metric span {
+    color: #888895;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   SEÇÕES
+========================= */
+
+.section {
+    width: min(1100px, calc(100% - 30px));
+
+    margin: 0 auto;
+
+    padding: 100px 0;
+}
+
+
+.section-heading {
+    max-width: 700px;
+
+    margin-bottom: 55px;
+}
+
+
+.section-heading > span,
+.contractor-content > span {
+    color: #7773ff;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+}
+
+
+.section-heading h2 {
+    font-size: clamp(32px, 5vw, 52px);
+
+    letter-spacing: -2px;
+
+    margin: 18px 0;
+}
+
+
+.section-heading h2 span {
+    color: #7c78ff;
+}
+
+
+.section-heading p {
+    color: #92929e;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================
+   BENTO GRID
+========================= */
+
+.bento-grid {
+    display: grid;
+
+    grid-template-columns:
+        1.4fr 1fr;
+
+    gap: 15px;
+}
+
+
+.bento-card {
+    min-height: 250px;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.055),
+            rgba(255,255,255,0.018)
+        );
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    transition: 0.35s;
+}
+
+
+.bento-card.large {
+    min-height: 330px;
+}
+
+
+.bento-card.wide {
+    min-height: 250px;
+}
+
+
+.bento-card:hover {
+    transform: translateY(-6px);
+
+    border-color:
+        rgba(117,112,255,0.35);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.35);
+}
+
+
+.card-number {
+    color: #6864ff;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.bento-card h3 {
+    font-size: 27px;
+
+    margin-bottom: 12px;
+}
+
+
+.bento-card p {
+    color: #8e8e9a;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    max-width: 500px;
+}
+
+
+/* =========================
+   EDITORES
+========================= */
+
+.editor-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+
+.editor-card {
+    padding: 28px;
+
+    min-height: 280px;
+
+    border-radius: 18px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    background:
+        rgba(255,255,255,0.025);
+
+    transition: 0.3s;
+}
+
+
+.editor-card:hover {
+    transform: translateY(-8px);
+
+    background:
+        rgba(89,85,255,0.08);
+
+    border-color:
+        rgba(110,105,255,0.35);
+}
+
+
+.editor-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(91,87,255,0.12);
+
+    color: #8b87ff;
+
+    margin-bottom: 35px;
+}
+
+
+.editor-card h3 {
+    font-size: 20px;
+
+    margin-bottom: 12px;
+}
+
+
+.editor-card p {
+    color: #858591;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    margin-bottom: 25px;
+}
+
+
+.tag {
+    color: #7773ff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   CONTRATANTES
+========================= */
+
+.contractor-section {
+    width: min(1100px, calc(100% - 30px));
+
+    margin: 80px auto;
+
+    padding: 80px 60px;
+
+    border-radius: 25px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    background:
+        radial-gradient(
+            circle at 80% 50%,
+            rgba(85,80,255,0.22),
+            transparent 45%
+        ),
+        rgba(255,255,255,0.025);
+}
+
+
+.contractor-content {
+    position: relative;
+
+    max-width: 650px;
+}
+
+
+.contractor-content h2 {
+    font-size: clamp(32px, 5vw, 50px);
+
+    margin: 18px 0;
+}
+
+
+.contractor-content p {
+    color: #92929e;
+
+    line-height: 1.8;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    padding: 60px 20px;
+
+    text-align: center;
+
+    border-top:
+        1px solid rgba(255,255,255,0.07);
+}
+
+
+.footer-brand {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.footer-brand img {
+    width: 50px;
+    height: 35px;
+
+    object-fit: contain;
+}
+
+
+footer p {
+    margin: 20px 0;
+
+    color: #666672;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+}
+
+
+footer small {
+    color: #44444e;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 850px) {
+
+    .nav,
+    .discord-button {
+        display: none;
+    }
+
+    .menu-button {
+        display: block;
+
+        margin-left: auto;
+    }
+
+    .mobile-menu {
+        position: fixed;
+
+        top: 98px;
+        left: 15px;
+        right: 15px;
+
+        z-index: 999;
+
+        padding: 20px;
+
+        border-radius: 18px;
+
+        background: rgba(10,10,18,0.92);
+
+        border:
+            1px solid rgba(255,255,255,0.1);
+
+        backdrop-filter: blur(20px);
+
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+    .mobile-menu.active {
+        display: flex;
+    }
+
+    .mobile-menu a {
+        padding: 15px;
+
+        color: #aaa;
+
+        border-radius: 10px;
+    }
+
+    .mobile-menu a:hover {
+        background: rgba(255,255,255,0.05);
+
+        color: white;
+    }
+
+    .mobile-discord {
+        background: #5865f2 !important;
+
+        color: white !important;
+
+        text-align: center;
+
+        margin-top: 8px;
+    }
+
+    .metrics {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .metric:nth-child(2) {
+        border-right: 0;
+    }
+
+    .metric:nth-child(1),
+    .metric:nth-child(2) {
+        border-bottom:
+            1px solid rgba(255,255,255,0.08);
+    }
+
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .header {
+        top: 10px;
+
+        height: 62px;
+
+        width: calc(100% - 20px);
+    }
+
+    .brand span {
+        font-size: 10px;
+    }
+
+    .brand img {
+        width: 42px;
+    }
+
+    .hero {
+        padding-top: 130px;
+    }
+
+    .eyebrow {
+        font-size: 8px;
+
+        letter-spacing: 3px;
+
+        line-height: 1.8;
+    }
+
+    .hero-logo {
+        width: 90%;
+
+        margin-bottom: 20px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+
+        letter-spacing: -1.5px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+        width: 100%;
+    }
+
+    .metrics {
+        margin-top: -10px;
+    }
+
+    .metric {
+        padding: 22px 8px;
+    }
+
+    .metric strong {
+        font-size: 25px;
+    }
+
+    .metric span {
+        font-size: 10px;
+    }
+
+    .section {
+        padding: 70px 0;
+    }
+
+    .section-heading h2 {
+        font-size: 35px;
+    }
+
+    .editor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contractor-section {
+        padding: 55px 25px;
+    }
+
+  }
