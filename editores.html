@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Editores da Pale Ascendancy — profissionais especializados em produção audiovisual."
+    >
+
+    <title>Editores | Pale Ascendancy</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =========================
+           PÁGINA DE EDITORES
+        ========================= */
+
+        .editors-page {
+            min-height: 100vh;
+
+            padding:
+                160px 20px 100px;
+
+            position: relative;
+
+            background:
+                radial-gradient(
+                    circle at 50% 15%,
+                    rgba(78, 73, 255, 0.16),
+                    transparent 35%
+                );
+        }
+
+
+        .editors-container {
+            width: min(1100px, 100%);
+
+            margin: auto;
+        }
+
+
+        /* =========================
+           CABEÇALHO
+        ========================= */
+
+        .editors-heading {
+            text-align: center;
+
+            max-width: 750px;
+
+            margin: 0 auto 60px;
+        }
+
+
+        .editors-heading span {
+            color: #7773ff;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 4px;
+        }
+
+
+        .editors-heading h1 {
+            font-size:
+                clamp(42px, 7vw, 70px);
+
+            letter-spacing: -3px;
+
+            margin: 18px 0;
+        }
+
+
+        .editors-heading h1 strong {
+            color: #7d79ff;
+        }
+
+
+        .editors-heading p {
+            color: #92929e;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =========================
+           PESQUISA
+        ========================= */
+
+        .editor-tools {
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 30px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .search-box {
+            flex: 1;
+
+            min-width: 220px;
+
+            height: 50px;
+
+            padding: 0 18px;
+
+            border-radius: 11px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+
+            background:
+                rgba(255,255,255,0.035);
+
+            color: white;
+
+            outline: none;
+
+            font-size: 14px;
+        }
+
+
+        .search-box::placeholder {
+            color: #686873;
+        }
+
+
+        .search-box:focus {
+            border-color:
+                rgba(115,110,255,0.5);
+        }
+
+
+        /* =========================
+           FILTROS
+        ========================= */
+
+        .filters {
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .filter-button {
+            height: 42px;
+
+            padding:
+                0 16px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            background:
+                rgba(255,255,255,0.025);
+
+            color: #92929e;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition: 0.25s;
+        }
+
+
+        .filter-button:hover,
+        .filter-button.active {
+            background:
+                rgba(88,101,242,0.16);
+
+            border-color:
+                rgba(100,105,255,0.4);
+
+            color: white;
+        }
+
+
+        /* =========================
+           GRID
+        ========================= */
+
+        .editors-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+        }
+
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .editor-profile {
+            min-height: 300px;
+
+            padding: 27px;
+
+            border-radius: 18px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.055),
+                    rgba(255,255,255,0.018)
+                );
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        .editor-profile::before {
+            content: "";
+
+            position: absolute;
+
+            width: 150px;
+            height: 150px;
+
+            right: -70px;
+            top: -70px;
+
+            background:
+                rgba(88,101,242,0.16);
+
+            filter: blur(50px);
+
+            border-radius: 50%;
+        }
+
+
+        .editor-profile:hover {
+            transform:
+                translateY(-7px);
+
+            border-color:
+                rgba(111,106,255,0.35);
+
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,0.3);
+        }
+
+
+        /* =========================
+           AVATAR
+        ========================= */
+
+        .editor-avatar {
+            width: 58px;
+            height: 58px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #25234f,
+                    #141421
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+
+            color: #aaa7ff;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            margin-bottom: 22px;
+        }
+
+
+        .editor-profile h2 {
+            font-size: 21px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .editor-role {
+            color: #7773ff;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .editor-description {
+            color: #858590;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           TAGS
+        ========================= */
+
+        .editor-tags {
+            display: flex;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .editor-tag {
+            padding:
+                6px 9px;
+
+            border-radius: 6px;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            color: #9999a5;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+           ESTADO
+        ========================= */
+
+        .editor-status {
+            position: absolute;
+
+            top: 25px;
+            right: 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            color: #777;
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #555;
+        }
+
+
+        /* =========================
+           VAZIO
+        ========================= */
+
+        .no-results {
+            display: none;
+
+            text-align: center;
+
+            padding: 60px 20px;
+
+            color: #777783;
+
+            grid-column:
+                1 / -1;
+        }
+
+
+        /* =========================
+           CTA
+        ========================= */
+
+        .editors-cta {
+            margin-top: 70px;
+
+            padding: 60px 30px;
+
+            text-align: center;
+
+            border-radius: 22px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(81,76,255,0.16),
+                    transparent 55%
+                ),
+                rgba(255,255,255,0.025);
+        }
+
+
+        .editors-cta h2 {
+            font-size: 30px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .editors-cta p {
+            max-width: 600px;
+
+            margin:
+                0 auto 25px;
+
+            color: #888894;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           RESPONSIVO
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .editors-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .editors-page {
+                padding:
+                    130px 15px 70px;
+            }
+
+
+            .editors-heading {
+                margin-bottom: 40px;
+            }
+
+
+            .editors-heading h1 {
+                font-size: 42px;
+
+                letter-spacing: -2px;
+            }
+
+
+            .editors-heading p {
+                font-size: 14px;
+            }
+
+
+            .editors-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .editor-profile {
+                min-height: 270px;
+            }
+
+
+            .editor-tools {
+                display: block;
+            }
+
+
+            .search-box {
+                width: 100%;
+
+                margin-bottom: 12px;
+            }
+
+
+            .filters {
+                overflow-x: auto;
+
+                flex-wrap: nowrap;
+
+                padding-bottom: 5px;
+            }
+
+
+            .filter-button {
+                white-space: nowrap;
+            }
+
+
+            .editors-cta {
+                padding:
+                    45px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <a href="index.html" class="brand">
+
+        <img
+            src="1 Sem Título_20260901004747.png"
+            alt="Logo Pale Ascendancy"
+        >
+
+        <span>
+            PALE ASCENDANCY
+        </span>
+
+    </a>
+
+
+    <nav class="nav">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="index.html#sobre">
+            Sobre
+        </a>
+
+        <a href="index.html#servicos">
+            Serviços
+        </a>
+
+        <a href="editores.html">
+            Editores
+        </a>
+
+        <a href="index.html#contato">
+            Contato
+        </a>
+
+    </nav>
+
+
+    <a
+        href="https://discord.gg/H3mnq7Nfp"
+        target="_blank"
+        class="discord-button"
+    >
+        Entrar no Discord
+    </a>
+
+
+    <button
+        class="menu-button"
+        id="menuButton"
+    >
+        ☰
+    </button>
+
+</header>
+
+
+<!-- =========================
+     MENU MOBILE
+========================= -->
+
+<div class="mobile-menu" id="mobileMenu">
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="index.html#sobre">
+        Sobre
+    </a>
+
+    <a href="index.html#servicos">
+        Serviços
+    </a>
+
+    <a href="editores.html">
+        Editores
+    </a>
+
+    <a href="index.html#contato">
+        Contato
+    </a>
+
+    <a
+        href="https://discord.gg/H3mnq7Nfp"
+        target="_blank"
+        class="mobile-discord"
+    >
+        Entrar no Discord
+    </a>
+
+</div>
+
+
+<!-- =========================
+     CONTEÚDO
+========================= -->
+
+<main class="editors-page">
+
+    <div class="editors-container">
+
+
+        <!-- CABEÇALHO -->
+
+        <section class="editors-heading">
+
+            <span>
+                03 — REDE DE PROFISSIONAIS
+            </span>
+
+            <h1>
+                Nossos
+                <strong>Editores.</strong>
+            </h1>
+
+            <p>
+                Profissionais especializados em diferentes
+                áreas da produção audiovisual, conectados
+                através da Pale Ascendancy.
+            </p>
+
+        </section>
+
+
+        <!-- FERRAMENTAS -->
+
+        <section class="editor-tools">
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-box"
+                placeholder="Pesquisar editor ou especialidade..."
+            >
+
+
+            <div class="filters">
+
+                <button
+                    class="filter-button active"
+                    data-filter="todos"
+                >
+                    Todos
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="promo"
+                >
+                    Promo
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="trailer"
+                >
+                    Trailers
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="highlight"
+                >
+                    Highlights
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="motion"
+                >
+                    Motion Design
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- EDITORES -->
+
+        <section class="editors-grid" id="editorsGrid">
+
+
+            <!-- EDITOR 1 -->
+
+            <article
+                class="editor-profile"
+                data-category="promo"
+                data-search="promo editor audiovisual"
+            >
+
+                <div class="editor-status">
+
+                    <span class="status-dot"></span>
+
+                    Disponível
+
+                </div>
+
+
+                <div class="editor-avatar">
+                    PA
+                </div>
+
+
+                <h2>
+                    Editor Pale
+                </h2>
+
+
+                <div class="editor-role">
+                    PROMO EDITOR
+                </div>
+
+
+                <p class="editor-description">
+                    Profissional especializado em
+                    produção de promos e conteúdos
+                    promocionais.
+                </p>
+
+
+                <div class="editor-tags">
+
+                    <span class="editor-tag">
+                        PROMO
+                    </span>
+
+                    <span class="editor-tag">
+                        EDITING
+                    </span>
+
+                    <span class="editor-tag">
+                        AUDIOVISUAL
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- EDITOR 2 -->
+
+            <article
+                class="editor-profile"
+                data-category="trailer"
+                data-search="trailer cinematic editor"
+            >
+
+                <div class="editor-status">
+
+                    <span class="status-dot"></span>
+
+                    Disponível
+
+                </div>
+
+
+                <div class="editor-avatar">
+                    PA
+                </div>
+
+
+                <h2>
+                    Editor Ascend
+                </h2>
+
+
+                <div class="editor-role">
+                    TRAILER EDITOR
+                </div>
+
+
+                <p class="editor-description">
+                    Especialização em trailers,
+                    storytelling visual e edição
+                    cinematográfica.
+                </p>
+
+
+                <div class="editor-tags">
+
+                    <span class="editor-tag">
+                        TRAILER
+                    </span>
+
+                    <span class="editor-tag">
+                        CINEMATIC
+                    </span>
+
+                    <span class="editor-tag">
+                        EDITING
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- EDITOR 3 -->
+
+            <article
+                class="editor-profile"
+                data-category="highlight"
+                data-search="highlight gaming editor"
+            >
+
+                <div class="editor-status">
+
+                    <span class="status-dot"></span>
+
+                    Disponível
+
+                </div>
+
+
+                <div class="editor-avatar">
+                    PA
+                </div>
+
+
+                <h2>
+                    Editor Horizon
+                </h2>
+
+
+                <div class="editor-role">
+                    HIGHLIGHT EDITOR
+                </div>
+
+
+                <p class="editor-description">
+                    Edição de highlights, gameplay
+                    e conteúdos focados em ritmo
+                    e impacto visual.
+                </p>
+
+
+                <div class="editor-tags">
+
+                    <span class="editor-tag">
+                        HIGHLIGHT
+                    </span>
+
+                    <span class="editor-tag">
+                        GAMING
+                    </span>
+
+                    <span class="editor-tag">
+                        EDITING
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- EDITOR 4 -->
+
+            <article
+                class="editor-profile"
+                data-category="motion"
+                data-search="motion design animation editor"
+            >
+
+                <div class="editor-status">
+
+                    <span class="status-dot"></span>
+
+                    Disponível
+
+                </div>
+
+
+                <div class="editor-avatar">
+                    PA
+                </div>
+
+
+                <h2>
+                    Editor Motion
+                </h2>
+
+
+                <div class="editor-role">
+                    MOTION DESIGNER
+                </div>
+
+
+                <p class="editor-description">
+                    Motion design, animações e
+                    elementos gráficos para
+                    produções audiovisuais.
+                </p>
+
+
+                <div class="editor-tags">
+
+                    <span class="editor-tag">
+                        MOTION
+                    </span>
+
+                    <span class="editor-tag">
+                        DESIGN
+                    </span>
+
+                    <span class="editor-tag">
+                        ANIMATION
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- SEM RESULTADOS -->
+
+            <div
+                class="no-results"
+                id="noResults"
+            >
+                Nenhum editor encontrado.
+            </div>
+
+        </section>
+
+
+        <!-- CTA -->
+
+        <section class="editors-cta">
+
+            <h2>
+                Quer fazer parte da rede?
+            </h2>
+
+            <p>
+                Entre na comunidade Pale Ascendancy e
+                conecte-se com outros profissionais,
+                criadores e contratantes.
+            </p>
+
+
+            <a
+                href="https://discord.gg/H3mnq7Nfp"
+                target="_blank"
+                class="primary-button"
+            >
+                Entrar no Discord
+            </a>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        <img
+            src="1 Sem Título_20260901004747.png"
+            alt="Pale Ascendancy"
+        >
+
+        <span>
+            PALE ASCENDANCY
+        </span>
+
+    </div>
+
+    <p>
+        CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
+    </p>
+
+    <small>
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
+    </small>
+
+</footer>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+    // =========================
+    // MENU MOBILE
+    // =========================
+
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const mobileMenu =
+        document.getElementById("mobileMenu");
+
+
+    menuButton.addEventListener(
+        "click",
+        () => {
+
+            mobileMenu.classList.toggle("active");
+
+        }
+    
