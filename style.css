@@ -163,6 +163,7 @@ h1 span {
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-family: var(--font-display);
+  white-space: nowrap;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -245,6 +246,12 @@ h1 span {
 .menu-icon {
   top: 50%;
   transform: translateY(-50%);
+}
+
+.menu-icon::before,
+.menu-icon::after {
+  left: 0;
+  right: 0;
 }
 
 .menu-icon::before {
@@ -701,7 +708,8 @@ footer small {
 
 @media (max-width: 960px) {
 
-  .nav {
+  .nav,
+  .header .discord-button {
     display: none;
   }
 
