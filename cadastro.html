@@ -14,10 +14,13 @@
 
     <meta
         name="description"
-        content="Crie sua conta de editor na Pale Ascendancy e faça parte da nossa rede de profissionais."
+        content="Crie sua conta na Pale Ascendancy."
     >
 
-    <meta name="theme-color" content="#0d0c0b">
+    <meta
+        name="theme-color"
+        content="#0d0c0b"
+    >
 
     <link
         rel="icon"
@@ -25,13 +28,14 @@
         type="image/svg+xml"
     >
 
-    <!-- FONTES -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
-        href="https://fonts.gstatic.com"
+        href="https://fonts.googleapis.com"
         crossorigin
     >
 
@@ -39,8 +43,6 @@
         href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet"
     >
-
-    <!-- CSS -->
 
     <link
         rel="stylesheet"
@@ -120,7 +122,7 @@
         class="menu-button"
         id="menuButton"
         type="button"
-        aria-label="Abrir menu de navegação"
+        aria-label="Abrir menu"
         aria-expanded="false"
         aria-controls="mobileMenu"
     >
@@ -207,8 +209,8 @@
             </h1>
 
             <p>
-                Faça seu cadastro para entrar na rede de
-                editores da Pale Ascendancy.
+                Faça seu cadastro para entrar na rede
+                de editores da Pale Ascendancy.
             </p>
 
         </div>
@@ -402,10 +404,8 @@
                 >
 
                 <label for="termos">
-
                     Concordo com as regras e diretrizes
                     da Pale Ascendancy.
-
                 </label>
 
             </div>
@@ -494,83 +494,151 @@
 
 
 <!-- ==================================================
-     SUPABASE
+     SCRIPT PRINCIPAL
 ================================================== -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="supabase.js"></script>
 
 <script src="script.js"></script>
 
 
 
 <!-- ==================================================
-     SISTEMA DE CADASTRO
+     SUPABASE
 ================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
-const registerForm = document.getElementById("registerForm");
+/* ==================================================
+   CONFIGURAÇÃO
+================================================== */
 
-const registerMessage = document.getElementById("registerMessage");
+const SUPABASE_URL =
+    "https://fnyellunugdfesprmvzm.supabase.co";
 
-const registerButton = document.getElementById("registerButton");
+const SUPABASE_KEY =
+    "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
 
 
-function showMessage(message, type) {
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
 
-    registerMessage.textContent = message;
 
-    registerMessage.className = "auth-message";
+
+/* ==================================================
+   ELEMENTOS
+================================================== */
+
+const registerForm =
+    document.getElementById("registerForm");
+
+const registerMessage =
+    document.getElementById("registerMessage");
+
+const registerButton =
+    document.getElementById("registerButton");
+
+
+
+/* ==================================================
+   MENSAGEM
+================================================== */
+
+function showMessage(
+    text,
+    type
+) {
+
+    registerMessage.textContent =
+        text;
+
+    registerMessage.className =
+        "auth-message";
+
 
     if (type) {
-        registerMessage.classList.add(type);
+
+        registerMessage.classList.add(
+            type
+        );
+
     }
 
 }
 
 
-if (registerForm) {
 
-    registerForm.addEventListener("submit", async function(event) {
+/* ==================================================
+   CADASTRO
+================================================== */
+
+registerForm.addEventListener(
+    "submit",
+    async function(event) {
 
         event.preventDefault();
 
 
         const nome =
-            document.getElementById("nome").value.trim();
+            document
+                .getElementById("nome")
+                .value
+                .trim();
+
 
         const nomeArtistico =
-            document.getElementById("nomeArtistico").value.trim();
+            document
+                .getElementById("nomeArtistico")
+                .value
+                .trim();
+
 
         const email =
-            document.getElementById("email").value.trim();
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
 
         const senha =
-            document.getElementById("senha").value;
+            document
+                .getElementById("senha")
+                .value;
+
 
         const confirmarSenha =
-            document.getElementById("confirmarSenha").value;
+            document
+                .getElementById("confirmarSenha")
+                .value;
+
 
         const especialidade =
-            document.getElementById("especialidade").value;
+            document
+                .getElementById("especialidade")
+                .value;
+
 
         const termos =
-            document.getElementById("termos").checked;
+            document
+                .getElementById("termos")
+                .checked;
 
-
-        showMessage("", "");
-
-        registerButton.disabled = true;
-
-        registerButton.textContent = "Criando conta...";
 
 
         /* ==========================================
            VALIDAÇÕES
         ========================================== */
-
 
         if (
             !nome ||
@@ -586,10 +654,6 @@ if (registerForm) {
                 "error"
             );
 
-            registerButton.disabled = false;
-
-            registerButton.textContent = "Criar conta";
-
             return;
 
         }
@@ -601,10 +665,6 @@ if (registerForm) {
                 "A senha precisa ter pelo menos 8 caracteres.",
                 "error"
             );
-
-            registerButton.disabled = false;
-
-            registerButton.textContent = "Criar conta";
 
             return;
 
@@ -618,10 +678,6 @@ if (registerForm) {
                 "error"
             );
 
-            registerButton.disabled = false;
-
-            registerButton.textContent = "Criar conta";
-
             return;
 
         }
@@ -634,10 +690,6 @@ if (registerForm) {
                 "error"
             );
 
-            registerButton.disabled = false;
-
-            registerButton.textContent = "Criar conta";
-
             return;
 
         }
@@ -645,199 +697,227 @@ if (registerForm) {
 
 
         /* ==========================================
-           VERIFICAR SUPABASE
+           BLOQUEAR BOTÃO
         ========================================== */
 
-        if (
-            typeof supabaseClient === "undefined"
-        ) {
+        registerButton.disabled =
+            true;
 
-            showMessage(
-                "Erro de conexão com o sistema. Verifique o arquivo supabase.js.",
-                "error"
-            );
-
-            registerButton.disabled = false;
-
-            registerButton.textContent = "Criar conta";
-
-            return;
-
-        }
+        registerButton.textContent =
+            "Criando conta...";
 
 
 
         try {
 
 
-            /* ==========================================
-               CRIAR USUÁRIO NO SUPABASE AUTH
-            ========================================== */
+            /* ======================================
+               1. CRIAR USUÁRIO NO AUTH
+            ====================================== */
 
             const {
-                data,
-                error
-            } = await supabaseClient.auth.signUp({
+                data: authData,
+                error: authError
+            } =
+                await supabaseClient.auth.signUp({
 
-                email: email,
+                    email: email,
 
-                password: senha,
+                    password: senha
 
-                options: {
-
-                    data: {
-
-                        nome: nome,
-
-                        nome_artistico: nomeArtistico,
-
-                        especialidade: especialidade
-
-                    }
-
-                }
-
-            });
+                });
 
 
-            if (error) {
+            if (authError) {
 
-                throw error;
+                throw authError;
 
             }
 
 
-            if (!data.user) {
+            if (
+                !authData ||
+                !authData.user
+            ) {
 
                 throw new Error(
-                    "Não foi possível criar o usuário."
+                    "O Supabase não retornou o usuário criado."
+                );
+
+            }
+
+
+            const user =
+                authData.user;
+
+
+
+            /* ======================================
+               2. CRIAR PERFIL
+            ====================================== */
+
+            const profileData = {
+
+                id: user.id,
+
+                email: email,
+
+                nome: nome,
+
+                nome_artistico: nomeArtistico,
+
+                especialidade: especialidade
+
+            };
+
+
+            const {
+                error: profileError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .upsert(
+                        profileData,
+                        {
+                            onConflict: "id"
+                        }
+                    );
+
+
+            if (profileError) {
+
+                console.error(
+                    "Erro ao criar perfil:",
+                    profileError
+                );
+
+                throw new Error(
+                    "A conta foi criada, mas não foi possível salvar o perfil: " +
+                    profileError.message
                 );
 
             }
 
 
 
-            /* ==========================================
-               CRIAR PERFIL
-            ========================================== */
+            /* ======================================
+               3. VERIFICAR SESSÃO
+            ====================================== */
 
-            if (data.session) {
-
-                const {
-                    error: profileError
-                } = await supabaseClient
-                    .from("profiles")
-                    .insert({
-
-                        id: data.user.id,
-
-                        email: email,
-
-                        nome: nome,
-
-                        nome_artistico: nomeArtistico,
-
-                        especialidade: especialidade
-
-                    });
+            const {
+                data: sessionData
+            } =
+                await supabaseClient.auth
+                    .getSession();
 
 
-                if (profileError) {
 
-                    console.error(
-                        "Erro ao criar perfil:",
-                        profileError
-                    );
+            /* ======================================
+               4. CADASTRO COM SESSÃO
+            ====================================== */
 
-                    throw new Error(
-                        "A conta foi criada, mas houve um problema ao criar o perfil."
-                    );
+            if (
+                sessionData &&
+                sessionData.session
+            ) {
 
-                }
+                showMessage(
+                    "Conta criada com sucesso! Abrindo seu perfil...",
+                    "success"
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.replace(
+                            "perfil.html"
+                        );
+
+                    },
+                    800
+                );
+
+
+                return;
 
             }
 
 
 
-            /* ==========================================
-               SUCESSO
-            ========================================== */
+            /* ======================================
+               5. E-MAIL PRECISA SER CONFIRMADO
+            ====================================== */
 
             showMessage(
-                "Conta criada com sucesso! Verifique seu e-mail para confirmar a conta, caso a confirmação esteja ativada.",
+                "Conta criada! Verifique seu e-mail para confirmar a conta. Depois faça login.",
                 "success"
             );
 
 
-            registerForm.reset();
-
-
         } catch (error) {
 
-
             console.error(
-                "Erro no cadastro:",
+                "Erro completo no cadastro:",
                 error
             );
 
 
-            let message =
-                "Não foi possível criar sua conta.";
+            let mensagem =
+                error.message ||
+                "Não foi possível criar a conta.";
 
 
             if (
-                error.message &&
-                error.message.toLowerCase().includes("already registered")
+                mensagem
+                    .toLowerCase()
+                    .includes(
+                        "user already registered"
+                    )
             ) {
 
-                message =
+                mensagem =
                     "Este e-mail já possui uma conta.";
 
             }
 
 
-            else if (
-                error.message &&
-                error.message.toLowerCase().includes("password")
+            if (
+                mensagem
+                    .toLowerCase()
+                    .includes(
+                        "password should be at least"
+                    )
             ) {
 
-                message =
-                    "A senha não atende aos requisitos.";
-
-            }
-
-
-            else if (
-                error.message
-            ) {
-
-                message =
-                    error.message;
+                mensagem =
+                    "A senha precisa ter pelo menos 8 caracteres.";
 
             }
 
 
             showMessage(
-                message,
+                mensagem,
                 "error"
             );
 
 
+        } finally {
+
+            registerButton.disabled =
+                false;
+
+            registerButton.textContent =
+                "Criar conta";
+
         }
 
-
-        registerButton.disabled = false;
-
-        registerButton.textContent = "Criar conta";
-
-
-    });
-
-}
+    }
+);
 
 </script>
 
 
 </body>
 
-    </html>
+                    </html>
