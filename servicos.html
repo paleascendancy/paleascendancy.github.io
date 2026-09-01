@@ -3,1083 +3,36 @@
 
 <head>
 
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Serviços — Pale Ascendancy</title>
-
-<meta
-    name="description"
-    content="Serviços de produção audiovisual da Pale Ascendancy."
->
-
-
-<style>
-
-/* =========================================
-   RESET
-========================================= */
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-html,
-body {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-
-    overflow-x: hidden;
-}
-
-body {
-
-    background: #08080d;
-
-    color: #eeeeF4;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-.header {
-
-    position: fixed;
-
-    top: 15px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: calc(100% - 30px);
-
-    max-width: 1180px;
-
-    min-height: 68px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 25px;
-
-    padding: 10px 16px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
-
-    border-radius: 16px;
-
-    background:
-        rgba(12,12,19,0.72);
-
-    backdrop-filter: blur(18px);
-
-    -webkit-backdrop-filter: blur(18px);
-
-    z-index: 1000;
-}
-
-
-/* =========================================
-   MARCA
-========================================= */
-
-.brand {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    color: white;
-
-    text-decoration: none;
-
-    white-space: nowrap;
-}
-
-.brand img {
-
-    width: 38px;
-    height: 38px;
-
-    object-fit: contain;
-
-    border-radius: 9px;
-}
-
-.brand span {
-
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-}
-
-
-/* =========================================
-   NAVEGAÇÃO
-========================================= */
-
-.nav {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 25px;
-
-    flex: 1;
-}
-
-.nav a {
-
-    color: #92929e;
-
-    text-decoration: none;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    transition: 0.25s;
-}
-
-.nav a:hover {
-
-    color: white;
-}
-
-.nav a.active {
-
-    color: white;
-}
-
-
-/* =========================================
-   BOTÕES
-========================================= */
-
-.discord-button,
-.primary-button,
-.secondary-button {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-decoration: none;
-
-    cursor: pointer;
-}
-
-.discord-button {
-
-    min-height: 40px;
-
-    padding: 0 16px;
-
-    border-radius: 9px;
-
-    background: white;
-
-    color: #08080d;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    white-space: nowrap;
-}
-
-.primary-button {
-
-    min-height: 46px;
-
-    padding: 0 22px;
-
-    border-radius: 10px;
-
-    background: white;
-
-    color: #08080d;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    transition: 0.25s;
-}
-
-.primary-button:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 30px
-        rgba(255,255,255,0.08);
-}
-
-.secondary-button {
-
-    min-height: 46px;
-
-    padding: 0 22px;
-
-    border-radius: 10px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.1);
-
-    background:
-        rgba(255,255,255,0.035);
-
-    color: #eeeeF4;
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-
-/* =========================================
-   MENU MOBILE
-========================================= */
-
-.menu-button {
-
-    display: none;
-
-    border: 0;
-
-    background: transparent;
-
-    color: white;
-
-    font-size: 25px;
-
-    cursor: pointer;
-}
-
-.mobile-menu {
-
-    display: none;
-}
-
-
-/* =========================================
-   HERO
-========================================= */
-
-.hero {
-
-    position: relative;
-
-    min-height: 680px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding:
-        150px 20px 100px;
-
-    text-align: center;
-
-    overflow: hidden;
-}
-
-.hero-glow {
-
-    position: absolute;
-
-    width: 650px;
-    height: 420px;
-
-    top: 80px;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    background:
-        rgba(79,73,255,0.16);
-
-    filter: blur(110px);
-
-    border-radius: 50%;
-}
-
-.hero-content {
-
-    position: relative;
-
-    width: min(850px, 100%);
-
-    z-index: 2;
-}
-
-.eyebrow {
-
-    margin-bottom: 25px;
-
-    color: #7773ff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 4px;
-}
-
-.hero-logo {
-
-    width: 150px;
-
-    max-width: 65%;
-
-    height: auto;
-
-    margin-bottom: 25px;
-
-    object-fit: contain;
-}
-
-.hero h1 {
-
-    margin: 0;
-
-    font-size:
-        clamp(42px, 7vw, 72px);
-
-    line-height: 1.03;
-
-    letter-spacing: -4px;
-}
-
-.hero h1 span {
-
-    display: block;
-
-    color: #7773ff;
-}
-
-.hero p {
-
-    max-width: 680px;
-
-    margin:
-        28px auto 0;
-
-    color: #90909b;
-
-    font-size: 15px;
-
-    line-height: 1.8;
-}
-
-
-/* =========================================
-   SEÇÃO
-========================================= */
-
-.section {
-
-    width:
-        min(1100px, calc(100% - 30px));
-
-    margin: 0 auto;
-
-    padding: 100px 0;
-}
-
-.section-heading {
-
-    max-width: 760px;
-
-    margin-bottom: 50px;
-}
-
-.section-heading > span {
-
-    color: #7773ff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 3px;
-}
-
-.section-heading h2 {
-
-    margin: 18px 0;
-
-    font-size:
-        clamp(34px, 5vw, 52px);
-
-    letter-spacing: -2px;
-}
-
-.section-heading h2 span {
-
-    color: #7773ff;
-}
-
-.section-heading p {
-
-    color: #858590;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-}
-
-
-/* =========================================
-   SERVIÇOS GRID
-========================================= */
-
-.services-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 16px;
-}
-
-
-/* =========================================
-   CARD DE SERVIÇO
-========================================= */
-
-.service-card {
-
-    position: relative;
-
-    min-height: 310px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    padding: 30px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.055),
-            rgba(255,255,255,0.018)
-        );
-
-    overflow: hidden;
-
-    transition:
-        transform .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease;
-}
-
-.service-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    top: -90px;
-    right: -90px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(88,82,255,0.15);
-
-    filter: blur(55px);
-
-    pointer-events: none;
-}
-
-.service-card:hover {
-
-    transform:
-        translateY(-7px);
-
-    border-color:
-        rgba(112,106,255,0.35);
-
-    box-shadow:
-        0 25px 60px
-        rgba(0,0,0,0.35);
-}
-
-
-/* =========================================
-   CARD PRINCIPAL
-========================================= */
-
-.service-card.featured {
-
-    min-height: 360px;
-
-    border-color:
-        rgba(112,106,255,0.25);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(88,82,255,0.09),
-            rgba(255,255,255,0.018)
-        );
-}
-
-
-/* =========================================
-   ÍCONE
-========================================= */
-
-.service-icon {
-
-    width: 55px;
-    height: 55px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    margin-bottom: 30px;
-
-    border-radius: 14px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
-
-    background:
-        rgba(255,255,255,0.04);
-
-    color: #8a86ff;
-
-    font-size: 22px;
-
-    font-weight: 800;
-}
-
-
-/* =========================================
-   NÚMERO
-========================================= */
-
-.service-number {
-
-    position: absolute;
-
-    top: 30px;
-
-    right: 30px;
-
-    color: #555561;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 2px;
-}
-
-
-/* =========================================
-   TEXTO
-========================================= */
-
-.service-card h3 {
-
-    margin: 0 0 12px;
-
-    font-size: 24px;
-
-    letter-spacing: -0.5px;
-}
-
-.service-card p {
-
-    margin: 0;
-
-    max-width: 500px;
-
-    color: #858590;
-
-    font-size: 13px;
-
-    line-height: 1.8;
-}
-
-
-/* =========================================
-   TAG
-========================================= */
-
-.service-tag {
-
-    display: inline-block;
-
-    width: fit-content;
-
-    margin-top: auto;
-
-    padding:
-        7px 10px;
-
-    border-radius: 6px;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color: #777783;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-}
-
-
-/* =========================================
-   PROCESSO
-========================================= */
-
-.process-section {
-
-    width:
-        min(1100px, calc(100% - 30px));
-
-    margin: 0 auto;
-
-    padding: 90px 0;
-}
-
-.process-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-}
-
-.process-card {
-
-    padding: 25px;
-
-    min-height: 190px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
-
-    border-radius: 17px;
-
-    background:
-        rgba(255,255,255,0.025);
-}
-
-.process-number {
-
-    color: #7773ff;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    margin-bottom: 25px;
-}
-
-.process-card h3 {
-
-    margin: 0 0 10px;
-
-    font-size: 18px;
-}
-
-.process-card p {
-
-    margin: 0;
-
-    color: #858590;
-
-    font-size: 12px;
-
-    line-height: 1.7;
-}
-
-
-/* =========================================
-   CTA
-========================================= */
-
-.cta {
-
-    width:
-        min(1100px, calc(100% - 30px));
-
-    margin:
-        0 auto 90px;
-
-    padding:
-        90px 30px;
-
-    text-align: center;
-
-    border-radius: 22px;
-
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
-
-    background:
-
-        radial-gradient(
-            circle at center,
-            rgba(81,76,255,0.14),
-            transparent 60%
-        ),
-
-        rgba(255,255,255,0.025);
-}
-
-.cta-content {
-
-    max-width: 700px;
-
-    margin: auto;
-}
-
-.cta span {
-
-    color: #7773ff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 3px;
-}
-
-.cta h2 {
-
-    margin: 18px 0;
-
-    font-size:
-        clamp(34px, 5vw, 55px);
-
-    letter-spacing: -2px;
-}
-
-.cta p {
-
-    margin-bottom: 25px;
-
-    color: #858590;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-}
-
-
-/* =========================================
-   FOOTER
-========================================= */
-
-footer {
-
-    padding:
-        60px 20px;
-
-    text-align: center;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,0.08);
-}
-
-.footer-brand {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-bottom: 15px;
-}
-
-.footer-brand img {
-
-    width: 35px;
-    height: 35px;
-
-    object-fit: contain;
-
-    border-radius: 8px;
-}
-
-.footer-brand span {
-
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-footer p {
-
-    color: #777783;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-}
-
-footer small {
-
-    display: block;
-
-    margin-top: 20px;
-
-    color: #555560;
-
-    font-size: 10px;
-}
-
-
-/* =========================================
-   RESPONSIVO
-========================================= */
-
-@media (max-width: 900px) {
-
-    .nav {
-        gap: 12px;
-    }
-
-    .nav a {
-        font-size: 10px;
-    }
-
-    .process-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 650px) {
-
-    .header {
-
-        width:
-            calc(100% - 20px);
-
-        top: 10px;
-
-        min-height: 58px;
-
-        padding:
-            8px 12px;
-    }
-
-    .brand span {
-        font-size: 10px;
-    }
-
-    .brand img {
-
-        width: 34px;
-        height: 34px;
-    }
-
-    .nav,
-    .discord-button {
-
-        display: none;
-    }
-
-    .menu-button {
-
-        display: block;
-
-        margin-left: auto;
-    }
-
-    .mobile-menu {
-
-        position: fixed;
-
-        top: 78px;
-
-        left: 10px;
-        right: 10px;
-
-        padding: 15px;
-
-        border-radius: 15px;
-
-        border:
-            1px solid
-            rgba(255,255,255,0.08);
-
-        background:
-            rgba(12,12,19,0.95);
-
-        backdrop-filter: blur(20px);
-
-        z-index: 999;
-    }
-
-    .mobile-menu.active {
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 5px;
-    }
-
-    .mobile-menu a {
-
-        padding: 14px;
-
-        color: #aaaab5;
-
-        text-decoration: none;
-
-        font-size: 12px;
-
-        font-weight: 700;
-
-        border-radius: 8px;
-    }
-
-    .mobile-menu a:hover {
-
-        background:
-            rgba(255,255,255,0.05);
-
-        color: white;
-    }
-
-    .mobile-discord {
-
-        margin-top: 8px;
-
-        background: white;
-
-        color: #08080d !important;
-
-        text-align: center;
-    }
-
-    .hero {
-
-        min-height: 650px;
-
-        padding-top: 130px;
-    }
-
-    .hero h1 {
-
-        font-size: 43px;
-
-        letter-spacing: -2px;
-    }
-
-    .hero p {
-
-        font-size: 13px;
-    }
-
-    .section {
-
-        padding: 75px 0;
-    }
-
-    .section-heading h2 {
-
-        font-size: 35px;
-    }
-
-    .services-grid {
-
-        grid-template-columns: 1fr;
-    }
-
-    .service-card,
-    .service-card.featured {
-
-        min-height: 320px;
-    }
-
-    .process-grid {
-
-        grid-template-columns: 1fr;
-    }
-
-    .cta {
-
-        padding:
-            65px 20px;
-    }
-
-}
-
-</style>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Serviços — Pale Ascendancy</title>
+
+    <meta
+        name="description"
+        content="Serviços de produção audiovisual da Pale Ascendancy: promo, trailers, highlights, motion design e projetos personalizados."
+    >
+    <link rel="canonical" href="https://paleascendancy.com/servicos.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Pale Ascendancy">
+    <meta property="og:title" content="Serviços — Pale Ascendancy">
+    <meta property="og:description" content="Promo, trailers, highlights, motion design e projetos personalizados com editores especializados.">
+    <meta property="og:url" content="https://paleascendancy.com/servicos.html">
+    <meta property="og:locale" content="pt_BR">
+
+    <meta name="theme-color" content="#0d0c0b">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -1087,21 +40,19 @@ footer small {
 <body>
 
 
-<!-- =========================================
+<!-- ==================================================
      HEADER
-========================================= -->
+================================================== -->
 
 <header class="header">
 
-
-    <a
-        href="index.html"
-        class="brand"
-    >
+    <a href="index.html" class="brand">
 
         <img
             src="1 Sem Título_20260901004747.png"
-            alt="Logo Pale Ascendancy"
+            alt="Pale Ascendancy"
+            width="36"
+            height="36"
         >
 
         <span>
@@ -1111,7 +62,7 @@ footer small {
     </a>
 
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navegação principal">
 
         <a href="index.html">
             Home
@@ -1121,10 +72,7 @@ footer small {
             Sobre
         </a>
 
-        <a
-            href="servicos.html"
-            class="active"
-        >
+        <a href="servicos.html" class="active">
             Serviços
         </a>
 
@@ -1132,7 +80,7 @@ footer small {
             Editores
         </a>
 
-        <a href="index.html#contatos">
+        <a href="index.html#contato">
             Contato
         </a>
 
@@ -1153,16 +101,20 @@ footer small {
         class="menu-button"
         id="menuButton"
         type="button"
+        aria-label="Abrir menu de navegação"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
     >
-        ☰
+        <span class="menu-icon" aria-hidden="true"></span>
     </button>
 
 </header>
 
 
-<!-- =========================================
+
+<!-- ==================================================
      MENU MOBILE
-========================================= -->
+================================================== -->
 
 <div
     class="mobile-menu"
@@ -1185,9 +137,10 @@ footer small {
         Editores
     </a>
 
-    <a href="index.html#contatos">
+    <a href="index.html#contato">
         Contato
     </a>
+
 
     <a
         href="https://discord.gg/H3mnq7Nfp"
@@ -1201,485 +154,256 @@ footer small {
 </div>
 
 
-<main>
+
+<!-- ==================================================
+     CONTEÚDO
+================================================== -->
+
+<main class="services-page">
+
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <div class="services-container">
 
 
-<!-- =========================================
-     HERO
-========================================= -->
+        <!-- CABEÇALHO -->
 
-<section class="hero">
+        <section class="services-heading">
 
-    <div class="hero-glow"></div>
-
-
-    <div class="hero-content">
-
-        <div class="eyebrow">
-
-            SERVIÇOS • PRODUÇÃO • AUDIOVISUAL
-
-        </div>
-
-
-        <img
-            class="hero-logo"
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-        >
-
-
-        <h1>
-
-            Produção que transforma
-            <span>
-                ideias em projetos.
-            </span>
-
-        </h1>
-
-
-        <p>
-
-            Conectamos contratantes a profissionais especializados
-            para diferentes necessidades da produção audiovisual.
-
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================
-     SERVIÇOS
-========================================= -->
-
-<section class="section">
-
-
-    <div class="section-heading">
-
-        <span>
-            01 — SERVIÇOS
-        </span>
-
-
-        <h2>
-
-            Encontre o profissional
-            <span>
-                certo para seu projeto.
-            </span>
-
-        </h2>
-
-
-        <p>
-
-            Cada projeto exige uma abordagem diferente.
-            Conheça algumas das principais áreas de produção
-            disponíveis através da rede Pale Ascendancy.
-
-        </p>
-
-    </div>
-
-
-    <div class="services-grid">
-
-
-        <!-- PROMO -->
-
-        <article class="service-card featured">
-
-            <div class="service-icon">
-                ✦
-            </div>
-
-
-            <div class="service-number">
-                01
-            </div>
-
-
-            <h3>
-                Promo
-            </h3>
-
-
-            <p>
-
-                Produção de vídeos promocionais
-                desenvolvidos para apresentar marcas,
-                projetos, produtos, comunidades e
-                lançamentos com impacto visual.
-
+            <p class="eyebrow">
+                Serviços
             </p>
 
-
-            <span class="service-tag">
-                PROMOTIONAL • AUDIOVISUAL
-            </span>
-
-        </article>
-
-
-        <!-- TRAILERS -->
-
-        <article class="service-card">
-
-            <div class="service-icon">
-                ◆
-            </div>
-
-
-            <div class="service-number">
-                02
-            </div>
-
-
-            <h3>
-                Trailers
-            </h3>
-
+            <h1>
+                Cada formato tem um <span>editor certo.</span>
+            </h1>
 
             <p>
-
-                Edição com linguagem cinematográfica
-                para criar expectativa, apresentar
-                projetos e destacar momentos importantes
-                através de narrativa audiovisual.
-
+                Descreva seu projeto no Discord e a gente indica
+                quem da rede já trabalha com esse tipo de entrega.
             </p>
 
-
-            <span class="service-tag">
-                CINEMATIC • TRAILER
-            </span>
-
-        </article>
+        </section>
 
 
-        <!-- HIGHLIGHTS -->
+        <!-- GRID DE SERVIÇOS -->
 
-        <article class="service-card">
+        <section class="services-grid">
 
-            <div class="service-icon">
-                ◇
+
+            <!-- PROMO -->
+
+            <article class="service-card featured">
+
+                <div class="service-icon" aria-hidden="true">✦</div>
+                <div class="service-number">01</div>
+
+                <h3>Promo</h3>
+
+                <p>
+                    Vídeos promocionais para apresentar marcas,
+                    canais, produtos ou lançamentos com impacto
+                    visual desde os primeiros segundos.
+                </p>
+
+                <span class="service-tag">Divulgação</span>
+
+            </article>
+
+
+            <!-- TRAILERS -->
+
+            <article class="service-card">
+
+                <div class="service-icon" aria-hidden="true">◆</div>
+                <div class="service-number">02</div>
+
+                <h3>Trailers</h3>
+
+                <p>
+                    Edição com linguagem cinematográfica pra criar
+                    expectativa e apresentar um projeto através de
+                    narrativa visual.
+                </p>
+
+                <span class="service-tag">Cinematográfico</span>
+
+            </article>
+
+
+            <!-- HIGHLIGHTS -->
+
+            <article class="service-card">
+
+                <div class="service-icon" aria-hidden="true">◇</div>
+                <div class="service-number">03</div>
+
+                <h3>Highlights</h3>
+
+                <p>
+                    Seleção e edição dos melhores momentos de
+                    partidas, lives ou eventos, cortados no ritmo
+                    pra prender atenção.
+                </p>
+
+                <span class="service-tag">Gameplay &amp; lives</span>
+
+            </article>
+
+
+            <!-- MOTION DESIGN -->
+
+            <article class="service-card featured">
+
+                <div class="service-icon" aria-hidden="true">✧</div>
+                <div class="service-number">04</div>
+
+                <h3>Motion Design</h3>
+
+                <p>
+                    Animações, elementos gráficos e transições
+                    pra dar identidade visual própria a uma
+                    produção.
+                </p>
+
+                <span class="service-tag">Animação</span>
+
+            </article>
+
+
+            <!-- OUTROS -->
+
+            <article class="service-card">
+
+                <div class="service-icon" aria-hidden="true">+</div>
+                <div class="service-number">05</div>
+
+                <h3>Outros formatos</h3>
+
+                <p>
+                    Precisa de algo fora dessas categorias? Fala
+                    com a gente no Discord e vemos se algum editor
+                    da rede atende.
+                </p>
+
+                <span class="service-tag">Sob consulta</span>
+
+            </article>
+
+
+            <!-- PROJETOS PERSONALIZADOS -->
+
+            <article class="service-card">
+
+                <div class="service-icon" aria-hidden="true">∞</div>
+                <div class="service-number">06</div>
+
+                <h3>Projetos personalizados</h3>
+
+                <p>
+                    Séries de vídeos, campanhas com várias entregas
+                    ou parcerias contínuas com um editor fixo da
+                    rede.
+                </p>
+
+                <span class="service-tag">Longo prazo</span>
+
+            </article>
+
+
+        </section>
+
+
+        <!-- COMO FUNCIONA -->
+
+        <section class="process-section">
+
+            <div class="services-heading">
+
+                <p class="eyebrow">Como funciona</p>
+
+                <h2>Do pedido à <span>entrega.</span></h2>
+
             </div>
 
+            <div class="process-grid">
 
-            <div class="service-number">
-                03
+                <article class="process-card">
+                    <div class="process-number">01</div>
+                    <h3>Você descreve o projeto</h3>
+                    <p>
+                        Formato, prazo e referências, direto no
+                        canal certo do Discord.
+                    </p>
+                </article>
+
+                <article class="process-card">
+                    <div class="process-number">02</div>
+                    <h3>Indicamos o editor</h3>
+                    <p>
+                        Com base na especialidade de cada um,
+                        você já conversa com quem faz esse tipo
+                        de trabalho.
+                    </p>
+                </article>
+
+                <article class="process-card">
+                    <div class="process-number">03</div>
+                    <h3>Combinam direto</h3>
+                    <p>
+                        Prazo, valor e entregas são acertados
+                        entre você e o editor, sem intermediário.
+                    </p>
+                </article>
+
             </div>
 
+        </section>
 
-            <h3>
-                Highlights
-            </h3>
 
+        <!-- CTA -->
+
+        <section class="editors-cta">
+
+            <h2>Pronto pra começar seu projeto?</h2>
 
             <p>
-
-                Seleção e edição dos melhores momentos
-                de partidas, eventos, competições,
-                produções e conteúdos para criar vídeos
-                dinâmicos e envolventes.
-
+                Entre no Discord e conta pra gente o que você
+                precisa.
             </p>
 
+            <a
+                href="https://discord.gg/H3mnq7Nfp"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="primary-button"
+            >
+                Entrar no Discord
+            </a>
 
-            <span class="service-tag">
-                HIGHLIGHTS • EDITING
-            </span>
-
-        </article>
-
-
-        <!-- MOTION DESIGN -->
-
-        <article class="service-card featured">
-
-            <div class="service-icon">
-                ✧
-            </div>
-
-
-            <div class="service-number">
-                04
-            </div>
-
-
-            <h3>
-                Motion Design
-            </h3>
-
-
-            <p>
-
-                Criação de animações, elementos gráficos,
-                transições e composição visual para
-                elevar a identidade e apresentação
-                de uma produção.
-
-            </p>
-
-
-            <span class="service-tag">
-                MOTION • DESIGN
-            </span>
-
-        </article>
-
-
-        <!-- OUTROS -->
-
-        <article class="service-card">
-
-            <div class="service-icon">
-                +
-            </div>
-
-
-            <div class="service-number">
-                05
-            </div>
-
-
-            <h3>
-                Outros Serviços
-            </h3>
-
-
-            <p>
-
-                Possui uma necessidade específica?
-                Nossa rede também pode conectar você
-                a profissionais para diferentes formatos
-                e demandas audiovisuais.
-
-            </p>
-
-
-            <span class="service-tag">
-                CUSTOM • PROJECT
-            </span>
-
-        </article>
-
-
-        <!-- PROJETOS PERSONALIZADOS -->
-
-        <article class="service-card">
-
-            <div class="service-icon">
-                ∞
-            </div>
-
-
-            <div class="service-number">
-                06
-            </div>
-
-
-            <h3>
-                Projetos Personalizados
-            </h3>
-
-
-            <p>
-
-                Explique sua ideia e necessidade.
-                A Pale Ascendancy pode direcionar
-                o projeto para profissionais compatíveis
-                com o trabalho solicitado.
-
-            </p>
-
-
-            <span class="service-tag">
-                CUSTOM PRODUCTION
-            </span>
-
-        </article>
+        </section>
 
 
     </div>
-
-</section>
-
-
-<!-- =========================================
-     COMO FUNCIONA
-========================================= -->
-
-<section class="process-section">
-
-
-    <div class="section-heading">
-
-        <span>
-            02 — PROCESSO
-        </span>
-
-
-        <h2>
-
-            Do pedido à
-            <span>
-                produção.
-            </span>
-
-        </h2>
-
-
-        <p>
-
-            Um processo simples para aproximar
-            contratantes e profissionais.
-
-        </p>
-
-    </div>
-
-
-    <div class="process-grid">
-
-
-        <article class="process-card">
-
-            <div class="process-number">
-                01
-            </div>
-
-
-            <h3>
-                Solicite
-            </h3>
-
-
-            <p>
-
-                Entre em contato através do Discord
-                e explique o que você precisa para
-                seu projeto.
-
-            </p>
-
-        </article>
-
-
-        <article class="process-card">
-
-            <div class="process-number">
-                02
-            </div>
-
-
-            <h3>
-                Conecte
-            </h3>
-
-
-            <p>
-
-                A necessidade do projeto é analisada
-                para encontrar profissionais compatíveis
-                com a demanda.
-
-            </p>
-
-        </article>
-
-
-        <article class="process-card">
-
-            <div class="process-number">
-                03
-            </div>
-
-
-            <h3>
-                Produza
-            </h3>
-
-
-            <p>
-
-                Após alinhar os detalhes, o profissional
-                inicia a produção do projeto.
-
-            </p>
-
-        </article>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================
-     CTA
-========================================= -->
-
-<section class="cta">
-
-
-    <div class="cta-content">
-
-        <span>
-            TEM UM PROJETO?
-        </span>
-
-
-        <h2>
-
-            Vamos transformar
-            sua ideia em produção.
-
-        </h2>
-
-
-        <p>
-
-            Entre na comunidade Pale Ascendancy
-            e converse conosco sobre sua necessidade.
-
-        </p>
-
-
-        <a
-            href="https://discord.gg/H3mnq7Nfp"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="primary-button"
-        >
-            Solicitar um projeto
-        </a>
-
-    </div>
-
-</section>
-
 
 </main>
 
 
-<!-- =========================================
+
+<!-- ==================================================
      FOOTER
-========================================= -->
+================================================== -->
 
 <footer>
-
 
     <div class="footer-brand">
 
         <img
             src="1 Sem Título_20260901004747.png"
             alt="Pale Ascendancy"
+            width="28"
+            height="28"
         >
-
 
         <span>
             PALE ASCENDANCY
@@ -1687,11 +411,9 @@ footer small {
 
     </div>
 
-
     <p>
-        CONEXÕES • PROJETOS • PRODUÇÃO PROFISSIONAL
+        Rede de editores e produção audiovisual.
     </p>
-
 
     <small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
@@ -1700,57 +422,7 @@ footer small {
 </footer>
 
 
-<!-- =========================================
-     JAVASCRIPT
-========================================= -->
-
-<script>
-
-const menuButton =
-    document.getElementById("menuButton");
-
-const mobileMenu =
-    document.getElementById("mobileMenu");
-
-
-if (menuButton && mobileMenu) {
-
-    menuButton.addEventListener(
-        "click",
-        function () {
-
-            mobileMenu.classList.toggle("active");
-
-        }
-    );
-
-}
-
-
-const mobileLinks =
-    document.querySelectorAll(
-        ".mobile-menu a"
-    );
-
-
-mobileLinks.forEach(
-    function(link) {
-
-        link.addEventListener(
-            "click",
-            function() {
-
-                mobileMenu.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-    }
-);
-
-</script>
+<script src="script.js"></script>
 
 
 </body>
