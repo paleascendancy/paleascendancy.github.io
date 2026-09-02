@@ -1,50 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Pale Ascendancy — Rede de Editores</title>
-
-    <meta
-        name="description"
-        content="Pale Ascendancy — rede de profissionais de edição e produção audiovisual."
-    >
-
-    <meta
-        name="theme-color"
-        content="#0d0c0b"
-    >
-
-    <link
-        rel="icon"
-        href="favicon.svg"
-        type="image/svg+xml"
-    >
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-    <!-- ==================================================
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pale Ascendancy — Rede de Editores</title>
+<meta content="Pale Ascendancy — rede de profissionais de edição e produção audiovisual." name="description"/>
+<meta content="#011e31" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+<!-- ==================================================
          CELULAR FLUTUANTE
     ================================================== -->
-
-    <style>
+<style>
 
         .hero-visual {
             display: flex;
@@ -570,798 +540,358 @@
         }
 
     </style>
-
 </head>
-
-
 <body>
-
-
 <!-- ==================================================
      HEADER
 ================================================== -->
-
 <header class="header">
-
-    <a
-        href="index.html"
-        class="brand"
-    >
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="36"
-            height="36"
-        >
-
-        <span>
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="1 Sem Título_20260901004747.png" width="36"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </a>
-
-
-    <nav
-        class="nav"
-        aria-label="Navegação principal"
-    >
-
-        <a href="index.html">
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
             Home
         </a>
-
-        <a href="index.html#sobre">
+<a href="index.html#sobre">
             Sobre
         </a>
-
-        <a href="servicos.html">
+<a href="servicos.html">
             Serviços
         </a>
-
-        <a href="editores.html">
+<a href="editores.html">
             Editores
         </a>
-
-        <a href="index.html#contato">
+<a href="index.html#contato">
             Contato
         </a>
-
-    </nav>
-
-
-    <!-- ==================================================
+</nav>
+<!-- ==================================================
          ÁREA DA CONTA
     ================================================== -->
-
-    <div
-        class="account-area"
-        id="accountArea"
-    >
-
-        <div
-            id="loggedOutArea"
-            class="logged-out-area"
-        >
-
-            <a
-                href="login.html"
-                class="account-login"
-            >
+<div class="account-area" id="accountArea">
+<div class="logged-out-area" id="loggedOutArea">
+<a class="account-login" href="login.html">
                 Entrar
             </a>
-
-            <a
-                href="cadastro.html"
-                class="account-register"
-            >
+<a class="account-register" href="cadastro.html">
                 Criar conta
             </a>
-
-        </div>
-
-
-        <div
-            id="loggedInArea"
-            class="logged-in-area"
-            hidden
-        >
-
-            <a
-                href="perfil.html"
-                class="profile-link"
-                aria-label="Abrir meu perfil"
-            >
-
-                <span class="profile-avatar-small">
-
-                    <span id="headerProfileInitial">
+</div>
+<div class="logged-in-area" hidden="" id="loggedInArea">
+<a aria-label="Abrir meu perfil" class="profile-link" href="perfil.html">
+<span class="profile-avatar-small">
+<span id="headerProfileInitial">
                         ?
                     </span>
-
-                    <img
-                        id="headerProfileImage"
-                        src=""
-                        alt="Foto de perfil"
-                        hidden
-                    >
-
-                </span>
-
-                <span class="profile-link-text">
+<img alt="Foto de perfil" hidden="" id="headerProfileImage" src=""/>
+</span>
+<span class="profile-link-text">
                     Perfil
                 </span>
-
-            </a>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==================================================
+</a>
+</div>
+</div>
+<!-- ==================================================
          MENU MOBILE
     ================================================== -->
-
-    <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-label="Abrir menu"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-    >
-
-        <span
-            class="menu-icon"
-            aria-hidden="true"
-        ></span>
-
-    </button>
-
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
 </header>
-
-
 <!-- ==================================================
      MENU MOBILE
 ================================================== -->
-
-<div
-    class="mobile-menu"
-    id="mobileMenu"
->
-
-    <a href="index.html">
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
         Home
     </a>
-
-    <a href="index.html#sobre">
+<a href="index.html#sobre">
         Sobre
     </a>
-
-    <a href="servicos.html">
+<a href="servicos.html">
         Serviços
     </a>
-
-    <a href="editores.html">
+<a href="editores.html">
         Editores
     </a>
-
-    <a href="index.html#contato">
+<a href="index.html#contato">
         Contato
     </a>
-
-
-    <div
-        class="mobile-account"
-        id="mobileAccount"
-    >
-
-        <div id="mobileLoggedOut">
-
-            <a href="login.html">
+<div class="mobile-account" id="mobileAccount">
+<div id="mobileLoggedOut">
+<a href="login.html">
                 Entrar
             </a>
-
-            <a href="cadastro.html">
+<a href="cadastro.html">
                 Criar conta
             </a>
-
-        </div>
-
-
-        <div
-            id="mobileLoggedIn"
-            hidden
-        >
-
-            <a href="perfil.html">
+</div>
+<div hidden="" id="mobileLoggedIn">
+<a href="perfil.html">
                 Meu perfil
             </a>
-
-        </div>
-
-    </div>
-
 </div>
-
-
+</div>
+</div>
 <!-- ==================================================
      MAIN
 ================================================== -->
-
 <main>
-
-
-    <!-- ==================================================
+<!-- ==================================================
          HERO
     ================================================== -->
-
-    <section class="hero">
-
-        <div class="hero-glow"></div>
-
-        <div class="hero-grid">
-
-            <div class="hero-content">
-
-                <p class="eyebrow">
-                    PALE ASCENDANCY
-                </p>
-
-
-                <h1>
+<section class="hero">
+<div class="hero-glow"></div>
+<div class="hero-grid">
+<div class="hero-content">
+<p class="eyebrow">REDE CRIATIVA</p>
+<h1>
                     Onde editores
                     <span>transformam ideias.</span>
-                </h1>
-
-
-                <p class="hero-lead">
+</h1>
+<p class="hero-lead">
                     Uma rede de profissionais de edição e
                     produção audiovisual para conectar talentos,
                     criadores e projetos.
                 </p>
-
-
-                <div class="hero-buttons">
-
-                    <a
-                        href="editores.html"
-                        class="primary-button"
-                    >
+<div class="hero-buttons">
+<a class="primary-button" href="editores.html">
                         Encontrar editores
                     </a>
-
-
-                    <a
-                        href="cadastro.html"
-                        class="secondary-button"
-                    >
+<a class="secondary-button" href="quero-ser-editor.html">
                         Quero ser editor
                     </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- ==================================================
+</div>
+</div>
+<!-- ==================================================
                  CELULAR FLUTUANTE
             ================================================== -->
-
-            <div class="hero-visual">
-
-                <div
-                    class="phone-scene"
-                    id="phoneScene"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Interagir com o celular"
-                >
-
-                    <span class="phone-side-button one"></span>
-
-                    <span class="phone-side-button two"></span>
-
-                    <span class="phone-side-button three"></span>
-
-
-                    <div class="phone">
-
-                        <div class="phone-frame">
-
-                            <!-- IMAGEM DO CELULAR -->
-
-                            <img
-                                class="phone-screen"
-                                src="https://cdn.discordapp.com/attachments/1513764141947551746/1544548142546948176/file_000000000428820e9367024538cb1a95.png?ex=6a98e80d&is=6a97968d&hm=fc9674551e80467548470901694cfee903ea0db14aedea47b44bbf2cfac3e463"
-                                alt="Perfil da Pale Ascendancy"
-                                loading="eager"
-                            >
-
-                            <span
-                                class="phone-camera"
-                                aria-hidden="true"
-                            ></span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="phone-shadow"
-                        aria-hidden="true"
-                    ></div>
-
-
-                    <span class="phone-hint">
+<div class="hero-visual"><div aria-label="Pale Ascendancy" class="phone-brand"><img alt="" aria-hidden="true" src="1 Sem Título_20260901004747.png"/></div>
+<div aria-label="Interagir com o celular" class="phone-scene" id="phoneScene" role="button" tabindex="0">
+<span class="phone-side-button one"></span>
+<span class="phone-side-button two"></span>
+<span class="phone-side-button three"></span>
+<div class="phone">
+<div class="phone-frame">
+<!-- IMAGEM DO CELULAR -->
+<img alt="Perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="https://cdn.discordapp.com/attachments/1513764141947551746/1544548142546948176/file_000000000428820e9367024538cb1a95.png?ex=6a98e80d&amp;is=6a97968d&amp;hm=fc9674551e80467548470901694cfee903ea0db14aedea47b44bbf2cfac3e463"/>
+<span aria-hidden="true" class="phone-camera"></span>
+</div>
+</div>
+<div aria-hidden="true" class="phone-shadow"></div>
+<span class="phone-hint">
                         Toque para interagir
                     </span>
-
-                </div>
-
-
-                <!-- ==================================================
+</div>
+<!-- ==================================================
                      TEXTO ABAIXO DO CELULAR
                 ================================================== -->
-
-                <div class="phone-caption">
-
-                    <strong>
-                        PALE ASCENDANCY
-                    </strong>
-
-                    <span>
-                        Editores, criadores e projetos
-                        conectados em um só lugar.
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ==================================================
+<div class="phone-caption">
+<strong>EDITORES &amp; PROJETOS</strong>
+<span>Talentos, criadores e projetos conectados em um só lugar.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================================================
          SOBRE
     ================================================== -->
-
-    <section
-        class="section"
-        id="sobre"
-    >
-
-        <div class="section-heading">
-
-            <p class="eyebrow">
+<section class="section" id="sobre">
+<div class="section-heading">
+<p class="eyebrow">
                 Sobre nós
             </p>
-
-
-            <h2>
+<h2>
                 Uma comunidade para
                 <span>quem cria.</span>
-            </h2>
-
-
-            <p>
+</h2>
+<p>
                 A Pale Ascendancy conecta editores,
                 criadores e clientes em um ambiente
                 focado em qualidade, profissionalismo
                 e evolução.
             </p>
-
-        </div>
-
-
-        <div class="bento-grid">
-
-            <article class="bento-card large">
-
-                <h3>
+</div>
+<div class="bento-grid">
+<article class="bento-card large">
+<h3>
                     Profissionais
                 </h3>
-
-                <p>
+<p>
                     Encontre editores especializados
                     em diferentes estilos e formatos.
                 </p>
-
-            </article>
-
-
-            <article class="bento-card">
-
-                <h3>
+</article>
+<article class="bento-card">
+<h3>
                     Projetos
                 </h3>
-
-                <p>
+<p>
                     Encontre profissionais para transformar
                     suas ideias em projetos audiovisuais.
                 </p>
-
-            </article>
-
-
-            <article class="bento-card">
-
-                <h3>
+</article>
+<article class="bento-card">
+<h3>
                     Qualidade
                 </h3>
-
-                <p>
+<p>
                     Conectamos pessoas que valorizam
                     criatividade, técnica e profissionalismo.
                 </p>
-
-            </article>
-
-
-            <article class="bento-card wide">
-
-                <h3>
+</article>
+<article class="bento-card wide">
+<h3>
                     Evolução
                 </h3>
-
-                <p>
+<p>
                     Um ambiente para aprender, competir,
                     criar e desenvolver novas habilidades.
                 </p>
-
-            </article>
-
-        </div>
-
-    </section>
-
-
-    <!-- ==================================================
+</article>
+</div>
+</section>
+<!-- ==================================================
          SERVIÇOS
     ================================================== -->
-
-    <section
-        class="section"
-        id="servicos"
-    >
-
-        <div class="section-heading">
-
-            <p class="eyebrow">
+<section class="section" id="servicos">
+<div class="section-heading">
+<p class="eyebrow">
                 Serviços
             </p>
-
-
-            <h2>
+<h2>
                 Edição para diferentes
                 <span>projetos.</span>
-            </h2>
-
-
-            <p>
+</h2>
+<p>
                 Encontre profissionais preparados
                 para diferentes tipos de produção.
             </p>
-
-        </div>
-
-
-        <div class="service-preview">
-
-            <div class="service-preview-content">
-
-                <h2>
+</div>
+<div class="service-preview">
+<div class="service-preview-content">
+<h2>
                     Transforme sua ideia
                     em <span>resultado.</span>
-                </h2>
-
-                <p>
+</h2>
+<p>
                     Escolha o estilo de edição que melhor
                     combina com seu projeto e encontre
                     profissionais especializados.
                 </p>
-
-
-                <div class="section-action">
-
-                    <a
-                        href="servicos.html"
-                        class="primary-button"
-                    >
+<div class="section-action">
+<a class="primary-button" href="servicos.html">
                         Ver serviços
                     </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="service-preview-list">
-
-                <div>
-
-                    <strong>
+</div>
+</div>
+<div class="service-preview-list">
+<div>
+<strong>
                         Promos
                     </strong>
-
-                    <span>
+<span>
                         Conteúdo promocional e comercial.
                     </span>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
+</div>
+<div>
+<strong>
                         Trailers
                     </strong>
-
-                    <span>
+<span>
                         Ritmo, narrativa e impacto visual.
                     </span>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
+</div>
+<div>
+<strong>
                         Highlights
                     </strong>
-
-                    <span>
+<span>
                         Os melhores momentos em destaque.
                     </span>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
+</div>
+<div>
+<strong>
                         Motion Design
                     </strong>
-
-                    <span>
+<span>
                         Tipografia, animações e composição.
                     </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ==================================================
+</div>
+</div>
+</div>
+</section>
+<!-- ==================================================
          EDITORES
     ================================================== -->
-
-    <section class="section">
-
-        <div class="section-heading">
-
-            <p class="eyebrow">
+<section class="section">
+<div class="section-heading">
+<p class="eyebrow">
                 Rede de profissionais
             </p>
-
-
-            <h2>
+<h2>
                 Conheça nossos
                 <span>editores.</span>
-            </h2>
-
-
-            <p>
+</h2>
+<p>
                 Explore profissionais conectados
                 à Pale Ascendancy.
             </p>
-
-        </div>
-
-
-        <div class="editor-grid">
-
-            <article class="editor-card">
-
-                <div class="editor-icon">
-                    S
-                </div>
-
-                <span class="tag">
-                    Disponível
-                </span>
-
-                <h3>
-                    Smookecut
-                </h3>
-
-                <div class="editor-specialty">
-                    RITMO &amp; CORTES
-                </div>
-
-                <p>
-                    Edições focadas em ritmo, cortes
-                    precisos e conteúdo de jogos.
-                </p>
-
-                <a
-                    href="editores.html"
-                    class="card-link"
-                >
-                    Ver especialidade →
-                </a>
-
-            </article>
-
-
-            <article class="editor-card">
-
-                <div class="editor-icon">
-                    M
-                </div>
-
-                <span class="tag">
-                    Disponível
-                </span>
-
-                <h3>
-                    MANGAKÁ
-                </h3>
-
-                <div class="editor-specialty">
-                    ANIME &amp; MOTION
-                </div>
-
-                <p>
-                    Edições com referência em anime,
-                    tipografia animada e transições.
-                </p>
-
-                <a
-                    href="editores.html"
-                    class="card-link"
-                >
-                    Ver especialidade →
-                </a>
-
-            </article>
-
-
-            <article class="editor-card editor-card-placeholder">
-
-                <div class="editor-icon placeholder-icon">
-                    +
-                </div>
-
-                <h3>
-                    Seu perfil pode estar aqui.
-                </h3>
-
-                <p>
-                    Crie sua conta e faça parte
-                    da rede de profissionais.
-                </p>
-
-                <a
-                    href="cadastro.html"
-                    class="card-link"
-                >
-                    Criar perfil →
-                </a>
-
-            </article>
-
-        </div>
-
-
-        <div class="section-action">
-
-            <a
-                href="editores.html"
-                class="secondary-button"
-            >
+</div>
+<div class="editor-grid"><article class="editor-card"><img alt="Foto de perfil de Smookecut" class="editor-icon editor-photo" loading="lazy" src="https://cdn.discordapp.com/attachments/1513764148553584680/1544553567954665472/tiktok-smookecut-profile-picture.jpg.webp?ex=6a98ed1b&amp;is=6a979b9b&amp;hm=17c50a0cf54d0890f4cdd641e872d12423ea8708bdee8d099785c91402215a76&amp;"/><span class="tag">Disponível</span><h3>Smookecut</h3><div class="editor-specialty">RITMO &amp; CORTES</div><p>Edições focadas em ritmo, cortes precisos e conteúdo de jogos.</p><a class="card-link" href="editores.html">Ver especialidade →</a></article><article class="editor-card"><img alt="Foto de perfil de MANGAKÁ" class="editor-icon editor-photo" loading="lazy" src="https://cdn.discordapp.com/attachments/1513764148553584680/1544553567686361108/tiktok-mangaka.studio-profile-picture.jpg.webp?ex=6a98ed1a&amp;is=6a979b9a&amp;hm=0f9a360df3461cab107db5800d85b64e5807d5e7b1781548d7e208e46c0ffdc3&amp;"/><span class="tag">Disponível</span><h3>MANGAKÁ</h3><div class="editor-specialty">ANIME &amp; MOTION</div><p>Edições com referência em anime, tipografia animada e transições.</p><a class="card-link" href="editores.html">Ver especialidade →</a></article><article class="editor-card"><img alt="Foto de perfil de SHYREZ" class="editor-icon editor-photo" loading="lazy" src="https://cdn.discordapp.com/attachments/1513764148553584680/1544553566914617354/tiktok-shyrez2-profile-picture.jpg.webp?ex=6a98ed1a&amp;is=6a979b9a&amp;hm=946c88307e978a38cad6547772fc9c9db1ed5940c7b5a660fcb79fbffc1d8e20&amp;"/><span class="tag">Disponível</span><h3>SHYREZ</h3><div class="editor-specialty">EDIÇÃO &amp; IDENTIDADE</div><p>Editor conectado à rede para projetos audiovisuais e conteúdo digital.</p><a class="card-link" href="editores.html">Ver especialidade →</a></article><article class="editor-card"><img alt="Foto de perfil de Loki" class="editor-icon editor-photo" loading="lazy" src="https://cdn.discordapp.com/attachments/1513764148553584680/1544553567304814632/tiktok-levi.vision-profile-picture.jpg.webp?ex=6a98ed1a&amp;is=6a979b9a&amp;hm=7e04a522c56918dac24c8657ebf301285df9fb250be3d72cee1ff15dcc0e1240&amp;"/><span class="tag">Disponível</span><h3>Loki</h3><div class="editor-specialty">EDIÇÃO DIGITAL</div><p>Editor conectado à rede para projetos e conteúdos de diferentes formatos.</p><a class="card-link" href="editores.html">Ver especialidade →</a></article></div>
+<div class="section-action">
+<a class="secondary-button" href="editores.html">
                 Ver todos os editores
             </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- ==================================================
+</div>
+</section>
+<!-- ==================================================
          CONTATO
     ================================================== -->
-
-    <section
-        class="section"
-        id="contato"
-    >
-
-        <div class="section-heading">
-
-            <p class="eyebrow">
+<section class="section" id="contato">
+<div class="section-heading">
+<p class="eyebrow">
                 Contato
             </p>
-
-
-            <h2>
+<h2>
                 Vamos criar
                 <span>algo grande.</span>
-            </h2>
-
-
-            <p>
+</h2>
+<p>
                 Entre em contato para conhecer a
                 Pale Ascendancy e nossos profissionais.
             </p>
-
-
-            <a
-                href="https://discord.gg/H3mnq7Nfp"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="primary-button"
-            >
+<a class="primary-button" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
                 Entrar no Discord
             </a>
-
-        </div>
-
-    </section>
-
-
+</div>
+</section>
 </main>
-
-
 <!-- ==================================================
      FOOTER
 ================================================== -->
-
 <footer>
-
-    <div class="footer-brand">
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="28"
-            height="28"
-        >
-
-        <span>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="1 Sem Título_20260901004747.png" width="28"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </div>
-
-
-    <p>
+</div>
+<p>
         Rede de editores e produção audiovisual.
     </p>
-
-
-    <small>
+<small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
-
 </footer>
-
-
 <!-- ==================================================
      SUPABASE
 ================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1863,8 +1393,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
-
 </body>
-
 </html>

@@ -1,411 +1,176 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Meu Perfil — Pale Ascendancy</title>
-
-    <meta
-        name="description"
-        content="Visualize seu perfil de editor na Pale Ascendancy."
-    >
-
-    <meta
-        name="theme-color"
-        content="#0d0c0b"
-    >
-
-    <link
-        rel="icon"
-        href="favicon.svg"
-        type="image/svg+xml"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Meu Perfil — Pale Ascendancy</title>
+<meta content="Visualize seu perfil de editor na Pale Ascendancy." name="description"/>
+<meta content="#011e31" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
 </head>
-
-
 <body>
-
-
 <header class="header">
-
-    <a
-        href="index.html"
-        class="brand"
-    >
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="36"
-            height="36"
-        >
-
-        <span>
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="1 Sem Título_20260901004747.png" width="36"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </a>
-
-
-    <nav
-        class="nav"
-        aria-label="Navegação principal"
-    >
-
-        <a href="index.html">
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
             Home
         </a>
-
-        <a href="index.html#sobre">
+<a href="index.html#sobre">
             Sobre
         </a>
-
-        <a href="servicos.html">
+<a href="servicos.html">
             Serviços
         </a>
-
-        <a href="editores.html">
+<a href="editores.html">
             Editores
         </a>
-
-        <a href="index.html#contato">
+<a href="index.html#contato">
             Contato
         </a>
-
-    </nav>
-
-
-    <a
-        class="discord-button"
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
+</nav>
+<a class="discord-button" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-
-
-    <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-label="Abrir menu"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-    >
-
-        <span
-            class="menu-icon"
-            aria-hidden="true"
-        ></span>
-
-    </button>
-
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
 </header>
-
-
-
-<div
-    class="mobile-menu"
-    id="mobileMenu"
->
-
-    <a href="index.html">
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
         Home
     </a>
-
-    <a href="index.html#sobre">
+<a href="index.html#sobre">
         Sobre
     </a>
-
-    <a href="servicos.html">
+<a href="servicos.html">
         Serviços
     </a>
-
-    <a href="editores.html">
+<a href="editores.html">
         Editores
     </a>
-
-    <a href="index.html#contato">
+<a href="index.html#contato">
         Contato
     </a>
-
-    <a
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mobile-discord"
-    >
+<a class="mobile-discord" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-
 </div>
-
-
-
 <main class="auth-page">
-
-    <div
-        class="hero-glow"
-        aria-hidden="true"
-    ></div>
-
-
-    <section class="auth-container">
-
-
-        <div class="auth-heading">
-
-            <p class="eyebrow">
+<div aria-hidden="true" class="hero-glow"></div>
+<section class="auth-container">
+<div class="auth-heading">
+<p class="eyebrow">
                 Minha conta
             </p>
-
-            <h1>
+<h1>
                 Meu <span>perfil.</span>
-            </h1>
-
-            <p>
+</h1>
+<p>
                 Visualize as informações do seu perfil
                 de editor.
             </p>
-
-        </div>
-
-
-
-        <!-- PERFIL -->
-
-        <div class="profile-view">
-
-
-            <!-- FOTO -->
-
-            <div class="profile-photo-area">
-
-                <div
-                    class="profile-photo"
-                    id="profilePhoto"
-                >
-
-                    <span id="profileInitial">
+</div>
+<!-- PERFIL -->
+<div class="profile-view">
+<!-- FOTO -->
+<div class="profile-photo-area">
+<div class="profile-photo" id="profilePhoto">
+<span id="profileInitial">
                         ?
                     </span>
-
-                    <img
-                        id="profileImage"
-                        src=""
-                        alt="Foto de perfil"
-                        hidden
-                    >
-
-                </div>
-
-            </div>
-
-
-
-            <!-- NOME ARTÍSTICO -->
-
-            <div class="profile-info">
-
-                <span class="profile-label">
+<img alt="Foto de perfil" hidden="" id="profileImage" src=""/>
+</div>
+</div>
+<!-- NOME ARTÍSTICO -->
+<div class="profile-info">
+<span class="profile-label">
                     Nome artístico
                 </span>
-
-                <strong id="profileNomeArtistico">
+<strong id="profileNomeArtistico">
                     Carregando...
                 </strong>
-
-            </div>
-
-
-
-            <!-- NOME -->
-
-            <div class="profile-info">
-
-                <span class="profile-label">
+</div>
+<!-- NOME -->
+<div class="profile-info">
+<span class="profile-label">
                     Nome
                 </span>
-
-                <strong id="profileNome">
+<strong id="profileNome">
                     Carregando...
                 </strong>
-
-            </div>
-
-
-
-            <!-- E-MAIL -->
-
-            <div class="profile-info">
-
-                <span class="profile-label">
+</div>
+<!-- E-MAIL -->
+<div class="profile-info">
+<span class="profile-label">
                     E-mail
                 </span>
-
-                <strong id="profileEmail">
+<strong id="profileEmail">
                     Carregando...
                 </strong>
-
-            </div>
-
-
-
-            <!-- ESPECIALIDADE -->
-
-            <div class="profile-info">
-
-                <span class="profile-label">
+</div>
+<!-- ESPECIALIDADE -->
+<div class="profile-info">
+<span class="profile-label">
                     Especialidade
                 </span>
-
-                <strong id="profileEspecialidade">
+<strong id="profileEspecialidade">
                     Carregando...
                 </strong>
-
-            </div>
-
-
-
-            <!-- BIO -->
-
-            <div class="profile-info">
-
-                <span class="profile-label">
+</div>
+<!-- BIO -->
+<div class="profile-info">
+<span class="profile-label">
                     Sobre
                 </span>
-
-                <p id="profileBio">
+<p id="profileBio">
                     Nenhuma descrição adicionada.
                 </p>
-
-            </div>
-
-
-
-            <!-- REDES -->
-
-            <div
-                class="profile-socials"
-                id="profileSocials"
-            >
-
-            </div>
-
-
-
-            <!-- MENSAGEM -->
-
-            <p
-                class="auth-message"
-                id="profileMessage"
-                aria-live="polite"
-            ></p>
-
-
-
-            <!-- EDITAR -->
-
-            <a
-                href="editar-perfil.html"
-                class="primary-button auth-submit"
-            >
+</div>
+<!-- REDES -->
+<div class="profile-socials" id="profileSocials">
+</div>
+<!-- MENSAGEM -->
+<p aria-live="polite" class="auth-message" id="profileMessage"></p>
+<!-- EDITAR -->
+<a class="primary-button auth-submit" href="editar-perfil.html">
                 Editar perfil
             </a>
-
-
-
-            <!-- SAIR -->
-
-            <button
-                type="button"
-                class="secondary-button auth-submit"
-                id="logoutButton"
-            >
+<!-- SAIR -->
+<button class="secondary-button auth-submit" id="logoutButton" type="button">
                 Sair da conta
             </button>
-
-
-        </div>
-
-
-    </section>
-
+</div>
+</section>
 </main>
-
-
-
 <footer>
-
-    <div class="footer-brand">
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="28"
-            height="28"
-        >
-
-        <span>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="1 Sem Título_20260901004747.png" width="28"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </div>
-
-
-    <p>
+</div>
+<p>
         Rede de editores e produção audiovisual.
     </p>
-
-
-    <small>
+<small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
-
 </footer>
-
-
-
 <script src="script.js"></script>
-
-
 <!-- ==================================================
      SUPABASE
 ================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
 
 /* ==================================================
@@ -939,8 +704,5 @@ logoutButton.addEventListener(
 loadProfile();
 
 </script>
-
-
 </body>
-
 </html>

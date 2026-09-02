@@ -1,514 +1,209 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Editar Perfil — Pale Ascendancy</title>
-
-    <meta
-        name="description"
-        content="Edite seu perfil de editor na Pale Ascendancy."
-    >
-
-    <meta
-        name="theme-color"
-        content="#0d0c0b"
-    >
-
-    <link
-        rel="icon"
-        href="favicon.svg"
-        type="image/svg+xml"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editar Perfil — Pale Ascendancy</title>
+<meta content="Edite seu perfil de editor na Pale Ascendancy." name="description"/>
+<meta content="#011e31" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
 </head>
-
-
 <body>
-
-
 <header class="header">
-
-    <a
-        href="index.html"
-        class="brand"
-    >
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="36"
-            height="36"
-        >
-
-        <span>
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="1 Sem Título_20260901004747.png" width="36"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </a>
-
-
-    <nav
-        class="nav"
-        aria-label="Navegação principal"
-    >
-
-        <a href="index.html">
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
             Home
         </a>
-
-        <a href="index.html#sobre">
+<a href="index.html#sobre">
             Sobre
         </a>
-
-        <a href="servicos.html">
+<a href="servicos.html">
             Serviços
         </a>
-
-        <a href="editores.html">
+<a href="editores.html">
             Editores
         </a>
-
-        <a href="index.html#contato">
+<a href="index.html#contato">
             Contato
         </a>
-
-    </nav>
-
-
-    <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-label="Abrir menu"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-    >
-
-        <span
-            class="menu-icon"
-            aria-hidden="true"
-        ></span>
-
-    </button>
-
+</nav>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
 </header>
-
-
-
-<div
-    class="mobile-menu"
-    id="mobileMenu"
->
-
-    <a href="index.html">
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
         Home
     </a>
-
-    <a href="index.html#sobre">
+<a href="index.html#sobre">
         Sobre
     </a>
-
-    <a href="servicos.html">
+<a href="servicos.html">
         Serviços
     </a>
-
-    <a href="editores.html">
+<a href="editores.html">
         Editores
     </a>
-
-    <a href="index.html#contato">
+<a href="index.html#contato">
         Contato
     </a>
-
 </div>
-
-
-
 <main class="auth-page">
-
-    <div
-        class="hero-glow"
-        aria-hidden="true"
-    ></div>
-
-
-    <section class="auth-container">
-
-
-        <div class="auth-heading">
-
-            <p class="eyebrow">
+<div aria-hidden="true" class="hero-glow"></div>
+<section class="auth-container">
+<div class="auth-heading">
+<p class="eyebrow">
                 Minha conta
             </p>
-
-            <h1>
+<h1>
                 Editar <span>perfil.</span>
-            </h1>
-
-            <p>
+</h1>
+<p>
                 Atualize as informações que aparecerão
                 no seu perfil de editor.
             </p>
-
-        </div>
-
-
-
-        <form
-            class="auth-form"
-            id="profileForm"
-        >
-
-
-            <!-- FOTO -->
-
-            <div class="profile-photo-area">
-
-                <div
-                    class="profile-photo"
-                    id="profilePhoto"
-                >
-
-                    <span id="profileInitial">
+</div>
+<form class="auth-form" id="profileForm">
+<!-- FOTO -->
+<div class="profile-photo-area">
+<div class="profile-photo" id="profilePhoto">
+<span id="profileInitial">
                         ?
                     </span>
-
-                    <img
-                        id="profileImage"
-                        src=""
-                        alt="Foto de perfil"
-                        hidden
-                    >
-
-                </div>
-
-
-                <label
-                    for="foto"
-                    class="secondary-button"
-                >
+<img alt="Foto de perfil" hidden="" id="profileImage" src=""/>
+</div>
+<label class="secondary-button" for="foto">
                     Escolher foto
                 </label>
-
-
-                <input
-                    type="file"
-                    id="foto"
-                    accept="image/png,image/jpeg,image/webp"
-                    hidden
-                >
-
-
-                <small>
+<input accept="image/png,image/jpeg,image/webp" hidden="" id="foto" type="file"/>
+<small>
                     PNG, JPG ou WEBP — máximo 5 MB.
                 </small>
-
-            </div>
-
-
-
-            <!-- NOME -->
-
-            <div class="form-row">
-
-                <label for="nome">
+</div>
+<!-- NOME -->
+<div class="form-row">
+<label for="nome">
                     Nome
                 </label>
-
-                <input
-                    type="text"
-                    id="nome"
-                    placeholder="Seu nome"
-                    autocomplete="name"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- NOME ARTÍSTICO -->
-
-            <div class="form-row">
-
-                <label for="nomeArtistico">
+<input autocomplete="name" id="nome" placeholder="Seu nome" required="" type="text"/>
+</div>
+<!-- NOME ARTÍSTICO -->
+<div class="form-row">
+<label for="nomeArtistico">
                     Nome artístico
                 </label>
-
-                <input
-                    type="text"
-                    id="nomeArtistico"
-                    placeholder="Nome que aparecerá para os clientes"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- ESPECIALIDADE -->
-
-            <div class="form-row">
-
-                <label for="especialidade">
+<input id="nomeArtistico" placeholder="Nome que aparecerá para os clientes" required="" type="text"/>
+</div>
+<!-- ESPECIALIDADE -->
+<div class="form-row">
+<label for="especialidade">
                     Especialidade principal
                 </label>
-
-                <select
-                    id="especialidade"
-                    required
-                >
-
-                    <option value="">
+<select id="especialidade" required="">
+<option value="">
                         Selecione uma especialidade
                     </option>
 
-                    <option value="promo">
-                        Promo
-                    </option>
-
-                    <option value="trailer">
+<option value="trailer">
                         Trailers
                     </option>
-
-                    <option value="highlight">
+<option value="highlight">
                         Highlights
                     </option>
-
-                    <option value="motion">
+<option value="motion">
                         Motion Design
                     </option>
-
-                    <option value="anime">
+<option value="anime">
                         Anime / Mangá
                     </option>
-
-                    <option value="gaming">
+<option value="gaming">
                         Gaming
                     </option>
-
-                    <option value="outros">
+<option value="outros">
                         Outros
                     </option>
-
-                </select>
-
-            </div>
-
-
-
-            <!-- BIO -->
-
-            <div class="form-row">
-
-                <label for="bio">
+</select><small class="field-help">Promo não é uma categoria de inscrição pelo site. Para esse tipo de trabalho, fale diretamente com a administração.</small>
+</div>
+<!-- BIO -->
+<div class="form-row">
+<label for="bio">
                     Sobre você
                 </label>
-
-                <textarea
-                    id="bio"
-                    rows="5"
-                    maxlength="500"
-                    placeholder="Conte um pouco sobre seu trabalho..."
-                ></textarea>
-
-            </div>
-
-
-
-            <!-- TIKTOK -->
-
-            <div class="form-row">
-
-                <label for="tiktok">
+<textarea id="bio" maxlength="500" placeholder="Conte um pouco sobre seu trabalho..." rows="5"></textarea>
+</div>
+<!-- TIKTOK -->
+<div class="form-row">
+<label for="tiktok">
                     TikTok
                 </label>
-
-                <input
-                    type="url"
-                    id="tiktok"
-                    placeholder="https://www.tiktok.com/@seuusuario"
-                >
-
-            </div>
-
-
-
-            <!-- INSTAGRAM -->
-
-            <div class="form-row">
-
-                <label for="instagram">
+<input id="tiktok" placeholder="https://www.tiktok.com/@seuusuario" type="url"/>
+</div>
+<!-- INSTAGRAM -->
+<div class="form-row">
+<label for="instagram">
                     Instagram
                 </label>
-
-                <input
-                    type="url"
-                    id="instagram"
-                    placeholder="https://www.instagram.com/seuusuario"
-                >
-
-            </div>
-
-
-
-            <!-- YOUTUBE -->
-
-            <div class="form-row">
-
-                <label for="youtube">
+<input id="instagram" placeholder="https://www.instagram.com/seuusuario" type="url"/>
+</div>
+<!-- YOUTUBE -->
+<div class="form-row">
+<label for="youtube">
                     YouTube
                 </label>
-
-                <input
-                    type="url"
-                    id="youtube"
-                    placeholder="https://youtube.com/@seucanal"
-                >
-
-            </div>
-
-
-
-            <!-- DISCORD -->
-
-            <div class="form-row">
-
-                <label for="discord">
+<input id="youtube" placeholder="https://youtube.com/@seucanal" type="url"/>
+</div>
+<!-- DISCORD -->
+<div class="form-row">
+<label for="discord">
                     Discord
                 </label>
-
-                <input
-                    type="text"
-                    id="discord"
-                    placeholder="seu_usuario"
-                >
-
-            </div>
-
-
-
-            <!-- MENSAGEM -->
-
-            <p
-                class="auth-message"
-                id="profileMessage"
-                aria-live="polite"
-            ></p>
-
-
-
-            <!-- SALVAR -->
-
-            <button
-                type="submit"
-                class="primary-button auth-submit"
-                id="saveButton"
-            >
+<input id="discord" placeholder="seu_usuario" type="text"/>
+</div>
+<!-- MENSAGEM -->
+<p aria-live="polite" class="auth-message" id="profileMessage"></p>
+<!-- SALVAR -->
+<button class="primary-button auth-submit" id="saveButton" type="submit">
                 Salvar alterações
             </button>
-
-
-
-            <!-- VOLTAR -->
-
-            <a
-                href="perfil.html"
-                class="secondary-button auth-submit"
-            >
+<!-- VOLTAR -->
+<a class="secondary-button auth-submit" href="perfil.html">
                 Voltar ao perfil
             </a>
-
-
-
-            <!-- SAIR -->
-
-            <button
-                type="button"
-                class="secondary-button auth-submit"
-                id="logoutButton"
-            >
+<!-- SAIR -->
+<button class="secondary-button auth-submit" id="logoutButton" type="button">
                 Sair da conta
             </button>
-
-
-        </form>
-
-
-    </section>
-
+</form>
+</section>
 </main>
-
-
-
 <footer>
-
-    <div class="footer-brand">
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="28"
-            height="28"
-        >
-
-        <span>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="1 Sem Título_20260901004747.png" width="28"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </div>
-
-
-    <p>
+</div>
+<p>
         Rede de editores e produção audiovisual.
     </p>
-
-
-    <small>
+<small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
-
 </footer>
-
-
-
 <script src="script.js"></script>
-
-
 <!-- SUPABASE -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
 
 /* ==================================================
@@ -1342,8 +1037,5 @@ logoutButton.addEventListener(
 loadUser();
 
 </script>
-
-
 </body>
-
 </html>

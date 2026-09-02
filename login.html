@@ -1,366 +1,153 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Entrar — Pale Ascendancy</title>
-
-    <meta
-        name="description"
-        content="Entre na sua conta da Pale Ascendancy."
-    >
-
-    <meta
-        name="theme-color"
-        content="#0d0c0b"
-    >
-
-    <link
-        rel="icon"
-        href="favicon.svg"
-        type="image/svg+xml"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Entrar — Pale Ascendancy</title>
+<meta content="Entre na sua conta da Pale Ascendancy." name="description"/>
+<meta content="#011e31" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
 </head>
-
-
 <body>
-
-
 <!-- ==================================================
      HEADER
 ================================================== -->
-
 <header class="header">
-
-    <a
-        href="index.html"
-        class="brand"
-    >
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="36"
-            height="36"
-        >
-
-        <span>
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="1 Sem Título_20260901004747.png" width="36"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </a>
-
-
-    <nav
-        class="nav"
-        aria-label="Navegação principal"
-    >
-
-        <a href="index.html">
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
             Home
         </a>
-
-        <a href="index.html#sobre">
+<a href="index.html#sobre">
             Sobre
         </a>
-
-        <a href="servicos.html">
+<a href="servicos.html">
             Serviços
         </a>
-
-        <a href="editores.html">
+<a href="editores.html">
             Editores
         </a>
-
-        <a href="index.html#contato">
+<a href="index.html#contato">
             Contato
         </a>
-
-    </nav>
-
-
-    <a
-        class="discord-button"
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
+</nav>
+<a class="discord-button" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-
-
-    <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-label="Abrir menu de navegação"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-    >
-
-        <span
-            class="menu-icon"
-            aria-hidden="true"
-        ></span>
-
-    </button>
-
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu de navegação" class="menu-button" id="menuButton" type="button">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
 </header>
-
-
-
 <!-- ==================================================
      MENU MOBILE
 ================================================== -->
-
-<div
-    class="mobile-menu"
-    id="mobileMenu"
->
-
-    <a href="index.html">
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
         Home
     </a>
-
-    <a href="index.html#sobre">
+<a href="index.html#sobre">
         Sobre
     </a>
-
-    <a href="servicos.html">
+<a href="servicos.html">
         Serviços
     </a>
-
-    <a href="editores.html">
+<a href="editores.html">
         Editores
     </a>
-
-    <a href="index.html#contato">
+<a href="index.html#contato">
         Contato
     </a>
-
-
-    <a
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mobile-discord"
-    >
+<a class="mobile-discord" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-
 </div>
-
-
-
 <!-- ==================================================
      LOGIN
 ================================================== -->
-
 <main class="auth-page">
-
-    <div
-        class="hero-glow"
-        aria-hidden="true"
-    ></div>
-
-
-    <section class="auth-container">
-
-
-        <div class="auth-heading">
-
-            <p class="eyebrow">
+<div aria-hidden="true" class="hero-glow"></div>
+<section class="auth-container">
+<div class="auth-heading">
+<p class="eyebrow">
                 Pale Ascendancy
             </p>
-
-            <h1>
+<h1>
                 Bem-vindo <span>de volta.</span>
-            </h1>
-
-            <p>
+</h1>
+<p>
                 Entre na sua conta para acessar
                 seu perfil de editor.
             </p>
-
-        </div>
-
-
-
-        <!-- FORMULÁRIO -->
-
-        <form
-            class="auth-form"
-            id="loginForm"
-        >
-
-
-            <!-- E-MAIL -->
-
-            <div class="form-row">
-
-                <label for="email">
+</div>
+<!-- FORMULÁRIO -->
+<form class="auth-form" id="loginForm">
+<!-- E-MAIL -->
+<div class="form-row">
+<label for="email">
                     E-mail
                 </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="seuemail@email.com"
-                    autocomplete="email"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- SENHA -->
-
-            <div class="form-row">
-
-                <label for="senha">
+<input autocomplete="email" id="email" name="email" placeholder="seuemail@email.com" required="" type="email"/>
+</div>
+<!-- SENHA -->
+<div class="form-row">
+<label for="senha">
                     Senha
                 </label>
-
-                <input
-                    type="password"
-                    id="senha"
-                    name="senha"
-                    placeholder="Sua senha"
-                    autocomplete="current-password"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- MENSAGEM -->
-
-            <p
-                class="auth-message"
-                id="loginMessage"
-                aria-live="polite"
-            ></p>
-
-
-
-            <!-- BOTÃO -->
-
-            <button
-                type="submit"
-                class="primary-button auth-submit"
-                id="loginButton"
-            >
+<input autocomplete="current-password" id="senha" name="senha" placeholder="Sua senha" required="" type="password"/>
+</div>
+<!-- MENSAGEM -->
+<p aria-live="polite" class="auth-message" id="loginMessage"></p>
+<!-- BOTÃO -->
+<button class="primary-button auth-submit" id="loginButton" type="submit">
                 Entrar
             </button>
-
-
-        </form>
-
-
-
-        <!-- CADASTRO -->
-
-        <div class="auth-footer">
-
-            <p>
+</form>
+<!-- CADASTRO -->
+<div class="auth-footer">
+<p>
                 Ainda não possui uma conta?
             </p>
-
-            <a href="cadastro.html">
+<a href="cadastro.html">
                 Criar minha conta
             </a>
-
-        </div>
-
-
-    </section>
-
+</div>
+</section>
 </main>
-
-
-
 <!-- ==================================================
      FOOTER
 ================================================== -->
-
 <footer>
-
-    <div class="footer-brand">
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="28"
-            height="28"
-        >
-
-        <span>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="1 Sem Título_20260901004747.png" width="28"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </div>
-
-
-    <p>
+</div>
+<p>
         Rede de editores e produção audiovisual.
     </p>
-
-
-    <small>
+<small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
-
 </footer>
-
-
-
 <!-- ==================================================
      SCRIPT PRINCIPAL
 ================================================== -->
-
 <script src="script.js"></script>
-
-
-
 <!-- ==================================================
      SUPABASE
 ================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
 
 /* ==================================================
@@ -663,8 +450,5 @@ async function checkExistingSession() {
 checkExistingSession();
 
 </script>
-
-
 </body>
-
 </html>
