@@ -133,7 +133,7 @@ button.primary-button:disabled{opacity:.55;cursor:wait;transform:none}
   border-radius:16px;background:rgba(1,30,49,.78);
   box-shadow:0 12px 35px rgba(0,0,0,.22);
 }
-.phone-brand img{width:150px;height:auto;display:block;filter:brightness(0) invert(1)}
+.phone-brand img{width:150px;height:auto;display:block;}
 .phone-brand span{font-family:var(--font-display);font-size:.78rem;letter-spacing:.12em;font-weight:700}
 .phone{background:linear-gradient(145deg,#68869a 0%,#0c4160 35%,#011e31 100%);border-color:rgba(215,224,235,.25)!important;box-shadow:0 35px 80px rgba(0,10,18,.48),0 0 45px rgba(104,134,154,.16),inset 0 0 0 1px rgba(215,224,235,.08)!important}
 .phone-frame{background:#011e31!important}
