@@ -1,606 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pale Ascendancy — Editores, Criadores e Projetos</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Pale Ascendancy — Rede de Editores</title>
 
     <meta
         name="description"
-        content="Pale Ascendancy — comunidade para editores, criadores e clientes."
+        content="Pale Ascendancy — rede de profissionais de edição e produção audiovisual."
+    >
+
+    <meta
+        name="theme-color"
+        content="#0d0c0b"
+    >
+
+    <link
+        rel="icon"
+        href="favicon.svg"
+        type="image/svg+xml"
     >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet"
     >
 
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- ==================================================
+         CELULAR FLUTUANTE
+    ================================================== -->
+
     <style>
-
-        :root {
-            --bg: #0d0c0b;
-            --bg-elevated: #12110f;
-            --surface: #181612;
-            --surface-hover: #211e19;
-
-            --border: rgba(238, 231, 214, 0.10);
-            --border-hover: rgba(217, 192, 138, 0.32);
-
-            --text: #f2efe9;
-            --text-muted: #a39c8e;
-
-            --accent: #d9c08a;
-            --accent-hover: #e6d19d;
-            --accent-soft: rgba(217, 192, 138, 0.10);
-            --accent-line: rgba(217, 192, 138, 0.30);
-
-            --wine: #6b3b4a;
-
-            --font-display: "Sora", "Inter", sans-serif;
-            --font-body: "Inter", sans-serif;
-
-            --radius: 16px;
-            --radius-sm: 9px;
-
-            --content-width: 1380px;
-            --page-padding: clamp(24px, 4vw, 64px);
-        }
-
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font-body);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-
-        button,
-        input,
-        textarea {
-            font: inherit;
-        }
-
-
-        img {
-            max-width: 100%;
-            display: block;
-        }
-
-
-        [hidden],
-        .logged-out-area[hidden],
-        .logged-in-area[hidden],
-        .mobile-account [hidden] {
-            display: none !important;
-        }
-
-
-        .container {
-            width: min(
-                calc(100% - (var(--page-padding) * 2)),
-                var(--content-width)
-            );
-
-            margin: 0 auto;
-        }
-
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-
-            background: rgba(13, 12, 11, 0.86);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-
-            border-bottom: 1px solid var(--border);
-        }
-
-
-        .header-inner {
-            min-height: 76px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-
-        .brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-
-            font-family: var(--font-display);
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-        }
-
-
-        .brand-mark {
-            width: 34px;
-            height: 34px;
-
-            display: grid;
-            place-items: center;
-
-            border: 1px solid var(--accent-line);
-            border-radius: 10px;
-
-            color: var(--accent);
-            background: var(--accent-soft);
-
-            font-size: 13px;
-        }
-
-
-        .main-nav {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-        }
-
-
-        .main-nav a {
-            position: relative;
-
-            color: var(--text-muted);
-
-            font-size: 14px;
-            font-weight: 500;
-
-            transition:
-                color 0.25s ease;
-        }
-
-
-        .main-nav a::after {
-            content: "";
-
-            position: absolute;
-            left: 0;
-            bottom: -8px;
-
-            width: 0;
-            height: 1px;
-
-            background: var(--accent);
-
-            transition: width 0.25s ease;
-        }
-
-
-        .main-nav a:hover {
-            color: var(--text);
-        }
-
-
-        .main-nav a:hover::after {
-            width: 100%;
-        }
-
-
-        .account-area {
-            display: flex;
-            align-items: center;
-        }
-
-
-        .logged-out-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-
-        .account-login,
-        .account-register {
-            padding: 9px 15px;
-
-            border-radius: 9px;
-
-            font-size: 13px;
-            font-weight: 600;
-
-            transition:
-                background 0.25s ease,
-                color 0.25s ease,
-                border-color 0.25s ease;
-        }
-
-
-        .account-login {
-            color: var(--text-muted);
-        }
-
-
-        .account-login:hover {
-            color: var(--text);
-            background: var(--surface);
-        }
-
-
-        .account-register {
-            border: 1px solid var(--accent-line);
-
-            color: var(--accent);
-            background: var(--accent-soft);
-        }
-
-
-        .account-register:hover {
-            color: var(--bg);
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-
-        .logged-in-area {
-            display: flex;
-            align-items: center;
-        }
-
-
-        .profile-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-
-            padding: 6px 10px 6px 6px;
-
-            border: 1px solid var(--border);
-            border-radius: 12px;
-
-            transition:
-                border-color 0.25s ease,
-                background 0.25s ease;
-        }
-
-
-        .profile-link:hover {
-            background: var(--surface);
-            border-color: var(--border-hover);
-        }
-
-
-        .profile-avatar-small {
-            position: relative;
-
-            width: 32px;
-            height: 32px;
-
-            display: grid;
-            place-items: center;
-
-            overflow: hidden;
-
-            border-radius: 50%;
-            border: 1px solid var(--border-hover);
-
-            background: var(--accent-soft);
-
-            color: var(--accent);
-
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-
-        .profile-avatar-small img {
-            position: absolute;
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-        }
-
-
-        .profile-link-text {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-
-        .mobile-menu-button {
-            display: none;
-
-            width: 42px;
-            height: 42px;
-
-            border: 1px solid var(--border);
-            border-radius: 10px;
-
-            background: var(--surface);
-            color: var(--text);
-
-            cursor: pointer;
-        }
-
-
-        .mobile-menu {
-            display: none;
-
-            padding: 0 0 22px;
-        }
-
-
-        .mobile-menu-inner {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-
-            padding-top: 12px;
-            border-top: 1px solid var(--border);
-        }
-
-
-        .mobile-menu a {
-            padding: 13px 0;
-
-            color: var(--text-muted);
-
-            font-size: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-
-
-        .mobile-account {
-            padding-top: 14px;
-        }
-
-
-        .mobile-account > div {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            position: relative;
-
-            min-height: calc(100vh - 76px);
-
-            display: flex;
-            align-items: center;
-
-            padding: 90px 0 100px;
-
-            overflow: hidden;
-        }
-
-
-        .hero::before {
-            content: "";
-
-            position: absolute;
-
-            width: 600px;
-            height: 600px;
-
-            top: -260px;
-            right: -220px;
-
-            border-radius: 50%;
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(217, 192, 138, 0.09),
-                    transparent 68%
-                );
-
-            pointer-events: none;
-        }
-
-
-        .hero-grid {
-            position: relative;
-            z-index: 1;
-
-            display: grid;
-            grid-template-columns: 1fr 0.9fr;
-
-            align-items: center;
-
-            gap: 80px;
-        }
-
-
-        .hero-content {
-            max-width: 720px;
-        }
-
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-
-            margin-bottom: 24px;
-
-            color: var(--accent);
-
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-
-        .eyebrow::before {
-            content: "";
-
-            width: 26px;
-            height: 1px;
-
-            background: var(--accent);
-        }
-
-
-        .hero h1 {
-            max-width: 760px;
-
-            margin-bottom: 25px;
-
-            font-family: var(--font-display);
-
-            font-size: clamp(42px, 6vw, 78px);
-            line-height: 1.04;
-
-            letter-spacing: -0.055em;
-        }
-
-
-        .hero h1 span {
-            color: var(--accent);
-        }
-
-
-        .hero-description {
-            max-width: 620px;
-
-            margin-bottom: 34px;
-
-            color: var(--text-muted);
-
-            font-size: clamp(16px, 1.5vw, 19px);
-            line-height: 1.8;
-        }
-
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            min-height: 48px;
-
-            padding: 0 20px;
-
-            border-radius: 10px;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            transition:
-                transform 0.25s ease,
-                background 0.25s ease,
-                border-color 0.25s ease,
-                color 0.25s ease;
-        }
-
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-
-        .btn-primary {
-            color: var(--bg);
-            background: var(--accent);
-        }
-
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-        }
-
-
-        .btn-secondary {
-            border: 1px solid var(--border);
-
-            color: var(--text);
-            background: var(--surface);
-        }
-
-
-        .btn-secondary:hover {
-            border-color: var(--border-hover);
-            background: var(--surface-hover);
-        }
-
-
-        /* =========================
-           PHONE
-        ========================= */
 
         .hero-visual {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 22px;
         }
 
 
         .phone-scene {
             position: relative;
 
-            width: min(100%, 360px);
-            min-height: 590px;
+            width: 100%;
+            min-height: 540px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
+            perspective: 1200px;
+
             cursor: pointer;
 
-            outline: none;
+            user-select: none;
 
-            perspective: 1000px;
+            -webkit-tap-highlight-color: transparent;
         }
 
 
         .phone {
             position: relative;
-            z-index: 2;
 
-            width: 270px;
-            height: 545px;
+            width: 250px;
+            height: 500px;
 
             padding: 8px;
 
@@ -609,40 +88,120 @@
             background:
                 linear-gradient(
                     145deg,
-                    #292621,
-                    #0b0a09 55%,
-                    #24211d
+                    #34312b 0%,
+                    #11100e 45%,
+                    #29251f 100%
                 );
 
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(238, 231, 214, 0.18);
 
             box-shadow:
-                0 40px 90px rgba(0, 0, 0, 0.55),
-                0 0 0 1px rgba(217, 192, 138, 0.08);
+                0 35px 80px rgba(0, 0, 0, 0.55),
+                0 0 45px rgba(217, 192, 138, 0.08),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 
             transform:
-                rotateY(-7deg)
+                perspective(1200px)
+                rotateY(-10deg)
                 rotateX(3deg)
                 rotateZ(1deg);
 
-            animation: phoneFloat 5s ease-in-out infinite;
+            animation:
+                phoneFloat 4.5s ease-in-out infinite;
 
             transition:
-                transform 0.45s ease,
-                box-shadow 0.45s ease;
+                transform 0.4s ease,
+                box-shadow 0.4s ease;
+
+            z-index: 2;
         }
 
 
         .phone-scene:hover .phone {
             transform:
-                rotateY(0deg)
+                perspective(1200px)
+                rotateY(-2deg)
                 rotateX(0deg)
                 rotateZ(0deg)
                 translateY(-8px);
 
             box-shadow:
-                0 50px 110px rgba(0, 0, 0, 0.65),
-                0 0 35px rgba(217, 192, 138, 0.08);
+                0 45px 95px rgba(0, 0, 0, 0.62),
+                0 0 55px rgba(217, 192, 138, 0.13),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+
+        .phone.touched {
+            animation: phoneTouch 0.55s cubic-bezier(.2,.8,.2,1);
+        }
+
+
+        @keyframes phoneFloat {
+
+            0%,
+            100% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    translateY(-11px);
+            }
+
+        }
+
+
+        @keyframes phoneTouch {
+
+            0% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    scale(1);
+            }
+
+            35% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-2deg)
+                    rotateX(0deg)
+                    rotateZ(0deg)
+                    scale(0.94)
+                    translateY(7px);
+            }
+
+            70% {
+                transform:
+                    perspective(1200px)
+                    rotateY(3deg)
+                    rotateX(0deg)
+                    rotateZ(0deg)
+                    scale(1.03)
+                    translateY(-5px);
+            }
+
+            100% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    scale(1)
+                    translateY(0);
+            }
+
         }
 
 
@@ -658,212 +217,193 @@
 
             background: #050505;
 
-            border: 2px solid #191816;
+            border: 1px solid rgba(0, 0, 0, 0.9);
+
+            box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.03);
         }
 
+
+        /*
+         * Área da imagem dentro da tela.
+         */
 
         .phone-screen {
             width: 100%;
             height: 100%;
 
+            display: block;
+
             object-fit: cover;
 
+            object-position: center;
+
             background: #080808;
+
+            transition:
+                transform 0.6s ease,
+                filter 0.4s ease;
         }
 
 
-        .phone-camera {
+        .phone-scene:hover .phone-screen {
+            transform: scale(1.025);
+        }
+
+
+        /*
+         * Parte superior preta semelhante
+         * ao recorte de uma câmera/sensor.
+         */
+
+        .phone-frame::before {
+            content: "";
+
             position: absolute;
 
-            top: 10px;
+            z-index: 8;
+
+            top: 8px;
             left: 50%;
 
-            width: 70px;
-            height: 20px;
+            width: 78px;
+            height: 23px;
 
             transform: translateX(-50%);
 
             border-radius: 999px;
 
-            background: #030303;
+            background: #050505;
 
             box-shadow:
-                inset 0 0 0 1px rgba(255,255,255,0.05);
+                0 1px 4px rgba(0,0,0,0.8);
         }
 
 
-        .phone-camera::after {
+        /*
+         * Reflexo sobre a tela.
+         */
+
+        .phone-frame::after {
             content: "";
 
             position: absolute;
 
-            top: 6px;
-            right: 10px;
+            z-index: 7;
 
-            width: 7px;
-            height: 7px;
+            inset: 0;
 
-            border-radius: 50%;
+            pointer-events: none;
 
-            background: #111;
+            border-radius: 35px;
 
-            border: 1px solid rgba(255,255,255,0.08);
+            background:
+                linear-gradient(
+                    115deg,
+                    rgba(255,255,255,0.10),
+                    transparent 25%,
+                    transparent 72%,
+                    rgba(255,255,255,0.025)
+                );
+
+            opacity: 0.7;
         }
 
 
+        /*
+         * Botões laterais.
+         */
+
         .phone-side-button {
             position: absolute;
-            z-index: 1;
 
-            right: 42px;
+            z-index: 10;
+
+            right: -4px;
 
             width: 4px;
 
-            border-radius: 3px;
+            border-radius:
+                0
+                3px
+                3px
+                0;
 
-            background: #35312a;
+            background: #302d28;
+
+            box-shadow:
+                inset 0 0 1px rgba(255,255,255,0.25);
         }
 
 
         .phone-side-button.one {
-            top: 155px;
-            height: 55px;
+            top: 120px;
+            height: 50px;
         }
 
 
         .phone-side-button.two {
-            top: 225px;
-            height: 38px;
+            top: 188px;
+            height: 30px;
         }
 
 
         .phone-side-button.three {
-            top: 273px;
-            height: 38px;
+            top: 230px;
+            height: 30px;
         }
 
 
-        .phone-shadow {
+        /*
+         * Câmera frontal.
+         */
+
+        .phone-camera {
             position: absolute;
-            z-index: 0;
 
-            bottom: 26px;
+            z-index: 10;
 
-            width: 230px;
-            height: 28px;
+            top: 15px;
+            left: 50%;
+
+            width: 7px;
+            height: 7px;
+
+            transform:
+                translateX(27px);
 
             border-radius: 50%;
 
-            background: rgba(0, 0, 0, 0.65);
+            background: #151515;
 
-            filter: blur(14px);
-
-            animation: phoneShadow 5s ease-in-out infinite;
+            box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.08);
         }
 
 
-        .phone-hint {
+        /*
+         * Sombra abaixo do celular.
+         */
+
+        .phone-shadow {
             position: absolute;
-            z-index: 4;
 
-            bottom: 3px;
+            z-index: 1;
 
-            color: var(--text-muted);
+            bottom: 27px;
 
-            font-size: 11px;
-            letter-spacing: 0.04em;
+            width: 190px;
+            height: 25px;
 
-            opacity: 0.75;
-        }
+            border-radius: 50%;
 
+            background:
+                rgba(0, 0, 0, 0.50);
 
-        .phone-caption {
-            display: flex;
-            flex-direction: column;
+            filter: blur(13px);
 
-            align-items: center;
-
-            margin-top: 8px;
-
-            text-align: center;
-        }
-
-
-        .phone-caption strong {
-            margin-bottom: 5px;
-
-            font-family: var(--font-display);
-
-            color: var(--accent);
-
-            font-size: 13px;
-            letter-spacing: 0.14em;
-        }
-
-
-        .phone-caption span {
-            max-width: 340px;
-
-            color: var(--text-muted);
-
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-
-        .phone.touched {
             animation:
-                phoneTouch 0.55s ease,
-                phoneFloat 5s ease-in-out infinite;
-        }
-
-
-        @keyframes phoneFloat {
-
-            0%,
-            100% {
-                transform:
-                    rotateY(-7deg)
-                    rotateX(3deg)
-                    rotateZ(1deg)
-                    translateY(0);
-            }
-
-            50% {
-                transform:
-                    rotateY(-4deg)
-                    rotateX(2deg)
-                    rotateZ(0deg)
-                    translateY(-12px);
-            }
-        }
-
-
-        @keyframes phoneTouch {
-
-            0% {
-                transform:
-                    rotateY(-7deg)
-                    rotateX(3deg)
-                    rotateZ(1deg)
-                    scale(1);
-            }
-
-            45% {
-                transform:
-                    rotateY(0deg)
-                    rotateX(0deg)
-                    rotateZ(0deg)
-                    scale(0.96);
-            }
-
-            100% {
-                transform:
-                    rotateY(-7deg)
-                    rotateX(3deg)
-                    rotateZ(1deg)
-                    scale(1);
-            }
+                phoneShadow 4.5s ease-in-out infinite;
         }
 
 
@@ -871,1400 +411,1339 @@
 
             0%,
             100% {
-                transform: scaleX(1);
+                transform: scaleX(1.15);
                 opacity: 0.65;
             }
 
             50% {
-                transform: scaleX(0.82);
-                opacity: 0.45;
+                transform: scaleX(0.92);
+                opacity: 0.42;
             }
+
         }
 
 
-        /* =========================
-           SECTIONS
-        ========================= */
-
-        section {
-            scroll-margin-top: 100px;
-        }
-
-
-        .section {
-            padding: 110px 0;
-            border-top: 1px solid var(--border);
-        }
-
-
-        .section-header {
-            max-width: 720px;
-            margin-bottom: 50px;
-        }
-
-
-        .section-label {
-            display: block;
-
-            margin-bottom: 14px;
-
-            color: var(--accent);
-
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-
-        .section h2 {
-            margin-bottom: 18px;
-
-            font-family: var(--font-display);
-
-            font-size: clamp(30px, 4vw, 48px);
-            line-height: 1.1;
-
-            letter-spacing: -0.04em;
-        }
-
-
-        .section-header p {
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
-
-
-        /* =========================
-           SOBRE
-        ========================= */
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-
-            gap: 60px;
-
-            align-items: start;
-        }
-
-
-        .about-text p {
-            margin-bottom: 18px;
-
-            color: var(--text-muted);
-            line-height: 1.85;
-        }
-
-
-        .about-highlight {
-            padding: 30px;
-
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-
-            background: var(--surface);
-        }
-
-
-        .about-highlight strong {
-            display: block;
-
-            margin-bottom: 12px;
-
-            color: var(--accent);
-
-            font-family: var(--font-display);
-            font-size: 18px;
-        }
-
-
-        .about-highlight p {
-            color: var(--text-muted);
-            line-height: 1.75;
-        }
-
-
-        /* =========================
-           SERVIÇOS
-        ========================= */
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-
-            gap: 16px;
-        }
-
-
-        .service-card {
-            min-height: 220px;
-
-            padding: 28px;
-
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-
-            background: var(--surface);
-
-            transition:
-                transform 0.3s ease,
-                border-color 0.3s ease,
-                background 0.3s ease;
-        }
-
-
-        .service-card:hover {
-            transform: translateY(-5px);
-
-            border-color: var(--border-hover);
-            background: var(--surface-hover);
-        }
-
-
-        .service-number {
-            display: block;
-
-            margin-bottom: 32px;
-
-            color: var(--accent);
-
-            font-family: var(--font-display);
-            font-size: 12px;
-        }
-
-
-        .service-card h3 {
-            margin-bottom: 10px;
-
-            font-family: var(--font-display);
-            font-size: 19px;
-        }
-
-
-        .service-card p {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-
-        /* =========================
-           EDITORES
-        ========================= */
-
-        .editors-box {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-
-            gap: 30px;
-
-            padding: 40px;
-
-            border: 1px solid var(--border);
-            border-radius: 20px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(217, 192, 138, 0.07),
-                    transparent 55%
-                ),
-                var(--surface);
-        }
-
-
-        .editors-box h3 {
-            margin-bottom: 15px;
-
-            font-family: var(--font-display);
-            font-size: 27px;
-        }
-
-
-        .editors-box p {
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
-
-
-        .editor-list {
+        /*
+         * Texto abaixo do celular.
+         */
+
+        .phone-caption {
             display: flex;
+
             flex-direction: column;
-            gap: 10px;
+
+            align-items: center;
+
+            gap: 6px;
+
+            max-width: 390px;
+
+            text-align: center;
+
+            margin-top: -12px;
         }
 
 
-        .editor-list div {
-            padding: 13px 15px;
+        .phone-caption strong {
+            color: var(--text);
 
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            font-family:
+                var(--font-display);
+
+            font-size: 0.9rem;
+
+            font-weight: 600;
+
+            letter-spacing: 0.08em;
+        }
+
+
+        .phone-caption span {
+            color: var(--text-muted);
+
+            font-family:
+                var(--font-body);
+
+            font-size: 0.8rem;
+
+            line-height: 1.6;
+        }
+
+
+        .phone-hint {
+            position: absolute;
+
+            bottom: 3px;
 
             color: var(--text-muted);
-            background: rgba(255,255,255,0.015);
 
-            font-size: 14px;
+            font-size: 0.68rem;
+
+            letter-spacing: 0.04em;
+
+            opacity: 0.65;
         }
 
 
-        .editor-list div::before {
-            content: "—";
+        /*
+         * Acessibilidade.
+         */
 
-            margin-right: 10px;
+        .phone-scene:focus-visible {
+            outline: 1px solid var(--accent);
 
-            color: var(--accent);
-        }
+            outline-offset: 8px;
 
-
-        /* =========================
-           CONTATO
-        ========================= */
-
-        .contact-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 40px;
-
-            padding: 45px;
-
-            border: 1px solid var(--border);
             border-radius: 20px;
-
-            background: var(--surface);
         }
 
 
-        .contact-box h2 {
-            margin-bottom: 12px;
-        }
+        /*
+         * Celular em telas menores.
+         */
 
-
-        .contact-box p {
-            max-width: 650px;
-
-            color: var(--text-muted);
-        }
-
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        .site-footer {
-            padding: 45px 0;
-
-            border-top: 1px solid var(--border);
-        }
-
-
-        .footer-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 30px;
-        }
-
-
-        .footer-brand {
-            font-family: var(--font-display);
-
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-        }
-
-
-        .footer-copy {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-
-        /* =========================
-           RESPONSIVO
-        ========================= */
-
-        @media (max-width: 1000px) {
-
-            .hero-grid {
-                grid-template-columns: 1fr;
-
-                gap: 70px;
-            }
-
-
-            .hero-content {
-                max-width: 800px;
-            }
-
-
-            .hero-visual {
-                order: 2;
-            }
-
-
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-
-            .editors-box {
-                grid-template-columns: 1fr;
-            }
-        }
-
-
-        @media (max-width: 760px) {
-
-            :root {
-                --page-padding: 20px;
-            }
-
-
-            .header-inner {
-                min-height: 68px;
-            }
-
-
-            .main-nav,
-            .account-area {
-                display: none;
-            }
-
-
-            .mobile-menu-button {
-                display: grid;
-                place-items: center;
-            }
-
-
-            .mobile-menu.open {
-                display: block;
-            }
-
-
-            .hero {
-                min-height: auto;
-
-                padding: 75px 0 85px;
-            }
-
-
-            .hero h1 {
-                font-size: clamp(39px, 12vw, 58px);
-            }
-
+        @media (max-width: 820px) {
 
             .phone-scene {
-                width: 100%;
-                min-height: 570px;
+                min-height: 500px;
             }
-
 
             .phone {
-                width: 250px;
-                height: 505px;
+                width: 220px;
+                height: 440px;
+
+                border-radius: 38px;
             }
-
-
-            .section {
-                padding: 80px 0;
-            }
-
-
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .editors-box {
-                padding: 28px;
-            }
-
-
-            .contact-box {
-                flex-direction: column;
-                align-items: flex-start;
-
-                padding: 30px;
-            }
-
-
-            .footer-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-
-        @media (max-width: 430px) {
-
-            .phone {
-                width: 225px;
-                height: 460px;
-
-                border-radius: 36px;
-            }
-
 
             .phone-frame {
-                border-radius: 30px;
+                border-radius: 31px;
             }
 
-
-            .phone-scene {
-                min-height: 525px;
-            }
-
-
-            .phone-caption {
-                margin-top: 0;
-            }
         }
 
+
+        @media (max-width: 600px) {
+
+            .phone-scene {
+                min-height: 455px;
+            }
+
+            .phone {
+                width: 200px;
+                height: 400px;
+
+                border-radius: 34px;
+            }
+
+            .phone-frame {
+                border-radius: 28px;
+            }
+
+            .phone-caption {
+                padding:
+                    0
+                    18px;
+            }
+
+            .phone-hint {
+                font-size: 0.62rem;
+            }
+
+        }
+
+
+        /*
+         * Respeita usuários que preferem
+         * menos movimento.
+         */
 
         @media (prefers-reduced-motion: reduce) {
 
-            html {
-                scroll-behavior: auto;
+            .phone {
+                animation: none;
             }
 
-
-            .phone,
             .phone-shadow {
-                animation: none !important;
+                animation: none;
             }
 
-
-            * {
-                transition-duration: 0.01ms !important;
-            }
         }
 
     </style>
+
 </head>
 
 
 <body>
 
-    <!-- =========================
-         HEADER
-    ========================= -->
 
-    <header class="site-header">
+<!-- ==================================================
+     HEADER
+================================================== -->
 
-        <div class="container header-inner">
+<header class="header">
 
-            <a href="#inicio" class="brand">
+    <a
+        href="index.html"
+        class="brand"
+    >
 
-                <span class="brand-mark">
-                    PA
-                </span>
+        <img
+            src="1 Sem Título_20260901004747.png"
+            alt="Pale Ascendancy"
+            width="36"
+            height="36"
+        >
 
-                <span>
-                    PALE ASCENDANCY
-                </span>
+        <span>
+            PALE ASCENDANCY
+        </span>
 
+    </a>
+
+
+    <nav
+        class="nav"
+        aria-label="Navegação principal"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="index.html#sobre">
+            Sobre
+        </a>
+
+        <a href="servicos.html">
+            Serviços
+        </a>
+
+        <a href="editores.html">
+            Editores
+        </a>
+
+        <a href="index.html#contato">
+            Contato
+        </a>
+
+    </nav>
+
+
+    <!-- ==================================================
+         ÁREA DA CONTA
+    ================================================== -->
+
+    <div
+        class="account-area"
+        id="accountArea"
+    >
+
+        <div
+            id="loggedOutArea"
+            class="logged-out-area"
+        >
+
+            <a
+                href="login.html"
+                class="account-login"
+            >
+                Entrar
             </a>
 
-
-            <nav class="main-nav" aria-label="Navegação principal">
-
-                <a href="#inicio">
-                    Início
-                </a>
-
-                <a href="#sobre">
-                    Sobre
-                </a>
-
-                <a href="#servicos">
-                    Serviços
-                </a>
-
-                <a href="#editores">
-                    Editores
-                </a>
-
-                <a href="#contato">
-                    Contato
-                </a>
-
-            </nav>
-
-
-            <div class="account-area" id="accountArea">
-
-                <div
-                    id="loggedOutArea"
-                    class="logged-out-area"
-                >
-
-                    <a
-                        href="login.html"
-                        class="account-login"
-                    >
-                        Entrar
-                    </a>
-
-                    <a
-                        href="cadastro.html"
-                        class="account-register"
-                    >
-                        Criar conta
-                    </a>
-
-                </div>
-
-
-                <div
-                    id="loggedInArea"
-                    class="logged-in-area"
-                    hidden
-                >
-
-                    <a
-                        href="perfil.html"
-                        class="profile-link"
-                        aria-label="Abrir meu perfil"
-                    >
-
-                        <span class="profile-avatar-small">
-
-                            <span id="headerProfileInitial">
-                                ?
-                            </span>
-
-                            <img
-                                id="headerProfileImage"
-                                src=""
-                                alt="Foto de perfil"
-                                hidden
-                            >
-
-                        </span>
-
-                        <span class="profile-link-text">
-                            Perfil
-                        </span>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="mobile-menu-button"
-                id="mobileMenuButton"
-                type="button"
-                aria-label="Abrir menu"
-                aria-expanded="false"
+            <a
+                href="cadastro.html"
+                class="account-register"
             >
-                ☰
-            </button>
+                Criar conta
+            </a>
 
         </div>
 
 
         <div
-            class="mobile-menu"
-            id="mobileMenu"
+            id="loggedInArea"
+            class="logged-in-area"
+            hidden
         >
 
-            <div class="container mobile-menu-inner">
+            <a
+                href="perfil.html"
+                class="profile-link"
+                aria-label="Abrir meu perfil"
+            >
 
-                <a href="#inicio">
-                    Início
-                </a>
+                <span class="profile-avatar-small">
 
-                <a href="#sobre">
-                    Sobre
-                </a>
+                    <span id="headerProfileInitial">
+                        ?
+                    </span>
 
-                <a href="#servicos">
-                    Serviços
-                </a>
+                    <img
+                        id="headerProfileImage"
+                        src=""
+                        alt="Foto de perfil"
+                        hidden
+                    >
 
-                <a href="#editores">
-                    Editores
-                </a>
+                </span>
 
-                <a href="#contato">
-                    Contato
-                </a>
+                <span class="profile-link-text">
+                    Perfil
+                </span>
 
-
-                <div class="mobile-account" id="mobileAccount">
-
-                    <div id="mobileLoggedOut">
-
-                        <a href="login.html">
-                            Entrar
-                        </a>
-
-                        <a href="cadastro.html">
-                            Criar conta
-                        </a>
-
-                    </div>
-
-
-                    <div id="mobileLoggedIn" hidden>
-
-                        <a href="perfil.html">
-                            Meu perfil
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
+            </a>
 
         </div>
 
-    </header>
+    </div>
 
 
-    <main>
+    <!-- ==================================================
+         MENU MOBILE
+    ================================================== -->
 
-        <!-- =========================
-             HERO
-        ========================= -->
+    <button
+        class="menu-button"
+        id="menuButton"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
+    >
 
-        <section
-            class="hero"
-            id="inicio"
+        <span
+            class="menu-icon"
+            aria-hidden="true"
+        ></span>
+
+    </button>
+
+</header>
+
+
+<!-- ==================================================
+     MENU MOBILE
+================================================== -->
+
+<div
+    class="mobile-menu"
+    id="mobileMenu"
+>
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="index.html#sobre">
+        Sobre
+    </a>
+
+    <a href="servicos.html">
+        Serviços
+    </a>
+
+    <a href="editores.html">
+        Editores
+    </a>
+
+    <a href="index.html#contato">
+        Contato
+    </a>
+
+
+    <div
+        class="mobile-account"
+        id="mobileAccount"
+    >
+
+        <div id="mobileLoggedOut">
+
+            <a href="login.html">
+                Entrar
+            </a>
+
+            <a href="cadastro.html">
+                Criar conta
+            </a>
+
+        </div>
+
+
+        <div
+            id="mobileLoggedIn"
+            hidden
         >
 
-            <div class="container hero-grid">
+            <a href="perfil.html">
+                Meu perfil
+            </a>
 
-                <div class="hero-content">
+        </div>
 
-                    <span class="eyebrow">
-                        Comunidade criativa
-                    </span>
+    </div>
 
-
-                    <h1>
-                        Onde
-                        <span>
-                            criatividade
-                        </span>
-                        encontra oportunidade.
-                    </h1>
+</div>
 
 
-                    <p class="hero-description">
-                        A Pale Ascendancy conecta editores,
-                        criadores e clientes em um ambiente
-                        profissional para desenvolver projetos,
-                        encontrar talentos e evoluir juntos.
-                    </p>
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
 
 
-                    <div class="hero-actions">
+    <!-- ==================================================
+         HERO
+    ================================================== -->
 
-                        <a
-                            href="cadastro.html"
-                            class="btn btn-primary"
-                        >
-                            Criar conta
-                        </a>
+    <section class="hero">
 
+        <div class="hero-glow"></div>
 
-                        <a
-                            href="#servicos"
-                            class="btn btn-secondary"
-                        >
-                            Conhecer a Pale Ascendancy
-                        </a>
+        <div class="hero-grid">
 
-                    </div>
+            <div class="hero-content">
 
-                </div>
+                <p class="eyebrow">
+                    PALE ASCENDANCY
+                </p>
 
 
-                <!-- CELULAR -->
+                <h1>
+                    Onde editores
+                    <span>transformam ideias.</span>
+                </h1>
 
-                <div class="hero-visual">
 
-                    <div
-                        class="phone-scene"
-                        id="phoneScene"
-                        role="button"
-                        tabindex="0"
-                        aria-label="Interagir com o celular"
+                <p class="hero-lead">
+                    Uma rede de profissionais de edição e
+                    produção audiovisual para conectar talentos,
+                    criadores e projetos.
+                </p>
+
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="editores.html"
+                        class="primary-button"
                     >
-
-                        <span
-                            class="phone-side-button one"
-                            aria-hidden="true"
-                        ></span>
-
-                        <span
-                            class="phone-side-button two"
-                            aria-hidden="true"
-                        ></span>
-
-                        <span
-                            class="phone-side-button three"
-                            aria-hidden="true"
-                        ></span>
-
-
-                        <div class="phone">
-
-                            <div class="phone-frame">
-
-                                <img
-                                    class="phone-screen"
-                                    src="assets/Perfil-telefone.jpg"
-                                    alt="Perfil da Pale Ascendancy"
-                                    loading="eager"
-                                >
-
-                                <span
-                                    class="phone-camera"
-                                    aria-hidden="true"
-                                ></span>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="phone-shadow"
-                            aria-hidden="true"
-                        ></div>
-
-
-                        <span class="phone-hint">
-                            Toque para interagir
-                        </span>
-
-                    </div>
-
-
-                    <div class="phone-caption">
-
-                        <strong>
-                            PALE ASCENDANCY
-                        </strong>
-
-                        <span>
-                            Editores, criadores e projetos
-                            conectados em um só lugar.
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             SOBRE
-        ========================= -->
-
-        <section
-            class="section"
-            id="sobre"
-        >
-
-            <div class="container">
-
-                <div class="section-header">
-
-                    <span class="section-label">
-                        Sobre nós
-                    </span>
-
-                    <h2>
-                        Uma comunidade feita para criar.
-                    </h2>
-
-                    <p>
-                        A Pale Ascendancy nasceu para aproximar
-                        pessoas que criam de pessoas que precisam
-                        de criatividade.
-                    </p>
-
-                </div>
-
-
-                <div class="about-grid">
-
-                    <div class="about-text">
-
-                        <p>
-                            Somos uma comunidade voltada para
-                            editores, criadores e clientes que
-                            procuram desenvolver projetos com
-                            mais organização, qualidade e
-                            profissionalismo.
-                        </p>
-
-                        <p>
-                            Aqui, editores podem apresentar seu
-                            trabalho e encontrar novas
-                            oportunidades, enquanto clientes
-                            podem encontrar profissionais de
-                            acordo com suas necessidades.
-                        </p>
-
-                    </div>
-
-
-                    <div class="about-highlight">
-
-                        <strong>
-                            Criar. Conectar. Evoluir.
-                        </strong>
-
-                        <p>
-                            Nosso objetivo é construir um ambiente
-                            onde talento, criatividade e
-                            oportunidade possam se encontrar de
-                            forma simples e profissional.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             SERVIÇOS
-        ========================= -->
-
-        <section
-            class="section"
-            id="servicos"
-        >
-
-            <div class="container">
-
-                <div class="section-header">
-
-                    <span class="section-label">
-                        Serviços
-                    </span>
-
-                    <h2>
-                        Conteúdo que ganha forma.
-                    </h2>
-
-                    <p>
-                        Encontre profissionais especializados
-                        em diferentes tipos de edição e produção
-                        audiovisual.
-                    </p>
-
-                </div>
-
-
-                <div class="services-grid">
-
-                    <article class="service-card">
-
-                        <span class="service-number">
-                            01
-                        </span>
-
-                        <h3>
-                            PROMOS
-                        </h3>
-
-                        <p>
-                            Edições promocionais para apresentar
-                            produtos, projetos, comunidades e
-                            marcas com impacto.
-                        </p>
-
-                    </article>
-
-
-                    <article class="service-card">
-
-                        <span class="service-number">
-                            02
-                        </span>
-
-                        <h3>
-                            Trailers
-                        </h3>
-
-                        <p>
-                            Produções cinematográficas para
-                            destacar histórias, projetos e
-                            experiências.
-                        </p>
-
-                    </article>
-
-
-                    <article class="service-card">
-
-                        <span class="service-number">
-                            03
-                        </span>
-
-                        <h3>
-                            Highlights
-                        </h3>
-
-                        <p>
-                            Momentos importantes transformados
-                            em vídeos dinâmicos e envolventes.
-                        </p>
-
-                    </article>
-
-
-                    <article class="service-card">
-
-                        <span class="service-number">
-                            04
-                        </span>
-
-                        <h3>
-                            Smookecut
-                        </h3>
-
-                        <p>
-                            Edições voltadas para estilos e
-                            projetos específicos da comunidade.
-                        </p>
-
-                    </article>
-
-
-                    <article class="service-card">
-
-                        <span class="service-number">
-                            05
-                        </span>
-
-                        <h3>
-                            Conteúdo
-                        </h3>
-
-                        <p>
-                            Soluções de edição para diferentes
-                            formatos e necessidades criativas.
-                        </p>
-
-                    </article>
-
-
-                    <article class="service-card">
-
-                        <span class="service-number">
-                            06
-                        </span>
-
-                        <h3>
-                            Projetos personalizados
-                        </h3>
-
-                        <p>
-                            Trabalhos desenvolvidos de acordo
-                            com as necessidades específicas de
-                            cada cliente.
-                        </p>
-
-                    </article>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             EDITORES
-        ========================= -->
-
-        <section
-            class="section"
-            id="editores"
-        >
-
-            <div class="container">
-
-                <div class="editors-box">
-
-                    <div>
-
-                        <span class="section-label">
-                            Para editores
-                        </span>
-
-                        <h3>
-                            Transforme seu trabalho em
-                            oportunidade.
-                        </h3>
-
-                        <p>
-                            Apresente suas habilidades, participe
-                            da comunidade e encontre projetos
-                            compatíveis com aquilo que você sabe
-                            fazer.
-                        </p>
-
-                    </div>
-
-
-                    <div class="editor-list">
-
-                        <div>
-                            Apresente seu trabalho
-                        </div>
-
-                        <div>
-                            Encontre novos projetos
-                        </div>
-
-                        <div>
-                            Conecte-se com clientes
-                        </div>
-
-                        <div>
-                            Evolua junto da comunidade
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             CONTATO
-        ========================= -->
-
-        <section
-            class="section"
-            id="contato"
-        >
-
-            <div class="container">
-
-                <div class="contact-box">
-
-                    <div>
-
-                        <span class="section-label">
-                            Comece agora
-                        </span>
-
-                        <h2>
-                            Faça parte da Pale Ascendancy.
-                        </h2>
-
-                        <p>
-                            Crie sua conta e comece a explorar
-                            uma comunidade construída para
-                            editores, criadores e clientes.
-                        </p>
-
-                    </div>
+                        Encontrar editores
+                    </a>
 
 
                     <a
                         href="cadastro.html"
-                        class="btn btn-primary"
+                        class="secondary-button"
                     >
-                        Criar minha conta
+                        Quero ser editor
                     </a>
 
                 </div>
 
             </div>
 
-        </section>
 
-    </main>
+            <!-- ==================================================
+                 CELULAR FLUTUANTE
+            ================================================== -->
+
+            <div class="hero-visual">
+
+                <div
+                    class="phone-scene"
+                    id="phoneScene"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Interagir com o celular"
+                >
+
+                    <span class="phone-side-button one"></span>
+
+                    <span class="phone-side-button two"></span>
+
+                    <span class="phone-side-button three"></span>
 
 
-    <!-- =========================
-         FOOTER
-    ========================= -->
+                    <div class="phone">
 
-    <footer class="site-footer">
+                        <div class="phone-frame">
 
-        <div class="container footer-inner">
+                            <!-- IMAGEM LOCAL DO CELULAR -->
 
-            <div class="footer-brand">
-                PALE ASCENDANCY
-            </div>
+                            <img
+                                class="phone-screen"
+                                src="assets/perfil-telefone.jpg"
+                                alt="Perfil da Pale Ascendancy"
+                                loading="eager"
+                            >
 
-            <div class="footer-copy">
-                © 2026 Pale Ascendancy. Todos os direitos reservados.
+                            <span
+                                class="phone-camera"
+                                aria-hidden="true"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="phone-shadow"
+                        aria-hidden="true"
+                    ></div>
+
+
+                    <span class="phone-hint">
+                        Toque para interagir
+                    </span>
+
+                </div>
+
+
+                <!-- ==================================================
+                     TEXTO ABAIXO DO CELULAR
+                ================================================== -->
+
+                <div class="phone-caption">
+
+                    <strong>
+                        PALE ASCENDANCY
+                    </strong>
+
+                    <span>
+                        Editores, criadores e projetos
+                        conectados em um só lugar.
+                    </span>
+
+                </div>
+
             </div>
 
         </div>
 
-    </footer>
+    </section>
 
 
-    <!-- =========================
-         SUPABASE
-    ========================= -->
+    <!-- ==================================================
+         SOBRE
+    ================================================== -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <section
+        class="section"
+        id="sobre"
+    >
 
+        <div class="section-heading">
 
-    <script>
-
-        /* =========================
-           SUPABASE
-        ========================= */
-
-        const SUPABASE_URL =
-            "https://fnyellunugdfesprmvzm.supabase.co";
-
-        const SUPABASE_KEY =
-            "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
+            <p class="eyebrow">
+                Sobre nós
+            </p>
 
 
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY,
-                {
-                    auth: {
-                        persistSession: true,
-                        autoRefreshToken: true,
-                        detectSessionInUrl: true
-                    }
+            <h2>
+                Uma comunidade para
+                <span>quem cria.</span>
+            </h2>
+
+
+            <p>
+                A Pale Ascendancy conecta editores,
+                criadores e clientes em um ambiente
+                focado em qualidade, profissionalismo
+                e evolução.
+            </p>
+
+        </div>
+
+
+        <div class="bento-grid">
+
+            <article class="bento-card large">
+
+                <h3>
+                    Profissionais
+                </h3>
+
+                <p>
+                    Encontre editores especializados
+                    em diferentes estilos e formatos.
+                </p>
+
+            </article>
+
+
+            <article class="bento-card">
+
+                <h3>
+                    Projetos
+                </h3>
+
+                <p>
+                    Encontre profissionais para transformar
+                    suas ideias em projetos audiovisuais.
+                </p>
+
+            </article>
+
+
+            <article class="bento-card">
+
+                <h3>
+                    Qualidade
+                </h3>
+
+                <p>
+                    Conectamos pessoas que valorizam
+                    criatividade, técnica e profissionalismo.
+                </p>
+
+            </article>
+
+
+            <article class="bento-card wide">
+
+                <h3>
+                    Evolução
+                </h3>
+
+                <p>
+                    Um ambiente para aprender, competir,
+                    criar e desenvolver novas habilidades.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         SERVIÇOS
+    ================================================== -->
+
+    <section
+        class="section"
+        id="servicos"
+    >
+
+        <div class="section-heading">
+
+            <p class="eyebrow">
+                Serviços
+            </p>
+
+
+            <h2>
+                Edição para diferentes
+                <span>projetos.</span>
+            </h2>
+
+
+            <p>
+                Encontre profissionais preparados
+                para diferentes tipos de produção.
+            </p>
+
+        </div>
+
+
+        <div class="service-preview">
+
+            <div class="service-preview-content">
+
+                <h2>
+                    Transforme sua ideia
+                    em <span>resultado.</span>
+                </h2>
+
+                <p>
+                    Escolha o estilo de edição que melhor
+                    combina com seu projeto e encontre
+                    profissionais especializados.
+                </p>
+
+
+                <div class="section-action">
+
+                    <a
+                        href="servicos.html"
+                        class="primary-button"
+                    >
+                        Ver serviços
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="service-preview-list">
+
+                <div>
+
+                    <strong>
+                        Promos
+                    </strong>
+
+                    <span>
+                        Conteúdo promocional e comercial.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Trailers
+                    </strong>
+
+                    <span>
+                        Ritmo, narrativa e impacto visual.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Highlights
+                    </strong>
+
+                    <span>
+                        Os melhores momentos em destaque.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Motion Design
+                    </strong>
+
+                    <span>
+                        Tipografia, animações e composição.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         EDITORES
+    ================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <p class="eyebrow">
+                Rede de profissionais
+            </p>
+
+
+            <h2>
+                Conheça nossos
+                <span>editores.</span>
+            </h2>
+
+
+            <p>
+                Explore profissionais conectados
+                à Pale Ascendancy.
+            </p>
+
+        </div>
+
+
+        <div class="editor-grid">
+
+            <article class="editor-card">
+
+                <div class="editor-icon">
+                    S
+                </div>
+
+                <span class="tag">
+                    Disponível
+                </span>
+
+                <h3>
+                    Smookecut
+                </h3>
+
+                <div class="editor-specialty">
+                    RITMO &amp; CORTES
+                </div>
+
+                <p>
+                    Edições focadas em ritmo, cortes
+                    precisos e conteúdo de jogos.
+                </p>
+
+                <a
+                    href="editores.html"
+                    class="card-link"
+                >
+                    Ver especialidade →
+                </a>
+
+            </article>
+
+
+            <article class="editor-card">
+
+                <div class="editor-icon">
+                    M
+                </div>
+
+                <span class="tag">
+                    Disponível
+                </span>
+
+                <h3>
+                    MANGAKÁ
+                </h3>
+
+                <div class="editor-specialty">
+                    ANIME &amp; MOTION
+                </div>
+
+                <p>
+                    Edições com referência em anime,
+                    tipografia animada e transições.
+                </p>
+
+                <a
+                    href="editores.html"
+                    class="card-link"
+                >
+                    Ver especialidade →
+                </a>
+
+            </article>
+
+
+            <article class="editor-card editor-card-placeholder">
+
+                <div class="editor-icon placeholder-icon">
+                    +
+                </div>
+
+                <h3>
+                    Seu perfil pode estar aqui.
+                </h3>
+
+                <p>
+                    Crie sua conta e faça parte
+                    da rede de profissionais.
+                </p>
+
+                <a
+                    href="cadastro.html"
+                    class="card-link"
+                >
+                    Criar perfil →
+                </a>
+
+            </article>
+
+        </div>
+
+
+        <div class="section-action">
+
+            <a
+                href="editores.html"
+                class="secondary-button"
+            >
+                Ver todos os editores
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         CONTATO
+    ================================================== -->
+
+    <section
+        class="section"
+        id="contato"
+    >
+
+        <div class="section-heading">
+
+            <p class="eyebrow">
+                Contato
+            </p>
+
+
+            <h2>
+                Vamos criar
+                <span>algo grande.</span>
+            </h2>
+
+
+            <p>
+                Entre em contato para conhecer a
+                Pale Ascendancy e nossos profissionais.
+            </p>
+
+
+            <a
+                href="https://discord.gg/H3mnq7Nfp"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="primary-button"
+            >
+                Entrar no Discord
+            </a>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        <img
+            src="1 Sem Título_20260901004747.png"
+            alt="Pale Ascendancy"
+            width="28"
+            height="28"
+        >
+
+        <span>
+            PALE ASCENDANCY
+        </span>
+
+    </div>
+
+
+    <p>
+        Rede de editores e produção audiovisual.
+    </p>
+
+
+    <small>
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
+    </small>
+
+</footer>
+
+
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* ==================================================
+       CONFIGURAÇÃO SUPABASE
+    ================================================== */
+
+    const SUPABASE_URL =
+        "https://fnyellunugdfesprmvzm.supabase.co";
+
+
+    const SUPABASE_KEY =
+        "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY,
+            {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
                 }
-            );
-
-
-        /* =========================
-           ATUALIZAR ÁREA DE CONTA
-        ========================= */
-
-        async function updateAccountUI() {
-
-            const loggedOutArea =
-                document.getElementById("loggedOutArea");
-
-            const loggedInArea =
-                document.getElementById("loggedInArea");
-
-            const mobileLoggedOut =
-                document.getElementById("mobileLoggedOut");
-
-            const mobileLoggedIn =
-                document.getElementById("mobileLoggedIn");
-
-            const headerInitial =
-                document.getElementById("headerProfileInitial");
-
-            const headerImage =
-                document.getElementById("headerProfileImage");
-
-
-            const {
-                data: {
-                    session
-                }
-            } = await supabaseClient.auth.getSession();
-
-
-            if (!session || !session.user) {
-
-                if (loggedOutArea) {
-                    loggedOutArea.hidden = false;
-                }
-
-                if (loggedInArea) {
-                    loggedInArea.hidden = true;
-                }
-
-                if (mobileLoggedOut) {
-                    mobileLoggedOut.hidden = false;
-                }
-
-                if (mobileLoggedIn) {
-                    mobileLoggedIn.hidden = true;
-                }
-
-                return;
-            }
-
-
-            if (loggedOutArea) {
-                loggedOutArea.hidden = true;
-            }
-
-            if (loggedInArea) {
-                loggedInArea.hidden = false;
-            }
-
-            if (mobileLoggedOut) {
-                mobileLoggedOut.hidden = true;
-            }
-
-            if (mobileLoggedIn) {
-                mobileLoggedIn.hidden = false;
-            }
-
-
-            try {
-
-                const {
-                    data: profile,
-                    error
-                } = await supabaseClient
-                    .from("profile")
-                    .select("nome,nome_artistico,avatar_url")
-                    .eq("id", session.user.id)
-                    .maybeSingle();
-
-
-                if (error) {
-                    console.error(
-                        "Erro ao carregar perfil:",
-                        error
-                    );
-                    return;
-                }
-
-
-                if (!profile) {
-                    return;
-                }
-
-
-                const displayName =
-                    profile.nome_artistico ||
-                    profile.nome ||
-                    session.user.email ||
-                    "Usuário";
-
-
-                if (headerInitial) {
-
-                    headerInitial.textContent =
-                        displayName
-                            .trim()
-                            .charAt(0)
-                            .toUpperCase();
-
-                }
-
-
-                if (
-                    headerImage &&
-                    profile.avatar_url
-                ) {
-
-                    headerImage.src =
-                        profile.avatar_url;
-
-                    headerImage.hidden = false;
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Erro ao atualizar perfil:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        /* =========================
-           AUTH STATE
-        ========================= */
-
-        supabaseClient.auth.onAuthStateChange(
-            function () {
-                updateAccountUI();
             }
         );
 
 
-        updateAccountUI();
+    /* ==================================================
+       ELEMENTOS DO HEADER
+    ================================================== */
+
+    const loggedOutArea =
+        document.getElementById(
+            "loggedOutArea"
+        );
 
 
-        /* =========================
-           MENU MOBILE
-        ========================= */
-
-        const mobileMenuButton =
-            document.getElementById(
-                "mobileMenuButton"
-            );
-
-        const mobileMenu =
-            document.getElementById(
-                "mobileMenu"
-            );
+    const loggedInArea =
+        document.getElementById(
+            "loggedInArea"
+        );
 
 
-        if (
-            mobileMenuButton &&
-            mobileMenu
-        ) {
-
-            mobileMenuButton.addEventListener(
-                "click",
-                function () {
-
-                    const isOpen =
-                        mobileMenu.classList.toggle(
-                            "open"
-                        );
+    const headerProfileInitial =
+        document.getElementById(
+            "headerProfileInitial"
+        );
 
 
-                    mobileMenuButton.setAttribute(
-                        "aria-expanded",
-                        String(isOpen)
-                    );
-
-                }
-            );
+    const headerProfileImage =
+        document.getElementById(
+            "headerProfileImage"
+        );
 
 
-            const mobileLinks =
-                mobileMenu.querySelectorAll(
-                    "a"
+    const mobileLoggedOut =
+        document.getElementById(
+            "mobileLoggedOut"
+        );
+
+
+    const mobileLoggedIn =
+        document.getElementById(
+            "mobileLoggedIn"
+        );
+
+
+    /* ==================================================
+       ATUALIZAR MENU DA CONTA
+    ================================================== */
+
+    async function updateAccountMenu() {
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao recuperar sessão:",
+                    error
                 );
 
+                showLoggedOut();
 
-            mobileLinks.forEach(
+                return;
+
+            }
+
+
+            const session =
+                data.session;
+
+
+            /* ==========================================
+               NÃO LOGADO
+            ========================================== */
+
+            if (
+                !session ||
+                !session.user
+            ) {
+
+                showLoggedOut();
+
+                return;
+
+            }
+
+
+            /* ==========================================
+               LOGADO
+            ========================================== */
+
+            const user =
+                session.user;
+
+
+            showLoggedIn();
+
+
+            /* ==========================================
+               BUSCAR PERFIL
+            ========================================== */
+
+            const {
+                data: profile,
+                error: profileError
+            } =
+                await supabaseClient
+                    .from("profile")
+                    .select(
+                        "nome,nome_artistico,avatar_url"
+                    )
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+
+            if (profileError) {
+
+                console.error(
+                    "Erro ao buscar perfil:",
+                    profileError
+                );
+
+            }
+
+
+            /* ==========================================
+               NOME
+            ========================================== */
+
+            const displayName =
+                profile?.nome_artistico ||
+                profile?.nome ||
+                user.email ||
+                "U";
+
+
+            const initial =
+                displayName
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase() ||
+                "U";
+
+
+            headerProfileInitial.textContent =
+                initial;
+
+
+            /* ==========================================
+               FOTO
+            ========================================== */
+
+            if (
+                profile &&
+                profile.avatar_url &&
+                profile.avatar_url.trim() !== ""
+            ) {
+
+                headerProfileImage.src =
+                    profile.avatar_url;
+
+
+                headerProfileImage.hidden =
+                    false;
+
+
+                headerProfileInitial.hidden =
+                    true;
+
+            } else {
+
+                headerProfileImage.src =
+                    "";
+
+
+                headerProfileImage.hidden =
+                    true;
+
+
+                headerProfileInitial.hidden =
+                    false;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado no sistema de conta:",
+                error
+            );
+
+            showLoggedOut();
+
+        }
+
+    }
+
+
+    /* ==================================================
+       MOSTRAR LOGADO
+    ================================================== */
+
+    function showLoggedIn() {
+
+        loggedOutArea.hidden =
+            true;
+
+
+        loggedInArea.hidden =
+            false;
+
+
+        mobileLoggedOut.hidden =
+            true;
+
+
+        mobileLoggedIn.hidden =
+            false;
+
+    }
+
+
+    /* ==================================================
+       MOSTRAR NÃO LOGADO
+    ================================================== */
+
+    function showLoggedOut() {
+
+        loggedOutArea.hidden =
+            false;
+
+
+        loggedInArea.hidden =
+            true;
+
+
+        mobileLoggedOut.hidden =
+            false;
+
+
+        mobileLoggedIn.hidden =
+            true;
+
+
+        headerProfileInitial.textContent =
+            "?";
+
+
+        headerProfileInitial.hidden =
+            false;
+
+
+        headerProfileImage.src =
+            "";
+
+
+        headerProfileImage.hidden =
+            true;
+
+    }
+
+
+    /* ==================================================
+       ALTERAÇÕES DE SESSÃO
+    ================================================== */
+
+    supabaseClient.auth.onAuthStateChange(
+        function (event, session) {
+
+            console.log(
+                "Estado da autenticação:",
+                event
+            );
+
+
+            if (session) {
+
+                showLoggedIn();
+
+            } else {
+
+                showLoggedOut();
+
+            }
+
+
+            setTimeout(
+                updateAccountMenu,
+                100
+            );
+
+        }
+    );
+
+
+    /* ==================================================
+       VERIFICAR SESSÃO
+    ================================================== */
+
+    updateAccountMenu();
+
+
+    /* ==================================================
+       MENU MOBILE
+    ================================================== */
+
+    const menuButton =
+        document.getElementById(
+            "menuButton"
+        );
+
+
+    const mobileMenu =
+        document.getElementById(
+            "mobileMenu"
+        );
+
+
+    if (
+        menuButton &&
+        mobileMenu
+    ) {
+
+        menuButton.addEventListener(
+            "click",
+            function () {
+
+                const isOpen =
+                    mobileMenu.classList.toggle(
+                        "is-open"
+                    );
+
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    isOpen
+                        ? "true"
+                        : "false"
+                );
+
+            }
+        );
+
+
+        mobileMenu
+            .querySelectorAll("a")
+            .forEach(
                 function (link) {
 
                     link.addEventListener(
@@ -2272,10 +1751,11 @@
                         function () {
 
                             mobileMenu.classList.remove(
-                                "open"
+                                "is-open"
                             );
 
-                            mobileMenuButton.setAttribute(
+
+                            menuButton.setAttribute(
                                 "aria-expanded",
                                 "false"
                             );
@@ -2286,88 +1766,105 @@
                 }
             );
 
-        }
+    }
 
 
-        /* =========================
-           ANIMAÇÃO DO CELULAR
-        ========================= */
+    /* ==================================================
+       CELULAR INTERATIVO
+    ================================================== */
 
-        const phoneScene =
-            document.getElementById(
-                "phoneScene"
+    const phoneScene =
+        document.getElementById(
+            "phoneScene"
+        );
+
+
+    if (phoneScene) {
+
+        const phone =
+            phoneScene.querySelector(
+                ".phone"
             );
 
 
-        if (phoneScene) {
+        function touchPhone() {
 
-            const phone =
-                phoneScene.querySelector(
-                    ".phone"
-                );
-
-
-            function touchPhone() {
-
-                if (!phone) {
-                    return;
-                }
-
-
-                phone.classList.remove(
-                    "touched"
-                );
-
-
-                void phone.offsetWidth;
-
-
-                phone.classList.add(
-                    "touched"
-                );
-
-
-                setTimeout(
-                    function () {
-
-                        phone.classList.remove(
-                            "touched"
-                        );
-
-                    },
-                    550
-                );
-
+            if (!phone) {
+                return;
             }
 
 
-            phoneScene.addEventListener(
-                "click",
-                touchPhone
+            phone.classList.remove(
+                "touched"
             );
 
 
-            phoneScene.addEventListener(
-                "keydown",
-                function (event) {
+            /*
+             * Força o navegador a reiniciar
+             * a animação toda vez que tocar.
+             */
 
-                    if (
-                        event.key === "Enter" ||
-                        event.key === " "
-                    ) {
+            void phone.offsetWidth;
 
-                        event.preventDefault();
 
-                        touchPhone();
+            phone.classList.add(
+                "touched"
+            );
 
-                    }
 
-                }
+            setTimeout(
+                function () {
+
+                    phone.classList.remove(
+                        "touched"
+                    );
+
+                },
+                550
             );
 
         }
 
-    </script>
+
+        /* ==========================================
+           TOQUE / CLIQUE
+        ========================================== */
+
+        phoneScene.addEventListener(
+            "click",
+            touchPhone
+        );
+
+
+        /* ==========================================
+           TECLADO
+        ========================================== */
+
+        phoneScene.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    touchPhone();
+
+                }
+
+            }
+        );
+
+    }
+
+});
+
+</script>
+
 
 </body>
+
 </html>
