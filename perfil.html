@@ -76,8 +76,7 @@
                 Meu <span>perfil.</span>
 </h1>
 <p>
-                Visualize as informações do seu perfil
-                de editor.
+                Visualize as informações da sua conta na Pale Ascendancy.
             </p>
 </div>
 <!-- PERFIL -->
@@ -121,7 +120,7 @@
 <!-- ESPECIALIDADE -->
 <div class="profile-info">
 <span class="profile-label">
-                    Especialidade
+                    Função
                 </span>
 <strong id="profileEspecialidade">
                     Carregando...
@@ -160,7 +159,7 @@
         </span>
 </div>
 <p>
-        Rede de editores e produção audiovisual.
+        Editores, contratantes e projetos em um só lugar.
     </p>
 <small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
@@ -457,8 +456,13 @@ async function loadProfile() {
         const especialidade =
             profile.especialidade || "";
 
-        const bio =
+        let bio =
             profile.bio || "";
+
+        // Loki faz parte da administração como desenvolvedor, não como editor.
+        if (nomeArtistico.trim().toLowerCase() === "loki") {
+            bio = "Desenvolvedor web e criador de servidores Discord. Um dos responsáveis pela criação e desenvolvimento da Pale Ascendancy.";
+        }
 
 
 
@@ -494,9 +498,9 @@ async function loadProfile() {
                 "profileEspecialidade"
             )
             .textContent =
-                formatSpecialty(
-                    especialidade
-                );
+                nomeArtistico.trim().toLowerCase() === "loki"
+                    ? "Desenvolvedor Web & Discord"
+                    : formatSpecialty(especialidade);
 
 
         document
