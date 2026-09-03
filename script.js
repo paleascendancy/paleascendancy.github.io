@@ -3,17 +3,17 @@
   "use strict";
 
   const PLAYLIST = [
-    { title: "Meaningful Love", file: "assets/music/01-meaningful-love.mp3" },
-    { title: "Better Days", file: "assets/music/02-better-days.mp3" },
-    { title: "Chill Day", file: "assets/music/03-chill-day.mp3" },
-    { title: "Canals", file: "assets/music/04-canals.mp3" },
-    { title: "Tek It — Hoodtrap Remix", file: "assets/music/05-tek-it-hoodtrap-remix.mp3" },
-    { title: "Star Shopping", file: "assets/music/06-star-shopping.mp3" },
-    { title: "Earrings", file: "assets/music/07-earrings.mp3" },
-    { title: "New Jeans Jersey Remix", file: "assets/music/08-new-jeans-jersey-remix.mp3" },
-    { title: "Nuts — Instrumental Slowed", file: "assets/music/09-nuts-instrumental-slowed.mp3" },
-    { title: "Sweater Weather — Instrumental", file: "assets/music/10-sweater-weather-instrumental.mp3" },
-    { title: "Childish Gambino — Instrumental", file: "assets/music/11-childish-gambino-instrumental.mp3" }
+    { title: "Meaningful Love", file: "music/01-meaningful-love.mp3" },
+    { title: "Better Days", file: "music/02-better-days.mp3" },
+    { title: "Chill Day", file: "music/03-chill-day.mp3" },
+    { title: "Canals", file: "music/04-canals.mp3" },
+    { title: "Tek It — Hoodtrap Remix", file: "music/05-tek-it-hoodtrap-remix.mp3" },
+    { title: "Star Shopping", file: "music/06-star-shopping.mp3" },
+    { title: "Earrings", file: "music/07-earrings.mp3" },
+    { title: "New Jeans Jersey Remix", file: "music/08-new-jeans-jersey-remix.mp3" },
+    { title: "Nuts — Instrumental Slowed", file: "music/09-nuts-instrumental-slowed.mp3" },
+    { title: "Sweater Weather — Instrumental", file: "music/10-sweater-weather-instrumental.mp3" },
+    { title: "Childish Gambino — Instrumental", file: "music/11-childish-gambino-instrumental.mp3" }
   ];
 
   const STORE = {
@@ -486,10 +486,12 @@
       play.dataset.paReady = "1";
       play.addEventListener("click", () => audio?.paused ? playMusic() : pauseMusic());
     }
+
     if (title && title.dataset.paReady !== "1") {
       title.dataset.paReady = "1";
       title.addEventListener("click", openMusicPanel);
     }
+
     if (next && next.dataset.paReady !== "1") {
       next.dataset.paReady = "1";
       next.addEventListener("click", nextTrack);
@@ -499,8 +501,16 @@
       audio.dataset.paReady = "1";
       audio.addEventListener("ended", nextTrack);
       audio.addEventListener("error", handleAudioError);
-      audio.addEventListener("play", () => { write(STORE.playing, "1"); updatePlayer(); startBeatAnimation(); });
-      audio.addEventListener("pause", () => { write(STORE.playing, "0"); updatePlayer(); stopBeatAnimation(); });
+      audio.addEventListener("play", () => {
+        write(STORE.playing, "1");
+        updatePlayer();
+        startBeatAnimation();
+      });
+      audio.addEventListener("pause", () => {
+        write(STORE.playing, "0");
+        updatePlayer();
+        stopBeatAnimation();
+      });
       audio.addEventListener("timeupdate", () => {
         if (!audio.paused) write(STORE.time, audio.currentTime || 0);
       });
@@ -508,8 +518,10 @@
 
     let index = parseInt(read(STORE.index, "0"), 10);
     if (!Number.isInteger(index) || index < 0 || index >= PLAYLIST.length) index = 0;
+
     const savedTime = Math.max(0, parseFloat(read(STORE.time, "0")) || 0);
     const shouldPlay = read(STORE.playing, "1") === "1";
+
     currentIndex = index;
     setTrack(index, false, savedTime);
 
@@ -523,15 +535,24 @@
   }
 
   let unlockInstalled = false;
+
   function installAutoplayUnlock() {
     if (unlockInstalled) return;
     unlockInstalled = true;
+
     const unlock = () => {
       if (audio?.paused) playMusic();
-      ["pointerdown", "touchstart", "keydown"].forEach((type) => document.removeEventListener(type, unlock, true));
+
+      ["pointerdown", "touchstart", "keydown"].forEach((type) => {
+        document.removeEventListener(type, unlock, true);
+      });
+
       unlockInstalled = false;
     };
-    ["pointerdown", "touchstart", "keydown"].forEach((type) => document.addEventListener(type, unlock, true));
+
+    ["pointerdown", "touchstart", "keydown"].forEach((type) => {
+      document.addEventListener(type, unlock, true);
+    });
   }
 
   /* ---------------- SUPABASE / HEADER ---------------- */
@@ -539,6 +560,7 @@
   function ensureSupabase() {
     if (window.supabase?.createClient) return Promise.resolve(true);
     if (supabasePromise) return supabasePromise;
+
     supabasePromise = new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
@@ -547,18 +569,27 @@
       script.onerror = () => resolve(false);
       document.head.appendChild(script);
     });
+
     return supabasePromise;
   }
 
   function getSupabaseClient() {
     if (supabaseClient) return supabaseClient;
     if (!window.supabase?.createClient) return null;
+
     try {
       supabaseClient = window.supabase.createClient(
         "https://fnyellunugdfesprmvzm.supabase.co",
         "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK",
-        { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
       );
+
       return supabaseClient;
     } catch (_) {
       return null;
@@ -567,13 +598,21 @@
 
   function applyCachedHeaderProfile() {
     const cached = (() => {
-      try { return JSON.parse(read(STORE.profile, "null")); } catch (_) { return null; }
+      try {
+        return JSON.parse(read(STORE.profile, "null"));
+      } catch (_) {
+        return null;
+      }
     })();
+
     const initial = $("#headerProfileInitial");
     const image = $("#headerProfileImage");
+
     if (!cached || !initial || !image) return;
+
     const name = String(cached.name || "U").trim() || "U";
     initial.textContent = name.charAt(0).toUpperCase();
+
     if (cached.avatar_url) {
       image.src = cached.avatar_url;
       image.hidden = false;
@@ -586,11 +625,13 @@
     const loggedIn = $("#loggedInArea");
     const mobileOut = $("#mobileLoggedOut");
     const mobileIn = $("#mobileLoggedIn");
+
     if (!loggedOut || !loggedIn) return;
 
     applyCachedHeaderProfile();
 
     const client = getSupabaseClient();
+
     if (!client) {
       ensureSupabase().then(() => initAccountHeader());
       return;
@@ -598,31 +639,49 @@
 
     client.auth.getSession().then(async ({ data }) => {
       const session = data?.session;
+
       if (!session?.user) {
         loggedOut.hidden = false;
         loggedIn.hidden = true;
+
         if (mobileOut) mobileOut.hidden = false;
         if (mobileIn) mobileIn.hidden = true;
+
         return;
       }
 
       loggedOut.hidden = true;
       loggedIn.hidden = false;
+
       if (mobileOut) mobileOut.hidden = true;
       if (mobileIn) mobileIn.hidden = false;
 
       const initial = $("#headerProfileInitial");
       const image = $("#headerProfileImage");
+
       if (!initial || !image) return;
 
       let profile = null;
+
       try {
-        const result = await client.from("profile").select("nome,nome_artistico,avatar_url").eq("id", session.user.id).maybeSingle();
+        const result = await client
+          .from("profile")
+          .select("nome,nome_artistico,avatar_url")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
         profile = result.data || null;
       } catch (_) {}
 
-      const name = String(profile?.nome_artistico || profile?.nome || session.user.email || "U").trim() || "U";
+      const name = String(
+        profile?.nome_artistico ||
+        profile?.nome ||
+        session.user.email ||
+        "U"
+      ).trim() || "U";
+
       initial.textContent = name.charAt(0).toUpperCase();
+
       if (profile?.avatar_url) {
         image.src = profile.avatar_url;
         image.hidden = false;
@@ -633,7 +692,13 @@
         initial.hidden = false;
       }
 
-      write(STORE.profile, JSON.stringify({ name, avatar_url: profile?.avatar_url || "" }));
+      write(
+        STORE.profile,
+        JSON.stringify({
+          name,
+          avatar_url: profile?.avatar_url || ""
+        })
+      );
     }).catch(() => {});
   }
 
@@ -645,62 +710,109 @@
 
   function shouldUseSpa(link, event) {
     if (!link || event.defaultPrevented || event.button !== 0) return false;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+
+    if (
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return false;
+
     if (link.target === "_blank" || link.hasAttribute("download")) return false;
 
     const href = link.getAttribute("href") || "";
+
     if (!href || /^(mailto:|tel:|javascript:)/i.test(href)) return false;
 
     let url;
-    try { url = new URL(href, location.href); } catch (_) { return false; }
+
+    try {
+      url = new URL(href, location.href);
+    } catch (_) {
+      return false;
+    }
+
     if (url.origin !== location.origin) return false;
     if (url.pathname === location.pathname && url.hash) return false;
 
     const extension = url.pathname.split(".").pop().toLowerCase();
+
     if (extension && !["html", "htm"].includes(extension)) return false;
+
     if (AUTH_PAGES.has(pageName(url.pathname))) return false;
+
     return true;
   }
 
   function updateActiveLinks() {
     const current = pageName(location.pathname);
+
     $$('a[href]').forEach((link) => {
       try {
         const url = new URL(link.href, location.href);
-        link.classList.toggle("active", url.origin === location.origin && pageName(url.pathname) === current && !url.hash);
+
+        link.classList.toggle(
+          "active",
+          url.origin === location.origin &&
+          pageName(url.pathname) === current &&
+          !url.hash
+        );
       } catch (_) {}
     });
   }
 
   async function navigate(url, push = true) {
     if (navigating) return;
+
     navigating = true;
+
     try {
       const target = new URL(url, location.href);
-      const response = await fetch(target.href, { credentials: "same-origin", cache: "no-store" });
+
+      const response = await fetch(
+        target.href,
+        {
+          credentials: "same-origin",
+          cache: "no-store"
+        }
+      );
+
       if (!response.ok) throw new Error("navigation");
+
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, "text/html");
+
       const nextMain = $("main", doc);
       const currentMain = $("main");
+
       if (!nextMain || !currentMain) throw new Error("page");
 
       currentMain.replaceWith(nextMain);
+
       if (doc.title) document.title = doc.title;
+
       if (push) history.pushState({ pale: true }, "", target.href);
 
       closeMobileMenu();
       closeMusicPanel();
+
       initEditorTools();
       initEditorPhotos();
       initAccountHeader();
       updateActiveLinks();
-        window.scrollTo(0, 0);
+
+      window.scrollTo(0, 0);
 
       if (target.hash) {
         setTimeout(() => {
-          const targetElement = document.getElementById(target.hash.slice(1));
-          targetElement?.scrollIntoView({ behavior: "smooth", block: "start" });
+          const targetElement = document.getElementById(
+            target.hash.slice(1)
+          );
+
+          targetElement?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
         }, 40);
       }
     } catch (_) {
@@ -712,17 +824,26 @@
 
   function initNavigation() {
     if (window.__PA_NAV_READY__) return;
+
     window.__PA_NAV_READY__ = true;
+
     document.addEventListener("click", (event) => {
-      const target = event.target instanceof Element ? event.target : null;
+      const target =
+        event.target instanceof Element ? event.target : null;
+
       const link = target?.closest("a[href]");
+
       if (!shouldUseSpa(link, event)) return;
+
       event.preventDefault();
       navigate(link.href, true);
     });
-    window.addEventListener("popstate", () => navigate(location.href, false));
-  }
 
+    window.addEventListener(
+      "popstate",
+      () => navigate(location.href, false)
+    );
+  }
 
   function boot() {
     initMobileMenu();
@@ -734,8 +855,15 @@
     updateActiveLinks();
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
-  else boot();
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      boot,
+      { once: true }
+    );
+  } else {
+    boot();
+  }
 
   window.PaleAscendancy = {
     music: {
