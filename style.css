@@ -426,3 +426,280 @@ body{
   .editor-description{font-size:.73rem}
   .hero-buttons a,.contact-actions a{width:auto}
 }
+
+
+/* =========================================================
+   PALE ASCENDANCY — V12 / MOBILE + EDITORIAL REFINEMENT
+   ========================================================= */
+:root{
+  --bg:#070a12;
+  --bg-deep:#03050b;
+  --surface:#0e1522;
+  --surface-2:#151e2d;
+  --text:#f5f7fb;
+  --text-soft:#d7deea;
+  --muted:#8f9bad;
+  --line:rgba(207,220,238,.13);
+  --line-strong:rgba(207,220,238,.22);
+  --cyan:#69d8ee;
+  --violet:#8f83ff;
+  --gold:#e9c978;
+  --pink:#e97ab8;
+}
+
+body{
+  background:
+    radial-gradient(700px 430px at 10% -8%,rgba(67,207,235,.095),transparent 64%),
+    radial-gradient(680px 500px at 94% 12%,rgba(117,103,255,.075),transparent 65%),
+    radial-gradient(700px 500px at 48% 105%,rgba(36,84,124,.07),transparent 68%),
+    linear-gradient(180deg,#080d17 0%,#060a12 48%,#04070d 100%);
+}
+
+/* Titles: clean white hierarchy, no orange/gold text fragments. */
+.hero-content h1 span,
+h1 span,
+h2 span,
+h3 span,
+.section-heading h2 span,
+.editors-heading h1 span{
+  color:inherit;
+}
+
+.hero-content h1,
+.editors-heading h1,
+.section-heading h2,
+.auth-heading h1{
+  text-wrap:balance;
+}
+
+.hero-content h1{max-width:720px}
+
+/* Buttons: restrained, tactile, animated without becoming flashy. */
+.primary-button,
+.secondary-button,
+.card-link,
+.filter-button,
+.discord-button,
+.mobile-discord,
+.menu-button,
+.music-play,
+.music-next,
+.music-title-button,
+.music-panel-close,
+.music-suggestion-row button{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.primary-button::after,
+.secondary-button::after,
+.card-link::after,
+.filter-button::after,
+.discord-button::after,
+.mobile-discord::after,
+.menu-button::after,
+.music-play::after,
+.music-next::after,
+.music-title-button::after,
+.music-panel-close::after,
+.music-suggestion-row button::after{
+  content:"";
+  position:absolute;
+  top:-120%;
+  left:-42%;
+  width:28%;
+  height:340%;
+  transform:rotate(20deg) translateX(-160%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.20),transparent);
+  pointer-events:none;
+  transition:transform .55s cubic-bezier(.2,.7,.2,1);
+  z-index:-1;
+}
+.primary-button:hover::after,
+.secondary-button:hover::after,
+.card-link:hover::after,
+.filter-button:hover::after,
+.discord-button:hover::after,
+.mobile-discord:hover::after,
+.menu-button:hover::after,
+.music-play:hover::after,
+.music-next:hover::after,
+.music-title-button:hover::after,
+.music-panel-close:hover::after,
+.music-suggestion-row button:hover::after{transform:rotate(20deg) translateX(560%)}
+.primary-button:active,
+.secondary-button:active,
+.card-link:active,
+.filter-button:active,
+.discord-button:active,
+.mobile-discord:active,
+.menu-button:active,
+.music-play:active,
+.music-next:active,
+.music-title-button:active{transform:translateY(1px) scale(.985)}
+
+.primary-button,
+.secondary-button,
+.card-link{
+  min-height:41px;
+  padding:9px 14px;
+  border-radius:11px;
+  font-size:.75rem;
+}
+.primary-button{
+  background:linear-gradient(135deg,#67d5eb,#92d8e8);
+  border:1px solid rgba(126,226,245,.72);
+  box-shadow:0 9px 24px rgba(65,200,225,.10);
+}
+.primary-button:hover{transform:translateY(-2px);box-shadow:0 13px 30px rgba(65,200,225,.17)}
+.secondary-button{
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(207,220,238,.20);
+}
+.secondary-button:hover{transform:translateY(-2px);background:rgba(255,255,255,.055);border-color:rgba(207,220,238,.32)}
+
+/* Keep the phone caption physically separated from the beat bars. */
+.phone-scene{
+  min-height:610px;
+  padding-bottom:48px;
+}
+.beat-bars{top:calc(50% + 328px);}
+.phone-caption{
+  margin-top:20px;
+  width:min(390px,92%);
+  padding:14px 18px 0;
+  gap:7px;
+  position:relative;
+  z-index:20;
+}
+.phone-caption strong{font-size:.70rem;letter-spacing:.19em}
+.phone-caption span{font-size:.68rem;line-height:1.55}
+
+/* Editors: compact cards on desktop; horizontal snap carousel on phones. */
+.editors-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+.editor-profile{
+  min-width:0;
+  min-height:0;
+  aspect-ratio:1 / 1;
+  height:auto;
+  padding:19px;
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease,background .22s ease;
+}
+.editor-profile:hover{transform:translateY(-4px);}
+.editor-status{margin-bottom:12px}
+.editor-avatar,.editor-photo-fallback{
+  width:68px;
+  height:68px;
+  margin-bottom:11px;
+  border-radius:18px;
+}
+.editor-profile h2{font-size:1.12rem;letter-spacing:-.02em}
+.editor-role{margin-top:5px;color:var(--cyan);font-size:.57rem;letter-spacing:.15em}
+.editor-description{
+  margin:10px 0 9px;
+  font-size:.69rem;
+  line-height:1.48;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+}
+.editor-tags{display:flex;flex-wrap:wrap;gap:5px}
+.editor-tag{padding:4px 7px;border-radius:8px;font-size:.57rem}
+.editor-footer{margin-top:auto;padding-top:10px}
+.editor-specialty-label{font-size:.62rem}
+
+@media(max-width:900px){
+  /* Fixed mobile header prevents the menu control from drifting into page content. */
+  body{padding-top:64px}
+  .header{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:64px;
+    padding:9px 14px;
+    gap:10px;
+    z-index:30000;
+  }
+  .brand{font-size:.70rem;letter-spacing:.085em}
+  .brand img{width:30px;height:30px}
+  .nav,.discord-button,.account-area{display:none!important}
+  .menu-button{
+    display:grid!important;
+    margin-left:auto!important;
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    z-index:30003;
+  }
+  .mobile-menu{
+    top:73px;
+    z-index:30010;
+    max-height:calc(100vh - 88px);
+  }
+  .mobile-menu.open,.mobile-menu.active{display:flex!important}
+  .hero{padding-top:42px}
+  .editors-page{padding-top:34px}
+  .phone-scene{min-height:575px;padding-bottom:46px}
+  .beat-bars{top:calc(50% + 284px)}
+}
+
+@media(max-width:650px){
+  .hero{padding-top:30px;padding-bottom:40px}
+  .hero-content h1{
+    font-size:clamp(2.35rem,11.5vw,3.25rem);
+    line-height:1.00;
+    letter-spacing:-.055em;
+  }
+  .hero-lead{font-size:.82rem;line-height:1.7;margin:19px 0 25px}
+  .hero-buttons{gap:8px}
+  .hero-buttons a{min-width:0;width:auto}
+  .phone-scene{min-height:520px;padding-bottom:38px}
+  .phone{width:min(242px,68vw)}
+  .beat-bars{top:calc(50% + 258px);width:250px;gap:4px}
+  .phone-caption{margin-top:18px;width:min(330px,94%);padding-top:10px}
+  .phone-caption strong{font-size:.65rem}
+  .phone-caption span{font-size:.64rem}
+
+  .editors-page{padding-top:28px}
+  .editors-heading h1{font-size:clamp(2.35rem,11.5vw,3.25rem)}
+  .editor-tools{margin-bottom:18px}
+  .editors-grid{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:2px 2px 13px;
+    margin-right:-18px;
+    padding-right:18px;
+    scroll-snap-type:x mandatory;
+    scroll-padding-left:2px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .editors-grid::-webkit-scrollbar{display:none}
+  .editor-profile{
+    flex:0 0 286px;
+    width:286px;
+    aspect-ratio:1 / 1;
+    scroll-snap-align:start;
+    border-radius:20px;
+    padding:18px;
+  }
+  .editor-avatar,.editor-photo-fallback{width:64px;height:64px;border-radius:17px}
+  .editor-profile h2{font-size:1.08rem}
+  .editor-description{font-size:.67rem;line-height:1.45}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .primary-button,.secondary-button,.card-link,.filter-button,.discord-button,.mobile-discord,.menu-button,.music-play,.music-next,.music-title-button,.music-panel-close,.music-suggestion-row button{transition:none}
+}
