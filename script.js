@@ -1,98 +1,51 @@
-/* =========================================================
-   PALE ASCENDANCY — SCRIPT.JS
-   Menu + busca + navegação + player global de música
-========================================================= */
-
+/* PALE ASCENDANCY — SITE CORE */
 (() => {
   "use strict";
 
-  /* =========================================================
-     CONFIGURAÇÕES
-  ========================================================= */
-
   const PLAYLIST = [
-    {
-      title: "Meaningful Love",
-      file: "assets/music/meaningful love (slowed instrumental)(MP3_160K).mp3"
-    },
-    {
-      title: "Better Days",
-      file: "assets/music/LAKEY INSPIRED - Better Days (MP3_160K).mp3"
-    },
-    {
-      title: "Chill Day",
-      file: "assets/music/LAKEY INSPIRED - Chill Day (MP3_160K).mp3"
-    },
-    {
-      title: "Canals",
-      file: "assets/music/Joakim Karud - Canais(MP3_160K).mp3"
-    },
-    {
-      title: "Tek It — Hoodtrap Remix",
-      file: "assets/music/Cafuné - Tek it (Tai2Talented☆ Hoodtrap Remix)(MP3_160K).mp3"
-    },
-    {
-      title: "Star Shopping",
-      file: "assets/music/Lil Peep - Star Shopping (Áudio Oficial)(MP3_160K).mp3"
-    },
-    {
-      title: "Earrings",
-      file: "assets/music/Malcolm Todd - Earrings (Visualizador Oficial)(MP3_160K).mp3"
-    },
-    {
-      title: "New Jeans Jersey Remix",
-      file: "assets/music/New Jeans Jersey Remix SLOWED - (Jiandro x Dxrkaii)(MP3_160K).mp3"
-    },
-    {
-      title: "Nuts — Slowed",
-      file: "assets/music/Instrumental de Nuts (Versão Lenta) (MP3_160K).mp3"
-    },
-    {
-      title: "Sweater Weather",
-      file: "assets/music/The Neighbourhood - Sweater Weather (Instrumental Oficial) (MP3_160K).mp3"
-    },
-    {
-      title: "Infantil Instrumental",
-      file: "assets/music/les gambino infantil instrumental _foryoupage _song _fyp _slowandreverb _instrumental _Mreso(MP3).mp3"
-    }
+    { title: "Meaningful Love", file: "assets/music/meaningful love (slowed instrumental)(MP3_160K).mp3" },
+    { title: "Better Days", file: "assets/music/LAKEY INSPIRED - Better Days(MP3_160K).mp3" },
+    { title: "Chill Day", file: "assets/music/LAKEY INSPIRED - Chill Day(MP3_160K).mp3" },
+    { title: "Canals", file: "assets/music/Joakim Karud - Canals(MP3_160K).mp3" },
+    { title: "Tek It — Hoodtrap Remix", file: "assets/music/Cafuné - Tek it (Tai2Talented☆ Hoodtrap Remix)(MP3_160K).mp3" },
+    { title: "Star Shopping", file: "assets/music/Lil Peep - Star Shopping (Official Audio)(MP3_160K).mp3" },
+    { title: "Earrings", file: "assets/music/Malcolm Todd - Earrings (Official Visualizer)(MP3_160K).mp3" },
+    { title: "New Jeans Jersey Remix", file: "assets/music/New Jeans Jersey Remix SLOWED - (Jiandro x Dxrkaii)(MP3_160K).mp3" },
+    { title: "Nuts — Instrumental Slowed", file: "assets/music/Nuts Instrumental (Slowed)(MP3_160K).mp3" },
+    { title: "Sweater Weather — Instrumental", file: "assets/music/The Neighbourhood- Sweater Weather (Official Instrumental)(MP3_160K).mp3" },
+    { title: "Childish Gambino — Instrumental", file: "assets/music/les childish gambino instrumental _foryoupage _song _fyp _slowandreverb _instrumental _Mreso(MP3).mp3" }
   ];
 
-  const STORAGE = {
+  const STORE = {
     index: "pa_music_index",
     time: "pa_music_time",
     playing: "pa_music_playing",
-    volume: "pa_music_volume",
+    profile: "pa_profile_cache",
     suggestions: "pa_music_suggestions"
   };
 
+  const AUTH_PAGES = new Set([
+    "login.html",
+    "cadastro.html",
+    "perfil.html",
+    "editar-perfil.html"
+  ]);
+
   let audio = null;
   let currentIndex = 0;
-  let isPlaying = false;
+  let failed = new Set();
   let audioContext = null;
   let analyser = null;
   let sourceNode = null;
-  let animationFrame = null;
-  let navigationInProgress = false;
+  let beatFrame = 0;
+  let navigating = false;
+  let supabaseClient = null;
+  let supabasePromise = null;
 
-  /* =========================================================
-     UTILIDADES
-  ========================================================= */
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  function qs(selector, parent = document) {
-    return parent.querySelector(selector);
-  }
-
-  function qsa(selector, parent = document) {
-    return [...parent.querySelectorAll(selector)];
-  }
-
-  function save(key, value) {
-    try {
-      localStorage.setItem(key, String(value));
-    } catch (_) {}
-  }
-
-  function load(key, fallback = null) {
+  function read(key, fallback = null) {
     try {
       const value = localStorage.getItem(key);
       return value === null ? fallback : value;
@@ -101,422 +54,12 @@
     }
   }
 
+  function write(key, value) {
+    try { localStorage.setItem(key, String(value)); } catch (_) {}
+  }
+
   function absoluteURL(path) {
-    try {
-      return new URL(path, document.baseURI).href;
-    } catch (_) {
-      return path;
-    }
-  }
-
-  function isSameOrigin(url) {
-    try {
-      return new URL(url, location.href).origin === location.origin;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /* =========================================================
-     MENU MOBILE
-  ========================================================= */
-
-  function initMobileMenu() {
-    const menuButton =
-      qs("#menuToggle") ||
-      qs(".menu-toggle") ||
-      qs("#mobileMenuButton");
-
-    const mobileMenu =
-      qs("#mobileMenu") ||
-      qs(".mobile-menu");
-
-    if (!menuButton || !mobileMenu) return;
-
-    if (menuButton.dataset.paMenuReady === "1") return;
-
-    menuButton.dataset.paMenuReady = "1";
-
-    menuButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const opened =
-        mobileMenu.classList.toggle("active") ||
-        mobileMenu.classList.contains("open");
-
-      menuButton.setAttribute(
-        "aria-expanded",
-        mobileMenu.classList.contains("active") ||
-        mobileMenu.classList.contains("open")
-          ? "true"
-          : "false"
-      );
-    });
-
-    qsa("a", mobileMenu).forEach((link) => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.remove("active");
-        mobileMenu.classList.remove("open");
-        menuButton.setAttribute("aria-expanded", "false");
-      });
-    });
-
-    document.addEventListener("click", (event) => {
-      if (
-        !mobileMenu.contains(event.target) &&
-        !menuButton.contains(event.target)
-      ) {
-        mobileMenu.classList.remove("active");
-        mobileMenu.classList.remove("open");
-        menuButton.setAttribute("aria-expanded", "false");
-      }
-    });
-  }
-
-  /* =========================================================
-     BUSCA
-  ========================================================= */
-
-  function initSearch() {
-    const searchInputs = qsa(
-      'input[type="search"], .search-input, #searchInput'
-    );
-
-    searchInputs.forEach((input) => {
-      if (input.dataset.paSearchReady === "1") return;
-
-      input.dataset.paSearchReady = "1";
-
-      input.addEventListener("input", () => {
-        const term = input.value.trim().toLowerCase();
-
-        const containers = qsa(
-          ".editor-card, .service-card, .card, .search-item"
-        );
-
-        containers.forEach((item) => {
-          const text = item.textContent.toLowerCase();
-
-          item.style.display =
-            !term || text.includes(term)
-              ? ""
-              : "none";
-        });
-      });
-    });
-  }
-
-  /* =========================================================
-     LINKS EXTERNOS
-  ========================================================= */
-
-  function initExternalLinks() {
-    qsa("a[href]").forEach((link) => {
-      if (link.dataset.paExternalReady === "1") return;
-
-      const href = link.getAttribute("href");
-
-      if (!href) return;
-
-      if (
-        href.startsWith("http://") ||
-        href.startsWith("https://")
-      ) {
-        try {
-          const url = new URL(href);
-
-          if (url.origin !== location.origin) {
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-          }
-        } catch (_) {}
-      }
-
-      link.dataset.paExternalReady = "1";
-    });
-  }
-
-  /* =========================================================
-     PLAYER HTML
-  ========================================================= */
-
-  function createPlayer() {
-    let player = qs("#musicPlayer");
-
-    if (!player) {
-      player = document.createElement("div");
-
-      player.id = "musicPlayer";
-      player.className = "music-player";
-
-      player.innerHTML = `
-        <div class="music-player-main">
-
-          <button
-            class="music-play"
-            id="musicPlay"
-            type="button"
-            aria-label="Reproduzir música"
-          >
-            ▶
-          </button>
-
-          <button
-            class="music-title-button"
-            id="musicTitleButton"
-            type="button"
-            aria-label="Abrir lista de músicas"
-          >
-            <span class="music-label">
-              PALE ASCENDANCY
-            </span>
-
-            <strong id="musicTitle">
-              Meaningful Love
-            </strong>
-
-            <span id="musicStatus">
-              Toque para começar
-            </span>
-          </button>
-
-          <button
-            class="music-next"
-            id="musicNext"
-            type="button"
-            aria-label="Próxima música"
-          >
-            ›
-          </button>
-
-        </div>
-
-        <audio
-          id="musicAudio"
-          preload="metadata"
-        ></audio>
-      `;
-
-      document.body.appendChild(player);
-    }
-
-    audio = qs("#musicAudio");
-
-    if (!audio) {
-      audio = document.createElement("audio");
-      audio.id = "musicAudio";
-      audio.preload = "metadata";
-      player.appendChild(audio);
-    }
-
-    return player;
-  }
-
-  /* =========================================================
-     PAINEL DE MÚSICAS
-  ========================================================= */
-
-  function ensurePanel() {
-    let panel = qs("#musicPanel");
-
-    if (panel) return panel;
-
-    panel = document.createElement("div");
-
-    panel.id = "musicPanel";
-    panel.className = "music-panel";
-    panel.hidden = true;
-
-    panel.innerHTML = `
-      <div class="music-panel-inner">
-
-        <div class="music-panel-header">
-
-          <div>
-            <span class="music-panel-kicker">
-              PALE ASCENDANCY
-            </span>
-
-            <h3>
-              Músicas
-            </h3>
-          </div>
-
-          <button
-            id="musicPanelClose"
-            class="music-panel-close"
-            type="button"
-            aria-label="Fechar"
-          >
-            ×
-          </button>
-
-        </div>
-
-        <div class="music-search-wrap">
-
-          <input
-            id="musicSearch"
-            class="music-search"
-            type="search"
-            placeholder="Pesquisar música..."
-            autocomplete="off"
-          >
-
-        </div>
-
-        <div
-          id="musicList"
-          class="music-list"
-        ></div>
-
-        <div class="music-suggestion">
-
-          <div class="music-suggestion-title">
-            Sugira uma música
-          </div>
-
-          <div class="music-suggestion-row">
-
-            <input
-              id="musicSuggestionInput"
-              type="text"
-              placeholder="Nome da música..."
-              maxlength="120"
-            >
-
-            <button
-              id="musicSuggestionSend"
-              type="button"
-            >
-              Enviar
-            </button>
-
-          </div>
-
-          <small id="musicSuggestionStatus"></small>
-
-        </div>
-
-      </div>
-    `;
-
-    document.body.appendChild(panel);
-
-    renderPlaylist();
-
-    const close = qs("#musicPanelClose");
-
-    if (close) {
-      close.addEventListener("click", closeMusicPanel);
-    }
-
-    const search = qs("#musicSearch");
-
-    if (search) {
-      search.addEventListener("input", () => {
-        renderPlaylist(search.value);
-      });
-    }
-
-    const send = qs("#musicSuggestionSend");
-
-    if (send) {
-      send.addEventListener("click", sendSuggestion);
-    }
-
-    return panel;
-  }
-
-  function openMusicPanel() {
-    const panel = ensurePanel();
-
-    panel.hidden = false;
-
-    requestAnimationFrame(() => {
-      panel.classList.add("active");
-    });
-
-    const search = qs("#musicSearch");
-
-    if (search) {
-      setTimeout(() => {
-        search.focus();
-      }, 100);
-    }
-  }
-
-  function closeMusicPanel() {
-    const panel = qs("#musicPanel");
-
-    if (!panel) return;
-
-    panel.classList.remove("active");
-
-    setTimeout(() => {
-      panel.hidden = true;
-    }, 180);
-  }
-
-  /* =========================================================
-     LISTA DE MÚSICAS
-  ========================================================= */
-
-  function renderPlaylist(filter = "") {
-    const list = qs("#musicList");
-
-    if (!list) return;
-
-    const term = String(filter).trim().toLowerCase();
-
-    list.innerHTML = "";
-
-    PLAYLIST.forEach((track, index) => {
-      if (
-        term &&
-        !track.title.toLowerCase().includes(term)
-      ) {
-        return;
-      }
-
-      const button = document.createElement("button");
-
-      button.type = "button";
-      button.className = "music-list-item";
-
-      if (index === currentIndex) {
-        button.classList.add("current");
-      }
-
-      button.innerHTML = `
-        <span class="music-list-number">
-          ${String(index + 1).padStart(2, "0")}
-        </span>
-
-        <span class="music-list-name">
-          ${escapeHTML(track.title)}
-        </span>
-
-        <span class="music-list-action">
-          ${index === currentIndex && isPlaying ? "Ⅱ" : "▶"}
-        </span>
-      `;
-
-      button.addEventListener("click", () => {
-        loadTrack(index, true);
-      });
-
-      list.appendChild(button);
-    });
-
-    if (!list.children.length) {
-      list.innerHTML = `
-        <div class="music-empty">
-          Nenhuma música encontrada.
-        </div>
-      `;
-    }
+    return new URL(path, document.baseURI).href;
   }
 
   function escapeHTML(value) {
@@ -528,229 +71,259 @@
       .replaceAll("'", "&#039;");
   }
 
-  /* =========================================================
-     PLAYER
-  ========================================================= */
+  /* ---------------- MENU ---------------- */
 
-  function getPlayerElements() {
-    return {
-      play: qs("#musicPlay"),
-      title: qs("#musicTitle"),
-      titleButton: qs("#musicTitleButton"),
-      status: qs("#musicStatus"),
-      next: qs("#musicNext")
-    };
+  function getMobileMenu() {
+    return $("#mobileMenu, .mobile-menu");
   }
 
-  function updatePlayerUI() {
-    const {
-      play,
-      title,
-      status
-    } = getPlayerElements();
-
-    const track = PLAYLIST[currentIndex];
-
-    if (title && track) {
-      title.textContent = track.title;
-    }
-
-    if (play) {
-      play.textContent = isPlaying ? "Ⅱ" : "▶";
-
-      play.setAttribute(
-        "aria-label",
-        isPlaying
-          ? "Pausar música"
-          : "Reproduzir música"
-      );
-    }
-
-    if (status) {
-      if (isPlaying) {
-        status.textContent = "Reproduzindo";
-      } else {
-        status.textContent = "Pausado";
-      }
-    }
-
-    renderPlaylist(
-      qs("#musicSearch")
-        ? qs("#musicSearch").value
-        : ""
-    );
+  function closeMobileMenu() {
+    const menu = getMobileMenu();
+    const button = $("#menuButton, #menuToggle, .menu-toggle, #mobileMenuButton");
+    if (menu) menu.classList.remove("active", "open");
+    document.body.classList.remove("mobile-menu-open");
+    if (button) button.setAttribute("aria-expanded", "false");
   }
 
-  function loadTrack(index, autoPlay = false) {
-    if (!PLAYLIST.length || !audio) return;
+  function initMobileMenu() {
+    if (window.__PA_MENU_READY__) return;
+    window.__PA_MENU_READY__ = true;
 
-    if (index < 0) {
-      index = PLAYLIST.length - 1;
-    }
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
 
-    if (index >= PLAYLIST.length) {
-      index = 0;
-    }
-
-    currentIndex = index;
-
-    const track = PLAYLIST[currentIndex];
-
-    save(STORAGE.index, currentIndex);
-    save(STORAGE.time, 0);
-
-    audio.pause();
-
-    audio.src = absoluteURL(track.file);
-    audio.load();
-
-    updatePlayerUI();
-
-    if (autoPlay) {
-      playMusic();
-    }
-  }
-
-  async function playMusic() {
-    if (!audio) return;
-
-    try {
-      await setupAudioAnalyser();
-
-      await audio.play();
-
-      isPlaying = true;
-
-      save(STORAGE.playing, "1");
-
-      updatePlayerUI();
-
-      startBeatAnimation();
-
-    } catch (error) {
-      isPlaying = false;
-
-      updatePlayerUI();
-
-      /*
-        Autoplay com som pode ser bloqueado pelo navegador.
-        Nesse caso esperamos a primeira interação do usuário.
-      */
-    }
-  }
-
-  function pauseMusic() {
-    if (!audio) return;
-
-    audio.pause();
-
-    isPlaying = false;
-
-    save(STORAGE.playing, "0");
-
-    updatePlayerUI();
-
-    stopBeatAnimation();
-  }
-
-  function toggleMusic() {
-    if (!audio) return;
-
-    if (audio.paused) {
-      playMusic();
-    } else {
-      pauseMusic();
-    }
-  }
-
-  function nextTrack() {
-    const nextIndex =
-      (currentIndex + 1) % PLAYLIST.length;
-
-    loadTrack(nextIndex, true);
-  }
-
-  /* =========================================================
-     AUTOPLAY / PRIMEIRA INTERAÇÃO
-  ========================================================= */
-
-  function installAutoplayUnlock() {
-    const events = [
-      "pointerdown",
-      "touchstart",
-      "keydown"
-    ];
-
-    const unlock = () => {
-      if (!audio) return;
-
-      if (audio.paused) {
-        playMusic();
+      const button = target.closest("#menuButton, #menuToggle, .menu-toggle, #mobileMenuButton");
+      if (button) {
+        const menu = getMobileMenu();
+        if (!menu) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const open = !menu.classList.contains("open");
+        menu.classList.toggle("open", open);
+        menu.classList.toggle("active", open);
+        document.body.classList.toggle("mobile-menu-open", open);
+        button.setAttribute("aria-expanded", open ? "true" : "false");
+        return;
       }
 
-      events.forEach((event) => {
-        document.removeEventListener(
-          event,
-          unlock,
-          true
-        );
-      });
-    };
+      const menu = getMobileMenu();
+      if (menu?.classList.contains("open") && !target.closest("#mobileMenu, .mobile-menu")) {
+        closeMobileMenu();
+      }
+    });
 
-    events.forEach((event) => {
-      document.addEventListener(
-        event,
-        unlock,
-        {
-          capture: true,
-          passive: true
-        }
-      );
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMobileMenu();
     });
   }
 
-  /* =========================================================
-     ÁUDIO / ANALYSER
-  ========================================================= */
+  /* ---------------- SEARCH / FILTERS ---------------- */
 
-  async function setupAudioAnalyser() {
-    if (!audio) return;
+  function initEditorTools() {
+    const input = $("#searchInput");
+    const grid = $("#editorsGrid");
+    const buttons = $$(".filter-button");
+    if (!input || !grid || input.dataset.paReady === "1") return;
 
-    if (audioContext) {
-      if (audioContext.state === "suspended") {
-        try {
-          await audioContext.resume();
-        } catch (_) {}
-      }
+    input.dataset.paReady = "1";
+    let filter = "todos";
 
-      return;
+    const apply = () => {
+      const term = input.value.trim().toLowerCase();
+      $$(".editor-profile", grid).forEach((card) => {
+        const haystack = `${card.dataset.search || ""} ${card.textContent || ""}`.toLowerCase();
+        const categories = (card.dataset.category || "todos").toLowerCase().split(/\s+/);
+        const matchesText = !term || haystack.includes(term);
+        const matchesFilter = filter === "todos" || categories.includes(filter) || categories.includes("todos");
+        card.hidden = !(matchesText && matchesFilter);
+      });
+    };
+
+    input.addEventListener("input", apply);
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filter = (button.dataset.filter || "todos").toLowerCase();
+        buttons.forEach((item) => item.classList.toggle("active", item === button));
+        apply();
+      });
+    });
+
+    apply();
+  }
+
+  function initEditorPhotos() {
+    $$(".editor-photo").forEach((image) => {
+      if (image.dataset.paReady === "1") return;
+      image.dataset.paReady = "1";
+      image.addEventListener("error", () => {
+        const name = image.alt.replace(/^Foto de perfil de\s*/i, "").trim() || "Editor";
+        const fallback = document.createElement("div");
+        fallback.className = "editor-photo-fallback";
+        fallback.setAttribute("aria-hidden", "true");
+        fallback.textContent = name.charAt(0).toUpperCase();
+        image.replaceWith(fallback);
+      }, { once: true });
+    });
+  }
+
+  /* ---------------- MUSIC UI ---------------- */
+
+  function playerMarkup() {
+    return `
+      <div class="music-player-main">
+        <button class="music-play" id="musicPlay" type="button" aria-label="Reproduzir música">▶</button>
+        <button class="music-title-button" id="musicTitleButton" type="button" aria-label="Abrir lista de músicas">
+          <span class="music-label">PALE ASCENDANCY</span>
+          <strong id="musicTitle">Meaningful Love</strong>
+          <span id="musicStatus">Toque para começar</span>
+        </button>
+        <button class="music-next" id="musicNext" type="button" aria-label="Próxima música">›</button>
+      </div>
+      <audio id="musicAudio" preload="auto" playsinline></audio>
+    `;
+  }
+
+  function ensurePlayer() {
+    let player = $("#musicPlayer");
+    if (!player) {
+      player = document.createElement("div");
+      player.id = "musicPlayer";
+      player.className = "music-player";
+      player.setAttribute("aria-label", "Player de música");
+      player.innerHTML = playerMarkup();
+      document.body.appendChild(player);
     }
 
+    audio = $("#musicAudio", player);
+    if (!audio) {
+      audio = document.createElement("audio");
+      audio.id = "musicAudio";
+      audio.preload = "auto";
+      audio.setAttribute("playsinline", "");
+      player.appendChild(audio);
+    }
+
+    return player;
+  }
+
+  function ensureMusicPanel() {
+    let panel = $("#musicPanel");
+    if (panel) return panel;
+
+    panel = document.createElement("aside");
+    panel.id = "musicPanel";
+    panel.className = "music-panel";
+    panel.hidden = true;
+    panel.setAttribute("aria-label", "Biblioteca musical");
+    panel.innerHTML = `
+      <div class="music-panel-inner">
+        <header class="music-panel-header">
+          <div>
+            <span class="music-panel-kicker">PALE ASCENDANCY</span>
+            <h2>Biblioteca musical</h2>
+            <p>Escolha uma faixa para continuar ouvindo enquanto navega.</p>
+          </div>
+          <button class="music-panel-close" id="musicPanelClose" type="button" aria-label="Fechar lista">×</button>
+        </header>
+        <label class="music-search-wrap">
+          <span aria-hidden="true">⌕</span>
+          <input id="musicSearch" class="music-search" type="search" placeholder="Pesquisar música..." autocomplete="off">
+        </label>
+        <div id="musicList" class="music-list"></div>
+        <div class="music-suggestion">
+          <strong>Sugira uma música</strong>
+          <p>Envie o nome de uma faixa que você gostaria de ver na playlist.</p>
+          <div class="music-suggestion-row">
+            <input id="musicSuggestionInput" type="text" maxlength="120" placeholder="Nome da música...">
+            <button id="musicSuggestionSend" type="button">Enviar</button>
+          </div>
+          <small id="musicSuggestionStatus" aria-live="polite"></small>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(panel);
+
+    $("#musicPanelClose").addEventListener("click", closeMusicPanel);
+    $("#musicSearch").addEventListener("input", (event) => renderPlaylist(event.target.value));
+    $("#musicSuggestionSend").addEventListener("click", sendSuggestion);
+    $("#musicSuggestionInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") sendSuggestion();
+    });
+
+    return panel;
+  }
+
+  function renderPlaylist(filter = "") {
+    const list = $("#musicList");
+    if (!list) return;
+    const term = filter.trim().toLowerCase();
+    list.innerHTML = "";
+
+    PLAYLIST.forEach((track, index) => {
+      if (term && !track.title.toLowerCase().includes(term)) return;
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "music-list-item";
+      item.classList.toggle("active", index === currentIndex);
+      item.innerHTML = `
+        <span class="music-list-number">${String(index + 1).padStart(2, "0")}</span>
+        <span class="music-list-name">${escapeHTML(track.title)}</span>
+        <span class="music-list-action">${index === currentIndex && !audio?.paused ? "Ⅱ" : "▶"}</span>
+      `;
+      item.addEventListener("click", () => selectTrack(index));
+      list.appendChild(item);
+    });
+
+    if (!list.children.length) {
+      list.innerHTML = '<div class="music-empty">Nenhuma música encontrada.</div>';
+    }
+  }
+
+  function openMusicPanel() {
+    const panel = ensureMusicPanel();
+    panel.hidden = false;
+    requestAnimationFrame(() => panel.classList.add("open"));
+    document.body.classList.add("music-panel-open");
+    renderPlaylist($("#musicSearch")?.value || "");
+  }
+
+  function closeMusicPanel() {
+    const panel = $("#musicPanel");
+    if (!panel) return;
+    panel.classList.remove("open");
+    document.body.classList.remove("music-panel-open");
+    setTimeout(() => { if (!panel.classList.contains("open")) panel.hidden = true; }, 220);
+  }
+
+  function updatePlayer() {
+    const track = PLAYLIST[currentIndex];
+    const play = $("#musicPlay");
+    const title = $("#musicTitle");
+    const status = $("#musicStatus");
+    if (title && track) title.textContent = track.title;
+    if (play) {
+      play.textContent = audio && !audio.paused ? "Ⅱ" : "▶";
+      play.setAttribute("aria-label", audio && !audio.paused ? "Pausar música" : "Reproduzir música");
+    }
+    if (status) status.textContent = audio && !audio.paused ? "Reproduzindo" : "Pausado";
+    renderPlaylist($("#musicSearch")?.value || "");
+  }
+
+  async function setupAudioAnalyser() {
+    if (audioContext || !audio) return;
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) return;
+
     try {
-      const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-      if (!AudioContext) return;
-
-      audioContext = new AudioContext();
-
+      audioContext = new Context();
       analyser = audioContext.createAnalyser();
-
       analyser.fftSize = 128;
-
-      analyser.smoothingTimeConstant = 0.82;
-
-      sourceNode =
-        audioContext.createMediaElementSource(audio);
-
+      analyser.smoothingTimeConstant = 0.8;
+      sourceNode = audioContext.createMediaElementSource(audio);
       sourceNode.connect(analyser);
-
       analyser.connect(audioContext.destination);
-
-      if (audioContext.state === "suspended") {
-        await audioContext.resume();
-      }
+      if (audioContext.state === "suspended") await audioContext.resume();
     } catch (_) {
       audioContext = null;
       analyser = null;
@@ -759,704 +332,436 @@
   }
 
   function startBeatAnimation() {
-    if (animationFrame) return;
+    if (beatFrame) return;
+    const data = analyser ? new Uint8Array(analyser.frequencyBinCount) : null;
 
-    const data =
-      analyser
-        ? new Uint8Array(analyser.frequencyBinCount)
-        : null;
-
-    const phone =
-      qs(".phone") ||
-      qs(".phone-mockup");
-
-    const beatBars =
-      qs("#beatBars");
-
-    const animate = () => {
-      animationFrame =
-        requestAnimationFrame(animate);
-
-      let intensity = 0;
-
+    const draw = () => {
+      beatFrame = requestAnimationFrame(draw);
+      let intensity = 0.25;
       if (analyser && data) {
         analyser.getByteFrequencyData(data);
-
         let total = 0;
-
-        for (let i = 0; i < data.length; i++) {
+        let low = 0;
+        for (let i = 0; i < data.length; i += 1) {
           total += data[i];
+          if (i < data.length * 0.35) low += data[i];
         }
-
-        intensity =
-          total / data.length / 255;
-      } else {
-        intensity =
-          0.35 +
-          Math.sin(Date.now() / 220) * 0.08;
+        intensity = Math.min(1, total / data.length / 255 * 0.45 + low / Math.max(1, data.length * 0.35) / 255 * 0.85);
       }
 
-      intensity = Math.max(
-        0,
-        Math.min(1, intensity)
-      );
-
+      const phone = $(".phone");
+      const glow = $(".phone-beat-glow");
+      const bars = $$("#beatBars i");
       if (phone) {
-        const scale =
-          1 + intensity * 0.018;
-
-        const glow =
-          0.25 + intensity * 0.75;
-
-        phone.style.setProperty(
-          "--beat-scale",
-          scale.toFixed(3)
-        );
-
-        phone.style.setProperty(
-          "--beat-glow",
-          glow.toFixed(2)
-        );
+        phone.style.setProperty("--beat-scale", (1 + intensity * 0.012).toFixed(4));
+        phone.style.setProperty("--beat-glow", `${Math.round(18 + intensity * 38)}px`);
       }
-
-      if (beatBars) {
-        const bars = qsa("i", beatBars);
-
-        bars.forEach((bar, index) => {
-          const value =
-            0.25 +
-            intensity *
-              (0.55 +
-                Math.sin(
-                  Date.now() / 120 +
-                  index
-                ) *
-                  0.25);
-
-          bar.style.transform =
-            `scaleY(${Math.max(
-              0.25,
-              Math.min(1.2, value)
-            )})`;
-        });
-      }
+      if (glow) glow.style.opacity = String(0.18 + intensity * 0.5);
+      bars.forEach((bar, index) => {
+        const wave = (Math.sin(performance.now() / (120 + index * 9) + index) + 1) / 2;
+        bar.style.height = `${Math.round(14 + intensity * 48 * (0.45 + wave * 0.55))}px`;
+        bar.style.opacity = String(0.35 + intensity * 0.65);
+      });
     };
-
-    animate();
+    draw();
   }
 
   function stopBeatAnimation() {
-    if (animationFrame) {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = null;
-    }
-
-    const phone =
-      qs(".phone") ||
-      qs(".phone-mockup");
-
+    if (beatFrame) cancelAnimationFrame(beatFrame);
+    beatFrame = 0;
+    const phone = $(".phone");
     if (phone) {
-      phone.style.setProperty(
-        "--beat-scale",
-        "1"
-      );
+      phone.style.setProperty("--beat-scale", "1");
+      phone.style.setProperty("--beat-glow", "18px");
+    }
+    $$("#beatBars i").forEach((bar) => {
+      bar.style.height = "14px";
+      bar.style.opacity = ".35";
+    });
+  }
 
-      phone.style.setProperty(
-        "--beat-glow",
-        "0.25"
-      );
+  async function playMusic() {
+    if (!audio) return false;
+    try {
+      await setupAudioAnalyser();
+      if (audioContext?.state === "suspended") await audioContext.resume();
+      await audio.play();
+      write(STORE.playing, "1");
+      updatePlayer();
+      startBeatAnimation();
+      return true;
+    } catch (_) {
+      write(STORE.playing, "0");
+      updatePlayer();
+      return false;
     }
   }
 
-  /* =========================================================
-     EVENTOS DO PLAYER
-  ========================================================= */
-
-  function initMusicControls() {
-    createPlayer();
-    ensurePanel();
-
-    const {
-      play,
-      titleButton,
-      next
-    } = getPlayerElements();
-
-    if (play && play.dataset.paMusicReady !== "1") {
-      play.dataset.paMusicReady = "1";
-
-      play.addEventListener(
-        "click",
-        (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
-          toggleMusic();
-        }
-      );
-    }
-
-    if (
-      titleButton &&
-      titleButton.dataset.paMusicReady !== "1"
-    ) {
-      titleButton.dataset.paMusicReady = "1";
-
-      titleButton.addEventListener(
-        "click",
-        (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
-          openMusicPanel();
-        }
-      );
-    }
-
-    if (
-      next &&
-      next.dataset.paMusicReady !== "1"
-    ) {
-      next.dataset.paMusicReady = "1";
-
-      next.addEventListener(
-        "click",
-        (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
-          nextTrack();
-        }
-      );
-    }
-
-    if (
-      audio &&
-      audio.dataset.paMusicReady !== "1"
-    ) {
-      audio.dataset.paMusicReady = "1";
-
-      audio.addEventListener(
-        "ended",
-        () => {
-          nextTrack();
-        }
-      );
-
-      audio.addEventListener(
-        "timeupdate",
-        () => {
-          if (
-            Number.isFinite(audio.currentTime)
-          ) {
-            save(
-              STORAGE.time,
-              audio.currentTime
-            );
-          }
-        }
-      );
-
-      audio.addEventListener(
-        "play",
-        () => {
-          isPlaying = true;
-
-          save(
-            STORAGE.playing,
-            "1"
-          );
-
-          updatePlayerUI();
-
-          startBeatAnimation();
-        }
-      );
-
-      audio.addEventListener(
-        "pause",
-        () => {
-          isPlaying = false;
-
-          save(
-            STORAGE.playing,
-            "0"
-          );
-
-          updatePlayerUI();
-
-          stopBeatAnimation();
-        }
-      );
-
-      audio.addEventListener(
-        "error",
-        () => {
-          const status =
-            qs("#musicStatus");
-
-          if (status) {
-            status.textContent =
-              "Não foi possível carregar esta faixa";
-          }
-
-          isPlaying = false;
-
-          updatePlayerUI();
-        }
-      );
-    }
-
-    restoreMusicState();
-  }
-
-  /* =========================================================
-     RESTAURAR MÚSICA
-  ========================================================= */
-
-  function restoreMusicState() {
+  function pauseMusic() {
     if (!audio) return;
-
-    let savedIndex =
-      parseInt(
-        load(STORAGE.index, "0"),
-        10
-      );
-
-    if (
-      !Number.isFinite(savedIndex) ||
-      savedIndex < 0 ||
-      savedIndex >= PLAYLIST.length
-    ) {
-      savedIndex = 0;
-    }
-
-    currentIndex = savedIndex;
-
-    const track = PLAYLIST[currentIndex];
-
-    if (!track) return;
-
-    audio.src =
-      absoluteURL(track.file);
-
-    audio.load();
-
-    const savedTime =
-      parseFloat(
-        load(STORAGE.time, "0")
-      );
-
-    const savedPlaying =
-      load(STORAGE.playing, "0") === "1";
-
-    audio.addEventListener(
-      "loadedmetadata",
-      () => {
-        if (
-          Number.isFinite(savedTime) &&
-          savedTime > 0 &&
-          savedTime < audio.duration
-        ) {
-          try {
-            audio.currentTime =
-              savedTime;
-          } catch (_) {}
-        }
-
-        updatePlayerUI();
-
-        if (savedPlaying) {
-          playMusic();
-        }
-      },
-      {
-        once: true
-      }
-    );
-
-    updatePlayerUI();
-
-    /*
-      Tentativa inicial de autoplay.
-    */
-    if (savedPlaying || currentIndex === 0) {
-      setTimeout(() => {
-        playMusic();
-      }, 250);
-    }
-
-    installAutoplayUnlock();
+    audio.pause();
+    write(STORE.playing, "0");
+    write(STORE.time, Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
+    updatePlayer();
+    stopBeatAnimation();
   }
 
-  /* =========================================================
-     SUGESTÕES DE MÚSICAS
-  ========================================================= */
+  function setTrack(index, autoplay = false, restoreTime = 0) {
+    if (!audio) return;
+    currentIndex = (index + PLAYLIST.length) % PLAYLIST.length;
+    const track = PLAYLIST[currentIndex];
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    audio.src = absoluteURL(track.file);
+    audio.preload = "auto";
+    audio.load();
+    write(STORE.index, currentIndex);
+    write(STORE.time, restoreTime || 0);
+    write(STORE.playing, autoplay ? "1" : "0");
+    updatePlayer();
+
+    if (restoreTime > 0) {
+      const restore = () => {
+        if (Number.isFinite(audio.duration) && restoreTime < audio.duration) audio.currentTime = restoreTime;
+      };
+      if (audio.readyState >= 1) restore();
+      else audio.addEventListener("loadedmetadata", restore, { once: true });
+    }
+
+    if (autoplay) {
+      const attempt = () => { playMusic(); };
+      if (audio.readyState >= 2) attempt();
+      else audio.addEventListener("canplay", attempt, { once: true });
+    }
+  }
+
+  function selectTrack(index) {
+    failed.delete(index);
+    setTrack(index, true);
+    closeMusicPanel();
+  }
+
+  function nextTrack() {
+    let next = (currentIndex + 1) % PLAYLIST.length;
+    let guard = 0;
+    while (failed.has(next) && guard < PLAYLIST.length) {
+      next = (next + 1) % PLAYLIST.length;
+      guard += 1;
+    }
+    if (guard >= PLAYLIST.length) failed.clear();
+    setTrack(next, true);
+  }
+
+  function handleAudioError() {
+    if (!audio) return;
+    failed.add(currentIndex);
+    if (failed.size >= PLAYLIST.length) {
+      failed.clear();
+      const status = $("#musicStatus");
+      if (status) status.textContent = "Não foi possível carregar as músicas.";
+      return;
+    }
+    nextTrack();
+  }
 
   function sendSuggestion() {
-    const input =
-      qs("#musicSuggestionInput");
-
-    const status =
-      qs("#musicSuggestionStatus");
-
+    const input = $("#musicSuggestionInput");
+    const status = $("#musicSuggestionStatus");
     if (!input || !status) return;
-
-    const value =
-      input.value.trim();
-
+    const value = input.value.trim();
     if (!value) {
-      status.textContent =
-        "Digite o nome de uma música.";
-
+      status.textContent = "Digite o nome da música.";
       return;
     }
 
     let suggestions = [];
-
-    try {
-      suggestions =
-        JSON.parse(
-          load(
-            STORAGE.suggestions,
-            "[]"
-          )
-        );
-
-      if (!Array.isArray(suggestions)) {
-        suggestions = [];
-      }
-    } catch (_) {
-      suggestions = [];
-    }
-
-    suggestions.push({
-      music: value,
-      date: new Date().toISOString()
-    });
-
-    save(
-      STORAGE.suggestions,
-      JSON.stringify(suggestions)
-    );
-
+    try { suggestions = JSON.parse(read(STORE.suggestions, "[]")); } catch (_) {}
+    if (!Array.isArray(suggestions)) suggestions = [];
+    suggestions.push({ music: value, date: new Date().toISOString() });
+    write(STORE.suggestions, JSON.stringify(suggestions));
+    status.textContent = "Sugestão registrada.";
     input.value = "";
-
-    status.textContent =
-      "Sugestão registrada neste dispositivo.";
-
-    setTimeout(() => {
-      status.textContent = "";
-    }, 3500);
   }
 
-  /* =========================================================
-     NAVEGAÇÃO ENTRE PÁGINAS
-     
-     Mantém o player e o áudio vivos quando possível,
-     evitando que a música reinicie.
-  ========================================================= */
+  function initMusic() {
+    ensurePlayer();
+    ensureMusicPanel();
 
-  function initSpaNavigation() {
-    if (
-      window.__PA_SPA_INITIALIZED__
-    ) {
-      return;
+    const play = $("#musicPlay");
+    const title = $("#musicTitleButton");
+    const next = $("#musicNext");
+
+    if (play && play.dataset.paReady !== "1") {
+      play.dataset.paReady = "1";
+      play.addEventListener("click", () => audio?.paused ? playMusic() : pauseMusic());
+    }
+    if (title && title.dataset.paReady !== "1") {
+      title.dataset.paReady = "1";
+      title.addEventListener("click", openMusicPanel);
+    }
+    if (next && next.dataset.paReady !== "1") {
+      next.dataset.paReady = "1";
+      next.addEventListener("click", nextTrack);
     }
 
-    window.__PA_SPA_INITIALIZED__ = true;
+    if (audio?.dataset.paReady !== "1") {
+      audio.dataset.paReady = "1";
+      audio.addEventListener("ended", nextTrack);
+      audio.addEventListener("error", handleAudioError);
+      audio.addEventListener("play", () => { write(STORE.playing, "1"); updatePlayer(); startBeatAnimation(); });
+      audio.addEventListener("pause", () => { write(STORE.playing, "0"); updatePlayer(); stopBeatAnimation(); });
+      audio.addEventListener("timeupdate", () => {
+        if (!audio.paused) write(STORE.time, audio.currentTime || 0);
+      });
+    }
 
-    document.addEventListener(
-      "click",
-      async (event) => {
-        const link =
-          event.target.closest(
-            "a[href]"
-          );
+    let index = parseInt(read(STORE.index, "0"), 10);
+    if (!Number.isInteger(index) || index < 0 || index >= PLAYLIST.length) index = 0;
+    const savedTime = Math.max(0, parseFloat(read(STORE.time, "0")) || 0);
+    const shouldPlay = read(STORE.playing, "1") === "1";
+    currentIndex = index;
+    setTrack(index, false, savedTime);
 
-        if (!link) return;
-
-        if (
-          event.defaultPrevented ||
-          event.button !== 0 ||
-          event.metaKey ||
-          event.ctrlKey ||
-          event.shiftKey ||
-          event.altKey
-        ) {
-          return;
-        }
-
-        const href =
-          link.getAttribute("href");
-
-        if (
-          !href ||
-          href.startsWith("#") ||
-          href.startsWith("mailto:") ||
-          href.startsWith("tel:")
-        ) {
-          return;
-        }
-
-        let url;
-
-        try {
-          url =
-            new URL(
-              href,
-              location.href
-            );
-        } catch (_) {
-          return;
-        }
-
-        if (
-          url.origin !== location.origin
-        ) {
-          return;
-        }
-
-        if (
-          url.pathname === location.pathname &&
-          url.search === location.search &&
-          url.hash
-        ) {
-          return;
-        }
-
-        const extension =
-          url.pathname
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-        if (
-          extension &&
-          ![
-            "html",
-            "htm"
-          ].includes(extension)
-        ) {
-          return;
-        }
-
-        event.preventDefault();
-
-        await navigateWithoutReload(
-          url.href,
-          true
-        );
-      }
-    );
+    if (shouldPlay) {
+      setTimeout(() => {
+        playMusic().then((started) => {
+          if (!started) installAutoplayUnlock();
+        });
+      }, 250);
+    }
   }
 
-  async function navigateWithoutReload(
-    targetURL,
-    pushState = true
-  ) {
-    if (navigationInProgress) {
-      return;
-    }
+  let unlockInstalled = false;
+  function installAutoplayUnlock() {
+    if (unlockInstalled) return;
+    unlockInstalled = true;
+    const unlock = () => {
+      if (audio?.paused) playMusic();
+      ["pointerdown", "touchstart", "keydown"].forEach((type) => document.removeEventListener(type, unlock, true));
+      unlockInstalled = false;
+    };
+    ["pointerdown", "touchstart", "keydown"].forEach((type) => document.addEventListener(type, unlock, true));
+  }
 
-    navigationInProgress = true;
+  /* ---------------- SUPABASE / HEADER ---------------- */
 
+  function ensureSupabase() {
+    if (window.supabase?.createClient) return Promise.resolve(true);
+    if (supabasePromise) return supabasePromise;
+    supabasePromise = new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.async = true;
+      script.onload = () => resolve(!!window.supabase?.createClient);
+      script.onerror = () => resolve(false);
+      document.head.appendChild(script);
+    });
+    return supabasePromise;
+  }
+
+  function getSupabaseClient() {
+    if (supabaseClient) return supabaseClient;
+    if (!window.supabase?.createClient) return null;
     try {
-      const response =
-        await fetch(
-          targetURL,
-          {
-            credentials: "same-origin"
-          }
-        );
+      supabaseClient = window.supabase.createClient(
+        "https://fnyellunugdfesprmvzm.supabase.co",
+        "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK",
+        { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
+      );
+      return supabaseClient;
+    } catch (_) {
+      return null;
+    }
+  }
 
-      if (!response.ok) {
-        throw new Error(
-          "Página não encontrada"
-        );
-      }
+  function applyCachedHeaderProfile() {
+    const cached = (() => {
+      try { return JSON.parse(read(STORE.profile, "null")); } catch (_) { return null; }
+    })();
+    const initial = $("#headerProfileInitial");
+    const image = $("#headerProfileImage");
+    if (!cached || !initial || !image) return;
+    const name = String(cached.name || "U").trim() || "U";
+    initial.textContent = name.charAt(0).toUpperCase();
+    if (cached.avatar_url) {
+      image.src = cached.avatar_url;
+      image.hidden = false;
+      initial.hidden = true;
+    }
+  }
 
-      const html =
-        await response.text();
+  function initAccountHeader() {
+    const loggedOut = $("#loggedOutArea");
+    const loggedIn = $("#loggedInArea");
+    const mobileOut = $("#mobileLoggedOut");
+    const mobileIn = $("#mobileLoggedIn");
+    if (!loggedOut || !loggedIn) return;
 
-      const parser =
-        new DOMParser();
+    applyCachedHeaderProfile();
 
-      const doc =
-        parser.parseFromString(
-          html,
-          "text/html"
-        );
+    const client = getSupabaseClient();
+    if (!client) {
+      ensureSupabase().then(() => initAccountHeader());
+      return;
+    }
 
-      const newMain =
-        doc.querySelector("main");
-
-      const currentMain =
-        document.querySelector("main");
-
-      if (
-        !newMain ||
-        !currentMain
-      ) {
-        location.href = targetURL;
+    client.auth.getSession().then(async ({ data }) => {
+      const session = data?.session;
+      if (!session?.user) {
+        loggedOut.hidden = false;
+        loggedIn.hidden = true;
+        if (mobileOut) mobileOut.hidden = false;
+        if (mobileIn) mobileIn.hidden = true;
         return;
       }
 
-      currentMain.replaceWith(
-        newMain
-      );
+      loggedOut.hidden = true;
+      loggedIn.hidden = false;
+      if (mobileOut) mobileOut.hidden = true;
+      if (mobileIn) mobileIn.hidden = false;
 
-      if (doc.title) {
-        document.title =
-          doc.title;
+      const initial = $("#headerProfileInitial");
+      const image = $("#headerProfileImage");
+      if (!initial || !image) return;
+
+      let profile = null;
+      try {
+        const result = await client.from("profile").select("nome,nome_artistico,avatar_url").eq("id", session.user.id).maybeSingle();
+        profile = result.data || null;
+      } catch (_) {}
+
+      const name = String(profile?.nome_artistico || profile?.nome || session.user.email || "U").trim() || "U";
+      initial.textContent = name.charAt(0).toUpperCase();
+      if (profile?.avatar_url) {
+        image.src = profile.avatar_url;
+        image.hidden = false;
+        initial.hidden = true;
+      } else {
+        image.hidden = true;
+        image.removeAttribute("src");
+        initial.hidden = false;
       }
 
-      if (pushState) {
-        history.pushState(
-          {
-            paNavigation: true
-          },
-          "",
-          targetURL
-        );
+      write(STORE.profile, JSON.stringify({ name, avatar_url: profile?.avatar_url || "" }));
+    }).catch(() => {});
+  }
+
+  /* ---------------- NAVIGATION ---------------- */
+
+  function pageName(pathname) {
+    return pathname.split("/").pop() || "index.html";
+  }
+
+  function shouldUseSpa(link, event) {
+    if (!link || event.defaultPrevented || event.button !== 0) return false;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    if (link.target === "_blank" || link.hasAttribute("download")) return false;
+
+    const href = link.getAttribute("href") || "";
+    if (!href || /^(mailto:|tel:|javascript:)/i.test(href)) return false;
+
+    let url;
+    try { url = new URL(href, location.href); } catch (_) { return false; }
+    if (url.origin !== location.origin) return false;
+    if (url.pathname === location.pathname && url.hash) return false;
+
+    const extension = url.pathname.split(".").pop().toLowerCase();
+    if (extension && !["html", "htm"].includes(extension)) return false;
+    if (AUTH_PAGES.has(pageName(url.pathname))) return false;
+    return true;
+  }
+
+  function updateActiveLinks() {
+    const current = pageName(location.pathname);
+    $$('a[href]').forEach((link) => {
+      try {
+        const url = new URL(link.href, location.href);
+        link.classList.toggle("active", url.origin === location.origin && pageName(url.pathname) === current && !url.hash);
+      } catch (_) {}
+    });
+  }
+
+  async function navigate(url, push = true) {
+    if (navigating) return;
+    navigating = true;
+    try {
+      const target = new URL(url, location.href);
+      const response = await fetch(target.href, { credentials: "same-origin", cache: "no-store" });
+      if (!response.ok) throw new Error("navigation");
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const nextMain = $("main", doc);
+      const currentMain = $("main");
+      if (!nextMain || !currentMain) throw new Error("page");
+
+      const nextHeader = $("header", doc);
+      const currentHeader = $("header");
+      const nextMenu = $(".mobile-menu", doc);
+      const currentMenu = $(".mobile-menu");
+
+      currentMain.replaceWith(nextMain);
+      if (currentHeader && nextHeader) currentHeader.replaceWith(nextHeader.cloneNode(true));
+      if (currentMenu && nextMenu) currentMenu.replaceWith(nextMenu.cloneNode(true));
+      if (doc.title) document.title = doc.title;
+      if (push) history.pushState({ pale: true }, "", target.href);
+
+      closeMobileMenu();
+      closeMusicPanel();
+      initEditorTools();
+      initEditorPhotos();
+      initAccountHeader();
+      updateActiveLinks();
+        window.scrollTo(0, 0);
+
+      if (target.hash) {
+        setTimeout(() => {
+          const targetElement = document.getElementById(target.hash.slice(1));
+          targetElement?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 40);
       }
-
-      window.scrollTo(
-        0,
-        0
-      );
-
-      /*
-        Não recriamos o player.
-        O áudio continua exatamente onde estava.
-      */
-
-      initMobileMenu();
-      initSearch();
-      initExternalLinks();
-
-      /*
-        Algumas páginas possuem elementos que
-        dependem do carregamento do DOM.
-      */
-      document.dispatchEvent(
-        new CustomEvent(
-          "pa:navigation",
-          {
-            detail: {
-              url: targetURL
-            }
-          }
-        )
-      );
-
-    } catch (error) {
-      /*
-        Se a navegação sem reload falhar,
-        fazemos a navegação normal.
-      */
-
-      location.href = targetURL;
-
+    } catch (_) {
+      location.href = url;
     } finally {
-      navigationInProgress = false;
+      navigating = false;
     }
   }
 
-  function initHistoryNavigation() {
-    window.addEventListener(
-      "popstate",
-      () => {
-        location.reload();
-      }
-    );
+  function initNavigation() {
+    if (window.__PA_NAV_READY__) return;
+    window.__PA_NAV_READY__ = true;
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest("a[href]");
+      if (!shouldUseSpa(link, event)) return;
+      event.preventDefault();
+      navigate(link.href, true);
+    });
+    window.addEventListener("popstate", () => navigate(location.href, false));
   }
 
-  /* =========================================================
-     PROTEÇÃO CONTRA RECARREGAMENTO
-  ========================================================= */
-
-  window.addEventListener(
-    "beforeunload",
-    () => {
-      if (!audio) return;
-
-      save(
-        STORAGE.index,
-        currentIndex
-      );
-
-      save(
-        STORAGE.time,
-        audio.currentTime || 0
-      );
-
-      save(
-        STORAGE.playing,
-        audio.paused
-          ? "0"
-          : "1"
-      );
-    }
-  );
-
-  /* =========================================================
-     API GLOBAL
-  ========================================================= */
-
-  window.PaleAscendancy =
-    window.PaleAscendancy || {};
-
-  window.PaleAscendancy.music = {
-    play: playMusic,
-    pause: pauseMusic,
-    toggle: toggleMusic,
-    next: nextTrack,
-    open: openMusicPanel,
-    close: closeMusicPanel,
-    getPlaylist: () =>
-      PLAYLIST.slice(),
-    getCurrent: () =>
-      PLAYLIST[currentIndex]
-  };
-
-  /* =========================================================
-     INICIALIZAÇÃO
-  ========================================================= */
 
   function boot() {
     initMobileMenu();
-    initSearch();
-    initExternalLinks();
-
-    /*
-      Player global.
-      Ele é criado também nas páginas que não possuem
-      o HTML do player.
-    */
-    initMusicControls();
-
-    /*
-      Navegação sem recarregar a página.
-      Isso permite manter o áudio tocando.
-    */
-    initSpaNavigation();
-
-    initHistoryNavigation();
+    initNavigation();
+    initEditorTools();
+    initEditorPhotos();
+    initMusic();
+    initAccountHeader();
+    updateActiveLinks();
   }
 
-  if (
-    document.readyState === "loading"
-  ) {
-    document.addEventListener(
-      "DOMContentLoaded",
-      boot,
-      {
-        once: true
-      }
-    );
-  } else {
-    boot();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
 
+  window.PaleAscendancy = {
+    music: {
+      play: playMusic,
+      pause: pauseMusic,
+      next: nextTrack,
+      open: openMusicPanel,
+      close: closeMusicPanel,
+      playlist: PLAYLIST
+    }
+  };
 })();
