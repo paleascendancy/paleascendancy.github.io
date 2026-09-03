@@ -307,6 +307,40 @@ function updateInitial(
 
 
 /* ==================================================
+   CACHE VISUAL — mostra os dados conhecidos imediatamente
+================================================== */
+
+function showCachedProfile() {
+    try {
+        const cached = JSON.parse(
+            localStorage.getItem("pa_profile_cache") || "null"
+        );
+
+        if (!cached) return;
+
+        const name = cached.name || "";
+        const initial = document.getElementById("profileInitial");
+        const nameArtist = document.getElementById("profileNomeArtistico");
+
+        if (initial && name) {
+            initial.textContent = name.charAt(0).toUpperCase();
+        }
+
+        if (nameArtist && name) {
+            nameArtist.textContent = name;
+        }
+
+        if (cached.avatar_url) {
+            profileImage.src = cached.avatar_url;
+            profileImage.hidden = false;
+            if (initial) initial.hidden = true;
+        }
+    } catch (_) {}
+}
+
+showCachedProfile();
+
+/* ==================================================
    CARREGAR PERFIL
 ================================================== */
 
@@ -363,7 +397,7 @@ async function loadProfile() {
         } =
             await supabaseClient
                 .from("profile")
-                .select("*")
+                .select("nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord")
                 .eq("id", user.id)
                 .maybeSingle();
 

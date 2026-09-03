@@ -897,3 +897,305 @@ body.music-panel-open::after{
   .logged-in-area{display:none!important}
   .logged-out-area{display:none!important}
 }
+
+/* =========================================================
+   PALE ASCENDANCY V8 — CORREÇÕES DEFINITIVAS
+========================================================= */
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:hidden!important;
+}
+
+body{
+  position:relative;
+}
+
+main,
+.hero,
+.hero-grid,
+.hero-content,
+.hero-visual,
+.section,
+.service-preview,
+.bento-grid,
+.editor-grid,
+.editors-grid{
+  min-width:0!important;
+  max-width:100%;
+}
+
+.hero-grid{
+  width:100%;
+}
+
+.hero-content h1,
+.hero-content p{
+  overflow-wrap:anywhere;
+}
+
+/* Menu mobile sempre acima de qualquer conteúdo */
+.header{
+  z-index:10000!important;
+}
+.mobile-menu{
+  z-index:10020!important;
+  max-width:calc(100vw - 28px)!important;
+  box-sizing:border-box!important;
+}
+.mobile-menu.active,
+.mobile-menu.open{
+  display:flex!important;
+}
+
+body.mobile-menu-open{
+  overflow:hidden!important;
+}
+
+/* No celular, mostrar o perfil real e não o ícone de fallback */
+@media(max-width:900px){
+  .account-area{
+    display:flex!important;
+    align-items:center!important;
+    margin-left:auto!important;
+    min-width:0!important;
+  }
+
+  .logged-in-area:not([hidden]){
+    display:flex!important;
+  }
+
+  .logged-out-area[hidden],
+  .logged-in-area[hidden],
+  .profile-quick[hidden]{
+    display:none!important;
+  }
+
+  .profile-quick{
+    display:none!important;
+  }
+
+  .profile-link{
+    display:inline-flex!important;
+    width:34px!important;
+    height:34px!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+
+  .profile-link-text{
+    display:none!important;
+  }
+
+  .profile-avatar-small{
+    width:34px!important;
+    height:34px!important;
+    min-width:34px!important;
+  }
+}
+
+/* Hero verdadeiramente responsivo */
+@media(max-width:820px){
+  .hero{
+    width:min(100% - 28px,1160px)!important;
+    padding-top:58px!important;
+  }
+
+  .hero-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:30px!important;
+  }
+
+  .hero-content{
+    width:100%!important;
+  }
+
+  .hero-visual{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+}
+
+@media(max-width:650px){
+  .header{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+
+  .brand{
+    min-width:0!important;
+    max-width:calc(100vw - 125px)!important;
+  }
+
+  .brand span{
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .hero{
+    width:calc(100% - 28px)!important;
+    padding:45px 0 55px!important;
+  }
+
+  .hero-content h1{
+    max-width:100%!important;
+  }
+
+  .hero-lead{
+    max-width:100%!important;
+    font-size:.94rem!important;
+  }
+
+  .hero-buttons{
+    width:100%!important;
+  }
+
+  .hero-buttons a{
+    max-width:100%!important;
+  }
+
+  .phone-scene{
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
+
+/* Visualizador musical atrás do celular */
+.phone-scene .beat-ring,
+.phone-scene .phone-beat-glow{
+  pointer-events:none!important;
+}
+
+.phone-scene .beat-bars{
+  z-index:1!important;
+  bottom:24px!important;
+  width:270px!important;
+  height:74px!important;
+  opacity:.9!important;
+}
+
+.phone-scene .phone-beat-glow{
+  z-index:1!important;
+}
+
+.phone-scene .phone{
+  z-index:8!important;
+}
+
+.phone-scene .phone-frame{
+  z-index:9!important;
+}
+
+/* Mais vida na animação, sem cobrir o celular */
+.beat-ring-a{
+  animation:paRingA 2.7s ease-in-out infinite!important;
+}
+
+.beat-ring-b{
+  animation:paRingB 3.4s ease-in-out infinite!important;
+}
+
+.beat-bars i{
+  animation:paBarIdle 1.15s ease-in-out infinite!important;
+  transform-origin:center bottom!important;
+}
+
+.beat-bars i:nth-child(2n){animation-delay:-.32s!important}
+.beat-bars i:nth-child(3n){animation-delay:-.58s!important}
+.beat-bars i:nth-child(4n){animation-delay:-.81s!important}
+
+@keyframes paRingA{
+  0%,100%{transform:translate(-50%,-50%) scale(.91);opacity:.30}
+  50%{transform:translate(-50%,-50%) scale(1.05);opacity:.72}
+}
+
+@keyframes paRingB{
+  0%,100%{transform:translate(-50%,-50%) scale(1.02);opacity:.22}
+  50%{transform:translate(-50%,-50%) scale(.94);opacity:.58}
+}
+
+@keyframes paBarIdle{
+  0%,100%{filter:brightness(.82);}
+  50%{filter:brightness(1.45);}
+}
+
+/* Player nunca ultrapassa a largura da tela */
+.music-player{
+  max-width:calc(100vw - 20px)!important;
+  min-width:0!important;
+}
+
+.music-title-button{
+  min-width:0!important;
+}
+
+/* Biblioteca central e realmente rolável */
+.music-panel{
+  position:fixed!important;
+  top:50%!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:min(430px,calc(100vw - 20px))!important;
+  height:min(650px,calc(100vh - 30px))!important;
+  max-height:calc(100vh - 30px)!important;
+  transform:translate(-50%,-50%) scale(.96)!important;
+}
+
+.music-panel.open,
+.music-panel.active{
+  transform:translate(-50%,-50%) scale(1)!important;
+}
+
+.music-panel-inner{
+  height:100%!important;
+  max-height:none!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+
+.music-list{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior:contain!important;
+}
+
+@media(max-width:650px){
+  .music-panel{
+    width:calc(100vw - 18px)!important;
+    height:min(620px,calc(100vh - 24px))!important;
+    max-height:calc(100vh - 24px)!important;
+    border-radius:24px!important;
+  }
+
+  .music-panel-inner{
+    padding:15px!important;
+  }
+
+  .music-list-item{
+    min-height:44px!important;
+  }
+}
+
+/* Fundo do painel sem interferir nos cliques */
+body.music-panel-open::after{
+  pointer-events:none!important;
+  z-index:21999!important;
+}
+
+/* Estados de carregamento do avatar */
+.profile-avatar-small img{
+  background:linear-gradient(135deg,rgba(93,225,255,.10),rgba(139,124,255,.16));
+}
+
+.profile-avatar-small img[hidden]{
+  display:none!important;
+}
