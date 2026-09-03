@@ -81,3 +81,348 @@ footer{padding:40px 18px 52px;text-align:center;border-top:1px solid var(--line)
 body.music-panel-open::after{content:"";position:fixed;inset:0;z-index:21999;background:rgba(1,4,12,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* =========================================================
+   PALE ASCENDANCY — VISUAL REFINEMENT V11
+   Design: hierarchy, contrast, spacing, restrained accents
+========================================================= */
+:root{
+  --bg:#070b16;
+  --bg-deep:#040710;
+  --surface:#0d1424;
+  --surface-2:#151e32;
+  --surface-soft:rgba(93,225,255,.065);
+  --text:#f4f7fb;
+  --text-soft:#cbd5e3;
+  --muted:#8998ab;
+  --line:rgba(183,205,232,.12);
+  --line-strong:rgba(183,205,232,.22);
+  --cyan:#62d9f5;
+  --violet:#9a8cff;
+  --gold:#e7c777;
+  --pink:#ed79bc;
+  --shadow:0 24px 70px rgba(0,0,0,.32);
+}
+
+body{
+  background:
+    radial-gradient(900px 520px at 8% -8%,rgba(98,217,245,.075),transparent 62%),
+    radial-gradient(760px 560px at 94% 16%,rgba(154,140,255,.065),transparent 62%),
+    radial-gradient(700px 500px at 48% 100%,rgba(231,199,119,.025),transparent 65%),
+    linear-gradient(180deg,#080d19 0%,#060a13 55%,#050811 100%);
+}
+
+.header{
+  background:rgba(6,10,19,.82);
+  border-bottom-color:rgba(183,205,232,.10);
+}
+
+.brand{font-size:.78rem;letter-spacing:.10em}
+.brand img{border-radius:9px}
+
+.nav a{
+  font-size:.76rem;
+  font-weight:600;
+  letter-spacing:.01em;
+}
+.nav a:hover,.nav a.active{
+  background:rgba(255,255,255,.045);
+}
+
+.discord-button{
+  background:rgba(255,255,255,.035);
+  border-color:rgba(183,205,232,.18);
+  padding:8px 12px;
+}
+.discord-button:hover{
+  background:rgba(98,217,245,.07);
+  border-color:rgba(98,217,245,.30);
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:.64rem;
+  letter-spacing:.20em;
+  font-weight:800;
+}
+
+.hero{
+  padding-top:88px;
+  padding-bottom:72px;
+}
+.hero-grid{gap:64px}
+.hero-content h1{
+  font-size:clamp(3.15rem,6.2vw,5.65rem);
+  line-height:.98;
+  letter-spacing:-.065em;
+  font-weight:700;
+  text-wrap:balance;
+}
+.hero-content h1 span{color:var(--gold)}
+.hero-lead{
+  max-width:570px;
+  margin:24px 0 30px;
+  color:#a7b3c3;
+  font-size:.94rem;
+  line-height:1.8;
+}
+
+.hero-buttons{gap:10px}
+.primary-button,.secondary-button,.card-link{
+  min-height:42px;
+  padding:9px 15px;
+  border-radius:10px;
+  font-size:.76rem;
+  letter-spacing:.01em;
+}
+.primary-button{
+  background:linear-gradient(135deg,#66d9f2,#a4e2f2);
+  border-color:rgba(126,226,245,.8);
+  box-shadow:0 10px 30px rgba(98,217,245,.11);
+}
+.primary-button:hover{
+  box-shadow:0 14px 34px rgba(98,217,245,.17);
+}
+.secondary-button{
+  background:rgba(255,255,255,.025);
+  border-color:rgba(183,205,232,.20);
+}
+.secondary-button:hover{
+  background:rgba(255,255,255,.055);
+  border-color:rgba(183,205,232,.32);
+}
+
+.hero-visual{padding-top:6px}
+.phone-scene{min-height:650px}
+.phone{
+  width:286px;
+  box-shadow:0 34px 75px rgba(0,0,0,.55),0 0 45px rgba(98,217,245,.10);
+}
+.phone-caption{
+  position:relative;
+  z-index:20;
+  width:min(360px,90%);
+  margin-top:12px;
+  padding:0 10px;
+  gap:6px;
+}
+.phone-caption strong{
+  font-size:.70rem;
+  letter-spacing:.20em;
+  color:#e9eef6;
+}
+.phone-caption span{
+  font-size:.68rem;
+  line-height:1.55;
+  color:#8e9caf;
+}
+.beat-bars{
+  z-index:3;
+  opacity:.72;
+}
+
+.section{padding:82px 0}
+.section-heading{margin-bottom:34px}
+.section-heading h2{
+  margin:0;
+  font-size:clamp(2.1rem,4.3vw,3.25rem);
+  line-height:1.04;
+  letter-spacing:-.052em;
+  font-weight:700;
+}
+.section-heading>p:last-child{
+  margin-top:13px;
+  line-height:1.75;
+}
+
+.bento-grid,.service-preview,.editors-grid{gap:16px}
+.bento-card,.service-preview,.editor-profile,.auth-form,.profile-view,.join-card,.contact-panel,.editors-cta{
+  background:
+    linear-gradient(145deg,rgba(17,28,48,.90),rgba(8,13,25,.96));
+  border-color:rgba(183,205,232,.12);
+  box-shadow:0 18px 55px rgba(0,0,0,.18);
+}
+.bento-card:hover,.service-preview:hover{
+  border-color:rgba(98,217,245,.20);
+}
+
+.editors-page{padding-top:70px}
+.editors-heading{max-width:760px;margin-bottom:30px}
+.editors-heading h1{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:clamp(2.7rem,5.4vw,4.7rem);
+  line-height:1;
+  letter-spacing:-.06em;
+  font-weight:700;
+}
+.editors-heading>p:last-child{
+  line-height:1.75;
+  max-width:680px;
+}
+
+.editor-tools{
+  padding:14px;
+  margin-bottom:24px;
+  border:1px solid rgba(183,205,232,.10);
+  border-radius:16px;
+  background:rgba(7,13,25,.48);
+}
+.search-box{
+  background:rgba(255,255,255,.025);
+  border-color:rgba(183,205,232,.14);
+  padding:11px 13px;
+  font-size:.78rem;
+}
+.filters{gap:6px}
+.filter-button{
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:.66rem;
+  font-weight:700;
+  transition:.18s ease;
+}
+.filter-button:hover{
+  background:rgba(98,217,245,.07);
+  border-color:rgba(98,217,245,.24);
+  color:var(--text);
+}
+.filter-button.active{
+  background:rgba(98,217,245,.12);
+  border-color:rgba(98,217,245,.34);
+  color:#dff8ff;
+}
+
+.editors-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.editor-profile{
+  min-height:330px;
+  padding:24px;
+  border-radius:18px;
+  position:relative;
+  overflow:hidden;
+}
+.editor-profile::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(98,217,245,.32),transparent);
+  opacity:.65;
+}
+.editor-profile:hover{
+  transform:translateY(-4px);
+  border-color:rgba(98,217,245,.23);
+  box-shadow:0 24px 60px rgba(0,0,0,.25);
+}
+.editor-status{
+  margin-bottom:20px;
+  font-size:.64rem;
+  font-weight:600;
+}
+.editor-avatar,.editor-photo-fallback{
+  width:82px;
+  height:82px;
+  margin-bottom:16px;
+  border-color:rgba(183,205,232,.16);
+  box-shadow:0 12px 28px rgba(0,0,0,.22);
+}
+.editor-profile h2{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:1.28rem;
+  line-height:1.15;
+  letter-spacing:-.025em;
+  font-weight:700;
+}
+.editor-role{
+  margin-top:7px;
+  color:var(--gold);
+  font-size:.60rem;
+  letter-spacing:.16em;
+}
+.editor-description{
+  margin:13px 0;
+  color:#919eb0;
+  font-size:.75rem;
+  line-height:1.65;
+}
+.editor-tags{gap:5px}
+.editor-tag{
+  padding:4px 7px;
+  border-radius:7px;
+  font-size:.61rem;
+  color:#b9c6d6;
+  border-color:rgba(183,205,232,.11);
+  background:rgba(255,255,255,.018);
+}
+.editor-footer{
+  margin-top:16px;
+  padding-top:12px;
+  border-top-color:rgba(183,205,232,.10);
+}
+.editor-specialty-label{
+  color:#dce4ee;
+  font-size:.66rem;
+}
+
+.music-player{
+  border-color:rgba(183,205,232,.16);
+  background:rgba(7,12,23,.90);
+}
+.music-player-main{gap:7px}
+
+@media(max-width:900px){
+  .hero{padding-top:54px}
+  .hero-grid{gap:30px}
+  .hero-content h1{font-size:clamp(2.8rem,9vw,4.4rem)}
+  .hero-lead{font-size:.9rem}
+  .hero-visual{order:0}
+  .phone-scene{min-height:585px}
+  .phone{width:265px}
+  .menu-button{
+    margin-left:auto;
+  }
+  .account-area{margin-left:auto}
+  .account-area + .menu-button{margin-left:7px}
+  .editors-page{padding-top:46px}
+}
+
+@media(max-width:650px){
+  .hero{padding-top:42px;padding-bottom:45px}
+  .hero-content h1{
+    font-size:clamp(2.45rem,12vw,3.35rem);
+    letter-spacing:-.055em;
+  }
+  .hero-lead{
+    max-width:430px;
+    font-size:.84rem;
+    line-height:1.7;
+  }
+  .hero-buttons a{
+    width:auto;
+    min-width:170px;
+  }
+  .hero-visual{margin-top:4px}
+  .phone-scene{
+    min-height:530px;
+  }
+  .phone{width:min(242px,70vw)}
+  .beat-bars{top:calc(50% + 265px)}
+  .phone-caption{
+    width:min(330px,92%);
+    margin-top:10px;
+  }
+  .phone-caption span{font-size:.66rem}
+  .section{padding:64px 0}
+  .section-heading h2{font-size:clamp(2rem,10vw,2.8rem)}
+  .editors-page{padding-top:38px}
+  .editors-heading h1{font-size:clamp(2.55rem,12vw,3.4rem)}
+  .editor-tools{padding:11px}
+  .editors-grid{gap:12px}
+  .editor-profile{min-height:0;padding:21px}
+  .editor-avatar,.editor-photo-fallback{width:76px;height:76px}
+  .editor-profile h2{font-size:1.18rem}
+  .editor-description{font-size:.73rem}
+  .hero-buttons a,.contact-actions a{width:auto}
+}
