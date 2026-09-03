@@ -368,3 +368,69 @@ html,body{max-width:100%;overflow-x:hidden}
 
 /* Estado de conta: nunca mostrar login enquanto a sessão está sendo verificada */
 #loggedOutArea[hidden],#loggedInArea[hidden],#mobileLoggedOut[hidden],#mobileLoggedIn[hidden]{display:none!important}
+
+
+/* ==================================================
+   V4 — PLAYER COMPACTO / MENU / HERO
+================================================== */
+
+/* O atributo hidden sempre vence regras de display. */
+.mobile-account > div[hidden],
+#loggedOutArea[hidden],
+#loggedInArea[hidden],
+#mobileLoggedOut[hidden],
+#mobileLoggedIn[hidden]{
+  display:none !important;
+}
+
+/* Player pequeno, limpo e discreto */
+.music-player{
+  right:16px;
+  bottom:16px;
+  width:min(270px,calc(100vw - 28px));
+  padding:9px 11px;
+  border-radius:14px;
+  background:rgba(3,24,38,.88);
+  border:1px solid rgba(215,224,235,.16);
+  box-shadow:0 12px 32px rgba(0,0,0,.28);
+}
+.music-player-main{gap:8px}
+.music-play,.music-next{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  font-size:10px;
+  border:1px solid rgba(215,224,235,.16);
+}
+.music-play{font-size:10px}
+.music-next{font-size:18px}
+.music-info{min-width:0}
+.music-label{display:none}
+.music-info strong{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.01em;
+}
+.music-info span:last-child{
+  font-size:8px;
+  margin-top:0;
+}
+.music-progress{
+  height:2px;
+  margin-top:7px;
+}
+
+@media(max-width:650px){
+  .music-player{
+    right:10px;
+    bottom:10px;
+    width:min(255px,calc(100vw - 20px));
+    padding:8px 10px;
+  }
+  .music-play,.music-next{width:29px;height:29px}
+}
+
+/* Evita qualquer overflow horizontal no hero em telas estreitas. */
+.hero-grid,
+.hero-content,
+.hero-visual{min-width:0}

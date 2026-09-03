@@ -539,7 +539,22 @@
 
         }
 
-    </style>
+    
+        /* Tipografia do hero — menor e mais leve */
+        .hero-content h1 {
+            font-size: clamp(2.2rem, 4.4vw, 3.7rem);
+            line-height: 1.08;
+            letter-spacing: -0.045em;
+            font-weight: 600;
+        }
+
+        @media (max-width: 650px) {
+            .hero-content h1 {
+                font-size: clamp(2rem, 9vw, 2.65rem);
+                letter-spacing: -0.035em;
+            }
+        }
+</style>
 </head>
 <body>
 <!-- ==================================================
@@ -681,7 +696,7 @@
 <div class="phone-frame">
 <div class="phone-beat-glow" aria-hidden="true"></div>
 <!-- IMAGEM DO CELULAR -->
-<img alt="Perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="assets/file_000000000428820e9367024538cb1a95.png"/>
+<img alt="Perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="./assets/file_000000000428820e9367024538cb1a95.png"/>
 <span aria-hidden="true" class="phone-camera"></span>
 </div>
 </div>
@@ -1228,77 +1243,6 @@ document.addEventListener("DOMContentLoaded", function () {
             headerProfileInitial.hidden = false;
         });
     }
-
-
-    /* ==================================================
-       MENU MOBILE
-    ================================================== */
-
-    const menuButton =
-        document.getElementById(
-            "menuButton"
-        );
-
-
-    const mobileMenu =
-        document.getElementById(
-            "mobileMenu"
-        );
-
-
-    if (
-        menuButton &&
-        mobileMenu
-    ) {
-
-        menuButton.addEventListener(
-            "click",
-            function () {
-
-                const isOpen =
-                    mobileMenu.classList.toggle(
-                        "active"
-                    );
-
-
-                menuButton.setAttribute(
-                    "aria-expanded",
-                    isOpen
-                        ? "true"
-                        : "false"
-                );
-
-            }
-        );
-
-
-        mobileMenu
-            .querySelectorAll("a")
-            .forEach(
-                function (link) {
-
-                    link.addEventListener(
-                        "click",
-                        function () {
-
-                            mobileMenu.classList.remove(
-                                "active"
-                            );
-
-
-                            menuButton.setAttribute(
-                                "aria-expanded",
-                                "false"
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-    }
-
 
     /* ==================================================
        CELULAR INTERATIVO
