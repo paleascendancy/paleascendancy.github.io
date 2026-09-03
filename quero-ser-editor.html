@@ -8,14 +8,14 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 <header class="header">
 <a href="index.html" class="brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="36" height="36"><span>PALE ASCENDANCY</span></a>
 <nav class="nav"><a href="index.html">Home</a><a href="index.html#sobre">Sobre</a><a href="servicos.html">Serviços</a><a href="editores.html">Editores</a><a href="index.html#contato">Contato</a></nav>
 <a class="discord-button" href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
-<button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span class="menu-icon" aria-hidden="true"></span></button>
+<button class="menu-button" id="menuButton" type="button" onclick="(function(b){var m=document.getElementById('mobileMenu');if(!m)return;var o=!m.classList.contains('open');m.classList.toggle('open',o);m.classList.toggle('active',o);b.setAttribute('aria-expanded',o?'true':'false');})(this)" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span class="menu-icon" aria-hidden="true"></span></button>
 </header>
 <div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="index.html#sobre">Sobre</a><a href="servicos.html">Serviços</a><a href="editores.html">Editores</a><a href="index.html#contato">Contato</a><a href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener noreferrer" class="mobile-discord">Falar com a administração</a></div>
 <main class="join-page"><div class="hero-glow"></div><div class="join-container">
@@ -34,4 +34,4 @@
 <details><summary>5. Promo</summary><p>Promo é tratada diretamente com a administração e não possui inscrição pública pelo site.</p></details>
 </div></aside></div></div></main>
 <footer><div class="footer-brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Editores, contratantes e projetos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small></footer>
-<script src="script.js"></script></body></html>
+<script src="script.js?v=10"></script></body></html>

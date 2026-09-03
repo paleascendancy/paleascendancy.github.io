@@ -3,17 +3,17 @@
   "use strict";
 
   const PLAYLIST = [
-    { title: "Meaningful Love", file: "assets/music/meaningful love (slowed instrumental)(MP3_160K).mp3" },
-    { title: "Better Days", file: "assets/music/LAKEY INSPIRED - Better Days(MP3_160K).mp3" },
-    { title: "Chill Day", file: "assets/music/LAKEY INSPIRED - Chill Day(MP3_160K).mp3" },
-    { title: "Canals", file: "assets/music/Joakim Karud - Canals(MP3_160K).mp3" },
-    { title: "Tek It — Hoodtrap Remix", file: "assets/music/Cafuné - Tek it (Tai2Talented☆ Hoodtrap Remix)(MP3_160K).mp3" },
-    { title: "Star Shopping", file: "assets/music/Lil Peep - Star Shopping (Official Audio)(MP3_160K).mp3" },
-    { title: "Earrings", file: "assets/music/Malcolm Todd - Earrings (Official Visualizer)(MP3_160K).mp3" },
-    { title: "New Jeans Jersey Remix", file: "assets/music/New Jeans Jersey Remix SLOWED - (Jiandro x Dxrkaii)(MP3_160K).mp3" },
-    { title: "Nuts — Instrumental Slowed", file: "assets/music/Nuts Instrumental (Slowed)(MP3_160K).mp3" },
-    { title: "Sweater Weather — Instrumental", file: "assets/music/The Neighbourhood- Sweater Weather (Official Instrumental)(MP3_160K).mp3" },
-    { title: "Childish Gambino — Instrumental", file: "assets/music/les childish gambino instrumental _foryoupage _song _fyp _slowandreverb _instrumental _Mreso(MP3).mp3" }
+    { title: "Meaningful Love", file: "assets/music/01-meaningful-love.mp3" },
+    { title: "Better Days", file: "assets/music/02-better-days.mp3" },
+    { title: "Chill Day", file: "assets/music/03-chill-day.mp3" },
+    { title: "Canals", file: "assets/music/04-canals.mp3" },
+    { title: "Tek It — Hoodtrap Remix", file: "assets/music/05-tek-it-hoodtrap-remix.mp3" },
+    { title: "Star Shopping", file: "assets/music/06-star-shopping.mp3" },
+    { title: "Earrings", file: "assets/music/07-earrings.mp3" },
+    { title: "New Jeans Jersey Remix", file: "assets/music/08-new-jeans-jersey-remix.mp3" },
+    { title: "Nuts — Instrumental Slowed", file: "assets/music/09-nuts-instrumental-slowed.mp3" },
+    { title: "Sweater Weather — Instrumental", file: "assets/music/10-sweater-weather-instrumental.mp3" },
+    { title: "Childish Gambino — Instrumental", file: "assets/music/11-childish-gambino-instrumental.mp3" }
   ];
 
   const STORE = {
@@ -74,16 +74,23 @@
   /* ---------------- MENU ---------------- */
 
   function getMobileMenu() {
-    return $("#mobileMenu, .mobile-menu");
+    return document.getElementById("mobileMenu");
   }
 
-  function closeMobileMenu() {
+  function setMobileMenu(open) {
     const menu = getMobileMenu();
-    const button = $("#menuButton, #menuToggle, .menu-toggle, #mobileMenuButton");
-    if (menu) menu.classList.remove("active", "open");
-    document.body.classList.remove("mobile-menu-open");
-    if (button) button.setAttribute("aria-expanded", "false");
+    const button = document.getElementById("menuButton");
+    if (!menu) return;
+    menu.classList.toggle("open", !!open);
+    menu.classList.toggle("active", !!open);
+    document.body.classList.toggle("mobile-menu-open", !!open);
+    if (button) {
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+      button.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+    }
   }
+
+  function closeMobileMenu() { setMobileMenu(false); }
 
   function initMobileMenu() {
     if (window.__PA_MENU_READY__) return;
@@ -92,25 +99,8 @@
     document.addEventListener("click", (event) => {
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return;
-
-      const button = target.closest("#menuButton, #menuToggle, .menu-toggle, #mobileMenuButton");
-      if (button) {
-        const menu = getMobileMenu();
-        if (!menu) return;
-        event.preventDefault();
-        event.stopPropagation();
-        const open = !menu.classList.contains("open");
-        menu.classList.toggle("open", open);
-        menu.classList.toggle("active", open);
-        document.body.classList.toggle("mobile-menu-open", open);
-        button.setAttribute("aria-expanded", open ? "true" : "false");
-        return;
-      }
-
       const menu = getMobileMenu();
-      if (menu?.classList.contains("open") && !target.closest("#mobileMenu, .mobile-menu")) {
-        closeMobileMenu();
-      }
+      if (menu?.classList.contains("open") && !target.closest("#menuButton, #mobileMenu")) closeMobileMenu();
     });
 
     document.addEventListener("keydown", (event) => {
@@ -695,14 +685,7 @@
       const currentMain = $("main");
       if (!nextMain || !currentMain) throw new Error("page");
 
-      const nextHeader = $("header", doc);
-      const currentHeader = $("header");
-      const nextMenu = $(".mobile-menu", doc);
-      const currentMenu = $(".mobile-menu");
-
       currentMain.replaceWith(nextMain);
-      if (currentHeader && nextHeader) currentHeader.replaceWith(nextHeader.cloneNode(true));
-      if (currentMenu && nextMenu) currentMenu.replaceWith(nextMenu.cloneNode(true));
       if (doc.title) document.title = doc.title;
       if (push) history.pushState({ pale: true }, "", target.href);
 

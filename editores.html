@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet"/>
+<link href="style.css?v=10" rel="stylesheet"/>
 </head>
 <body>
 <!-- ==================================================
@@ -51,7 +51,7 @@
 <a class="discord-button" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu de navegação" class="menu-button" id="menuButton" type="button">
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu de navegação" class="menu-button" id="menuButton" type="button" onclick="(function(b){var m=document.getElementById('mobileMenu');if(!m)return;var o=!m.classList.contains('open');m.classList.toggle('open',o);m.classList.toggle('active',o);b.setAttribute('aria-expanded',o?'true':'false');})(this)">
 <span aria-hidden="true" class="menu-icon"></span>
 </button>
 </header>
@@ -152,6 +152,6 @@
         © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
 </footer>
-<script src="script.js"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>

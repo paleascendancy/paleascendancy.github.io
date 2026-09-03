@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 
-<link href="style.css" rel="stylesheet"/>
+<link href="style.css?v=10" rel="stylesheet"/>
 </head>
 <body>
 <!-- ==================================================
@@ -71,7 +71,7 @@
 <!-- ==================================================
          MENU MOBILE
     ================================================== -->
-<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button">
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button" onclick="(function(b){var m=document.getElementById('mobileMenu');if(!m)return;var o=!m.classList.contains('open');m.classList.toggle('open',o);m.classList.toggle('active',o);b.setAttribute('aria-expanded',o?'true':'false');})(this)">
 <span aria-hidden="true" class="menu-icon"></span>
 </button>
 </header>
@@ -142,17 +142,17 @@
 <!-- ==================================================
                  CELULAR FLUTUANTE
             ================================================== -->
-<div class="hero-visual"><div aria-label="Pale Ascendancy" class="phone-brand"><img alt="" aria-hidden="true" src="pale-ascendancy-logo.png"/></div>
+<div class="hero-visual">
 <div aria-label="Visualização do aplicativo Pale Ascendancy" class="phone-scene" id="phoneScene">
 <div class="beat-ring beat-ring-a" aria-hidden="true"></div>
 <div class="beat-ring beat-ring-b" aria-hidden="true"></div>
-<div class="beat-bars" id="beatBars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <div class="phone">
 <div class="phone-frame">
 <div class="phone-beat-glow" aria-hidden="true"></div>
 <img alt="Visualização do perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="./assets/file_000000000428820e9367024538cb1a95.png"/>
 </div>
 </div>
+<div class="beat-bars" id="beatBars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </div>
 <!-- ==================================================
                      TEXTO ABAIXO DO CELULAR
@@ -350,6 +350,6 @@
      SUPABASE
 ================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>
