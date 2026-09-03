@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pale Ascendancy — Rede de Editores</title>
+<meta content="Pale Ascendancy — rede de profissionais de edição e produção audiovisual." name="description"/>
+<meta content="#011e31" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+<!-- ==================================================
+         CELULAR FLUTUANTE
+    ================================================== -->
+<style>
+
+        .hero-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+        }
+
+
+        .phone-scene {
+            position: relative;
+
+            width: 100%;
+            min-height: 500px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            perspective: 1200px;
+
+            cursor: pointer;
+
+            user-select: none;
+
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        .phone {
+            position: relative;
+
+            width: 220px;
+            height: 440px;
+
+            padding: 8px;
+
+            border-radius: 42px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #34312b 0%,
+                    #11100e 45%,
+                    #29251f 100%
+                );
+
+            border: 1px solid rgba(238, 231, 214, 0.18);
+
+            box-shadow:
+                0 35px 80px rgba(0, 0, 0, 0.55),
+                0 0 45px rgba(217, 192, 138, 0.08),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+            transform:
+                perspective(1200px)
+                rotateY(-10deg)
+                rotateX(3deg)
+                rotateZ(1deg);
+
+            animation:
+                phoneFloat 4.5s ease-in-out infinite;
+
+            transition:
+                transform 0.4s ease,
+                box-shadow 0.4s ease;
+
+            z-index: 2;
+        }
+
+
+        .phone-scene:hover .phone {
+            transform:
+                perspective(1200px)
+                rotateY(-2deg)
+                rotateX(0deg)
+                rotateZ(0deg)
+                translateY(-8px);
+
+            box-shadow:
+                0 45px 95px rgba(0, 0, 0, 0.62),
+                0 0 55px rgba(217, 192, 138, 0.13),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+
+        .phone.touched {
+            animation: phoneTouch 0.55s cubic-bezier(.2,.8,.2,1);
+        }
+
+
+        @keyframes phoneFloat {
+
+            0%,
+            100% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    translateY(-11px);
+            }
+
+        }
+
+
+        @keyframes phoneTouch {
+
+            0% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    scale(1);
+            }
+
+            35% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-2deg)
+                    rotateX(0deg)
+                    rotateZ(0deg)
+                    scale(0.94)
+                    translateY(7px);
+            }
+
+            70% {
+                transform:
+                    perspective(1200px)
+                    rotateY(3deg)
+                    rotateX(0deg)
+                    rotateZ(0deg)
+                    scale(1.03)
+                    translateY(-5px);
+            }
+
+            100% {
+                transform:
+                    perspective(1200px)
+                    rotateY(-10deg)
+                    rotateX(3deg)
+                    rotateZ(1deg)
+                    scale(1)
+                    translateY(0);
+            }
+
+        }
+
+
+        .phone-frame {
+            position: relative;
+
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+
+            border-radius: 35px;
+
+            background: #050505;
+
+            border: 1px solid rgba(0, 0, 0, 0.9);
+
+            box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.03);
+        }
+
+
+        /*
+         * Área da imagem dentro da tela.
+         */
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            object-position: center;
+
+            background: #080808;
+
+            transition:
+                transform 0.6s ease,
+                filter 0.4s ease;
+        }
+
+
+        .phone-scene:hover .phone-screen {
+            transform: scale(1.025);
+        }
+
+
+        /*
+         * Parte superior preta semelhante
+         * ao recorte de uma câmera/sensor.
+         */
+
+        .phone-frame::before {
+            content: "";
+
+            position: absolute;
+
+            z-index: 8;
+
+            top: 8px;
+            left: 50%;
+
+            width: 78px;
+            height: 23px;
+
+            transform: translateX(-50%);
+
+            border-radius: 999px;
+
+            background: #050505;
+
+            box-shadow:
+                0 1px 4px rgba(0,0,0,0.8);
+        }
+
+
+        /*
+         * Reflexo sobre a tela.
+         */
+
+        .phone-frame::after {
+            content: "";
+
+            position: absolute;
+
+            z-index: 7;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            border-radius: 35px;
+
+            background:
+                linear-gradient(
+                    115deg,
+                    rgba(255,255,255,0.10),
+                    transparent 25%,
+                    transparent 72%,
+                    rgba(255,255,255,0.025)
+                );
+
+            opacity: 0.7;
+        }
+
+
+        /*
+         * Botões laterais.
+         */
+
+        .phone-side-button {
+            position: absolute;
+
+            z-index: 10;
+
+            right: -4px;
+
+            width: 4px;
+
+            border-radius:
+                0
+                3px
+                3px
+                0;
+
+            background: #302d28;
+
+            box-shadow:
+                inset 0 0 1px rgba(255,255,255,0.25);
+        }
+
+
+        .phone-side-button.one {
+            top: 120px;
+            height: 50px;
+        }
+
+
+        .phone-side-button.two {
+            top: 188px;
+            height: 30px;
+        }
+
+
+        .phone-side-button.three {
+            top: 230px;
+            height: 30px;
+        }
+
+
+        /*
+         * Câmera frontal.
+         */
+
+        .phone-camera {
+            position: absolute;
+
+            z-index: 10;
+
+            top: 15px;
+            left: 50%;
+
+            width: 7px;
+            height: 7px;
+
+            transform:
+                translateX(27px);
+
+            border-radius: 50%;
+
+            background: #151515;
+
+            box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+
+
+        /*
+         * Sombra abaixo do celular.
+         */
+
+        .phone-shadow {
+            position: absolute;
+
+            z-index: 1;
+
+            bottom: 27px;
+
+            width: 190px;
+            height: 25px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0, 0, 0, 0.50);
+
+            filter: blur(13px);
+
+            animation:
+                phoneShadow 4.5s ease-in-out infinite;
+        }
+
+
+        @keyframes phoneShadow {
+
+            0%,
+            100% {
+                transform: scaleX(1.15);
+                opacity: 0.65;
+            }
+
+            50% {
+                transform: scaleX(0.92);
+                opacity: 0.42;
+            }
+
+        }
+
+
+        /*
+         * Texto abaixo do celular.
+         */
+
+        .phone-caption {
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 6px;
+
+            max-width: 390px;
+
+            text-align: center;
+
+            margin-top: -12px;
+        }
+
+
+        .phone-caption strong {
+            color: var(--text);
+
+            font-family:
+                var(--font-display);
+
+            font-size: 0.9rem;
+
+            font-weight: 600;
+
+            letter-spacing: 0.08em;
+        }
+
+
+        .phone-caption span {
+            color: var(--text-muted);
+
+            font-family:
+                var(--font-body);
+
+            font-size: 0.8rem;
+
+            line-height: 1.6;
+        }
+
+
+        .phone-hint {
+            position: absolute;
+
+            bottom: 3px;
+
+            color: var(--text-muted);
+
+            font-size: 0.68rem;
+
+            letter-spacing: 0.04em;
+
+            opacity: 0.65;
+        }
+
+
+        /*
+         * Acessibilidade.
+         */
+
+        .phone-scene:focus-visible {
+            outline: 1px solid var(--accent);
+
+            outline-offset: 8px;
+
+            border-radius: 20px;
+        }
+
+
+        /*
+         * Celular em telas menores.
+         */
+
+        @media (max-width: 820px) {
+
+            .phone-scene {
+                min-height: 460px;
+            }
+
+            .phone {
+                width: 205px;
+                height: 410px;
+
+                border-radius: 38px;
+            }
+
+            .phone-frame {
+                border-radius: 31px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .phone-scene {
+                min-height: 455px;
+            }
+
+            .phone {
+                width: 190px;
+                height: 380px;
+
+                border-radius: 34px;
+            }
+
+            .phone-frame {
+                border-radius: 28px;
+            }
+
+            .phone-caption {
+                padding:
+                    0
+                    18px;
+            }
+
+            .phone-hint {
+                font-size: 0.62rem;
+            }
+
+        }
+
+
+        /*
+         * Respeita usuários que preferem
+         * menos movimento.
+         */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .phone {
+                animation: none;
+            }
+
+            .phone-shadow {
+                animation: none;
+            }
+
+        }
+
+    
+        /* Tipografia do hero — menor e mais leve */
+        .hero-content h1 {
+            font-size: clamp(2.2rem, 4.4vw, 3.7rem);
+            line-height: 1.08;
+            letter-spacing: -0.045em;
+            font-weight: 600;
+        }
+
+        @media (max-width: 650px) {
+            .hero-content h1 {
+                font-size: clamp(2rem, 9vw, 2.65rem);
+                letter-spacing: -0.035em;
+            }
+        }
+</style>
+</head>
+<body>
+<!-- ==================================================
+     HEADER
+================================================== -->
+<header class="header">
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="pale-ascendancy-logo.png" width="36"/>
+<span>
+            PALE ASCENDANCY
+        </span>
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
+            Home
+        </a>
+<a href="index.html#sobre">
+            Sobre
+        </a>
+<a href="servicos.html">
+            Serviços
+        </a>
+<a href="editores.html">
+            Editores
+        </a>
+<a href="index.html#contato">
+            Contato
+        </a>
+</nav>
+<!-- ==================================================
+         ÁREA DA CONTA
+    ================================================== -->
+<div class="account-area" id="accountArea">
+<div class="logged-out-area" hidden id="loggedOutArea">
+<a class="account-login" href="login.html">
+                Entrar
+            </a>
+<a class="account-register" href="cadastro.html">
+                Criar conta
+            </a>
+</div>
+<div class="logged-in-area" hidden="" id="loggedInArea">
+<a aria-label="Abrir meu perfil" class="profile-link" href="perfil.html">
+<span class="profile-avatar-small">
+<span id="headerProfileInitial">
+                        ?
+                    </span>
+<img alt="Foto de perfil" hidden="" id="headerProfileImage" src=""/>
+</span>
+<span class="profile-link-text">
+                    Perfil
+                </span>
+</a>
+</div>
+</div>
+<!-- ==================================================
+         MENU MOBILE
+    ================================================== -->
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
+</header>
+<!-- ==================================================
+     MENU MOBILE
+================================================== -->
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
+        Home
+    </a>
+<a href="index.html#sobre">
+        Sobre
+    </a>
+<a href="servicos.html">
+        Serviços
+    </a>
+<a href="editores.html">
+        Editores
+    </a>
+<a href="index.html#contato">
+        Contato
+    </a>
+<div class="mobile-account" id="mobileAccount">
+<div id="mobileLoggedOut">
+<a href="login.html">
+                Entrar
+            </a>
+<a href="cadastro.html">
+                Criar conta
+            </a>
+</div>
+<div hidden="" id="mobileLoggedIn">
+<a href="perfil.html">
+                Meu perfil
+            </a>
+</div>
+</div>
+</div>
+<!-- ==================================================
+     MAIN
+================================================== -->
+<main>
+<!-- ==================================================
+         HERO
+    ================================================== -->
+<section class="hero">
+<div class="hero-glow"></div>
+<div class="hero-grid">
+<div class="hero-content">
+<p class="eyebrow">REDE CRIATIVA</p>
+<h1>
+                    Seu projeto começa
+                    <span>com a edição certa.</span>
+</h1>
+<p class="hero-lead">
+                    Uma comunidade de editores e contratantes para encontrar profissionais,
+                    apresentar trabalhos e desenvolver projetos audiovisuais.
+                </p>
+<div class="hero-buttons">
+<a class="primary-button" href="editores.html">
+                        Encontrar editores
+                    </a>
+<a class="secondary-button" href="quero-ser-editor.html">
+                        Quero ser editor
+                    </a>
+</div>
+</div>
+<!-- ==================================================
+                 CELULAR FLUTUANTE
+            ================================================== -->
+<div class="hero-visual"><div aria-label="Pale Ascendancy" class="phone-brand"><img alt="" aria-hidden="true" src="pale-ascendancy-logo.png"/></div>
+<div aria-label="Interagir com o celular" class="phone-scene" id="phoneScene" role="button" tabindex="0">
+<div class="beat-ring beat-ring-a" aria-hidden="true"></div>
+<div class="beat-ring beat-ring-b" aria-hidden="true"></div>
+<div class="beat-bars" id="beatBars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<span class="phone-side-button one"></span>
+<span class="phone-side-button two"></span>
+<span class="phone-side-button three"></span>
+<div class="phone">
+<div class="phone-frame">
+<div class="phone-beat-glow" aria-hidden="true"></div>
+<!-- IMAGEM DO CELULAR -->
+<img alt="Perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="./assets/file_000000000428820e9367024538cb1a95.png"/>
+<span aria-hidden="true" class="phone-camera"></span>
+</div>
+</div>
+<div aria-hidden="true" class="phone-shadow"></div>
+<span class="phone-hint">
+                        Toque para interagir
+                    </span>
+</div>
+<!-- ==================================================
+                     TEXTO ABAIXO DO CELULAR
+                ================================================== -->
+<div class="phone-caption">
+<strong>EDITORES &amp; PROJETOS</strong>
+<span>Talentos, criadores e projetos conectados em um só lugar.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================================================
+         SOBRE
+    ================================================== -->
+<section class="section" id="sobre">
+<div class="section-heading">
+<p class="eyebrow">
+                Sobre nós
+            </p>
+<h2>
+                Uma comunidade de
+                <span>editores e contratantes.</span>
+</h2>
+<p>
+                A Pale Ascendancy reúne editores e contratantes para facilitar
+                a busca por profissionais, a apresentação de trabalhos
+                e a criação de novos projetos.
+            </p>
+</div>
+<div class="bento-grid">
+<article class="bento-card large">
+<h3>
+                    Profissionais
+                </h3>
+<p>
+                    Encontre editores especializados em diferentes estilos e formatos,
+                    prontos para assumir novos projetos e entregar um trabalho profissional.
+                </p>
+</article>
+<article class="bento-card">
+<h3>
+                    Projetos
+                </h3>
+<p>
+                    Encontre o profissional certo para tirar seu projeto do papel
+                    e chegar a uma edição que combine com o que você procura.
+                </p>
+</article>
+<article class="bento-card">
+<h3>
+                    Qualidade
+                </h3>
+<p>
+                    Valorizamos criatividade, técnica e profissionalismo
+                    em cada projeto e em cada parceria.
+                </p>
+</article>
+<article class="bento-card wide">
+<h3>
+                    Evolução
+                </h3>
+<p>
+                    Um ambiente para aprender, competir,
+                    criar e desenvolver novas habilidades.
+                </p>
+</article>
+</div>
+</section>
+<!-- ==================================================
+         SERVIÇOS
+    ================================================== -->
+<section class="section" id="servicos">
+<div class="section-heading">
+<p class="eyebrow">
+                Serviços
+            </p>
+<h2>
+                Edição para diferentes
+                <span>projetos.</span>
+</h2>
+<p>
+                Encontre profissionais preparados
+                para diferentes tipos de produção.
+            </p>
+</div>
+<div class="service-preview">
+<div class="service-preview-content">
+<h2>
+                    Encontre a edição
+                    <span>certa para seu projeto.</span>
+</h2>
+<p>
+                    Escolha o estilo que combina com seu projeto e encontre
+                    profissionais preparados para assumir a produção.
+                </p>
+<div class="section-action">
+<a class="primary-button" href="servicos.html">
+                        Ver serviços
+                    </a>
+</div>
+</div>
+<div class="service-preview-list">
+<div>
+<strong>
+                        Promos
+                    </strong>
+<span>
+                        Conteúdo promocional e comercial.
+                    </span>
+</div>
+<div>
+<strong>
+                        Trailers
+                    </strong>
+<span>
+                        Ritmo, narrativa e impacto visual.
+                    </span>
+</div>
+<div>
+<strong>
+                        Highlights
+                    </strong>
+<span>
+                        Os melhores momentos em destaque.
+                    </span>
+</div>
+<div>
+<strong>
+                        Motion Design
+                    </strong>
+<span>
+                        Tipografia, animações e composição.
+                    </span>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================================================
+         CONTATO
+    ================================================== -->
+<section class="section" id="contato">
+<div class="section-heading">
+<p class="eyebrow">Contato</p>
+<h2>Fale com a <span>administração.</span></h2>
+<p>Para contratar, apresentar um projeto ou falar diretamente com a Pale Ascendancy, use o contato oficial abaixo.</p>
+</div>
+<div class="contact-panel">
+<div class="contact-owner">
+<span class="contact-label">ADMINISTRAÇÃO</span>
+<h3>Rarison <span>— Proprietário</span></h3>
+<p>Responsável pela Pale Ascendancy, pelo desenvolvimento do site e pela organização da comunidade.</p>
+<div class="contact-team-note"><strong>Loki</strong><span>Desenvolvimento Web &amp; Discord · um dos criadores do site</span></div>
+</div>
+<div class="contact-actions-grid">
+<a class="primary-button" href="https://wa.me/5595991501077" target="_blank" rel="noopener noreferrer">WhatsApp direto</a>
+<a class="secondary-button" href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
+</div>
+</div>
+</section>
+</main>
+<!-- ==================================================
+     PLAYER DE MÚSICA
+================================================== -->
+<div class="music-player" id="musicPlayer" aria-label="Player de música">
+  <div class="music-player-main">
+    <button class="music-play" id="musicPlay" type="button" aria-label="Reproduzir música">▶</button>
+    <div class="music-info">
+      <span class="music-label">PALE ASCENDANCY</span>
+      <strong id="musicTitle">Meaningful Love</strong>
+      <span id="musicStatus">Toque para começar</span>
+    </div>
+    <button class="music-next" id="musicNext" type="button" aria-label="Próxima música">›</button>
+  </div>
+  <input id="musicProgress" class="music-progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Progresso da música">
+  <audio id="musicAudio" preload="metadata"></audio>
+</div>
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
+<footer>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="pale-ascendancy-logo.png" width="28"/>
+<span>
+            PALE ASCENDANCY
+        </span>
+</div>
+<p>
+        Editores, contratantes e projetos em um só lugar.
+    </p>
+<small>
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
+    </small>
+</footer>
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* ==================================================
+       CONFIGURAÇÃO SUPABASE
+    ================================================== */
+
+    const SUPABASE_URL =
+        "https://fnyellunugdfesprmvzm.supabase.co";
+
+
+    const SUPABASE_KEY =
+        "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY,
+            {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
+                }
+            }
+        );
+
+
+    /* ==================================================
+       ELEMENTOS DO HEADER
+    ================================================== */
+
+    const loggedOutArea =
+        document.getElementById(
+            "loggedOutArea"
+        );
+
+
+    const loggedInArea =
+        document.getElementById(
+            "loggedInArea"
+        );
+
+
+    const headerProfileInitial =
+        document.getElementById(
+            "headerProfileInitial"
+        );
+
+
+    const headerProfileImage =
+        document.getElementById(
+            "headerProfileImage"
+        );
+
+
+    const mobileLoggedOut =
+        document.getElementById(
+            "mobileLoggedOut"
+        );
+
+
+    const mobileLoggedIn =
+        document.getElementById(
+            "mobileLoggedIn"
+        );
+
+
+    /* ==================================================
+       ATUALIZAR MENU DA CONTA
+    ================================================== */
+
+    async function updateAccountMenu() {
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao recuperar sessão:",
+                    error
+                );
+
+                /* Não apaga uma sessão visualmente por um erro transitório. */
+                return;
+
+            }
+
+
+            const session =
+                data.session;
+
+
+            /* ==========================================
+               NÃO LOGADO
+            ========================================== */
+
+            if (
+                !session ||
+                !session.user
+            ) {
+
+                showLoggedOut();
+
+                return;
+
+            }
+
+
+            /* ==========================================
+               LOGADO
+            ========================================== */
+
+            const user =
+                session.user;
+
+
+            showLoggedIn();
+
+
+            /* ==========================================
+               BUSCAR PERFIL
+            ========================================== */
+
+            const {
+                data: profile,
+                error: profileError
+            } =
+                await supabaseClient
+                    .from("profile")
+                    .select(
+                        "nome,nome_artistico,avatar_url"
+                    )
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+
+            if (profileError) {
+
+                console.error(
+                    "Erro ao buscar perfil:",
+                    profileError
+                );
+
+            }
+
+
+            /* ==========================================
+               NOME
+            ========================================== */
+
+            const displayName =
+                profile?.nome_artistico ||
+                profile?.nome ||
+                user.email ||
+                "U";
+
+
+            const initial =
+                displayName
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase() ||
+                "U";
+
+
+            headerProfileInitial.textContent =
+                initial;
+
+
+            /* ==========================================
+               FOTO
+            ========================================== */
+
+            if (
+                profile &&
+                profile.avatar_url &&
+                profile.avatar_url.trim() !== ""
+            ) {
+
+                headerProfileImage.src =
+                    profile.avatar_url;
+
+
+                headerProfileImage.hidden =
+                    false;
+
+
+                headerProfileInitial.hidden =
+                    true;
+
+            } else {
+
+                headerProfileImage.src =
+                    "";
+
+
+                headerProfileImage.hidden =
+                    true;
+
+
+                headerProfileInitial.hidden =
+                    false;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado no sistema de conta:",
+                error
+            );
+
+            /* Mantém o estado atual em vez de mostrar Entrar/Criar conta por um erro momentâneo. */
+
+        }
+
+    }
+
+
+    /* ==================================================
+       MOSTRAR LOGADO
+    ================================================== */
+
+    function showLoggedIn() {
+
+        loggedOutArea.hidden =
+            true;
+
+
+        loggedInArea.hidden =
+            false;
+
+
+        mobileLoggedOut.hidden =
+            true;
+
+
+        mobileLoggedIn.hidden =
+            false;
+
+    }
+
+
+    /* ==================================================
+       MOSTRAR NÃO LOGADO
+    ================================================== */
+
+    function showLoggedOut() {
+
+        loggedOutArea.hidden =
+            false;
+
+
+        loggedInArea.hidden =
+            true;
+
+
+        mobileLoggedOut.hidden =
+            false;
+
+
+        mobileLoggedIn.hidden =
+            true;
+
+
+        headerProfileInitial.textContent =
+            "?";
+
+
+        headerProfileInitial.hidden =
+            false;
+
+
+        headerProfileImage.src =
+            "";
+
+
+        headerProfileImage.hidden =
+            true;
+
+    }
+
+
+    /* ==================================================
+       ALTERAÇÕES DE SESSÃO
+    ================================================== */
+
+    supabaseClient.auth.onAuthStateChange(
+        function (event, session) {
+
+            console.log(
+                "Estado da autenticação:",
+                event
+            );
+
+
+            if (session) {
+
+                showLoggedIn();
+
+            } else {
+
+                showLoggedOut();
+
+            }
+
+
+            setTimeout(
+                updateAccountMenu,
+                100
+            );
+
+        }
+    );
+
+
+    /* ==================================================
+       VERIFICAR SESSÃO
+    ================================================== */
+
+    updateAccountMenu();
+
+    if (headerProfileImage) {
+        headerProfileImage.addEventListener("error", function () {
+            this.hidden = true;
+            headerProfileInitial.hidden = false;
+        });
+    }
+
+    /* ==================================================
+       CELULAR INTERATIVO
+    ================================================== */
+
+    const phoneScene =
+        document.getElementById(
+            "phoneScene"
+        );
+
+
+    if (phoneScene) {
+
+        const phone =
+            phoneScene.querySelector(
+                ".phone"
+            );
+
+
+        function touchPhone() {
+
+            if (!phone) {
+                return;
+            }
+
+
+            phone.classList.remove(
+                "touched"
+            );
+
+
+            /*
+             * Força o navegador a reiniciar
+             * a animação toda vez que tocar.
+             */
+
+            void phone.offsetWidth;
+
+
+            phone.classList.add(
+                "touched"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    phone.classList.remove(
+                        "touched"
+                    );
+
+                },
+                550
+            );
+
+        }
+
+
+        /* ==========================================
+           TOQUE / CLIQUE
+        ========================================== */
+
+        phoneScene.addEventListener(
+            "click",
+            touchPhone
+        );
+
+
+        /* ==========================================
+           TECLADO
+        ========================================== */
+
+        phoneScene.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    touchPhone();
+
+                }
+
+            }
+        );
+
+    }
+
+});
+
+</script>
+<script src="script.js"></script>
+</body>
+</html>
