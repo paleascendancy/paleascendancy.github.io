@@ -703,3 +703,124 @@ h3 span,
 @media(prefers-reduced-motion:reduce){
   .primary-button,.secondary-button,.card-link,.filter-button,.discord-button,.mobile-discord,.menu-button,.music-play,.music-next,.music-title-button,.music-panel-close,.music-suggestion-row button{transition:none}
 }
+
+
+/* =========================================================
+   PALE ASCENDANCY — V13 / MUSIC + SOFT TYPOGRAPHY
+   ========================================================= */
+:root{
+  --title-gradient:linear-gradient(110deg,#f6fbff 0%,#b8f4ff 25%,#9e91ff 52%,#f18ac9 78%,#f6fbff 100%);
+}
+
+/* Softer, more distinctive display face while keeping the body clean. */
+.hero-content h1,
+.section-heading h2,
+.editors-heading h1,
+.auth-heading h1,
+.music-panel-header h2,
+.editor-profile h2,
+.bento-card h3,
+.service-preview h3,
+.contact-panel h3,
+.join-card h2,
+.profile-view h1,
+.profile-view h2{
+  font-family:"Nunito", "Manrope", system-ui, sans-serif;
+  font-weight:800;
+}
+
+/* Animated gradient titles: colorful, but no orange/gold text. */
+.hero-content h1,
+.section-heading h2,
+.editors-heading h1,
+.auth-heading h1{
+  background:var(--title-gradient);
+  background-size:240% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  animation:paTitleGradient 8s ease-in-out infinite alternate;
+}
+
+.hero-content h1 span,
+.section-heading h2 span,
+.editors-heading h1 span,
+.auth-heading h1 span{
+  background:inherit;
+  background-size:inherit;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+}
+
+@keyframes paTitleGradient{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+
+/* Music player: compact floating control, especially on phones. */
+.music-player{
+  width:min(250px,calc(100vw - 34px));
+  padding:7px;
+  border-radius:15px;
+}
+.music-player-main{gap:6px}
+.music-play,.music-next{width:33px;height:33px;min-width:33px}
+.music-title-button{min-width:0;padding:0 2px}
+.music-label{font-size:6.5px}
+.music-title-button strong{font-size:10.5px}
+.music-title-button span:last-child{font-size:7.5px}
+
+/* The close control is always visible and stays above the panel content. */
+.music-panel-inner{position:relative;padding:20px}
+.music-panel-header{position:relative;padding-right:46px}
+.music-panel-close{
+  position:absolute;
+  top:0;
+  right:0;
+  z-index:20;
+  width:38px;
+  height:38px;
+  min-width:38px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border-color:rgba(207,220,238,.22);
+  box-shadow:0 8px 24px rgba(0,0,0,.22);
+  font-size:22px;
+  line-height:1;
+}
+.music-panel-close:hover{
+  transform:translateY(-1px) rotate(3deg);
+  border-color:rgba(98,217,245,.45);
+  background:rgba(98,217,245,.10);
+}
+
+@media(max-width:650px){
+  .music-player{
+    right:12px;
+    bottom:12px;
+    width:min(224px,calc(100vw - 24px));
+    padding:6px;
+    border-radius:14px;
+  }
+  .music-play,.music-next{width:31px;height:31px;min-width:31px}
+  .music-title-button strong{font-size:10px}
+  .music-title-button span:last-child{font-size:7px}
+  .music-panel{
+    width:calc(100vw - 18px);
+    height:min(640px,calc(100vh - 86px));
+    border-radius:21px;
+  }
+  .music-panel-inner{padding:16px}
+  .music-panel-header{padding-right:50px}
+  .music-panel-close{width:40px;height:40px;min-width:40px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-content h1,
+  .section-heading h2,
+  .editors-heading h1,
+  .auth-heading h1{animation:none}
+}
