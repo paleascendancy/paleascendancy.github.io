@@ -1,0 +1,4 @@
+Coloque aqui os arquivos MP3 usados pela playlist.
+A primeira música deve se chamar exatamente: Meaningful Love.mp3
+Os outros nomes estão definidos no script.js.
+Não renomeie os arquivos sem atualizar a playlist no script.js.
