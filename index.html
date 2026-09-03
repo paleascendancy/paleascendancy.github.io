@@ -684,8 +684,9 @@
 <span class="phone-side-button three"></span>
 <div class="phone">
 <div class="phone-frame">
+<div class="phone-beat-glow" aria-hidden="true"></div>
 <!-- IMAGEM DO CELULAR -->
-<img alt="Perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="https://cdn.discordapp.com/attachments/1513764141947551746/1544548142546948176/file_000000000428820e9367024538cb1a95.png?ex=6a98e80d&amp;is=6a97968d&amp;hm=fc9674551e80467548470901694cfee903ea0db14aedea47b44bbf2cfac3e463"/>
+<img alt="Perfil da Pale Ascendancy" class="phone-screen" loading="eager" src="assets/perfil-telefone.jpg"/>
 <span aria-hidden="true" class="phone-camera"></span>
 </div>
 </div>
@@ -854,6 +855,28 @@
 </section>
 </main>
 <!-- ==================================================
+     PLAYER DE MÚSICA
+================================================== -->
+<div class="music-player" id="musicPlayer">
+  <div class="music-player-top">
+    <div class="music-player-cover" aria-hidden="true">♫</div>
+    <div class="music-player-info">
+      <span class="music-player-label">PALE ASCENDANCY MUSIC</span>
+      <strong id="musicTitle">Meaningful Love</strong>
+      <span id="musicStatus">Pronto para tocar</span>
+    </div>
+  </div>
+  <div class="music-player-controls">
+    <button id="musicPrev" type="button" aria-label="Música anterior">◀</button>
+    <button id="musicPlay" class="music-main-button" type="button" aria-label="Reproduzir música">▶</button>
+    <button id="musicNext" type="button" aria-label="Próxima música">▶▶</button>
+    <input id="musicProgress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Progresso da música">
+    <input id="musicVolume" type="range" min="0" max="1" value="0.65" step="0.01" aria-label="Volume">
+  </div>
+  <audio id="musicAudio" preload="metadata"></audio>
+</div>
+
+<!-- ==================================================
      FOOTER
 ================================================== -->
 <footer>
@@ -969,8 +992,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     error
                 );
 
-                showLoggedOut();
-
+                /* Não apaga uma sessão visualmente por um erro transitório. */
                 return;
 
             }
@@ -1100,7 +1122,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 error
             );
 
-            showLoggedOut();
+            /* Mantém o estado atual em vez de mostrar Entrar/Criar conta por um erro momentâneo. */
 
         }
 
@@ -1209,6 +1231,13 @@ document.addEventListener("DOMContentLoaded", function () {
     ================================================== */
 
     updateAccountMenu();
+
+    if (headerProfileImage) {
+        headerProfileImage.addEventListener("error", function () {
+            this.hidden = true;
+            headerProfileInitial.hidden = false;
+        });
+    }
 
 
     /* ==================================================
@@ -1377,3 +1406,90 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 </body>
 </html>
+
+    /* ==================================================
+       PLAYER + VISUALIZADOR DE BATIDAS
+    ================================================== */
+
+    const audio = document.getElementById("musicAudio");
+    const playButton = document.getElementById("musicPlay");
+    const prevButton = document.getElementById("musicPrev");
+    const nextButton = document.getElementById("musicNext");
+    const progress = document.getElementById("musicProgress");
+    const volume = document.getElementById("musicVolume");
+    const musicTitle = document.getElementById("musicTitle");
+    const musicStatus = document.getElementById("musicStatus");
+    const beatBars = document.querySelectorAll("#beatBars i");
+    const phone = document.querySelector(".phone");
+
+    if (audio && playButton) {
+        const playlist = [
+            ["Meaningful Love", "assets/music/Amor significativo (versão instrumental lenta) (MP3_160K).mp3"],
+            ["Cafuné — Tek It (Hoodtrap Remix)", "assets/music/Cafuné - Tek it (Tai2Talented☆ Hoodtrap Remix)(MP3_160K).mp3"],
+            ["Canals", "assets/music/Joakim Karud - Canais(MP3_160K).mp3"],
+            ["Better Days", "assets/music/LAKEY INSPIRED - Better Days (MP3_160K).mp3"],
+            ["Chill Day", "assets/music/LAKEY INSPIRED - Chill Day (MP3_160K).mp3"],
+            ["Star Shopping", "assets/music/Lil Peep - Star Shopping (Áudio Oficial)(MP3_160K).mp3"],
+            ["Earrings", "assets/music/Malcolm Todd - Earrings (Visualizador Oficial)(MP3_160K).mp3"],
+            ["New Jeans Jersey Remix", "assets/music/New Jeans Jersey Remix SLOWED - (Jiandro x Dxrkaii)(MP3_160K).mp3"],
+            ["Nuts — Instrumental (Slowed)", "assets/music/Instrumental de Nuts (Versão Lenta) (MP3_160K).mp3"],
+            ["Sweater Weather — Instrumental", "assets/music/The Neighbourhood - Sweater Weather (Instrumental Oficial) (MP3_160K).mp3"],
+            ["Les Gambino — Instrumental", "assets/music/les gambino infantil instrumental _foryoupage _song _fyp _slowandreverb _instrumental _Mreso(MP3).mp3"]
+        ];
+        let track=0;
+        let audioCtx=null, analyser=null, source=null, data=null, raf=null;
+
+        function setTrack(i, autoplay=false){
+            track=(i+playlist.length)%playlist.length;
+            musicTitle.textContent=playlist[track][0];
+            audio.src=encodeURI(playlist[track][1]);
+            audio.currentTime=0;
+            progress.value=0;
+            musicStatus.textContent=autoplay ? "Carregando…" : "Pronto para tocar";
+            if(autoplay) audio.play().catch(()=>musicStatus.textContent="Toque em play para iniciar");
+        }
+
+        function startVisualizer(){
+            if(!audioCtx){
+                audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+                analyser=audioCtx.createAnalyser();
+                analyser.fftSize=64;
+                source=audioCtx.createMediaElementSource(audio);
+                source.connect(analyser); analyser.connect(audioCtx.destination);
+                data=new Uint8Array(analyser.frequencyBinCount);
+            }
+            if(audioCtx.state==='suspended') audioCtx.resume();
+            cancelAnimationFrame(raf);
+            const draw=()=>{
+                analyser.getByteFrequencyData(data);
+                beatBars.forEach((bar,i)=>{
+                    const value=(data[(i*2)%data.length]||0)/255;
+                    bar.style.transform=`scaleY(${0.25+value*1.55})`;
+                });
+                const bass=(data[1]||0)/255;
+                if(phone){
+                    phone.style.setProperty('--beat-scale', String(1+bass*.012));
+                    phone.style.setProperty('--beat-glow', `${bass*18}px`);
+                }
+                raf=requestAnimationFrame(draw);
+            };
+            draw();
+        }
+
+        playButton.addEventListener("click",()=>{
+            if(audio.paused){ startVisualizer(); audio.play().catch(()=>musicStatus.textContent="Toque novamente para iniciar"); }
+            else audio.pause();
+        });
+        nextButton.addEventListener("click",()=>setTrack(track+1,true));
+        prevButton.addEventListener("click",()=>{ if(audio.currentTime>4){audio.currentTime=0;} else setTrack(track-1,true); });
+        audio.addEventListener("play",()=>{startVisualizer(); playButton.textContent="Ⅱ"; musicStatus.textContent="Reproduzindo";});
+        audio.addEventListener("pause",()=>{playButton.textContent="▶"; musicStatus.textContent="Pausada";});
+        audio.addEventListener("ended",()=>setTrack(track+1,true));
+        audio.addEventListener("timeupdate",()=>{if(audio.duration) progress.value=(audio.currentTime/audio.duration)*100;});
+        progress.addEventListener("input",()=>{if(audio.duration) audio.currentTime=audio.duration*(progress.value/100);});
+        volume.addEventListener("input",()=>audio.volume=Number(volume.value));
+        audio.volume=Number(volume.value);
+        audio.addEventListener("error",()=>musicStatus.textContent="Arquivo não encontrado");
+        setTrack(0,false);
+    }
+
