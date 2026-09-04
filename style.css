@@ -834,3 +834,32 @@ h3 span,
   .music-panel{top:auto;bottom:58px;transform:translateX(-50%) scale(.97);}
   .music-panel.open{transform:translateX(-50%) scale(1);}
 }
+
+
+/* =========================================================
+   V19 — AUTH STABILITY / ULTRA-COMPACT MUSIC / EDITORIAL FINISH
+========================================================= */
+.music-player{width:min(184px,calc(100vw - 24px))!important;padding:4px!important;border-radius:12px!important}
+.music-player-main{gap:4px!important}
+.music-play,.music-next{width:26px!important;height:26px!important;min-width:26px!important}
+.music-title-button strong{font-size:8.3px!important}
+.music-title-button span:last-child{font-size:6.2px!important}
+.music-label{font-size:5.2px!important}
+.music-panel{width:min(315px,calc(100vw - 28px))!important;height:min(430px,calc(100vh - 118px))!important;max-height:min(430px,calc(100vh - 118px))!important;border-radius:18px!important}
+.music-panel-inner{padding:12px!important}
+.music-panel-header{padding-right:46px!important}
+.music-panel-header h2{font-size:1rem!important}
+.music-panel-header p{font-size:.56rem!important;line-height:1.35!important}
+.music-panel-close{width:38px!important;height:38px!important;min-width:38px!important;border-radius:11px!important;font-size:20px!important;touch-action:manipulation!important}
+.music-search-wrap{margin:8px 0 6px!important}
+.music-list-item{min-height:34px!important;padding:5px 6px!important;margin-bottom:4px!important}
+.music-list-number{font-size:.58rem!important}.music-list-name{font-size:.62rem!important}.music-list-action{font-size:.6rem!important}
+.music-suggestion{margin-top:5px!important;padding-top:7px!important}.music-suggestion strong{font-size:.67rem!important}.music-suggestion p{font-size:.55rem!important;margin:2px 0 6px!important}
+@media(max-width:650px){
+  .music-player{right:8px!important;bottom:8px!important;width:min(176px,calc(100vw - 16px))!important}
+  .music-play,.music-next{width:25px!important;height:25px!important;min-width:25px!important}
+  .music-title-button strong{font-size:8px!important}
+  .music-panel{bottom:50px!important;width:min(306px,calc(100vw - 24px))!important;height:min(405px,calc(100vh - 96px))!important;max-height:min(405px,calc(100vh - 96px))!important}
+  .music-panel-close{width:40px!important;height:40px!important;min-width:40px!important}
+}
+.dexsi-avatar{background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 34%),linear-gradient(145deg,#17141d,#0c0b10)!important;border-color:rgba(235,225,250,.2)!important}
