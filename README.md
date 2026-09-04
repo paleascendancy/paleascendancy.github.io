@@ -1,17 +1,5 @@
-# Pale Ascendancy
+# Pale Ascendancy V18
 
-Site oficial da Pale Ascendancy — comunidade que conecta editores, criadores e clientes para projetos audiovisuais.
+Versão com autenticação corrigida, perfil automático via Supabase, cabeçalho de conta persistente entre páginas, player de música compacto, painel administrativo protegido por `admin_users`, diretório de editores e preparação para monetização.
 
-## Páginas principais
-- Home
-- Editores
-- Perfil
-- Serviços
-- Termos de Uso
-- Política de Privacidade
-
-## Publicação
-O projeto é um site estático (HTML/CSS/JS) e pode ser publicado no Vercel importando o repositório do GitHub. Consulte `VERCEL.md`.
-
-## Backend
-O cadastro e os perfis utilizam Supabase.
+Consulte `SUPABASE_CONFIG.md` e execute `PALE_ASCENDANCY_V18_SUPABASE.sql`.

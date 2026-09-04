@@ -1,535 +1,199 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Criar conta — Pale Ascendancy</title>
-
-    <meta
-        name="description"
-        content="Crie sua conta na Pale Ascendancy."
-    >
-
-    <meta
-        name="theme-color"
-        content="#0d0c0b"
-    >
-
-    <link
-        rel="icon"
-        href="favicon.svg"
-        type="image/svg+xml"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Criar conta — Pale Ascendancy</title>
+<meta content="Crie sua conta na Pale Ascendancy." name="description"/>
+<meta content="#050914" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="style.css?v=18" rel="stylesheet"/>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
-
-
 <body>
-
-
-<!-- ==================================================
-     HEADER
-================================================== -->
-
 <header class="header">
-
-    <a
-        href="index.html"
-        class="brand"
-    >
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="36"
-            height="36"
-        >
-
-        <span>
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="pale-ascendancy-logo.png" width="36"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </a>
-
-
-    <nav
-        class="nav"
-        aria-label="Navegação principal"
-    >
-
-        <a href="index.html">
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
             Home
         </a>
-
-        <a href="index.html#sobre">
+<a href="index.html#sobre">
             Sobre
         </a>
-
-        <a href="servicos.html">
+<a href="servicos.html">
             Serviços
         </a>
-
-        <a href="editores.html">
+<a href="editores.html">
             Editores
         </a>
-
-        <a href="index.html#contato">
+<a href="index.html#contato">
             Contato
         </a>
-
-    </nav>
-
-
-    <a
-        class="discord-button"
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
+</nav>
+<a class="discord-button" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-
-
-    <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-label="Abrir menu"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-    >
-
-        <span
-            class="menu-icon"
-            aria-hidden="true"
-        ></span>
-
-    </button>
-
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button" onclick="(function(b){var m=document.getElementById('mobileMenu');if(!m)return;var o=!m.classList.contains('open');m.classList.toggle('open',o);m.classList.toggle('active',o);b.setAttribute('aria-expanded',o?'true':'false');})(this)">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
 </header>
-
-
-
-<!-- ==================================================
-     MENU MOBILE
-================================================== -->
-
-<div
-    class="mobile-menu"
-    id="mobileMenu"
->
-
-    <a href="index.html">
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
         Home
     </a>
-
-    <a href="index.html#sobre">
+<a href="index.html#sobre">
         Sobre
     </a>
-
-    <a href="servicos.html">
+<a href="servicos.html">
         Serviços
     </a>
-
-    <a href="editores.html">
+<a href="editores.html">
         Editores
     </a>
-
-    <a href="index.html#contato">
+<a href="index.html#contato">
         Contato
     </a>
-
-
-    <a
-        href="https://discord.gg/H3mnq7Nfp"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mobile-discord"
-    >
+<a class="mobile-discord" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
         Entrar no Discord
     </a>
-
 </div>
-
-
-
-<!-- ==================================================
-     CADASTRO
-================================================== -->
-
 <main class="auth-page">
-
-    <div
-        class="hero-glow"
-        aria-hidden="true"
-    ></div>
-
-
-    <section class="auth-container">
-
-
-        <div class="auth-heading">
-
-            <p class="eyebrow">
-                Pale Ascendancy
-            </p>
-
-
-            <h1>
+<div aria-hidden="true" class="hero-glow"></div>
+<section class="auth-container">
+<div class="auth-heading">
+<p class="eyebrow">Conta de editor</p>
+<h1>
                 Crie sua <span>conta.</span>
-            </h1>
-
-
-            <p>
+</h1>
+<p>
                 Faça seu cadastro para entrar na rede
                 de editores da Pale Ascendancy.
             </p>
-
-        </div>
-
-
-
-        <!-- ==================================================
-             FORMULÁRIO
-        ================================================== -->
-
-        <form
-            class="auth-form"
-            id="registerForm"
-        >
-
-
-            <!-- NOME -->
-
-            <div class="form-row">
-
-                <label for="nome">
+</div>
+<form class="auth-form" id="registerForm">
+<div class="form-row">
+<label for="nome">
                     Nome
                 </label>
-
-                <input
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    placeholder="Seu nome"
-                    autocomplete="name"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- NOME ARTÍSTICO -->
-
-            <div class="form-row">
-
-                <label for="nomeArtistico">
+<input autocomplete="name" id="nome" name="nome" placeholder="Seu nome" required="" type="text"/>
+</div>
+<div class="form-row">
+<label for="nomeArtistico">
                     Nome artístico
                 </label>
-
-                <input
-                    type="text"
-                    id="nomeArtistico"
-                    name="nomeArtistico"
-                    placeholder="Como você quer aparecer na rede"
-                    autocomplete="nickname"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- EMAIL -->
-
-            <div class="form-row">
-
-                <label for="email">
+<input autocomplete="nickname" id="nomeArtistico" name="nomeArtistico" placeholder="Como você quer aparecer na rede" required="" type="text"/>
+</div>
+<div class="form-row">
+<label for="email">
                     E-mail
                 </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="seuemail@email.com"
-                    autocomplete="email"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- SENHA -->
-
-            <div class="form-row">
-
-                <label for="senha">
+<input autocomplete="email" id="email" name="email" placeholder="seuemail@email.com" required="" type="email"/>
+</div>
+<div class="form-row">
+<label for="senha">
                     Senha
                 </label>
-
-                <input
-                    type="password"
-                    id="senha"
-                    name="senha"
-                    placeholder="Crie uma senha"
-                    autocomplete="new-password"
-                    minlength="8"
-                    required
-                >
-
-                <small class="field-help">
+<input autocomplete="new-password" id="senha" minlength="8" name="senha" placeholder="Crie uma senha" required="" type="password"/>
+<small class="field-help">
                     A senha deve ter pelo menos 8 caracteres.
                 </small>
-
-            </div>
-
-
-
-            <!-- CONFIRMAR SENHA -->
-
-            <div class="form-row">
-
-                <label for="confirmarSenha">
+</div>
+<div class="form-row">
+<label for="confirmarSenha">
                     Confirmar senha
                 </label>
-
-                <input
-                    type="password"
-                    id="confirmarSenha"
-                    name="confirmarSenha"
-                    placeholder="Digite a senha novamente"
-                    autocomplete="new-password"
-                    minlength="8"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- ESPECIALIDADE -->
-
-            <div class="form-row">
-
-                <label for="especialidade">
+<input autocomplete="new-password" id="confirmarSenha" minlength="8" name="confirmarSenha" placeholder="Digite a senha novamente" required="" type="password"/>
+</div>
+<div class="form-row">
+<label for="especialidade">
                     Especialidade principal
                 </label>
-
-                <select
-                    id="especialidade"
-                    name="especialidade"
-                    required
-                >
-
-                    <option
-                        value=""
-                        selected
-                        disabled
-                    >
+<select id="especialidade" name="especialidade" required="">
+<option disabled="" selected="" value="">
                         Selecione uma especialidade
                     </option>
 
-
-                    <option value="promo">
-                        Promo
-                    </option>
-
-
-                    <option value="trailer">
+<option value="trailer">
                         Trailers
                     </option>
-
-
-                    <option value="highlight">
+<option value="highlight">
                         Highlights
                     </option>
-
-
-                    <option value="motion">
+<option value="motion">
                         Motion Design
                     </option>
-
-
-                    <option value="anime">
+<option value="anime">
                         Anime / Mangá
                     </option>
-
-
-                    <option value="gaming">
+<option value="gaming">
                         Gaming
                     </option>
-
-
-                    <option value="outros">
+<option value="outros">
                         Outros
                     </option>
-
-                </select>
-
-            </div>
-
-
-
-            <!-- TERMOS -->
-
-            <div class="form-checkbox">
-
-                <input
-                    type="checkbox"
-                    id="termos"
-                    name="termos"
-                    required
-                >
-
-                <label for="termos">
+</select><small class="field-help">Para atuar com Promo, não faça cadastro pelo site. Entre em contato diretamente com a administração.</small>
+</div>
+<div class="form-checkbox">
+<input id="termos" name="termos" required="" type="checkbox"/>
+<label for="termos">
 
                     Concordo com as regras e diretrizes
                     da Pale Ascendancy.
 
                 </label>
-
-            </div>
-
-
-
-            <!-- MENSAGEM -->
-
-            <p
-                class="auth-message"
-                id="registerMessage"
-                aria-live="polite"
-            ></p>
-
-
-
-            <!-- BOTÃO -->
-
-            <button
-                type="submit"
-                class="primary-button auth-submit"
-                id="registerButton"
-            >
+</div>
+<p aria-live="polite" class="auth-message" id="registerMessage"></p>
+<button class="primary-button auth-submit" id="registerButton" type="submit">
                 Criar conta
             </button>
-
-
-        </form>
-
-
-
-        <!-- ==================================================
-             LOGIN
-        ================================================== -->
-
-        <div class="auth-footer">
-
-            <p>
+</form>
+<div class="auth-footer">
+<p>
                 Já possui uma conta?
             </p>
-
-            <a href="login.html">
+<a href="login.html">
                 Entrar na minha conta
             </a>
-
-        </div>
-
-
-    </section>
-
+</div>
+</section>
 </main>
-
-
-
-<!-- ==================================================
-     FOOTER
-================================================== -->
-
 <footer>
-
-    <div class="footer-brand">
-
-        <img
-            src="1 Sem Título_20260901004747.png"
-            alt="Pale Ascendancy"
-            width="28"
-            height="28"
-        >
-
-        <span>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="pale-ascendancy-logo.png" width="28"/>
+<span>
             PALE ASCENDANCY
         </span>
-
-    </div>
-
-
-    <p>
-        Rede de editores e produção audiovisual.
+</div>
+<p>
+        Editores, contratantes e projetos em um só lugar.
     </p>
-
-
-    <small>
+<small>
         © 2026 Pale Ascendancy. Todos os direitos reservados.
     </small>
-
+<div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-
-
-
-<!-- ==================================================
-     SCRIPT PRINCIPAL
-================================================== -->
-
-<script src="script.js"></script>
-
-
-
+<script src="script.js?v=17"></script>
 <!-- ==================================================
      SUPABASE
 ================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
 
 /* ==================================================
-   CONFIGURAÇÃO SUPABASE
+   SUPABASE
 ================================================== */
 
 const SUPABASE_URL =
     "https://fnyellunugdfesprmvzm.supabase.co";
-
 
 const SUPABASE_KEY =
     "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
@@ -557,10 +221,8 @@ const supabaseClient =
 const registerForm =
     document.getElementById("registerForm");
 
-
 const registerMessage =
     document.getElementById("registerMessage");
-
 
 const registerButton =
     document.getElementById("registerButton");
@@ -575,7 +237,6 @@ function showMessage(text, type) {
 
     registerMessage.textContent =
         text;
-
 
     registerMessage.className =
         "auth-message";
@@ -604,10 +265,6 @@ registerForm.addEventListener(
         event.preventDefault();
 
 
-        /* ==================================================
-           PEGAR DADOS DO FORMULÁRIO
-        ================================================== */
-
         const nome =
             document
                 .getElementById("nome")
@@ -626,8 +283,7 @@ registerForm.addEventListener(
             document
                 .getElementById("email")
                 .value
-                .trim()
-                .toLowerCase();
+                .trim();
 
 
         const senha =
@@ -655,9 +311,9 @@ registerForm.addEventListener(
 
 
 
-        /* ==================================================
+        /* ==========================================
            VALIDAÇÃO
-        ================================================== */
+        ========================================== */
 
         if (
             !nome ||
@@ -678,7 +334,6 @@ registerForm.addEventListener(
         }
 
 
-
         if (senha.length < 8) {
 
             showMessage(
@@ -691,7 +346,6 @@ registerForm.addEventListener(
         }
 
 
-
         if (senha !== confirmarSenha) {
 
             showMessage(
@@ -702,7 +356,6 @@ registerForm.addEventListener(
             return;
 
         }
-
 
 
         if (!termos) {
@@ -718,13 +371,12 @@ registerForm.addEventListener(
 
 
 
-        /* ==================================================
+        /* ==========================================
            BOTÃO
-        ================================================== */
+        ========================================== */
 
         registerButton.disabled =
             true;
-
 
         registerButton.textContent =
             "Criando conta...";
@@ -734,15 +386,9 @@ registerForm.addEventListener(
         try {
 
 
-            /* ==================================================
-               CRIAR USUÁRIO NO SUPABASE AUTH
-
-               IMPORTANTE:
-               Os dados do perfil são enviados como metadata.
-
-               O TRIGGER DO SUPABASE vai pegar esses dados
-               e criar automaticamente a linha em public.profile.
-            ================================================== */
+            /* ======================================
+               CRIAR CONTA NO SUPABASE AUTH
+            ====================================== */
 
             const {
                 data: authData,
@@ -756,28 +402,20 @@ registerForm.addEventListener(
 
                     options: {
 
+                        emailRedirectTo: new URL(
+                            "perfil.html",
+                            window.location.origin
+                        ).href,
+
                         data: {
-
-                            nome:
-                                nome,
-
-                            nome_artistico:
-                                nomeArtistico,
-
-                            especialidade:
-                                especialidade
-
+                            nome: nome,
+                            nome_artistico: nomeArtistico,
+                            especialidade: especialidade
                         }
-
                     }
 
                 });
 
-
-
-            /* ==================================================
-               VERIFICAR ERRO DO AUTH
-            ================================================== */
 
             if (authError) {
 
@@ -785,11 +423,6 @@ registerForm.addEventListener(
 
             }
 
-
-
-            /* ==================================================
-               VERIFICAR USUÁRIO
-            ================================================== */
 
             if (
                 !authData ||
@@ -803,17 +436,32 @@ registerForm.addEventListener(
             }
 
 
+            const user =
+                authData.user;
 
-            /* ==================================================
+
+
+            /* ======================================
+               PERFIL
+
+               O perfil é criado automaticamente pelo trigger
+               do Supabase quando a conta é criada.
+            ====================================== */
+
+            console.log(
+                "Conta criada. O perfil será criado automaticamente pelo Supabase."
+            );
+
+
+    /* ======================================
                VERIFICAR SESSÃO
-            ================================================== */
+            ====================================== */
 
             const {
                 data: sessionData,
                 error: sessionError
             } =
                 await supabaseClient.auth.getSession();
-
 
 
             if (sessionError) {
@@ -824,9 +472,9 @@ registerForm.addEventListener(
 
 
 
-            /* ==================================================
-               USUÁRIO JÁ ESTÁ LOGADO
-            ================================================== */
+            /* ======================================
+               SE JÁ ESTIVER LOGADO
+            ====================================== */
 
             if (
                 sessionData &&
@@ -857,9 +505,9 @@ registerForm.addEventListener(
 
 
 
-            /* ==================================================
-               CONFIRMAÇÃO DE EMAIL
-            ================================================== */
+            /* ======================================
+               CONFIRMAÇÃO DE E-MAIL
+            ====================================== */
 
             showMessage(
                 "Conta criada com sucesso! Verifique seu e-mail para confirmar a conta e depois faça login.",
@@ -868,7 +516,6 @@ registerForm.addEventListener(
 
 
         } catch (error) {
-
 
             console.error(
                 "ERRO COMPLETO DO CADASTRO:",
@@ -885,10 +532,8 @@ registerForm.addEventListener(
 
         } finally {
 
-
             registerButton.disabled =
                 false;
-
 
             registerButton.textContent =
                 "Criar conta";
@@ -899,8 +544,5 @@ registerForm.addEventListener(
 );
 
 </script>
-
-
 </body>
-
 </html>
