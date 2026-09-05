@@ -1,285 +1,1138 @@
-/* PALE ASCENDANCY V27 — unified client */
+/* PALE ASCENDANCY — SITE CORE */
 (() => {
   "use strict";
 
-  const SUPABASE_URL = "https://fnyellunugdfesprmvzm.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
   const PLAYLIST = [
-    ["Meaningful Love", "audio/meaningful love (slowed instrumental)(MP3_160K).mp3"],
-    ["Canals", "audio/Joakim Karud - Canals(MP3_160K).mp3"],
-    ["Better Days", "audio/LAKEY INSPIRED - Better Days(MP3_160K).mp3"],
-    ["Chill Day", "audio/LAKEY INSPIRED - Chill Day(MP3_160K).mp3"],
-    ["New Jeans Jersey Remix SLOWED", "audio/New Jeans Jersey Remix SLOWED - (Jiandro x Dxrkaii)(MP3_160K).mp3"],
-    ["Nuts — Instrumental (Slowed)", "audio/Nuts Instrumental (Slowed)(MP3_160K).mp3"],
-    ["Sweater Weather — Instrumental", "audio/The Neighbourhood- Sweater Weather (Official Instrumental)(MP3_160K).mp3"],
-    ["Childish Gambino — Instrumental", "audio/les childish gambino instrumental _foryoupage _song _fyp _slowandreverb _instrumental _Mreso(MP3).mp3"],
-    ["Música", "audio/musica.mp3"]
+    { title: "Meaningful Love", file: "music/01-meaningful-love.mp3" },
+    { title: "Better Days", file: "music/02-better-days.mp3" },
+    { title: "Chill Day", file: "music/03-chill-day.mp3" },
+    { title: "Canals", file: "music/04-canals.mp3" },
+    { title: "Tek It — Hoodtrap Remix", file: "music/05-tek-it-hoodtrap-remix.mp3" },
+    { title: "Star Shopping", file: "music/06-star-shopping.mp3" },
+    { title: "Earrings", file: "music/07-earrings.mp3" },
+    { title: "New Jeans Jersey Remix", file: "music/08-new-jeans-jersey-remix.mp3" },
+    { title: "Nuts — Instrumental Slowed", file: "music/09-nuts-instrumental-slowed.mp3" },
+    { title: "Sweater Weather — Instrumental", file: "music/10-sweater-weather-instrumental.mp3" },
+    { title: "Childish Gambino — Instrumental", file: "music/11-childish-gambino-instrumental.mp3" }
   ];
-  const CATEGORIES = [
-    ["promo", "Promo"], ["trailer", "Trailers"], ["highlight", "Highlights"], ["motion", "Motion Design"],
-    ["anime", "Anime / Mangá"], ["gaming", "Gaming"], ["tiktok", "TikTok"],
-    ["reels", "Reels"], ["amv", "AMV"], ["thumbnail", "Thumbnails"],
-    ["youtube", "YouTube"], ["design", "Design Gráfico"], ["branding", "Branding"],
-    ["uiux", "UI / UX"], ["illustration", "Ilustração"], ["3d", "3D"], ["outros", "Outros"]
-  ];
-  const CATEGORY_MAP = Object.fromEntries(CATEGORIES);
-  const PLANS = {
-    free: ["Gratuito", 2], premium: ["Premium", 5], pro: ["Pro", 10],
-    studio: ["Studio", 20], elite: ["Elite", 40]
-  };
-  const PREMIUM_BORDERS = { minimal:"Minimal", aurora:"Aurora", pale:"Pale", ascendancy:"Ascendancy", neon:"Neon", obsidian:"Obsidian" };
-  const PREMIUM_CARDS = { elegant:"Elegant", glass:"Glass", showcase:"Showcase" };
-  function premiumActive(profile) { return !!profile && profile.professional_plan === "premium" && profile.plan_status === "active" && (!profile.plan_expires_at || new Date(profile.plan_expires_at).getTime() > Date.now()); }
-  function premiumBorder(profile) { return PREMIUM_BORDERS[profile?.premium_border] ? profile.premium_border : "minimal"; }
-  function premiumCard(profile) { return PREMIUM_CARDS[profile?.premium_card_style] ? profile.premium_card_style : "elegant"; }
-  function premiumVars(profile) { return `premium-border-${premiumBorder(profile)}`; }
-  const THEME_DEFAULTS = {
-    "--bg": "#08070c", "--bg-deep": "#05040a", "--surface": "#121018", "--surface-2": "#1a1722",
-    "--text": "#f7f4fb", "--text-soft": "#ddd6e8", "--muted": "#9c94a8",
-    "--cyan": "#9fe8ff", "--violet": "#a894ff", "--gold": "#e9cf91", "--pink": "#e6a4d0"
+
+  const STORE = {
+    index: "pa_music_index",
+    time: "pa_music_time",
+    playing: "pa_music_playing",
+    profile: "pa_profile_cache",
+    suggestions: "pa_music_suggestions"
   };
 
-  let client = null;
+  const AUTH_PAGES = new Set([
+    "login.html",
+    "cadastro.html",
+    "perfil.html",
+    "editar-perfil.html",
+    "admin.html",
+    "editor-painel.html",
+    "login-editor.html",
+    "login-profissional.html",
+    "login-admin.html",
+    "planos.html",
+    "editor-perfil.html"
+  ]);
+
   let audio = null;
-  let trackIndex = 0;
+  let currentIndex = 0;
+  let failed = new Set();
+  let audioContext = null;
+  let analyser = null;
+  let sourceNode = null;
+  let beatFrame = 0;
+  let navigating = false;
+  let supabaseClient = null;
+  let supabasePromise = null;
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-  const esc = value => String(value ?? "").replace(/[&<>\"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
-  const setMsg = (el, text, kind = "") => { if (!el) return; el.textContent = text || ""; el.className = `auth-message ${kind}`.trim(); };
 
-  function getClient() {
-    if (client) return client;
-    if (window.supabase?.createClient) {
-      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-      });
-    }
-    return client;
-  }
-
-  async function ensureClient() {
-    if (getClient()) return client;
-    await new Promise(resolve => {
-      const s = document.createElement("script");
-      s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-      s.onload = resolve; s.onerror = resolve;
-      document.head.appendChild(s);
-    });
-    return getClient();
-  }
-
-  async function session() {
-    const c = await ensureClient();
-    return (await c.auth.getSession()).data.session || null;
-  }
-
-  async function profile(userId, full = false) {
-    const c = await ensureClient();
-    // Campos estáveis do perfil. O login não depende das colunas opcionais
-    // de personalização Premium, evitando que uma migração futura bloqueie
-    // a autenticação profissional.
-    const fields = full
-      ? "id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,portfolio_limit,plan_status,plan_expires_at"
-      : "id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,professional_plan,portfolio_limit,plan_status,plan_expires_at";
-    const r = await c.from("profile").select(fields).eq("id", userId).maybeSingle();
-    if (r.error) {
-      console.error("Erro ao carregar perfil:", r.error);
-      return null;
-    }
-    return r.data || null;
-  }
-
-  async function premiumProfileOptions(userId) {
-    const c = await ensureClient();
+  function read(key, fallback = null) {
     try {
-      const r = await c.from("profile").select("premium_border,premium_card_style").eq("id", userId).maybeSingle();
-      return r.error ? {} : (r.data || {});
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : value;
     } catch (_) {
-      return {};
+      return fallback;
     }
   }
 
-  async function isAdmin(userId) {
-    const c = await ensureClient();
-    if (!userId) return false;
-    const r = await c.rpc("is_admin");
-    return !r.error && r.data === true;
+  function write(key, value) {
+    try { localStorage.setItem(key, String(value)); } catch (_) {}
   }
 
-  function setMenu(open) {
-    const menu = $("#mobileMenu");
-    const button = $("#menuButton");
-    const backdrop = $("#paMenuBackdrop");
-    if (!menu || !button) return;
-    menu.classList.toggle("open", open);
-    menu.classList.toggle("active", open);
-    document.body.classList.toggle("mobile-menu-open", open);
-    button.setAttribute("aria-expanded", open ? "true" : "false");
-    button.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-    backdrop?.classList.toggle("open", open);
+  function absoluteURL(path) {
+    return new URL(path, document.baseURI).href;
   }
 
-  function initMenu() {
-    const button = $("#menuButton");
-    const menu = $("#mobileMenu");
-    if (!button || !menu || button.dataset.paReady === "1") return;
-    button.dataset.paReady = "1";
-    let backdrop = $("#paMenuBackdrop");
-    if (!backdrop) {
-      backdrop = document.createElement("div");
-      backdrop.id = "paMenuBackdrop";
-      document.body.appendChild(backdrop);
-    }
-    button.addEventListener("click", event => {
-      event.preventDefault();
-      event.stopPropagation();
-      setMenu(!menu.classList.contains("open"));
-    }, { passive: false });
-    menu.addEventListener("click", event => {
-      const link = event.target.closest("a");
-      if (link) setMenu(false);
-    });
-    backdrop.addEventListener("click", () => setMenu(false));
-    document.addEventListener("keydown", event => { if (event.key === "Escape") setMenu(false); });
+  function escapeHTML(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
-  function injectAccountUI() {
-    const header = $(".header");
-    if (!header) return;
-    if (!$("#paAccountArea")) {
-      const area = document.createElement("div");
-      area.id = "paAccountArea";
-      area.className = "account-area";
-      area.innerHTML = `<a class="secondary-button account-login" href="login.html">Entrar</a>`;
-      header.insertBefore(area, $("#menuButton"));
+  /* ---------------- MENU ---------------- */
+
+  function getMobileMenu() {
+    return document.getElementById("mobileMenu");
+  }
+
+  function setMobileMenu(open) {
+    const menu = getMobileMenu();
+    const button = document.getElementById("menuButton");
+    if (!menu) return;
+    menu.classList.toggle("open", !!open);
+    menu.classList.toggle("active", !!open);
+    document.body.classList.toggle("mobile-menu-open", !!open);
+    if (button) {
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+      button.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
     }
   }
 
-  async function refreshAccountUI() {
-    const area = $("#paAccountArea");
-    const menu = $("#mobileMenu");
-    if (!area) return;
-    const s = await session();
-    if (!s?.user) {
-      area.innerHTML = `<a class="secondary-button account-login" href="login.html">Entrar</a><a class="primary-button account-register" href="cadastro.html">Criar conta</a>`;
-      if (menu) {
-        menu.innerHTML = `<a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos profissionais</a><div class="mobile-account"><a href="login.html">Login comum</a><a href="login-profissional.html">Login profissional</a></div>`;
+  function closeMobileMenu() { setMobileMenu(false); }
+
+  function initMobileMenu() {
+    if (window.__PA_MENU_READY__) return;
+    window.__PA_MENU_READY__ = true;
+
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
+
+      const button = target.closest("#menuButton");
+      if (button) {
+        event.preventDefault();
+        event.stopPropagation();
+        const menu = getMobileMenu();
+        if (menu) setMobileMenu(!menu.classList.contains("open"));
+        return;
       }
-      const manage = $("#editorManageBar");
-      const apply = $("#editorApplyBar");
-      if (manage) manage.hidden = true;
-      if (apply) apply.hidden = true;
+
+      const menu = getMobileMenu();
+      if (menu?.classList.contains("open") && !target.closest("#mobileMenu")) closeMobileMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMobileMenu();
+    });
+  }
+
+  /* ---------------- SEARCH / FILTERS ---------------- */
+
+  function initEditorTools() {
+    const input = $("#searchInput");
+    const grid = $("#editorsGrid");
+    const buttons = $$(".filter-button");
+    if (!input || !grid || input.dataset.paReady === "1") return;
+
+    input.dataset.paReady = "1";
+    let filter = "todos";
+
+    const apply = () => {
+      const term = input.value.trim().toLowerCase();
+      $$(".editor-profile", grid).forEach((card) => {
+        const haystack = `${card.dataset.search || ""} ${card.textContent || ""}`.toLowerCase();
+        const categories = (card.dataset.category || "todos").toLowerCase().split(/\s+/);
+        const matchesText = !term || haystack.includes(term);
+        const matchesFilter = filter === "todos" || categories.includes(filter) || categories.includes("todos");
+        card.hidden = !(matchesText && matchesFilter);
+      });
+    };
+
+    window.__PA_EDITOR_FILTER_APPLY__ = apply;
+    input.addEventListener("input", apply);
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filter = (button.dataset.filter || "todos").toLowerCase();
+        buttons.forEach((item) => item.classList.toggle("active", item === button));
+        apply();
+      });
+    });
+
+    apply();
+  }
+
+  /* ---------------- PROFESSIONAL DIRECTORY / REELS ---------------- */
+
+  const PROFESSIONAL_CATEGORY_MAP = {
+    trailer: "Trailers", highlight: "Highlights", motion: "Motion Design", anime: "Anime / Mangá",
+    gaming: "Gaming", tiktok: "TikTok", reels: "Reels", amv: "AMV", thumbnail: "Thumbnails",
+    youtube: "YouTube", promo: "Promo", design: "Design Gráfico", branding: "Branding", uiux: "UI / UX",
+    illustration: "Ilustração", "3d": "3D", outros: "Outros"
+  };
+
+  function professionalRole(profile) {
+    return profile.is_editor && profile.is_designer ? "EDITOR + DESIGNER" : profile.is_designer ? "DESIGNER" : "EDITOR";
+  }
+
+  function professionalAvailability(value) {
+    return value === "ocupado" ? "Ocupado" : value === "sob_consulta" ? "Sob consulta" : "Disponível";
+  }
+
+  function portfolioMediaMarkup(item) {
+    const title = escapeHTML(item.title || "Trabalho");
+    const url = escapeHTML(item.url || "");
+    if (item.item_type === "video") return `<video src="${url}" muted autoplay loop playsinline preload="metadata" aria-label="${title}"></video>`;
+    if (item.item_type === "image") return `<img src="${url}" alt="${title}" loading="lazy">`;
+    return `<div class="portfolio-reel-link"><span>↗</span><strong>Abrir projeto</strong><small>${url}</small></div>`;
+  }
+
+  async function loadProfessionalDirectory() {
+    const grid = $("#editorsGrid");
+    if (!grid) return;
+
+    const reels = $("#portfolioReels");
+    grid.innerHTML = '<div class="professional-loading">Carregando profissionais...</div>';
+    if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Carregando portfólios...</div>';
+
+    const client = getSupabaseClient();
+    if (!client) {
+      await ensureSupabase();
+    }
+    const sb = getSupabaseClient();
+    if (!sb) {
+      grid.innerHTML = '<div class="professional-loading">Não foi possível conectar aos profissionais.</div>';
+      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
       return;
     }
-    const p = await profile(s.user.id);
-    const admin = await isAdmin(s.user.id);
-    const professional = !!(p?.is_editor || p?.is_designer);
-    const label = p?.nome_artistico || p?.nome || "Minha conta";
-    area.innerHTML = `<a class="secondary-button account-login" href="perfil.html">${esc(label)}</a>${admin ? `<a class="secondary-button admin-header-link" href="admin.html">Admin</a>` : ""}${professional ? `<a class="secondary-button editor-header-link" href="editor-painel.html">Profissional</a>` : ""}`;
-    if (menu) {
-      const links = [
-        `<a href="index.html">Home</a>`, `<a href="editores.html">Editores &amp; Designers</a>`,
-        `<a href="servicos.html">Serviços</a>`, `<a href="planos.html">Planos profissionais</a>`,
-        `<a href="perfil.html">Meu perfil</a>`
-      ];
-      if (professional) links.push(`<a href="editor-painel.html">Área profissional</a>`);
-      if (admin) links.push(`<a href="admin.html">Administração</a>`);
-      links.push(`<a href="#" data-pa-logout>Sair</a>`);
-      menu.innerHTML = links.join("");
-      $("[data-pa-logout]", menu)?.addEventListener("click", async e => {
-        e.preventDefault();
-        const c = await ensureClient();
-        await c.auth.signOut();
-        location.replace("index.html");
-      });
+
+    const [{ data: profiles, error: profileError }, { data: items, error: itemError }] = await Promise.all([
+      sb.from("editor_directory")
+        .select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer")
+        .order("is_featured", { ascending: false }),
+      sb.from("editor_portfolio_items")
+        .select("id,editor_id,title,description,item_type,url,sort_order,created_at")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false })
+    ]);
+
+    if (profileError) {
+      grid.innerHTML = '<div class="professional-loading">Não foi possível carregar os profissionais.</div>';
+      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      return;
     }
-    const manage = $("#editorManageBar");
-    const apply = $("#editorApplyBar");
-    if (manage) manage.hidden = !professional;
-    if (apply) apply.hidden = !s?.user || professional;
+
+    const approved = profiles || [];
+    if (!approved.length) {
+      grid.innerHTML = '<div class="professional-loading">Ainda não há profissionais aprovados na rede.</div>';
+    } else {
+      grid.innerHTML = approved.map((profile) => {
+        const name = profile.nome_artistico || profile.nome || "Profissional";
+        const categories = [profile.especialidade, ...(Array.isArray(profile.editor_categories) ? profile.editor_categories : [])].filter(Boolean).map(String);
+        const tags = [...new Set(categories)].slice(0, 5).map((item) => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[item] || item)}</span>`).join("");
+        const avatar = profile.avatar_url
+          ? `<img class="editor-avatar editor-photo" src="${escapeHTML(profile.avatar_url)}" alt="Foto de perfil de ${escapeHTML(name)}" loading="lazy">`
+          : `<div class="editor-avatar placeholder-icon">${escapeHTML(name.charAt(0).toUpperCase())}</div>`;
+        const role = professionalRole(profile);
+        const searchText = `${name} ${profile.especialidade || ""} ${categories.join(" ")} ${profile.bio || ""} ${profile.editor_software || ""}`.toLowerCase();
+        return `<article class="editor-profile dynamic-professional" data-profile-id="${escapeHTML(profile.id)}" data-category="${escapeHTML(categories.join(" ").toLowerCase())}" data-search="${escapeHTML(searchText)}">
+          <div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${escapeHTML(profile.is_featured ? "Destaque" : professionalAvailability(profile.availability))}</div>
+          ${avatar}
+          <h2>${escapeHTML(name)}</h2>
+          <div class="editor-role">${role}</div>
+          <p class="editor-description">${escapeHTML(profile.bio || `${role.toLowerCase()} com foco em ${PROFESSIONAL_CATEGORY_MAP[profile.especialidade] || profile.especialidade || "criação audiovisual"}.`)}</p>
+          <div class="editor-tags">${tags || '<span class="editor-tag">Portfólio</span>'}${profile.is_featured ? '<span class="editor-tag">Destaque</span>' : ''}</div>
+          <div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(profile.id)}">Ver perfil →</a></div>
+        </article>`;
+      }).join("");
+    }
+
+    initEditorPhotos();
+    window.__PA_EDITOR_FILTER_APPLY__?.();
+
+    if (!reels) return;
+    if (itemError) {
+      reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      return;
+    }
+
+    const profileMap = new Map(approved.map((profile) => [profile.id, profile]));
+    const validItems = (items || []).map((item) => ({ ...item, profile: profileMap.get(item.editor_id) })).filter((item) => item.profile);
+    if (!validItems.length) {
+      reels.innerHTML = '<div class="portfolio-reels-empty">Os portfólios publicados pelos profissionais aparecerão aqui.</div>';
+      return;
+    }
+
+    reels.innerHTML = validItems.map((item) => {
+      const profile = item.profile || {};
+      const name = profile.nome_artistico || profile.nome || "Profissional";
+      const body = `<a class="portfolio-reel-media" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">${portfolioMediaMarkup(item)}</a>`;
+      return `<article class="portfolio-reel-card">
+        <div class="portfolio-reel-visual">${body}<div class="portfolio-reel-gradient"></div><div class="portfolio-reel-overlay"><span>${escapeHTML(name)}</span><strong>${escapeHTML(item.title || "Projeto")}</strong></div></div>
+        <div class="portfolio-reel-copy"><strong>${escapeHTML(item.title || "Projeto")}</strong><span>${escapeHTML(name)} · ${item.item_type === "video" ? "Vídeo" : item.item_type === "image" ? "Arte" : "Projeto"}</span>${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}</div>
+      </article>`;
+    }).join("");
   }
 
-  async function applyTheme() {
+  function initEditorPhotos() {
+    $$(".editor-photo").forEach((image) => {
+      if (image.dataset.paReady === "1") return;
+      image.dataset.paReady = "1";
+      image.addEventListener("error", () => {
+        const name = image.alt.replace(/^Foto de perfil de\s*/i, "").trim() || "Editor";
+        const fallback = document.createElement("div");
+        fallback.className = "editor-photo-fallback";
+        fallback.setAttribute("aria-hidden", "true");
+        fallback.textContent = name.charAt(0).toUpperCase();
+        image.replaceWith(fallback);
+      }, { once: true });
+    });
+  }
+
+  /* ---------------- MUSIC UI ---------------- */
+
+  function playerMarkup() {
+    return `
+      <div class="music-player-main">
+        <button class="music-play" id="musicPlay" type="button" aria-label="Reproduzir música">▶</button>
+        <button class="music-title-button" id="musicTitleButton" type="button" aria-label="Abrir lista de músicas">
+          <span class="music-label">PALE ASCENDANCY</span>
+          <strong id="musicTitle">Meaningful Love</strong>
+          <span id="musicStatus">Toque para começar</span>
+        </button>
+        <button class="music-next" id="musicNext" type="button" aria-label="Próxima música">›</button>
+      </div>
+      <audio id="musicAudio" preload="auto" playsinline></audio>
+    `;
+  }
+
+  function ensurePlayer() {
+    let player = $("#musicPlayer");
+    if (!player) {
+      player = document.createElement("div");
+      player.id = "musicPlayer";
+      player.className = "music-player";
+      player.setAttribute("aria-label", "Player de música");
+      player.innerHTML = playerMarkup();
+      document.body.appendChild(player);
+    }
+
+    audio = $("#musicAudio", player);
+    if (!audio) {
+      audio = document.createElement("audio");
+      audio.id = "musicAudio";
+      audio.preload = "auto";
+      audio.setAttribute("playsinline", "");
+      player.appendChild(audio);
+    }
+
+    return player;
+  }
+
+  function ensureMusicPanel() {
+    let panel = $("#musicPanel");
+    if (panel) return panel;
+
+    panel = document.createElement("aside");
+    panel.id = "musicPanel";
+    panel.className = "music-panel";
+    panel.hidden = true;
+    panel.setAttribute("aria-label", "Biblioteca musical");
+    panel.innerHTML = `
+      <div class="music-panel-inner">
+        <header class="music-panel-header">
+          <div>
+            <span class="music-panel-kicker">PALE ASCENDANCY</span>
+            <h2>Biblioteca musical</h2>
+            <p>Escolha uma faixa para continuar ouvindo enquanto navega.</p>
+          </div>
+          <button class="music-panel-close" id="musicPanelClose" type="button" aria-label="Fechar lista">×</button>
+        </header>
+        <label class="music-search-wrap">
+          <span aria-hidden="true">⌕</span>
+          <input id="musicSearch" class="music-search" type="search" placeholder="Pesquisar música..." autocomplete="off">
+        </label>
+        <div id="musicList" class="music-list"></div>
+        <div class="music-suggestion">
+          <strong>Sugira uma música</strong>
+          <p>Envie o nome de uma faixa que você gostaria de ver na playlist.</p>
+          <div class="music-suggestion-row">
+            <input id="musicSuggestionInput" type="text" maxlength="120" placeholder="Nome da música...">
+            <button id="musicSuggestionSend" type="button">Enviar</button>
+          </div>
+          <small id="musicSuggestionStatus" aria-live="polite"></small>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(panel);
+
+    $("#musicPanelClose").addEventListener("click", closeMusicPanel);
+    $("#musicSearch").addEventListener("input", (event) => renderPlaylist(event.target.value));
+    $("#musicSuggestionSend").addEventListener("click", sendSuggestion);
+    $("#musicSuggestionInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") sendSuggestion();
+    });
+
+    return panel;
+  }
+
+  function renderPlaylist(filter = "") {
+    const list = $("#musicList");
+    if (!list) return;
+    const term = filter.trim().toLowerCase();
+    list.innerHTML = "";
+
+    PLAYLIST.forEach((track, index) => {
+      if (term && !track.title.toLowerCase().includes(term)) return;
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "music-list-item";
+      item.classList.toggle("active", index === currentIndex);
+      item.innerHTML = `
+        <span class="music-list-number">${String(index + 1).padStart(2, "0")}</span>
+        <span class="music-list-name">${escapeHTML(track.title)}</span>
+        <span class="music-list-action">${index === currentIndex && !audio?.paused ? "Ⅱ" : "▶"}</span>
+      `;
+      item.addEventListener("click", () => selectTrack(index));
+      list.appendChild(item);
+    });
+
+    if (!list.children.length) {
+      list.innerHTML = '<div class="music-empty">Nenhuma música encontrada.</div>';
+    }
+  }
+
+  function openMusicPanel() {
+    const panel = ensureMusicPanel();
+    panel.hidden = false;
+    requestAnimationFrame(() => panel.classList.add("open"));
+    document.body.classList.add("music-panel-open");
+    renderPlaylist($("#musicSearch")?.value || "");
+  }
+
+  function closeMusicPanel() {
+    const panel = $("#musicPanel");
+    if (!panel) return;
+    panel.classList.remove("open");
+    document.body.classList.remove("music-panel-open");
+    setTimeout(() => { if (!panel.classList.contains("open")) panel.hidden = true; }, 220);
+  }
+
+  function updatePlayer() {
+    const track = PLAYLIST[currentIndex];
+    const play = $("#musicPlay");
+    const title = $("#musicTitle");
+    const status = $("#musicStatus");
+    if (title && track) title.textContent = track.title;
+    if (play) {
+      play.textContent = audio && !audio.paused ? "Ⅱ" : "▶";
+      play.setAttribute("aria-label", audio && !audio.paused ? "Pausar música" : "Reproduzir música");
+    }
+    if (status) status.textContent = audio && !audio.paused ? "Reproduzindo" : "Pausado";
+    renderPlaylist($("#musicSearch")?.value || "");
+  }
+
+  async function setupAudioAnalyser() {
+    if (audioContext || !audio) return;
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) return;
+
     try {
-      const c = await ensureClient();
-      const r = await c.from("site_settings").select("theme").eq("id", "global").maybeSingle();
-      const theme = r.data?.theme || {};
-      Object.entries(theme).forEach(([key, value]) => { if (/^--/.test(key) && typeof value === "string") document.documentElement.style.setProperty(key, value); });
+      audioContext = new Context();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.8;
+      sourceNode = audioContext.createMediaElementSource(audio);
+      sourceNode.connect(analyser);
+      analyser.connect(audioContext.destination);
+      if (audioContext.state === "suspended") await audioContext.resume();
+    } catch (_) {
+      audioContext = null;
+      analyser = null;
+      sourceNode = null;
+    }
+  }
+
+  function startBeatAnimation() {
+    if (beatFrame) return;
+    const data = analyser ? new Uint8Array(analyser.frequencyBinCount) : null;
+
+    const draw = () => {
+      beatFrame = requestAnimationFrame(draw);
+      let intensity = 0.25;
+      if (analyser && data) {
+        analyser.getByteFrequencyData(data);
+        let total = 0;
+        let low = 0;
+        for (let i = 0; i < data.length; i += 1) {
+          total += data[i];
+          if (i < data.length * 0.35) low += data[i];
+        }
+        intensity = Math.min(1, total / data.length / 255 * 0.45 + low / Math.max(1, data.length * 0.35) / 255 * 0.85);
+      }
+
+      const phone = $(".phone");
+      const glow = $(".phone-beat-glow");
+      const bars = $$("#beatBars i");
+      if (phone) {
+        phone.style.setProperty("--beat-scale", (1 + intensity * 0.012).toFixed(4));
+        phone.style.setProperty("--beat-glow", `${Math.round(18 + intensity * 38)}px`);
+      }
+      if (glow) glow.style.opacity = String(0.18 + intensity * 0.5);
+      bars.forEach((bar, index) => {
+        const wave = (Math.sin(performance.now() / (120 + index * 9) + index) + 1) / 2;
+        bar.style.height = `${Math.round(14 + intensity * 48 * (0.45 + wave * 0.55))}px`;
+        bar.style.opacity = String(0.35 + intensity * 0.65);
+      });
+    };
+    draw();
+  }
+
+  function stopBeatAnimation() {
+    if (beatFrame) cancelAnimationFrame(beatFrame);
+    beatFrame = 0;
+    const phone = $(".phone");
+    if (phone) {
+      phone.style.setProperty("--beat-scale", "1");
+      phone.style.setProperty("--beat-glow", "18px");
+    }
+    $$("#beatBars i").forEach((bar) => {
+      bar.style.height = "14px";
+      bar.style.opacity = ".35";
+    });
+  }
+
+  async function playMusic() {
+    if (!audio) return false;
+    try {
+      await setupAudioAnalyser();
+      if (audioContext?.state === "suspended") await audioContext.resume();
+      await audio.play();
+      write(STORE.playing, "1");
+      updatePlayer();
+      startBeatAnimation();
+      return true;
+    } catch (_) {
+      write(STORE.playing, "0");
+      updatePlayer();
+      return false;
+    }
+  }
+
+  function pauseMusic() {
+    if (!audio) return;
+    audio.pause();
+    write(STORE.playing, "0");
+    write(STORE.time, Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
+    updatePlayer();
+    stopBeatAnimation();
+  }
+
+  function setTrack(index, autoplay = false, restoreTime = 0) {
+    if (!audio) return;
+    currentIndex = (index + PLAYLIST.length) % PLAYLIST.length;
+    const track = PLAYLIST[currentIndex];
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    audio.src = absoluteURL(track.file);
+    audio.preload = "auto";
+    audio.load();
+    write(STORE.index, currentIndex);
+    write(STORE.time, restoreTime || 0);
+    write(STORE.playing, autoplay ? "1" : "0");
+    updatePlayer();
+
+    if (restoreTime > 0) {
+      const restore = () => {
+        if (Number.isFinite(audio.duration) && restoreTime < audio.duration) audio.currentTime = restoreTime;
+      };
+      if (audio.readyState >= 1) restore();
+      else audio.addEventListener("loadedmetadata", restore, { once: true });
+    }
+
+    if (autoplay) {
+      const attempt = () => { playMusic(); };
+      if (audio.readyState >= 2) attempt();
+      else audio.addEventListener("canplay", attempt, { once: true });
+    }
+  }
+
+  function selectTrack(index) {
+    failed.delete(index);
+    setTrack(index, true);
+    closeMusicPanel();
+  }
+
+  function nextTrack() {
+    let next = (currentIndex + 1) % PLAYLIST.length;
+    let guard = 0;
+    while (failed.has(next) && guard < PLAYLIST.length) {
+      next = (next + 1) % PLAYLIST.length;
+      guard += 1;
+    }
+    if (guard >= PLAYLIST.length) failed.clear();
+    setTrack(next, true);
+  }
+
+  function handleAudioError() {
+    if (!audio) return;
+    failed.add(currentIndex);
+    if (failed.size >= PLAYLIST.length) {
+      failed.clear();
+      const status = $("#musicStatus");
+      if (status) status.textContent = "Não foi possível carregar as músicas.";
+      return;
+    }
+    nextTrack();
+  }
+
+  function sendSuggestion() {
+    const input = $("#musicSuggestionInput");
+    const status = $("#musicSuggestionStatus");
+    if (!input || !status) return;
+    const value = input.value.trim();
+    if (!value) {
+      status.textContent = "Digite o nome da música.";
+      return;
+    }
+
+    let suggestions = [];
+    try { suggestions = JSON.parse(read(STORE.suggestions, "[]")); } catch (_) {}
+    if (!Array.isArray(suggestions)) suggestions = [];
+    suggestions.push({ music: value, date: new Date().toISOString() });
+    write(STORE.suggestions, JSON.stringify(suggestions));
+    status.textContent = "Sugestão registrada.";
+    input.value = "";
+  }
+
+  function initMusic() {
+    ensurePlayer();
+    ensureMusicPanel();
+
+    const play = $("#musicPlay");
+    const title = $("#musicTitleButton");
+    const next = $("#musicNext");
+
+    if (play && play.dataset.paReady !== "1") {
+      play.dataset.paReady = "1";
+      play.addEventListener("click", () => audio?.paused ? playMusic() : pauseMusic());
+    }
+
+    if (title && title.dataset.paReady !== "1") {
+      title.dataset.paReady = "1";
+      title.addEventListener("click", openMusicPanel);
+    }
+
+    if (next && next.dataset.paReady !== "1") {
+      next.dataset.paReady = "1";
+      next.addEventListener("click", nextTrack);
+    }
+
+    if (audio?.dataset.paReady !== "1") {
+      audio.dataset.paReady = "1";
+      audio.addEventListener("ended", nextTrack);
+      audio.addEventListener("error", handleAudioError);
+      audio.addEventListener("play", () => {
+        write(STORE.playing, "1");
+        updatePlayer();
+        startBeatAnimation();
+      });
+      audio.addEventListener("pause", () => {
+        write(STORE.playing, "0");
+        updatePlayer();
+        stopBeatAnimation();
+      });
+      audio.addEventListener("timeupdate", () => {
+        if (!audio.paused) write(STORE.time, audio.currentTime || 0);
+      });
+    }
+
+    let index = parseInt(read(STORE.index, "0"), 10);
+    if (!Number.isInteger(index) || index < 0 || index >= PLAYLIST.length) index = 0;
+
+    const savedTime = Math.max(0, parseFloat(read(STORE.time, "0")) || 0);
+    const shouldPlay = read(STORE.playing, "1") === "1";
+
+    currentIndex = index;
+    setTrack(index, false, savedTime);
+
+    if (shouldPlay) {
+      // Give the page time to settle before requesting autoplay.
+      // If the browser blocks sound, the first meaningful interaction unlocks it.
+      setTimeout(() => {
+        playMusic().then((started) => {
+          if (!started) installAutoplayUnlock();
+        });
+      }, 1800);
+    }
+  }
+
+  let unlockInstalled = false;
+
+  function installAutoplayUnlock() {
+    if (unlockInstalled) return;
+    unlockInstalled = true;
+
+    const unlock = () => {
+      if (audio?.paused) playMusic();
+
+      ["pointerdown", "touchstart", "keydown", "scroll"].forEach((type) => {
+        document.removeEventListener(type, unlock, true);
+      });
+
+      unlockInstalled = false;
+    };
+
+    ["pointerdown", "touchstart", "keydown", "scroll"].forEach((type) => {
+      document.addEventListener(type, unlock, true, { passive: type === "scroll" });
+    });
+  }
+
+  /* ---------------- SUPABASE / HEADER ---------------- */
+
+  function ensureSupabase() {
+    if (window.supabase?.createClient) return Promise.resolve(true);
+    if (supabasePromise) return supabasePromise;
+
+    supabasePromise = new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.async = true;
+      script.onload = () => resolve(!!window.supabase?.createClient);
+      script.onerror = () => resolve(false);
+      document.head.appendChild(script);
+    });
+
+    return supabasePromise;
+  }
+
+  function getSupabaseClient() {
+    if (supabaseClient) return supabaseClient;
+    if (!window.supabase?.createClient) return null;
+
+    try {
+      supabaseClient = window.supabase.createClient(
+        "https://fnyellunugdfesprmvzm.supabase.co",
+        "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK",
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
+
+      return supabaseClient;
+    } catch (_) {
+      return null;
+    }
+  }
+
+
+  /* ---------------- GLOBAL APPEARANCE ---------------- */
+
+  const BUTTON_MODES = new Set(["gradient", "solid", "outline", "glass", "minimal"]);
+
+  function applySiteAppearance(settings) {
+    if (!settings || typeof settings !== "object") return;
+    const root = document.documentElement;
+    const primary = settings.primary || settings.cyan || "#5de1ff";
+    const secondary = settings.secondary || settings.violet || "#8b7cff";
+    const background = settings.background || "#050914";
+    const text = settings.text || "#eef7ff";
+    const accent = settings.accent || settings.gold || "#f1c76b";
+    const muted = settings.muted || "#91a8bd";
+    const textSoft = settings.text_soft || "#d4deea";
+    const line = settings.line || "rgba(170,215,255,.15)";
+    const lineStrong = settings.line_strong || "rgba(170,215,255,.28)";
+    root.style.setProperty("--pa-primary", primary);
+    root.style.setProperty("--pa-secondary", secondary);
+    root.style.setProperty("--pa-background", background);
+    root.style.setProperty("--pa-text", text);
+    root.style.setProperty("--pa-accent", accent);
+    root.style.setProperty("--pa-muted", muted);
+    root.style.setProperty("--pa-text-soft", textSoft);
+    root.style.setProperty("--pa-line", line);
+    root.style.setProperty("--pa-line-strong", lineStrong);
+    const surfaces = {
+      obsidian:{radius:"22px",card_bg:"rgba(12,10,17,.86)",card_border:"rgba(255,255,255,.11)",card_shadow:"0 18px 60px rgba(0,0,0,.22)",card_hover:"0 24px 70px rgba(0,0,0,.34)"},
+      glass:{radius:"24px",card_bg:"rgba(255,255,255,.045)",card_border:"rgba(255,255,255,.16)",card_shadow:"0 22px 70px rgba(0,0,0,.28)",card_hover:"0 28px 90px rgba(0,0,0,.38)"},
+      soft:{radius:"18px",card_bg:"rgba(255,255,255,.028)",card_border:"rgba(255,255,255,.08)",card_shadow:"0 12px 38px rgba(0,0,0,.18)",card_hover:"0 18px 50px rgba(0,0,0,.25)"},
+      neon:{radius:"20px",card_bg:"rgba(7,12,24,.82)",card_border:"color-mix(in srgb,var(--pa-primary,#9fe8ff) 28%,transparent)",card_shadow:"0 20px 70px color-mix(in srgb,var(--pa-primary,#9fe8ff) 10%,transparent)",card_hover:"0 26px 90px color-mix(in srgb,var(--pa-primary,#9fe8ff) 16%,transparent)"},
+      editorial:{radius:"14px",card_bg:"rgba(20,17,28,.92)",card_border:"rgba(235,225,250,.14)",card_shadow:"0 16px 48px rgba(0,0,0,.22)",card_hover:"0 20px 60px rgba(0,0,0,.3)"},
+      minimal:{radius:"10px",card_bg:"rgba(255,255,255,.012)",card_border:"rgba(255,255,255,.06)",card_shadow:"none",card_hover:"0 10px 30px rgba(0,0,0,.16)"}
+    };
+    const fonts = {
+      modern:{display:'"Space Grotesk",system-ui,sans-serif',body:'"Manrope",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      editorial:{display:'"Sora",system-ui,sans-serif',body:'"DM Sans",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      clean:{display:'"Inter",system-ui,sans-serif',body:'"DM Sans",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      neo:{display:'"Syne",system-ui,sans-serif',body:'"Inter",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      elegant:{display:'"Playfair Display",Georgia,serif',body:'"Manrope",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      technical:{display:'"IBM Plex Sans",system-ui,sans-serif',body:'"IBM Plex Sans",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'}
+    };
+    const surface = surfaces[settings.surface_preset] || surfaces.obsidian;
+    const font = fonts[settings.font_preset] || fonts.modern;
+    root.style.setProperty("--pa-card-bg", settings.card_bg || surface.card_bg);
+    root.style.setProperty("--pa-card-border", settings.card_border || surface.card_border);
+    root.style.setProperty("--pa-card-shadow", settings.card_shadow || surface.card_shadow);
+    root.style.setProperty("--pa-card-hover", settings.card_hover || surface.card_hover);
+    root.style.setProperty("--pa-radius", settings.radius || surface.radius);
+    root.style.setProperty("--pa-font-display", settings.font_display || font.display);
+    root.style.setProperty("--pa-font-body", settings.font_body || font.body);
+    root.style.setProperty("--pa-font-mono", settings.font_mono || font.mono);
+    root.style.setProperty("--pa-button-text", settings.button_text || "#061018");
+    root.dataset.buttonMode = ["gradient", "solid", "outline", "glass", "minimal"].includes(settings.button_mode) ? settings.button_mode : "gradient";
+    root.dataset.surfacePreset = settings.surface_preset || "obsidian";
+    root.dataset.fontPreset = settings.font_preset || "modern";
+    try { localStorage.setItem("paAppearance", JSON.stringify({ ...settings, primary, secondary, background, text, accent, muted, text_soft: textSoft, line, line_strong: lineStrong })); } catch (_) {}
+  }
+
+  async function initGlobalAppearance() {
+    try {
+      const cached = JSON.parse(read("paAppearance", "null"));
+      if (cached) applySiteAppearance(cached);
+    } catch (_) {}
+    const load = async () => {
+      const sb = getSupabaseClient();
+      if (!sb) return;
+      try {
+        const { data } = await sb.from("site_settings").select("settings").eq("id", true).maybeSingle();
+        if (data?.settings) applySiteAppearance(data.settings);
+      } catch (_) {}
+    };
+    if (window.supabase?.createClient) await load();
+    else setTimeout(load, 700);
+  }
+
+  function applyCachedHeaderProfile() {
+    const cached = (() => {
+      try { return JSON.parse(read(STORE.profile, "null")); }
+      catch (_) { return null; }
+    })();
+
+    const initial = $("#headerProfileInitial");
+    const image = $("#headerProfileImage");
+    if (!cached || !initial || !image) return;
+
+    const name = String(cached.name || "U").trim() || "U";
+    initial.textContent = name.charAt(0).toUpperCase();
+
+    if (cached.avatar_url) {
+      image.src = cached.avatar_url;
+      image.hidden = false;
+      initial.hidden = true;
+    } else {
+      image.hidden = true;
+      initial.hidden = false;
+    }
+  }
+
+  function ensureAccountMarkup() {
+    const header = document.querySelector(".header");
+    if (!header) return;
+
+    let account = document.getElementById("accountArea");
+    if (!account) {
+      account = document.createElement("div");
+      account.className = "account-area";
+      account.id = "accountArea";
+      account.innerHTML = `
+        <div class="logged-out-area" id="loggedOutArea">
+          <a class="account-login" href="login.html">Entrar</a>
+          <a class="account-register" href="cadastro.html">Criar conta</a>
+        </div>
+        <div class="logged-in-area" id="loggedInArea" hidden>
+          <a class="profile-link" href="perfil.html" aria-label="Abrir meu perfil">
+            <span class="profile-avatar-small">
+              <span id="headerProfileInitial">?</span>
+              <img id="headerProfileImage" src="" alt="Foto de perfil" hidden>
+            </span>
+            <span class="profile-link-text">Perfil</span>
+          </a>
+        </div>
+      `;
+      const menuButton = header.querySelector("#menuButton");
+      if (menuButton) header.insertBefore(account, menuButton);
+      else header.appendChild(account);
+    }
+
+    let loggedOut = document.getElementById("loggedOutArea");
+    let loggedIn = document.getElementById("loggedInArea");
+    if (!loggedOut || !loggedIn) {
+      account.innerHTML = `
+        <div class="logged-out-area" id="loggedOutArea">
+          <a class="account-login" href="login.html">Entrar</a>
+          <a class="account-register" href="cadastro.html">Criar conta</a>
+        </div>
+        <div class="logged-in-area" id="loggedInArea" hidden>
+          <a class="profile-link" href="perfil.html" aria-label="Abrir meu perfil">
+            <span class="profile-avatar-small">
+              <span id="headerProfileInitial">?</span>
+              <img id="headerProfileImage" src="" alt="Foto de perfil" hidden>
+            </span>
+            <span class="profile-link-text">Perfil</span>
+          </a>
+        </div>`;
+      loggedOut = document.getElementById("loggedOutArea");
+      loggedIn = document.getElementById("loggedInArea");
+    }
+
+    const mobileMenu = getMobileMenu();
+    if (mobileMenu && !document.getElementById("mobileAccount")) {
+      const mobileAccount = document.createElement("div");
+      mobileAccount.className = "mobile-account";
+      mobileAccount.id = "mobileAccount";
+      mobileAccount.innerHTML = `
+        <div id="mobileLoggedOut">
+          <a href="login.html">Entrar</a>
+          <a href="cadastro.html">Criar conta</a>
+        </div>
+        <div id="mobileLoggedIn" hidden>
+          <a href="perfil.html">Meu perfil</a>
+          <a href="admin.html" id="mobileAdminLink" hidden>Administração</a>
+          <a href="editor-painel.html" id="mobileEditorLink" hidden>Área do editor</a>
+        </div>`;
+      mobileMenu.appendChild(mobileAccount);
+    }
+
+    const mobileIn = document.getElementById("mobileLoggedIn");
+    if (mobileIn && !document.getElementById("mobileEditorLink")) {
+      const editorLink = document.createElement("a");
+      editorLink.href = "editor-painel.html";
+      editorLink.id = "mobileEditorLink";
+      editorLink.textContent = "Área profissional";
+      editorLink.hidden = true;
+      mobileIn.appendChild(editorLink);
+    }
+
+    if (mobileIn && !document.getElementById("mobileAdminLink")) {
+      const adminLink = document.createElement("a");
+      adminLink.href = "admin.html";
+      adminLink.id = "mobileAdminLink";
+      adminLink.textContent = "Administração";
+      adminLink.hidden = true;
+      mobileIn.appendChild(adminLink);
+    }
+  }
+
+  function setAdminHeaderLink(show) {
+    const loggedIn = document.getElementById("loggedInArea");
+    const mobileLink = document.getElementById("mobileAdminLink");
+    if (mobileLink) mobileLink.hidden = !show;
+    if (!loggedIn) return;
+    let link = document.getElementById("adminHeaderLink");
+    if (show) {
+      if (!link) {
+        link = document.createElement("a");
+        link.id = "adminHeaderLink";
+        link.className = "admin-header-link";
+        link.href = "admin.html";
+        link.textContent = "Admin";
+        link.setAttribute("aria-label", "Abrir painel de administração");
+        loggedIn.appendChild(link);
+      }
+      link.hidden = false;
+    } else if (link) {
+      link.remove();
+    }
+  }
+
+  function setEditorHeaderLink(show) {
+    const loggedIn = document.getElementById("loggedInArea");
+    const mobileLink = document.getElementById("mobileEditorLink");
+    if (mobileLink) mobileLink.hidden = !show;
+    if (!loggedIn) return;
+    let link = document.getElementById("editorHeaderLink");
+    if (show) {
+      if (!link) {
+        link = document.createElement("a");
+        link.id = "editorHeaderLink";
+        link.className = "editor-header-link";
+        link.href = "editor-painel.html";
+        link.textContent = "Profissional";
+        link.setAttribute("aria-label", "Abrir área profissional");
+        loggedIn.appendChild(link);
+      }
+      link.hidden = false;
+    } else if (link) {
+      link.remove();
+    }
+  }
+
+  function updateEditorPageAccess(isEditor) {
+    const bar = document.getElementById("editorManageBar");
+    if (!bar) return;
+    bar.hidden = !isEditor;
+  }
+
+  function updateAccountUI(session, profile, isAdmin = false) {
+    const loggedOut = $("#loggedOutArea");
+    const loggedIn = $("#loggedInArea");
+    const mobileOut = $("#mobileLoggedOut");
+    const mobileIn = $("#mobileLoggedIn");
+
+    if (!loggedOut || !loggedIn) return;
+
+    const logged = !!session?.user;
+    loggedOut.hidden = logged;
+    loggedIn.hidden = !logged;
+    if (mobileOut) mobileOut.hidden = logged;
+    if (mobileIn) mobileIn.hidden = !logged;
+    setAdminHeaderLink(logged && isAdmin);
+    setEditorHeaderLink(logged && (profile?.is_editor === true || profile?.is_designer === true));
+    updateEditorPageAccess(logged && (profile?.is_editor === true || profile?.is_designer === true));
+
+    if (!logged) return;
+
+    const initial = $("#headerProfileInitial");
+    const image = $("#headerProfileImage");
+    if (!initial || !image) return;
+
+    const name = String(
+      profile?.nome_artistico || profile?.nome || session.user.email || "U"
+    ).trim() || "U";
+
+    initial.textContent = name.charAt(0).toUpperCase();
+
+    if (profile?.avatar_url) {
+      image.src = profile.avatar_url;
+      image.hidden = false;
+      initial.hidden = true;
+    } else {
+      image.hidden = true;
+      image.removeAttribute("src");
+      initial.hidden = false;
+    }
+
+    write(STORE.profile, JSON.stringify({
+      name,
+      avatar_url: profile?.avatar_url || ""
+    }));
+  }
+
+  async function initAccountHeader() {
+    ensureAccountMarkup();
+    applyCachedHeaderProfile();
+
+    const client = getSupabaseClient();
+    if (!client) {
+      const loaded = await ensureSupabase();
+      if (loaded && getSupabaseClient()) return initAccountHeader();
+      updateAccountUI(null, null, false);
+      return;
+    }
+
+    try {
+      const { data } = await client.auth.getSession();
+      const session = data?.session || null;
+
+      if (!session?.user) {
+        updateAccountUI(null, null, false);
+        return;
+      }
+
+      let profile = null;
+      try {
+        const result = await client
+          .from("profile")
+          .select("nome,nome_artistico,avatar_url,is_editor,is_designer")
+          .eq("id", session.user.id)
+          .maybeSingle();
+        profile = result.data || null;
+      } catch (_) {}
+
+      let isAdmin = false;
+      try {
+        const result = await client.rpc("is_admin");
+        isAdmin = result.data === true && !result.error;
+      } catch (_) {}
+
+      updateAccountUI(session, profile, isAdmin);
+    } catch (_) {
+      updateAccountUI(null, null, false);
+    }
+
+    if (!window.__PA_AUTH_LISTENER__) {
+      window.__PA_AUTH_LISTENER__ = true;
+      client.auth.onAuthStateChange(() => {
+        setTimeout(() => initAccountHeader(), 0);
+      });
+    }
+  }
+
+  async function handleAuthRedirect() {
+    const current = pageName(location.pathname);
+    const client = getSupabaseClient();
+    if (!client) return;
+
+    try {
+      // Supabase can return from email confirmation using either a hash session
+      // or a PKCE `code`. The client is configured to detect the URL; this
+      // explicit exchange covers hosted-email configurations that use PKCE.
+      const code = new URLSearchParams(location.search).get("code");
+      if (code && typeof client.auth.exchangeCodeForSession === "function") {
+        await client.auth.exchangeCodeForSession(code);
+        history.replaceState({}, document.title, location.pathname + location.hash);
+      }
+
+      const { data } = await client.auth.getSession();
+      if (data?.session?.user && (current === "login.html" || current === "cadastro.html")) {
+        window.location.replace("perfil.html");
+      }
     } catch (_) {}
   }
 
-  function musicInit() {
-    if ($("#musicPlayer")) return;
-    const wrap = document.createElement("div");
-    wrap.id = "musicPlayer";
-    wrap.className = "music-player";
-    wrap.innerHTML = `<div class="music-player-main"><button class="music-play" id="musicPlay" type="button" aria-label="Reproduzir ou pausar">▶</button><button class="music-title-button" id="musicTitleButton" type="button"><span class="music-label">PALE ASCENDANCY</span><strong id="musicTitle"></strong><span id="musicStatus">Toque para começar</span></button><button class="music-next" id="musicNext" type="button" aria-label="Próxima música">›</button></div><audio id="musicAudio" preload="metadata" playsinline></audio>`;
-    document.body.appendChild(wrap);
-    audio = $("#musicAudio");
-    const saved = Number.parseInt(localStorage.getItem("pa_music_index") || "0", 10);
-    trackIndex = Number.isInteger(saved) && saved >= 0 && saved < PLAYLIST.length ? saved : 0;
-    loadTrack(false);
-    $("#musicPlay").addEventListener("click", () => audio.paused ? playMusic() : pauseMusic());
-    $("#musicNext").addEventListener("click", nextMusic);
-    $("#musicTitleButton").addEventListener("click", openMusicList);
-    audio.addEventListener("ended", nextMusic);
-    audio.addEventListener("timeupdate", () => localStorage.setItem("pa_music_time", String(audio.currentTime || 0)));
-    const resume = Number.parseFloat(localStorage.getItem("pa_music_time") || "0");
-    if (resume > 0) audio.addEventListener("loadedmetadata", () => { try { audio.currentTime = Math.min(resume, Math.max(0, audio.duration - 0.5)); } catch (_) {} }, { once: true });
-    const unlock = () => { if (localStorage.getItem("pa_music_playing") === "1") playMusic(); };
-    ["pointerdown", "touchstart", "keydown", "scroll"].forEach(type => document.addEventListener(type, unlock, { once: true, passive: true }));
-  }
 
-  function loadTrack(autoPlay) {
-    if (!audio) return;
-    const [title, file] = PLAYLIST[trackIndex];
-    audio.src = new URL(file, document.baseURI).href;
-    audio.load();
-    $("#musicTitle").textContent = title;
-    localStorage.setItem("pa_music_index", String(trackIndex));
-    if (autoPlay) playMusic();
-  }
-  async function playMusic() { try { await audio.play(); localStorage.setItem("pa_music_playing", "1"); $("#musicPlay").textContent = "Ⅱ"; $("#musicStatus").textContent = "Reproduzindo"; } catch (_) { $("#musicStatus").textContent = "Toque para iniciar"; } }
-  function pauseMusic() { audio.pause(); localStorage.setItem("pa_music_playing", "0"); $("#musicPlay").textContent = "▶"; $("#musicStatus").textContent = "Pausado"; }
-  function nextMusic() { trackIndex = (trackIndex + 1) % PLAYLIST.length; localStorage.setItem("pa_music_time", "0"); loadTrack(true); }
-  function openMusicList() {
-    let panel = $("#musicPanel");
-    if (!panel) {
-      panel = document.createElement("aside"); panel.id = "musicPanel"; panel.className = "music-panel";
-      panel.innerHTML = `<div class="music-panel-inner"><header class="music-panel-header"><div><span class="music-panel-kicker">PALE ASCENDANCY</span><h2>Biblioteca musical</h2></div><button id="musicPanelClose" class="music-panel-close" type="button">×</button></header><label class="music-search-wrap"><span>⌕</span><input id="musicSearch" class="music-search" placeholder="Pesquisar música..."></label><div id="musicList" class="music-list"></div></div>`;
-      document.body.appendChild(panel);
-      $("#musicPanelClose").addEventListener("click", () => panel.classList.remove("open"));
-      $("#musicSearch").addEventListener("input", e => renderMusic(e.target.value));
+  /* ---------------- AUTHENTICATION ---------------- */
+
+  async function isAdminAccount(userId) {
+    const client = getSupabaseClient();
+    if (!client || !userId) return false;
+    try {
+      const result = await client.rpc("is_admin");
+      return !result.error && result.data === true;
+    } catch (_) {
+      return false;
     }
-    panel.classList.add("open"); renderMusic($("#musicSearch")?.value || "");
-  }
-  function renderMusic(term = "") {
-    const list = $("#musicList"); if (!list) return;
-    const q = term.toLowerCase();
-    list.innerHTML = PLAYLIST.map((item, i) => !item[0].toLowerCase().includes(q) ? "" : `<button type="button" class="music-list-item" data-track="${i}"><span class="music-list-number">${String(i + 1).padStart(2, "0")}</span><span class="music-list-name">${esc(item[0])}</span><span>▶</span></button>`).join("");
-    $$('[data-track]', list).forEach(btn => btn.addEventListener("click", () => { trackIndex = Number(btn.dataset.track); localStorage.setItem("pa_music_time", "0"); loadTrack(true); $("#musicPanel").classList.remove("open"); }));
   }
 
-  async function handleLogin(form, mode) {
-    const c = await ensureClient();
-    const email = $("#email", form).value.trim();
-    const password = $("#senha", form).value;
+  async function handleLoginForm(form, mode) {
+    const client = getSupabaseClient() || (await ensureSupabase(), getSupabaseClient());
+    if (!client) {
+      const message = mode === "admin" ? $("#adminLoginMessage") : mode === "professional" ? $("#professionalLoginMessage") : $("#loginMessage");
+      if (message) {
+        message.textContent = "Não foi possível conectar ao sistema de login. Tente novamente.";
+        message.className = "auth-message error";
+      }
+      return;
+    }
+
+    const emailInput = $("#email", form);
+    const passwordInput = $("#senha", form);
     const message = mode === "admin" ? $("#adminLoginMessage") : mode === "professional" ? $("#professionalLoginMessage") : $("#loginMessage");
     const button = form.querySelector("button[type=submit]");
-    const originalText = mode === "admin" ? "Entrar na administração" : mode === "professional" ? "Entrar na área profissional" : "Entrar";
-    button.disabled = true;
-    button.textContent = mode === "admin" ? "Verificando..." : "Entrando...";
-    setMsg(message, "");
+    const email = emailInput?.value.trim() || "";
+    const password = passwordInput?.value || "";
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = mode === "admin" ? "Verificando..." : "Entrando...";
+    }
+    if (message) {
+      message.textContent = "";
+      message.className = "auth-message";
+    }
 
     try {
-      const r = await c.auth.signInWithPassword({ email, password });
-      if (r.error) throw new Error("E-mail ou senha incorretos, ou conta não confirmada.");
-      const user = r.data.user;
+      const result = await client.auth.signInWithPassword({ email, password });
+      if (result.error) throw result.error;
+
+      const user = result.data?.user;
+      if (!user) throw new Error("Sessão não criada.");
 
       if (mode === "admin") {
-        if (!(await isAdmin(user.id))) {
-          await c.auth.signOut();
+        if (!(await isAdminAccount(user.id))) {
+          await client.auth.signOut();
           throw new Error("Esta conta não possui acesso administrativo.");
         }
         location.replace("admin.html");
@@ -287,243 +1140,236 @@
       }
 
       if (mode === "professional") {
-        // IMPORTANTE: aprovação é permanente enquanto is_editor/is_designer
-        // permanecer ativo. Não exigimos professional_login_enabled nem uma
-        // nova candidatura para quem já foi aprovado.
-        // Usamos o diretório público para verificar a aprovação sem depender
-        // das políticas de leitura da tabela profile.
-        const access = await c
-          .from("editor_directory")
-          .select("id,is_editor,is_designer")
+        const profileResult = await client
+          .from("profile")
+          .select("is_editor,is_designer,professional_login_enabled")
           .eq("id", user.id)
           .maybeSingle();
 
-        if (access.error) {
-          console.error("Erro ao verificar acesso profissional:", access.error);
-          throw new Error("Não foi possível verificar seu acesso profissional. Tente novamente.");
-        }
+        const profile = profileResult.data;
+        const enabled = profile?.professional_login_enabled === true;
+        const professional = profile?.is_editor === true || profile?.is_designer === true;
 
-        const approved = !!access.data && (access.data.is_editor === true || access.data.is_designer === true);
-        if (!approved) {
-          await c.auth.signOut();
-          throw new Error("Esta conta ainda não está aprovada como profissional.");
+        if (profileResult.error || !professional || !enabled) {
+          await client.auth.signOut();
+          throw new Error("Esta conta ainda não tem o login profissional liberado pela administração.");
         }
 
         location.replace("editor-painel.html");
         return;
       }
 
-      location.replace((await isAdmin(user.id)) ? "admin.html" : "perfil.html");
-    } catch (err) {
-      console.error("Erro no login:", err);
-      setMsg(message, err?.message || "Não foi possível entrar. Tente novamente.", "error");
-      button.disabled = false;
-      button.textContent = originalText;
+      location.replace((await isAdminAccount(user.id)) ? "admin.html" : "perfil.html");
+    } catch (error) {
+      if (message) {
+        message.textContent = error?.message || "Não foi possível entrar. Confira seus dados.";
+        message.className = "auth-message error";
+      }
+      if (button) {
+        button.disabled = false;
+        button.textContent = mode === "admin" ? "Entrar na administração" : mode === "professional" ? "Entrar na área profissional" : "Entrar";
+      }
     }
   }
 
   function initLoginPages() {
-    const common = $("#loginForm"); if (common && !common.dataset.ready) { common.dataset.ready = "1"; common.addEventListener("submit", e => { e.preventDefault(); handleLogin(common, "common"); }); }
-    const professional = $("#professionalLoginForm"); if (professional && !professional.dataset.ready) { professional.dataset.ready = "1"; professional.addEventListener("submit", e => { e.preventDefault(); handleLogin(professional, "professional"); }); }
-    const admin = $("#adminLoginForm"); if (admin && !admin.dataset.ready) { admin.dataset.ready = "1"; admin.addEventListener("submit", e => { e.preventDefault(); handleLogin(admin, "admin"); }); }
-  }
+    const forms = [
+      [$("#loginForm"), "common"],
+      [$("#professionalLoginForm"), "professional"],
+      [$("#adminLoginForm"), "admin"]
+    ];
 
-  function buildCategoryButtons(holder, multi = false, selected = []) {
-    if (!holder) return;
-    const values = new Set(Array.isArray(selected) ? selected : [selected].filter(Boolean));
-    holder.innerHTML = CATEGORIES.map(([value, label]) => `<button type="button" class="category-choice ${values.has(value) ? "selected" : ""}" data-v="${value}">${label}</button>`).join("");
-    holder.onclick = e => {
-      const b = e.target.closest("button"); if (!b) return;
-      if (!multi) $$("button", holder).forEach(x => x.classList.remove("selected"));
-      b.classList.toggle("selected", multi ? !b.classList.contains("selected") : true);
-    };
-  }
-
-  function selectedCategories(holder) { return $$("button.selected", holder).map(b => b.dataset.v); }
-
-  function initRegister() {
-    const form = $("#registerForm"); if (!form || form.dataset.ready) return; form.dataset.ready = "1";
-    buildCategoryButtons($("#categoryChoices"), false);
-    const file = $("#signupAvatar"), image = $("#signupImage"), initial = $("#signupInitial");
-    file?.addEventListener("change", () => { const f = file.files?.[0]; if (!f) return; if (f.size > 5 * 1024 * 1024) { setMsg($("#registerMessage"), "A foto precisa ter até 5 MB.", "error"); file.value = ""; return; } image.src = URL.createObjectURL(f); image.hidden = false; initial.hidden = true; });
-    form.addEventListener("submit", async e => {
-      e.preventDefault(); const c = await ensureClient(); const button = $("#registerButton"); const message = $("#registerMessage");
-      const selected = selectedCategories($("#categoryChoices")); $("#especialidade").value = selected[0] || "";
-      button.disabled = true; button.textContent = "Criando...";
-      const r = await c.auth.signUp({ email: $("#email").value.trim(), password: $("#senha").value, options: { emailRedirectTo: new URL("perfil.html", location.href).href, data: { nome: $("#nome").value.trim(), nome_artistico: $("#nomeArtistico").value.trim(), especialidade: selected[0] || "", professional_application: false, requested_role: null } } });
-      if (r.error) { setMsg(message, r.error.message, "error"); button.disabled = false; button.textContent = "Criar conta"; return; }
-      const avatar = file?.files?.[0];
-      if (avatar) { try { localStorage.setItem("pa_pending_signup_avatar", await fileToDataUrl(avatar)); } catch (_) {} }
-      setMsg(message, r.data.session ? "Conta criada. Abrindo seu perfil..." : "Conta criada. Confirme seu e-mail e depois entre para concluir o perfil.", "success");
-      if (r.data.session) setTimeout(() => location.replace("perfil.html"), 500); else { button.disabled = false; button.textContent = "Criar conta"; }
-    });
-  }
-  const fileToDataUrl = file => new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
-
-  function initProfessionalRegister() {
-    const form = $("#professionalRegisterForm"); if (!form || form.dataset.ready) return; form.dataset.ready = "1";
-    buildCategoryButtons($("#categoryChoices"), false);
-    form.addEventListener("submit", async e => {
-      e.preventDefault(); const c = await ensureClient(); const message = $("#professionalRegisterMessage"), button = $("#professionalRegisterButton");
-      const chosen = selectedCategories($("#categoryChoices")); $("#especialidade").value = chosen[0] || "";
-      button.disabled = true; button.textContent = "Enviando...";
-      const r = await c.auth.signUp({ email: $("#email").value.trim(), password: $("#senha").value, options: { emailRedirectTo: new URL("login-profissional.html", location.href).href, data: { nome: $("#nome").value.trim(), nome_artistico: $("#nomeArtistico").value.trim(), especialidade: chosen[0] || "", professional_application: true, requested_role: $("#tipo").value } } });
-      if (r.error) { setMsg(message, r.error.message, "error"); button.disabled = false; button.textContent = "Enviar cadastro profissional"; return; }
-      setMsg(message, r.data.session ? "Solicitação enviada. A administração precisa aprovar sua atuação." : "Solicitação enviada. Confirme seu e-mail; depois aguarde a aprovação da administração.", "success"); button.disabled = false; button.textContent = "Enviar cadastro profissional";
+    forms.forEach(([form, mode]) => {
+      if (!form || form.dataset.paLoginReady === "1") return;
+      form.dataset.paLoginReady = "1";
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        handleLoginForm(form, mode);
+      });
     });
   }
 
-  async function uploadAvatar(c, userId, file) {
-    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
-    const path = `${userId}/avatar-${Date.now()}.${ext}`;
-    const r = await c.storage.from("avatars").upload(path, file, { upsert: false, contentType: file.type });
-    if (r.error) throw r.error;
-    return c.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+  /* ---------------- NAVIGATION ---------------- */
+
+  function pageName(pathname) {
+    return pathname.split("/").pop() || "index.html";
   }
 
-  async function finishPendingAvatar(c, userId) {
-    const raw = localStorage.getItem("pa_pending_signup_avatar"); if (!raw) return null;
+  function shouldUseSpa(link, event) {
+    if (!link || event.defaultPrevented || event.button !== 0) return false;
+
+    if (
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return false;
+
+    if (link.target === "_blank" || link.hasAttribute("download")) return false;
+
+    const href = link.getAttribute("href") || "";
+
+    if (!href || /^(mailto:|tel:|javascript:)/i.test(href)) return false;
+
+    let url;
+
     try {
-      const response = await fetch(raw); const blob = await response.blob();
-      const url = await uploadAvatar(c, userId, blob); await c.from("profile").update({ avatar_url: url }).eq("id", userId); localStorage.removeItem("pa_pending_signup_avatar"); return url;
-    } catch (_) { return null; }
+      url = new URL(href, location.href);
+    } catch (_) {
+      return false;
+    }
+
+    if (url.origin !== location.origin) return false;
+    if (url.pathname === location.pathname && url.hash) return false;
+
+    const extension = url.pathname.split(".").pop().toLowerCase();
+
+    if (extension && !["html", "htm"].includes(extension)) return false;
+
+    if (AUTH_PAGES.has(pageName(url.pathname))) return false;
+
+    return true;
   }
 
-  function initCommonProfile() {
-    const view = $("#profileView"); if (!view || view.dataset.ready) return; view.dataset.ready = "1";
-    (async () => {
-      const c = await ensureClient(); const s = await session(); if (!s?.user) { location.replace("login.html"); return; }
-      let p = await profile(s.user.id); if (!p) { setMsg($("#profileMessage"), "Seu perfil ainda está sendo criado. Recarregue em alguns segundos.", "error"); return; }
-      const pending = await finishPendingAvatar(c, s.user.id); if (pending) p.avatar_url = pending;
-      const map = CATEGORY_MAP;
-      $("#profileNome").textContent = p.nome || "Não informado"; $("#profileNomeArtistico").textContent = p.nome_artistico || "Não informado"; $("#profileEmail").textContent = p.email || s.user.email || "Não informado"; $("#profileEspecialidade").textContent = map[p.especialidade] || p.especialidade || "Não informado";
-      const initial = $("#profileInitial"), image = $("#profileImage"); initial.textContent = (p.nome_artistico || p.nome || p.email || "?").charAt(0).toUpperCase(); if (p.avatar_url) { image.src = `${p.avatar_url}${p.avatar_url.includes("?") ? "&" : "?"}v=${Date.now()}`; image.hidden = false; initial.hidden = true; }
-      const admin = await isAdmin(s.user.id); const professional = !!(p.is_editor || p.is_designer); $("#profileAdminButton").hidden = !admin; $("#profileProfessionalButton").hidden = !professional; $("#profileSpecialActions").hidden = !(admin || professional);
-      $("#logoutButton")?.addEventListener("click", async () => { await c.auth.signOut(); location.replace("index.html"); });
-    })();
+  function updateActiveLinks() {
+    const current = pageName(location.pathname);
+
+    $$('a[href]').forEach((link) => {
+      try {
+        const url = new URL(link.href, location.href);
+
+        link.classList.toggle(
+          "active",
+          url.origin === location.origin &&
+          pageName(url.pathname) === current &&
+          !url.hash
+        );
+      } catch (_) {}
+    });
   }
 
-  function initEditProfile() {
-    const form = $("#editForm"); if (!form || form.dataset.ready) return; form.dataset.ready = "1";
-    (async () => {
-      const c = await ensureClient(), s = await session(); if (!s?.user) { location.replace("login.html"); return; }
-      const p = await profile(s.user.id); if (!p) { setMsg($("#message"), "Perfil não encontrado.", "error"); return; }
-      $("#nome").value = p.nome || ""; $("#nomeArtistico").value = p.nome_artistico || ""; $("#especialidade").value = p.especialidade || "";
-      if (p.avatar_url) { $("#image").src = `${p.avatar_url}?v=${Date.now()}`; $("#image").hidden = false; $("#initial").hidden = true; } $("#initial").textContent = (p.nome_artistico || p.nome || "?").charAt(0).toUpperCase();
-      let avatarUrl = p.avatar_url || null; $("#photo").addEventListener("change", () => { const f = $("#photo").files?.[0]; if (!f) return; $("#image").src = URL.createObjectURL(f); $("#image").hidden = false; $("#initial").hidden = true; });
-      form.addEventListener("submit", async e => { e.preventDefault(); const button = form.querySelector("button[type=submit]"); button.disabled = true; setMsg($("#message"), "Salvando..."); try { const f = $("#photo").files?.[0]; if (f) { if (f.size > 8 * 1024 * 1024) throw new Error("A foto precisa ter até 8 MB."); avatarUrl = await uploadAvatar(c, s.user.id, f); } const r = await c.from("profile").update({ nome: $("#nome").value.trim(), nome_artistico: $("#nomeArtistico").value.trim(), especialidade: $("#especialidade").value || "", avatar_url: avatarUrl }).eq("id", s.user.id); if (r.error) throw r.error; setMsg($("#message"), "Perfil atualizado.", "success"); setTimeout(() => location.replace("perfil.html"), 450); } catch (err) { setMsg($("#message"), err.message || "Não foi possível salvar.", "error"); button.disabled = false; } });
-    })();
-  }
+  async function navigate(url, push = true) {
+    if (navigating) return;
 
-  function initEditorPanel() {
-    const form = $("#editorForm"); if (!form || form.dataset.ready) return; form.dataset.ready = "1";
-    (async () => {
-      const c = await ensureClient(), s = await session(); if (!s?.user) { location.replace("login-profissional.html"); return; }
-      const p = await profile(s.user.id, true); if (!p || !(p.is_editor || p.is_designer)) { await c.auth.signOut(); location.replace("login-profissional.html"); return; }
-      const role = p.is_editor && p.is_designer ? "Editor + Designer" : p.is_editor ? "Editor" : "Designer";
-      $("#role").value = role; $("#nomeArtistico").value = p.nome_artistico || ""; $("#especialidade").innerHTML = CATEGORIES.map(([v,l]) => `<option value="${v}">${l}</option>`).join(""); $("#especialidade").value = p.especialidade || ""; $("#bio").value = p.bio || ""; $("#software").value = p.editor_software || ""; $("#availability").value = p.availability || "disponivel"; $("#portfolioUrl").value = p.portfolio_url || ""; $("#tiktok").value = p.tiktok || ""; $("#instagram").value = p.instagram || ""; $("#youtube").value = p.youtube || ""; $("#discord").value = p.discord || "";
-      buildCategoryButtons($("#categoryGrid"), true, p.editor_categories || []);
-      const initial = $("#avatarInitial"), image = $("#avatarImage"); initial.textContent = (p.nome_artistico || p.nome || "?").charAt(0).toUpperCase(); if (p.avatar_url) { image.src = `${p.avatar_url}?v=${Date.now()}`; image.hidden = false; initial.hidden = true; }
-      $("#publicProfile").href = `editor-perfil.html?id=${encodeURIComponent(s.user.id)}`;
-      const plan = PLANS[p.professional_plan] || PLANS.free; $("#planName").textContent = plan[0]; $("#limit").textContent = plan[1]; $("#planDesc").textContent = `${plan[1]} espaços de portfólio${p.plan_status === "active" && p.professional_plan !== "free" ? " ativos" : ""}.`;
-      const premium = premiumActive(p), customization = $("#premiumCustomization");
-      if (customization) {
-        customization.hidden = !premium;
-        if (premium) {
-          const premiumOptions = await premiumProfileOptions(s.user.id);
-          $("#premiumBorder").value = premiumOptions.premium_border || "minimal";
-          $("#premiumCardStyle").value = premiumOptions.premium_card_style || "elegant";
-          const preview=$("#premiumLivePreview"), update=()=>{ preview.className=`premium-live-preview premium-border-${$("#premiumBorder").value}`; };
-          $("#premiumBorder").addEventListener("change",update);
-          update();
+    navigating = true;
+
+    try {
+      const target = new URL(url, location.href);
+
+      const response = await fetch(
+        target.href,
+        {
+          credentials: "same-origin",
+          cache: "no-store"
         }
+      );
+
+      if (!response.ok) throw new Error("navigation");
+
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+
+      const nextMain = $("main", doc);
+      const currentMain = $("main");
+
+      if (!nextMain || !currentMain) throw new Error("page");
+
+      currentMain.replaceWith(nextMain);
+
+      if (doc.title) document.title = doc.title;
+
+      if (push) history.pushState({ pale: true }, "", target.href);
+
+      closeMobileMenu();
+      closeMusicPanel();
+
+      initEditorTools();
+      initEditorPhotos();
+      initLoginPages();
+      loadProfessionalDirectory();
+      ensureAccountMarkup();
+      handleAuthRedirect().finally(() => initAccountHeader());
+      updateActiveLinks();
+
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      if (target.hash) {
+        setTimeout(() => {
+          const targetElement = document.getElementById(
+            target.hash.slice(1)
+          );
+
+          targetElement?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }, 40);
       }
-      await loadPortfolioManager(c, s.user.id, plan[1]);
-      $("#avatarFile")?.addEventListener("change", async () => { const f = $("#avatarFile").files?.[0]; if (!f) return; try { if (f.size > 8 * 1024 * 1024) throw new Error("A foto precisa ter até 8 MB."); $("#avatarStatus").textContent = "Enviando..."; const url = await uploadAvatar(c, s.user.id, f); const r = await c.from("profile").update({ avatar_url: url }).eq("id", s.user.id); if (r.error) throw r.error; image.src = `${url}?v=${Date.now()}`; image.hidden = false; initial.hidden = true; $("#avatarStatus").textContent = "Foto atualizada."; } catch (err) { $("#avatarStatus").textContent = err.message || "Erro ao enviar foto."; } });
-      form.addEventListener("submit", async e => { e.preventDefault(); const b = $("#saveEditor"); b.disabled = true; setMsg($("#editorMessage"), "Salvando..."); const patch = { nome_artistico: $("#nomeArtistico").value.trim(), especialidade: $("#especialidade").value, editor_categories: selectedCategories($("#categoryGrid")), bio: $("#bio").value.trim(), editor_software: $("#software").value.trim(), availability: $("#availability").value, portfolio_url: $("#portfolioUrl").value.trim(), tiktok: $("#tiktok").value.trim(), instagram: $("#instagram").value.trim(), youtube: $("#youtube").value.trim(), discord: $("#discord").value.trim() }; if (premium) { patch.premium_border=$("#premiumBorder").value; patch.premium_card_style=$("#premiumCardStyle").value; } const r = await c.from("profile").update(patch).eq("id", s.user.id); if (r.error) { setMsg($("#editorMessage"), r.error.message, "error"); b.disabled = false; return; } setMsg($("#editorMessage"), "Perfil profissional salvo.", "success"); b.disabled = false; await loadPortfolioManager(c, s.user.id, plan[1]); });
-    })();
+    } catch (_) {
+      location.href = url;
+    } finally {
+      navigating = false;
+    }
   }
 
-  async function loadPortfolioManager(c, userId, limit) {
-    const list = $("#portfolioList"); if (!list) return;
-    const r = await c.from("editor_portfolio_items").select("id,title,description,item_type,url,sort_order,created_at").eq("editor_id", userId).order("sort_order", { ascending: true }).order("created_at", { ascending: true });
-    if (r.error) { list.innerHTML = `<div class="admin-empty">${esc(r.error.message)}</div>`; return; }
-    const items = r.data || []; $("#count").textContent = items.length; $("#limit").textContent = limit;
-    list.innerHTML = items.map(x => `<article class="portfolio-manager-item"><div class="portfolio-manager-media">${x.item_type === "video" ? `<video src="${esc(x.url)}" controls preload="metadata"></video>` : x.item_type === "image" ? `<img src="${esc(x.url)}" alt="${esc(x.title)}">` : `<div class="portfolio-link-preview">LINK</div>`}</div><div><strong>${esc(x.title)}</strong><p>${esc(x.description || "")}</p><button type="button" class="secondary-button portfolio-delete" data-id="${x.id}" data-url="${esc(x.url)}">Excluir</button></div></article>`).join("") || `<div class="admin-empty">Nenhum item no portfólio.</div>`;
-    $$(".portfolio-delete", list).forEach(b => b.addEventListener("click", async () => { if (!confirm("Excluir este item do portfólio?")) return; const del = await c.from("editor_portfolio_items").delete().eq("id", b.dataset.id).eq("editor_id", userId); if (!del.error) await loadPortfolioManager(c, userId, limit); }));
+  function initNavigation() {
+    if (window.__PA_NAV_READY__) return;
+
+    window.__PA_NAV_READY__ = true;
+
+    document.addEventListener("click", (event) => {
+      const target =
+        event.target instanceof Element ? event.target : null;
+
+      const link = target?.closest("a[href]");
+
+      if (!shouldUseSpa(link, event)) return;
+
+      event.preventDefault();
+      navigate(link.href, true);
+    });
+
+    window.addEventListener(
+      "popstate",
+      () => navigate(location.href, false)
+    );
   }
 
-  function initPortfolioForm() {
-    const form = $("#portfolioForm"); if (!form || form.dataset.ready) return; form.dataset.ready = "1";
-    const type = $("#itemType"), fileRow = $("#itemFileRow"), urlRow = $("#itemUrlRow");
-    const toggle = () => { const isLink = type.value === "link"; fileRow.hidden = isLink; urlRow.hidden = !isLink; $("#itemFile").required = !isLink; $("#itemUrl").required = isLink; }; type.addEventListener("change", toggle); toggle();
-    form.addEventListener("submit", async e => { e.preventDefault(); const c = await ensureClient(), s = await session(); if (!s?.user) { location.replace("login-profissional.html"); return; } const message = $("#portfolioMessage"), button = $("#addPortfolio"); button.disabled = true; setMsg(message, "Enviando..."); try { const title = $("#itemTitle").value.trim(), desc = $("#itemDesc").value.trim(); let url = $("#itemUrl").value.trim(); const itemType = type.value; if (itemType !== "link") { const f = $("#itemFile").files?.[0]; if (!f) throw new Error("Escolha um arquivo."); if (f.size > 50 * 1024 * 1024) throw new Error("O arquivo precisa ter até 50 MB."); const ext = f.name.split(".").pop()?.toLowerCase() || "bin"; const path = `${s.user.id}/${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}.${ext}`; const up = await c.storage.from("portfolio").upload(path, f, { upsert: false, contentType: f.type }); if (up.error) throw up.error; url = c.storage.from("portfolio").getPublicUrl(path).data.publicUrl; } const ins = await c.from("editor_portfolio_items").insert({ editor_id: s.user.id, title, description: desc, item_type: itemType, url, sort_order: Date.now() }); if (ins.error) throw ins.error; form.reset(); toggle(); setMsg(message, "Item adicionado ao portfólio.", "success"); const p = await profile(s.user.id); await loadPortfolioManager(c, s.user.id, (PLANS[p?.professional_plan] || PLANS.free)[1]); } catch (err) { setMsg(message, err.message || "Não foi possível adicionar.", "error"); } finally { button.disabled = false; } });
+  function boot() {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    initMobileMenu();
+    initNavigation();
+    initEditorTools();
+    initEditorPhotos();
+    initLoginPages();
+    loadProfessionalDirectory();
+    initMusic();
+    initGlobalAppearance();
+    ensureAccountMarkup();
+    handleAuthRedirect().finally(() => initAccountHeader());
+    updateActiveLinks();
   }
 
-  function portfolioMediaMarkup(item) {
-    const title = esc(item.title || "Trabalho"), url = esc(item.url || "");
-    if (item.item_type === "video") return `<video src="${url}" muted autoplay loop playsinline preload="metadata" aria-label="${title}"></video>`;
-    if (item.item_type === "image") return `<img src="${url}" alt="${title}" loading="lazy">`;
-    return `<div class="portfolio-reel-link"><span>↗</span><strong>Abrir projeto</strong><small>${url}</small></div>`;
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      boot,
+      { once: true }
+    );
+  } else {
+    boot();
   }
 
-  async function initEditorsDirectory() {
-    const grid = $("#editorsGrid"); if (!grid || grid.dataset.ready) return; grid.dataset.ready = "1";
-    const reels = $("#portfolioReels"), premiumHolder = $("#premiumHighlights");
-    grid.innerHTML = '<div class="professional-loading">Carregando profissionais...</div>';
-    if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Carregando portfólios...</div>';
-    if (premiumHolder) premiumHolder.innerHTML = '<div class="portfolio-reels-empty">Carregando destaques...</div>';
-    const c = await ensureClient();
-    if (!c) { grid.innerHTML='<div class="professional-loading">Não foi possível conectar aos profissionais.</div>'; return; }
-    const [{ data: profiles, error: profileError }, { data: items, error: itemError }] = await Promise.all([
-      c.from("editor_directory").select("*").order("is_featured", { ascending:false }),
-      c.from("editor_portfolio_items").select("id,editor_id,title,description,item_type,url,sort_order,created_at").order("sort_order", { ascending:true }).order("created_at", { ascending:false })
-    ]);
-    if (profileError) { grid.innerHTML='<div class="professional-loading">Não foi possível carregar os profissionais.</div>'; if(reels) reels.innerHTML='<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>'; return; }
-    const approved=profiles||[], activePremium=approved.filter(premiumActive);
-    const ordered=[...approved].sort((a,b)=>Number(premiumActive(b))-Number(premiumActive(a))||Number(b.is_featured)-Number(a.is_featured)||String(a.nome_artistico||"").localeCompare(String(b.nome_artistico||"")));
-    grid.innerHTML=ordered.map(p=>{const cats=(p.editor_categories?.length?p.editor_categories:[p.especialidade]).filter(Boolean), tags=cats.map(x=>`<span class="editor-tag">${esc(CATEGORY_MAP[x]||x)}</span>`).join(""), name=p.nome_artistico||"Profissional", premium=premiumActive(p), border=premiumBorder(p), avatar=p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:`<span>${esc(name.charAt(0).toUpperCase())}</span>`; return `<article class="editor-profile ${premium?`premium-directory-card premium-border-${border}`:""}" data-search="${esc([name,p.especialidade,p.bio,p.editor_software].join(" "))}" data-category="${esc(cats.join(" "))}"><div class="editor-card-top"><div class="editor-avatar">${avatar}</div><div><p class="editor-role">${p.is_editor&&p.is_designer?"Editor + Designer":p.is_editor?"Editor":"Designer"}</p><h2>${esc(name)}</h2></div></div>${premium?'<span class="premium-badge directory-premium-badge">Premium</span>':''}<div class="editor-tags">${tags}</div><p>${esc(p.bio||"Profissional da Pale Ascendancy.")}</p><div class="editor-card-actions"><a class="secondary-button" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Ver perfil</a></div></article>`;}).join("")||'<div class="professional-loading">Nenhum profissional aprovado ainda.</div>';
-    initFilters();
-    if(premiumHolder){const map=new Map(approved.map(p=>[p.id,p])),by=new Map();(items||[]).forEach(item=>{if(!map.has(item.editor_id))return;if(!by.has(item.editor_id))by.set(item.editor_id,[]);by.get(item.editor_id).push(item);}); premiumHolder.innerHTML=activePremium.map(p=>{const name=p.nome_artistico||"Profissional",works=by.get(p.id)||[],avatar=p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:`<span>${esc(name.charAt(0).toUpperCase())}</span>`,border=premiumBorder(p),card=premiumCard(p),workMarkup=works.length?works.map(item=>`<a class="premium-mini-item" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer"><div class="premium-mini-item-media">${item.item_type==="video"?`<video src="${esc(item.url)}" muted autoplay loop playsinline preload="metadata"></video>`:item.item_type==="image"?`<img src="${esc(item.url)}" alt="${esc(item.title||"Trabalho")}" loading="lazy">`:`<div class="portfolio-link-preview">LINK</div>`}</div><div class="premium-mini-item-copy"><strong>${esc(item.title||"Projeto")}</strong><span>${item.item_type==="video"?"Vídeo":item.item_type==="image"?"Arte":"Link"}</span></div></a>`).join(""):'<div class="portfolio-reels-empty">Este profissional ainda não adicionou trabalhos.</div>'; return `<article class="premium-showcase-card premium-border-${border}" data-border="${border}" data-card="${card}"><div class="premium-showcase-head"><div class="premium-profile-identity"><div class="premium-profile-avatar">${avatar}</div><div><span class="premium-badge">Premium · R$ 15/mês</span><h3>${esc(name)}</h3><p>${esc(CATEGORY_MAP[p.especialidade]||p.especialidade||"Profissional")}</p></div></div><a class="premium-profile-link" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Ver perfil →</a></div><p class="premium-profile-bio">${esc(p.bio||"Perfil profissional em destaque na Pale Ascendancy.")}</p><div class="premium-items">${workMarkup}</div></article>`;}).join("")||'<div class="portfolio-reels-empty">Nenhum perfil Premium ativo no momento.</div>';}
-    if(!reels)return;if(itemError){reels.innerHTML='<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';return;}
-    const map=new Map(approved.map(p=>[p.id,p])); const valid=(items||[]).map(item=>({...item,profile:map.get(item.editor_id)})).filter(item=>item.profile).sort((a,b)=>Number(premiumActive(b.profile))-Number(premiumActive(a.profile))||new Date(b.created_at||0)-new Date(a.created_at||0));
-    reels.innerHTML=valid.map(item=>{const p=item.profile,name=p.nome_artistico||"Profissional",premium=premiumActive(p),border=premiumBorder(p),avatar=p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:`<span>${esc(name.charAt(0).toUpperCase())}</span>`,body=`<a class="portfolio-reel-media" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${portfolioMediaMarkup(item)}</a>`;return `<article class="portfolio-reel-card ${premium?`is-premium premium-border-${border}`:""}"><div class="portfolio-reel-visual">${premium?'<div class="portfolio-reel-premium"><span class="premium-badge">Premium</span></div>':''}${body}<div class="portfolio-reel-gradient"></div><div class="portfolio-reel-overlay"><span>${premium?"Destaque Premium":"Portfólio"}</span><strong>${esc(item.title||"Projeto")}</strong></div></div><div class="portfolio-reel-copy"><strong>${esc(item.title||"Projeto")}</strong><a class="portfolio-author" href="editor-perfil.html?id=${encodeURIComponent(p.id)}" aria-label="Ver perfil de ${esc(name)}"><span class="portfolio-author-avatar">${avatar}</span>${esc(name)} →</a>${item.description?`<p>${esc(item.description)}</p>`:""}</div></article>`;}).join("")||'<div class="portfolio-reels-empty">Os portfólios publicados pelos profissionais aparecerão aqui.</div>';
-  }
-
-  function initFilters() { const input = $("#searchInput"), grid = $("#editorsGrid"); if (!input || !grid || input.dataset.filterReady) return; input.dataset.filterReady = "1"; let filter = "todos"; const run = () => $$(".editor-profile", grid).forEach(card => { const text = `${card.textContent} ${card.dataset.search || ""}`.toLowerCase(); const cats = (card.dataset.category || "todos").toLowerCase().split(/\s+/); card.hidden = !!((input.value.trim() && !text.includes(input.value.trim().toLowerCase())) || (filter !== "todos" && !cats.includes(filter))); }); input.addEventListener("input", run); $$(".filter-button").forEach(b => b.addEventListener("click", () => { filter = b.dataset.filter || "todos"; $$(".filter-button").forEach(x => x.classList.toggle("active", x === b)); run(); })); run(); }
-
-  function initPublicEditorProfile() {
-    const root = $("#publicProfile"); if (!root || root.dataset.ready) return; root.dataset.ready="1";
-    (async()=>{ const c=await ensureClient(), id=new URLSearchParams(location.search).get("id"); if(!id){$("#profileContent").innerHTML='<div class="admin-empty">Profissional não encontrado.</div>';return;} const r=await c.from("editor_directory").select("*").eq("id",id).maybeSingle(); if(r.error||!r.data){$("#profileContent").innerHTML='<div class="admin-empty">Profissional não encontrado.</div>';return;} const p=r.data; const items=(await c.from("editor_portfolio_items").select("id,title,description,item_type,url,sort_order,created_at").eq("editor_id",id).order("sort_order",{ascending:true}).order("created_at",{ascending:true})).data||[]; const role=p.is_editor&&p.is_designer?"Editor + Designer":p.is_editor?"Editor":"Designer", cats=(p.editor_categories?.length?p.editor_categories:[p.especialidade]).filter(Boolean), plan=PLANS[p.professional_plan]||PLANS.free, premium=premiumActive(p), border=premiumBorder(p), card=premiumCard(p); root.classList.toggle("is-premium-profile",premium); root.dataset.border=premium?border:""; root.dataset.card=premium?card:""; const badge=premium?`<span class="premium-badge">Premium · R$ 15/mês</span>`:`<span class="plan-badge">${esc(plan[0])}</span>`; $("#profileContent").innerHTML=`<div class="editor-public-top ${premium?`premium-public-top premium-border-${border}`:""}"><div class="editor-public-avatar">${p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:`<span>${esc((p.nome_artistico||"P").charAt(0).toUpperCase())}</span>`}</div><div><p class="editor-role">${role}</p><h1>${esc(p.nome_artistico||"Profissional")}</h1>${badge}</div></div><div class="editor-tags">${cats.map(x=>`<span class="editor-tag">${esc(CATEGORY_MAP[x]||x)}</span>`).join("")}</div><p class="editor-public-bio">${esc(p.bio||"Este profissional ainda não adicionou uma descrição.")}</p><div class="profile-info"><span class="profile-label">Programas</span><strong>${esc(p.editor_software||"Não informado")}</strong></div><div class="profile-info"><span class="profile-label">Disponibilidade</span><strong>${esc(p.availability==="disponivel"?"Disponível":p.availability==="ocupado"?"Ocupado no momento":"Sob consulta")}</strong></div><div class="profile-socials">${social("TikTok",p.tiktok)}${social("Instagram",p.instagram)}${social("YouTube",p.youtube)}${social("Portfólio",p.portfolio_url)}${p.discord?`<span class="secondary-button">Discord: ${esc(p.discord)}</span>`:""}</div><section class="public-portfolio"><div class="section-heading"><p class="eyebrow">Portfólio ${premium?"Premium":""}</p><h2>${premium?"Apresentação em destaque.":"Trabalhos em destaque."}</h2></div><div class="portfolio-public-grid ${premium?`premium-public-grid premium-border-${border}`:""}">${items.map(item=>item.item_type==="video"?`<article class="portfolio-public-card ${premium?`premium-public-card premium-border-${border}`:""}"><video src="${esc(item.url)}" controls playsinline preload="metadata"></video><div><strong>${esc(item.title)}</strong><p>${esc(item.description||"")}</p></div></article>`:item.item_type==="image"?`<article class="portfolio-public-card ${premium?`premium-public-card premium-border-${border}`:""}"><img src="${esc(item.url)}" alt="${esc(item.title)}"><div><strong>${esc(item.title)}</strong><p>${esc(item.description||"")}</p></div></article>`:`<article class="portfolio-public-card ${premium?`premium-public-card premium-border-${border}`:""}"><div class="portfolio-link-preview">LINK</div><div><strong>${esc(item.title)}</strong><p>${esc(item.description||"")}</p><a class="secondary-button" target="_blank" rel="noopener noreferrer" href="${esc(item.url)}">Abrir projeto</a></div></article>`).join("")||`<div class="admin-empty">Este profissional ainda não adicionou trabalhos.</div>`}</div></section><div class="editor-public-actions"><a class="secondary-button" href="editores.html">Voltar para profissionais</a></div>`; })();
-  }
-  function social(label, url) { return url ? `<a class="secondary-button" target="_blank" rel="noopener noreferrer" href="${esc(url)}">${label}</a>` : ""; }
-
-  async function initAdmin() {
-    const content = $("#adminContent"); if (!content || content.dataset.ready) return; content.dataset.ready = "1";
-    const c = await ensureClient(), s = await session(); if (!s?.user || !(await isAdmin(s.user.id))) { $("#adminDenied").hidden = false; content.hidden = true; return; }
-    content.hidden = false; $("#adminDenied").hidden = true;
-    const list = $("#adminList"), search = $("#adminSearch"), message = $("#adminMessage"), stats = $("#adminStats"); let profiles = [];
-    const renderStats = () => { stats.innerHTML = `<div><strong>${profiles.length}</strong><span>Contas</span></div><div><strong>${profiles.filter(p=>p.is_editor).length}</strong><span>Editores</span></div><div><strong>${profiles.filter(p=>p.is_designer).length}</strong><span>Designers</span></div><div><strong>${profiles.filter(p=>p.is_featured).length}</strong><span>Destacados</span></div>`; };
-    const role = p => p.is_editor && p.is_designer ? "Editor + Designer" : p.is_editor ? "Editor" : p.is_designer ? "Designer" : "Membro";
-    const render = () => { const q=(search.value||"").toLowerCase().trim(); const rows=profiles.filter(p=>`${p.nome||""} ${p.nome_artistico||""} ${p.email||""} ${p.especialidade||""} ${role(p)}`.toLowerCase().includes(q)); list.innerHTML=rows.map(p=>`<article class="admin-user"><div class="admin-user-main"><div class="admin-avatar">${p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:esc((p.nome_artistico||p.nome||"U").charAt(0).toUpperCase())}</div><div><h2>${esc(p.nome_artistico||p.nome||"Sem nome")}</h2><p>${esc(p.email||"")}</p><small>${role(p)} · ${esc(CATEGORY_MAP[p.especialidade]||p.especialidade||"Sem categoria")}</small></div></div><div class="admin-actions"><label><input type="checkbox" data-id="${p.id}" data-field="is_editor" ${p.is_editor?"checked":""}> Editor</label><label><input type="checkbox" data-id="${p.id}" data-field="is_designer" ${p.is_designer?"checked":""}> Designer</label><label><input type="checkbox" data-id="${p.id}" data-field="is_featured" ${p.is_featured?"checked":""}> Destaque</label><label class="admin-plan-field"><span>Plano</span><select data-id="${p.id}" data-field="professional_plan">${Object.entries(PLANS).map(([k,v])=>`<option value="${k}" ${p.professional_plan===k?"selected":""}>${v[0]} · ${v[1]} espaços</option>`).join("")}</select></label><a class="secondary-button" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Perfil</a></div></article>`).join("") || `<div class="admin-empty">Nenhuma conta encontrada.</div>`; };
-    const load = async () => { setMsg(message,"Carregando..."); const r=await c.from("profile").select("id,email,nome,nome_artistico,especialidade,avatar_url,is_editor,is_designer,is_featured,professional_plan,portfolio_limit,plan_status,plan_expires_at").order("created_at",{ascending:false}); if(r.error){setMsg(message,r.error.message,"error");return;} profiles=r.data||[];renderStats();render();setMsg(message,""); };
-    list.addEventListener("change", async e => { const el=e.target;if(!el.dataset.field)return; const patch={[el.dataset.field]:el.type==="checkbox"?el.checked:el.value};if(el.dataset.field==="professional_plan"){patch.portfolio_limit=PLANS[el.value][1];patch.plan_status=el.value==="free"?"inactive":"active";patch.plan_expires_at=null;}const r=await c.from("profile").update(patch).eq("id",el.dataset.id);if(r.error)setMsg(message,r.error.message,"error");else await load(); });
-    search.addEventListener("input",render); $("#adminRefresh")?.addEventListener("click",load);
-    $$(".admin-tab").forEach(tab=>tab.addEventListener("click",()=>{ $$(".admin-tab").forEach(x=>x.classList.toggle("active",x===tab)); $$(".admin-panel").forEach(x=>x.hidden=x.id!==`panel-${tab.dataset.panel}`); }));
-    async function loadTheme(){ const r=await c.from("site_settings").select("theme").eq("id","global").maybeSingle(); const theme={...THEME_DEFAULTS,...(r.data?.theme||{})}; const holder=$("#themeGrid"); holder.innerHTML=Object.entries(THEME_DEFAULTS).map(([k,v])=>`<label class="admin-color-field"><input type="color" data-key="${k}" value="${/^#[0-9a-f]{6}$/i.test(theme[k])?theme[k]:v}"><span><strong>${esc(k)}</strong><small>${esc(theme[k])}</small></span></label>`).join(""); }
-    $("#saveTheme")?.addEventListener("click",async()=>{const theme={};$$('[data-key]',$('#themeGrid')).forEach(x=>theme[x.dataset.key]=x.value);const r=await c.from("site_settings").upsert({id:"global",theme,updated_by:s.user.id,updated_at:new Date().toISOString()});setMsg($("#themeMessage"),r.error?r.error.message:"Aparência salva.",r.error?"error":"success");if(!r.error)Object.entries(theme).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));});
-    $("#resetTheme")?.addEventListener("click",async()=>{const r=await c.from("site_settings").upsert({id:"global",theme:THEME_DEFAULTS,updated_by:s.user.id,updated_at:new Date().toISOString()});setMsg($("#themeMessage"),r.error?r.error.message:"Padrão restaurado.",r.error?"error":"success");if(!r.error)Object.entries(THEME_DEFAULTS).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));});
-    async function loadPerms(){ const admins=(await c.from("admin_users").select("user_id,created_at").order("created_at",{ascending:true})).data||[]; const ids=admins.map(x=>x.user_id); if(!ids.length){$("#permissionList").innerHTML=`<div class="admin-empty">Nenhum administrador.</div>`;return;} const ps=(await c.from("profile").select("id,nome,nome_artistico,email").in("id",ids)).data||[]; const perms=(await c.from("admin_permissions").select("*").in("user_id",ids)).data||[]; $("#permissionList").innerHTML=ps.map(p=>{const q=perms.find(x=>x.user_id===p.id)||{};return `<article class="admin-permission-card"><h3>${esc(p.nome_artistico||p.nome||p.email)}</h3><p>${esc(p.email)}</p>${[["can_manage_professionals","Gerenciar profissionais"],["can_manage_theme","Gerenciar aparência"],["can_manage_users","Gerenciar contas"],["can_manage_content","Gerenciar conteúdo"]].map(([k,l])=>`<label><input type="checkbox" data-user="${p.id}" data-perm="${k}" ${q[k]?"checked":""}>${l}</label>`).join("")}</article>`}).join(""); }
-    $("#permissionList")?.addEventListener("change",async e=>{const x=e.target;if(!x.dataset.user)return;const patch={user_id:x.dataset.user,[x.dataset.perm]:x.checked};const r=await c.from("admin_permissions").upsert(patch,{onConflict:"user_id"});if(r.error)setMsg($("#permissionMessage"),r.error.message,"error");});
-    $("#makeAdmin")?.addEventListener("click",async()=>{const r=await c.rpc("set_admin_by_email",{target_email:$("#adminEmail").value.trim()});setMsg($("#userAdminMessage"),r.error?r.error.message:"Administrador adicionado.",r.error?"error":"success");if(!r.error)loadPerms();});
-    $("#removeAdmin")?.addEventListener("click",async()=>{const r=await c.rpc("remove_admin_by_email",{target_email:$("#adminEmail").value.trim()});setMsg($("#userAdminMessage"),r.error?r.error.message:"Acesso administrativo revogado.",r.error?"error":"success");if(!r.error)loadPerms();});
-    await Promise.all([load(),loadTheme(),loadPerms()]);
-  }
-
-  async function init() {
-    initMenu(); injectAccountUI(); initLoginPages(); initRegister(); initProfessionalRegister(); initCommonProfile(); initEditProfile(); initEditorPanel(); initPortfolioForm(); initPublicEditorProfile(); initEditorsDirectory(); initAdmin(); await applyTheme(); refreshAccountUI(); musicInit();
-  }
-
-  window.PaleAscendancy = { supabase: () => getClient(), logout: async () => { const c=await ensureClient(); await c.auth.signOut(); location.replace("index.html"); } };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true }); else init();
+  window.PaleAscendancy = {
+    music: {
+      play: playMusic,
+      pause: pauseMusic,
+      next: nextTrack,
+      open: openMusicPanel,
+      close: closeMusicPanel,
+      playlist: PLAYLIST
+    }
+  };
 })();
