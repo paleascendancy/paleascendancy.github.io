@@ -614,6 +614,40 @@
     }
   }
 
+
+  /* ---------------- GLOBAL APPEARANCE ---------------- */
+
+  const BUTTON_MODES = new Set(["gradient", "solid", "outline", "glass", "minimal"]);
+
+  function applySiteAppearance(settings) {
+    if (!settings || typeof settings !== "object") return;
+    const root = document.documentElement;
+    if (settings.primary) root.style.setProperty("--pa-primary", settings.primary);
+    if (settings.secondary) root.style.setProperty("--pa-secondary", settings.secondary);
+    if (settings.background) root.style.setProperty("--pa-background", settings.background);
+    if (settings.text) root.style.setProperty("--pa-text", settings.text);
+    if (settings.accent) root.style.setProperty("--pa-accent", settings.accent);
+    if (BUTTON_MODES.has(settings.button_mode)) root.dataset.buttonMode = settings.button_mode;
+    try { localStorage.setItem("paAppearance", JSON.stringify(settings)); } catch (_) {}
+  }
+
+  async function initGlobalAppearance() {
+    try {
+      const cached = JSON.parse(read("paAppearance", "null"));
+      if (cached) applySiteAppearance(cached);
+    } catch (_) {}
+    const load = async () => {
+      const sb = getSupabaseClient();
+      if (!sb) return;
+      try {
+        const { data } = await sb.from("site_settings").select("settings").eq("id", true).maybeSingle();
+        if (data?.settings) applySiteAppearance(data.settings);
+      } catch (_) {}
+    };
+    if (window.supabase?.createClient) await load();
+    else setTimeout(load, 700);
+  }
+
   function applyCachedHeaderProfile() {
     const cached = (() => {
       try { return JSON.parse(read(STORE.profile, "null")); }
@@ -1038,36 +1072,14 @@
     );
   }
 
-  async function loadGlobalAppearance() {
-    try {
-      const ready = await ensureSupabase();
-      if (!ready) return;
-      const client = getSupabaseClient();
-      if (!client) return;
-      const { data, error } = await client
-        .from("site_settings")
-        .select("settings")
-        .eq("id", true)
-        .maybeSingle();
-      if (error || !data?.settings) return;
-      const values = data.settings;
-      const root = document.documentElement;
-      if (/^#[0-9a-fA-F]{6}$/.test(values.primary || "")) { root.style.setProperty("--pa-primary", values.primary); root.style.setProperty("--cyan", values.primary); }
-      if (/^#[0-9a-fA-F]{6}$/.test(values.secondary || "")) { root.style.setProperty("--pa-secondary", values.secondary); root.style.setProperty("--violet", values.secondary); }
-      if (/^#[0-9a-fA-F]{6}$/.test(values.background || "")) { root.style.setProperty("--pa-background", values.background); root.style.setProperty("--bg", values.background); root.style.setProperty("--bg-deep", values.background); }
-      if (/^#[0-9a-fA-F]{6}$/.test(values.text || "")) { root.style.setProperty("--pa-text", values.text); root.style.setProperty("--text", values.text); }
-      if (/^#[0-9a-fA-F]{6}$/.test(values.accent || "")) { root.style.setProperty("--pa-accent", values.accent); root.style.setProperty("--gold", values.accent); }
-    } catch (_) {}
-  }
-
   function boot() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     initMobileMenu();
     initNavigation();
-    loadGlobalAppearance();
     initEditorTools();
     initEditorPhotos();
     initMusic();
+    initGlobalAppearance();
     ensureAccountMarkup();
     handleAuthRedirect().finally(() => initAccountHeader());
     updateActiveLinks();

@@ -14,7 +14,7 @@
 <style>
 .admin-subsection{margin-top:28px}.admin-subsection .section-heading{margin-bottom:16px}.admin-application{display:flex;justify-content:space-between;gap:18px;align-items:center}.admin-application-meta{display:grid;gap:6px}.admin-role-badge{display:inline-flex;width:max-content;padding:7px 10px;border:1px solid rgba(159,232,255,.25);border-radius:999px;font-size:.8rem;font-weight:700}.admin-application-actions{display:flex;gap:10px;flex-wrap:wrap}.admin-actions .danger-button{border-color:rgba(255,100,100,.3)}.admin-user-status{display:inline-flex;width:max-content;padding:6px 9px;border-radius:999px;font-size:.75rem;font-weight:700;border:1px solid rgba(159,232,255,.2)}.admin-user-status.prof{border-color:rgba(168,148,255,.35)}.admin-user-status.active{border-color:rgba(159,232,255,.35)}.admin-user-status.pending{border-color:rgba(233,207,145,.35)}.admin-user-grid{display:grid;gap:14px}.admin-user-info{display:grid;gap:5px}.admin-user-info small{opacity:.72}.admin-user-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.admin-user-card{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.admin-user-meta{display:grid;gap:6px}.admin-user-meta h2{margin:0}.admin-user-meta p{margin:0;opacity:.78}.admin-user-side{display:grid;justify-items:end;gap:8px;text-align:right}.admin-user-empty{padding:24px;text-align:center;opacity:.75}@media(max-width:720px){.admin-user-card{flex-direction:column}.admin-user-side{justify-items:start;text-align:left}}@media(max-width:720px){.admin-application{align-items:flex-start;flex-direction:column}.admin-application-actions{width:100%}.admin-application-actions button{width:100%}}
 .admin-plans-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:18px}.admin-plan-card{padding:20px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.025)}.admin-plan-card h3{margin:0 0 7px}.admin-plan-price{font-size:1.15rem;font-weight:800}.admin-plan-limit,.admin-plan-count{display:block;margin-top:6px;opacity:.72;font-size:.84rem}.admin-plan-card.active{border-color:rgba(159,232,255,.3)}.admin-plan-list{display:grid;gap:12px;margin-top:18px}.admin-plan-row{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:16px 18px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.02)}.admin-plan-row-main{display:flex;align-items:center;gap:12px}.admin-plan-row-main h3{margin:0}.admin-plan-row-main p{margin:4px 0 0;opacity:.7}.admin-plan-row select{min-width:220px}@media(max-width:1000px){.admin-plans-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.admin-plans-grid{grid-template-columns:1fr}.admin-plan-row{flex-direction:column;align-items:flex-start}.admin-plan-row select{width:100%;min-width:0}}
-</style>
+.select-field{display:grid;gap:8px}.select-field>span{font-size:.72rem;font-weight:700}.select-field select{width:100%;min-height:42px}.appearance-preview[data-button-mode="solid"] button:first-child{background:var(--preview-primary)!important}.appearance-preview[data-button-mode="outline"] button{background:transparent!important;border:1px solid var(--preview-primary)!important;color:var(--preview-primary)!important}.appearance-preview[data-button-mode="glass"] button{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.16)!important;backdrop-filter:blur(12px)}.appearance-preview[data-button-mode="minimal"] button{background:transparent!important;border:0!important;border-bottom:1px solid var(--preview-accent)!important;border-radius:0!important;color:var(--preview-text)!important}.appearance-preview[data-button-mode="minimal"] button:first-child{color:var(--preview-primary)!important}.appearance-preview[data-button-mode="solid"] button:last-child{background:var(--preview-secondary)!important}</style>
 </head>
 <body class="admin-page">
 <header class="header">
@@ -70,7 +70,7 @@
     <div>
       <p class="eyebrow">Identidade visual global</p>
       <h2>Aparência do site</h2>
-      <p>Altere a paleta principal da Pale Ascendancy. As cores salvas aqui são aplicadas globalmente nas páginas que usam o sistema visual.</p>
+      <p>Altere a paleta e o modo dos botões. As configurações salvas aqui são aplicadas globalmente nas páginas que usam o sistema visual.</p>
     </div>
     <div class="appearance-actions">
       <button class="secondary-button" id="appearanceReset" type="button">Restaurar padrão</button>
@@ -87,6 +87,7 @@
         <label class="color-field"><span>Fundo</span><div><input type="color" id="appearanceBackgroundColor"><input type="text" id="appearanceBackground" maxlength="7" spellcheck="false"></div></label>
         <label class="color-field"><span>Textos</span><div><input type="color" id="appearanceTextColor"><input type="text" id="appearanceText" maxlength="7" spellcheck="false"></div></label>
         <label class="color-field"><span>Destaques</span><div><input type="color" id="appearanceAccentColor"><input type="text" id="appearanceAccent" maxlength="7" spellcheck="false"></div></label>
+        <label class="select-field"><span>Modo dos botões</span><select id="appearanceButtonMode"><option value="gradient">Gradiente</option><option value="solid">Sólido</option><option value="outline">Contorno</option><option value="glass">Vidro</option><option value="minimal">Minimalista</option></select></label>
       </div>
     </article>
 
@@ -172,7 +173,7 @@ async function load(){
   if(appError){showMessage("Não foi possível carregar as solicitações: "+appError.message,"error");return;}
   profiles=data||[];applications=apps||[];showMessage("");renderApplications();render();renderPlans();
 }
-const APPEARANCE_DEFAULTS={primary:"#9fe8ff",secondary:"#a894ff",background:"#09080d",text:"#f7f4fb",accent:"#e9cf91"};
+const APPEARANCE_DEFAULTS={primary:"#9fe8ff",secondary:"#a894ff",background:"#09080d",text:"#f7f4fb",accent:"#e9cf91",button_mode:"gradient"};
 const appearanceFields={
   primary:[document.getElementById("appearancePrimary"),document.getElementById("appearancePrimaryColor")],
   secondary:[document.getElementById("appearanceSecondary"),document.getElementById("appearanceSecondaryColor")],
@@ -180,10 +181,11 @@ const appearanceFields={
   text:[document.getElementById("appearanceText"),document.getElementById("appearanceTextColor")],
   accent:[document.getElementById("appearanceAccent"),document.getElementById("appearanceAccentColor")]
 };
+const appearanceButtonMode=document.getElementById("appearanceButtonMode");
 function normalizeHex(v,fallback){const x=String(v||"").trim();return /^#[0-9a-fA-F]{6}$/.test(x)?x.toLowerCase():fallback;}
-function setAppearanceForm(values){Object.entries(appearanceFields).forEach(([key,[text,color]])=>{const value=normalizeHex(values[key],APPEARANCE_DEFAULTS[key]);text.value=value;color.value=value;});updateAppearancePreview();}
-function getAppearanceForm(){return Object.fromEntries(Object.entries(appearanceFields).map(([key,[text]])=>[key,normalizeHex(text.value,APPEARANCE_DEFAULTS[key])]));}
-function applyAppearancePreview(values){const root=document.getElementById("appearancePreview");if(!root)return;root.style.setProperty("--preview-primary",values.primary);root.style.setProperty("--preview-secondary",values.secondary);root.style.setProperty("--preview-bg",values.background);root.style.setProperty("--preview-text",values.text);root.style.setProperty("--preview-accent",values.accent);}
+function setAppearanceForm(values){Object.entries(appearanceFields).forEach(([key,[text,color]])=>{const value=normalizeHex(values[key],APPEARANCE_DEFAULTS[key]);text.value=value;color.value=value;});if(appearanceButtonMode)appearanceButtonMode.value=["gradient","solid","outline","glass","minimal"].includes(values.button_mode)?values.button_mode:"gradient";updateAppearancePreview();}
+function getAppearanceForm(){const values=Object.fromEntries(Object.entries(appearanceFields).map(([key,[text]])=>[key,normalizeHex(text.value,APPEARANCE_DEFAULTS[key])]));values.button_mode=appearanceButtonMode?.value||"gradient";return values;}
+function applyAppearancePreview(values){const root=document.getElementById("appearancePreview");if(!root)return;root.style.setProperty("--preview-primary",values.primary);root.style.setProperty("--preview-secondary",values.secondary);root.style.setProperty("--preview-bg",values.background);root.style.setProperty("--preview-text",values.text);root.style.setProperty("--preview-accent",values.accent);root.dataset.buttonMode=values.button_mode||"gradient";}
 function updateAppearancePreview(){applyAppearancePreview(getAppearanceForm());}
 async function loadAppearance(){
   setAppearanceForm(APPEARANCE_DEFAULTS);
@@ -204,6 +206,7 @@ function applyGlobalAppearance(values){const root=document.documentElement;root.
 function initAppearance(){
   document.querySelectorAll(".admin-tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".admin-tab-panel").forEach(x=>x.hidden=true);tab.classList.add("active");const panelMap={overview:"adminTabOverview",users:"adminTabUsers",plans:"adminTabPlans",appearance:"adminTabAppearance"};document.getElementById(panelMap[tab.dataset.adminTab]||"adminTabOverview").hidden=false;if(tab.dataset.adminTab==="appearance")loadAppearance();if(tab.dataset.adminTab==="users")loadUsers();if(tab.dataset.adminTab==="plans")renderPlans();}));
   Object.entries(appearanceFields).forEach(([_,[text,color]])=>{text.addEventListener("input",()=>{const v=normalizeHex(text.value,color.value);if(/^#[0-9a-fA-F]{6}$/.test(text.value.trim()))color.value=v;updateAppearancePreview();});color.addEventListener("input",()=>{text.value=color.value;updateAppearancePreview();});});
+  appearanceButtonMode?.addEventListener("change",updateAppearancePreview);
   document.getElementById("appearanceReset").addEventListener("click",()=>{setAppearanceForm(APPEARANCE_DEFAULTS);document.getElementById("appearanceStatus").textContent="Prévia restaurada. Clique em Salvar aparência para publicar.";});
   document.getElementById("appearanceSave").addEventListener("click",saveAppearance);
   setAppearanceForm(APPEARANCE_DEFAULTS);
