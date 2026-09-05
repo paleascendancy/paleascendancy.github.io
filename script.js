@@ -78,11 +78,28 @@
 
   async function profile(userId, full = false) {
     const c = await ensureClient();
+    // Campos estáveis do perfil. O login não depende das colunas opcionais
+    // de personalização Premium, evitando que uma migração futura bloqueie
+    // a autenticação profissional.
     const fields = full
-      ? "id,email,nome,nome_artistico,especialidade,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,portfolio_limit,plan_status,plan_expires_at,premium_border,premium_card_style,professional_application,requested_role"
-      : "id,email,nome,nome_artistico,especialidade,avatar_url,is_editor,is_designer,is_featured,professional_plan,portfolio_limit,plan_status,plan_expires_at,premium_border,premium_card_style";
+      ? "id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,portfolio_limit,plan_status,plan_expires_at"
+      : "id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,professional_plan,portfolio_limit,plan_status,plan_expires_at";
     const r = await c.from("profile").select(fields).eq("id", userId).maybeSingle();
+    if (r.error) {
+      console.error("Erro ao carregar perfil:", r.error);
+      return null;
+    }
     return r.data || null;
+  }
+
+  async function premiumProfileOptions(userId) {
+    const c = await ensureClient();
+    try {
+      const r = await c.from("profile").select("premium_border,premium_card_style").eq("id", userId).maybeSingle();
+      return r.error ? {} : (r.data || {});
+    } catch (_) {
+      return {};
+    }
   }
 
   async function isAdmin(userId) {
@@ -255,7 +272,18 @@
     }
     if (mode === "professional") {
       const p = await profile(user.id);
-      if (!(p?.is_editor || p?.is_designer)) { await c.auth.signOut(); setMsg(message, "A conta ainda não foi aprovada como profissional.", "error"); button.disabled = false; button.textContent = "Entrar na área profissional"; return; }
+      if (!p) {
+        await c.auth.signOut();
+        setMsg(message, "Não foi possível carregar seu perfil profissional. Verifique a configuração do Supabase.", "error");
+        button.disabled = false; button.textContent = "Entrar na área profissional";
+        return;
+      }
+      if (!(p.is_editor || p.is_designer)) {
+        await c.auth.signOut();
+        setMsg(message, "A conta ainda não foi aprovada como profissional.", "error");
+        button.disabled = false; button.textContent = "Entrar na área profissional";
+        return;
+      }
       location.replace("editor-painel.html"); return;
     }
     location.replace((await isAdmin(user.id)) ? "admin.html" : "perfil.html");
@@ -366,7 +394,17 @@
       $("#publicProfile").href = `editor-perfil.html?id=${encodeURIComponent(s.user.id)}`;
       const plan = PLANS[p.professional_plan] || PLANS.free; $("#planName").textContent = plan[0]; $("#limit").textContent = plan[1]; $("#planDesc").textContent = `${plan[1]} espaços de portfólio${p.plan_status === "active" && p.professional_plan !== "free" ? " ativos" : ""}.`;
       const premium = premiumActive(p), customization = $("#premiumCustomization");
-      if (customization) { customization.hidden = !premium; if (premium) { $("#premiumBorder").value = premiumBorder(p); $("#premiumCardStyle").value = premiumCard(p); const preview=$("#premiumLivePreview"), update=()=>{ preview.className=`premium-live-preview premium-border-${$("#premiumBorder").value}`; }; $("#premiumBorder").addEventListener("change",update); update(); } }
+      if (customization) {
+        customization.hidden = !premium;
+        if (premium) {
+          const premiumOptions = await premiumProfileOptions(s.user.id);
+          $("#premiumBorder").value = premiumOptions.premium_border || "minimal";
+          $("#premiumCardStyle").value = premiumOptions.premium_card_style || "elegant";
+          const preview=$("#premiumLivePreview"), update=()=>{ preview.className=`premium-live-preview premium-border-${$("#premiumBorder").value}`; };
+          $("#premiumBorder").addEventListener("change",update);
+          update();
+        }
+      }
       await loadPortfolioManager(c, s.user.id, plan[1]);
       $("#avatarFile")?.addEventListener("change", async () => { const f = $("#avatarFile").files?.[0]; if (!f) return; try { if (f.size > 8 * 1024 * 1024) throw new Error("A foto precisa ter até 8 MB."); $("#avatarStatus").textContent = "Enviando..."; const url = await uploadAvatar(c, s.user.id, f); const r = await c.from("profile").update({ avatar_url: url }).eq("id", s.user.id); if (r.error) throw r.error; image.src = `${url}?v=${Date.now()}`; image.hidden = false; initial.hidden = true; $("#avatarStatus").textContent = "Foto atualizada."; } catch (err) { $("#avatarStatus").textContent = err.message || "Erro ao enviar foto."; } });
       form.addEventListener("submit", async e => { e.preventDefault(); const b = $("#saveEditor"); b.disabled = true; setMsg($("#editorMessage"), "Salvando..."); const patch = { nome_artistico: $("#nomeArtistico").value.trim(), especialidade: $("#especialidade").value, editor_categories: selectedCategories($("#categoryGrid")), bio: $("#bio").value.trim(), editor_software: $("#software").value.trim(), availability: $("#availability").value, portfolio_url: $("#portfolioUrl").value.trim(), tiktok: $("#tiktok").value.trim(), instagram: $("#instagram").value.trim(), youtube: $("#youtube").value.trim(), discord: $("#discord").value.trim() }; if (premium) { patch.premium_border=$("#premiumBorder").value; patch.premium_card_style=$("#premiumCardStyle").value; } const r = await c.from("profile").update(patch).eq("id", s.user.id); if (r.error) { setMsg($("#editorMessage"), r.error.message, "error"); b.disabled = false; return; } setMsg($("#editorMessage"), "Perfil profissional salvo.", "success"); b.disabled = false; await loadPortfolioManager(c, s.user.id, plan[1]); });
