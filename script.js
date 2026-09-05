@@ -1495,15 +1495,6 @@
           if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
           return;
         }
-        if (data?.session?.user?.id) {
-          try {
-            await c.from("professional_applications").insert({
-              profile_id: data.session.user.id,
-              requested_role: requestedRole,
-              status: "pending"
-            });
-          } catch (_) {}
-        }
         authMessage("professionalRegisterMessage", data?.session ? "Solicitação enviada. Aguarde a aprovação da administração." : "Solicitação registrada. Confirme seu e-mail e aguarde a aprovação da administração.", "success");
         if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
       });
