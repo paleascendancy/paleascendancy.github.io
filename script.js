@@ -3,17 +3,17 @@
   "use strict";
 
   const PLAYLIST = [
-    { title: "Meaningful Love", file: "assets/music/01-meaningful-love.mp3" },
-    { title: "Better Days", file: "assets/music/02-better-days.mp3" },
-    { title: "Chill Day", file: "assets/music/03-chill-day.mp3" },
-    { title: "Canals", file: "assets/music/04-canals.mp3" },
-    { title: "Tek It — Hoodtrap Remix", file: "assets/music/05-tek-it-hoodtrap-remix.mp3" },
-    { title: "Star Shopping", file: "assets/music/06-star-shopping.mp3" },
-    { title: "Earrings", file: "assets/music/07-earrings.mp3" },
-    { title: "New Jeans Jersey Remix", file: "assets/music/08-new-jeans-jersey-remix.mp3" },
-    { title: "Nuts — Instrumental Slowed", file: "assets/music/09-nuts-instrumental-slowed.mp3" },
-    { title: "Sweater Weather — Instrumental", file: "assets/music/10-sweater-weather-instrumental.mp3" },
-    { title: "Childish Gambino — Instrumental", file: "assets/music/11-childish-gambino-instrumental.mp3" }
+    { title: "Meaningful Love", file: "music/01-meaningful-love.mp3" },
+    { title: "Better Days", file: "music/02-better-days.mp3" },
+    { title: "Chill Day", file: "music/03-chill-day.mp3" },
+    { title: "Canals", file: "music/04-canals.mp3" },
+    { title: "Tek It — Hoodtrap Remix", file: "music/05-tek-it-hoodtrap-remix.mp3" },
+    { title: "Star Shopping", file: "music/06-star-shopping.mp3" },
+    { title: "Earrings", file: "music/07-earrings.mp3" },
+    { title: "New Jeans Jersey Remix", file: "music/08-new-jeans-jersey-remix.mp3" },
+    { title: "Nuts — Instrumental Slowed", file: "music/09-nuts-instrumental-slowed.mp3" },
+    { title: "Sweater Weather — Instrumental", file: "music/10-sweater-weather-instrumental.mp3" },
+    { title: "Childish Gambino — Instrumental", file: "music/11-childish-gambino-instrumental.mp3" }
   ];
 
   const STORE = {
@@ -184,59 +184,87 @@
     return `<div class="portfolio-reel-link"><span>↗</span><strong>Abrir projeto</strong><small>${url}</small></div>`;
   }
 
+  function initPublicContentRealtime(sb) {
+    if (!sb || window.__PA_PUBLIC_REALTIME__) return;
+    window.__PA_PUBLIC_REALTIME__ = true;
+    try {
+      sb.channel("pa-public-content")
+        .on("postgres_changes", { event: "*", schema: "public", table: "profile" }, () => loadProfessionalDirectory())
+        .on("postgres_changes", { event: "*", schema: "public", table: "editor_portfolio_items" }, () => loadProfessionalDirectory())
+        .subscribe();
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && document.getElementById("editorsGrid")) loadProfessionalDirectory();
+      });
+    } catch (error) {
+      console.warn("[Pale Ascendancy] realtime indisponível:", error);
+    }
+  }
+
+  async function fetchPublicProfessionals(sb) {
+    const viewResult = await sb.from("editor_directory")
+      .select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer")
+      .order("is_featured", { ascending: false })
+      .order("nome_artistico", { ascending: true });
+
+    if (!viewResult.error) return { data: viewResult.data || [], error: null };
+
+    const direct = await sb.from("profile")
+      .select("id,nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer,is_public")
+      .or("is_editor.eq.true,is_designer.eq.true")
+      .order("is_featured", { ascending: false })
+      .order("nome_artistico", { ascending: true });
+
+    if (direct.error) return { data: [], error: direct.error };
+    return { data: (direct.data || []).filter(p => p.is_public !== false), error: null };
+  }
+
   async function loadProfessionalDirectory() {
     const grid = $("#editorsGrid");
     if (!grid) return;
 
     const reels = $("#portfolioReels");
     grid.innerHTML = '<div class="professional-loading">Carregando profissionais...</div>';
-    if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Carregando portfólios...</div>';
+    if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Carregando trabalhos...</div>';
 
-    const client = getSupabaseClient();
-    if (!client) {
-      await ensureSupabase();
-    }
-    const sb = getSupabaseClient();
+    const sb = getSupabaseClient() || (await ensureSupabase(), getSupabaseClient());
     if (!sb) {
-      grid.innerHTML = '<div class="professional-loading">Não foi possível conectar aos profissionais.</div>';
-      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      grid.innerHTML = '<div class="professional-loading">Não foi possível conectar à rede profissional.</div>';
+      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os trabalhos.</div>';
       return;
     }
 
-    const [{ data: profiles, error: profileError }, { data: items, error: itemError }] = await Promise.all([
-      sb.from("editor_directory")
-        .select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer")
-        .order("is_featured", { ascending: false }),
-      sb.from("editor_portfolio_items")
-        .select("id,editor_id,title,description,item_type,url,sort_order,created_at")
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: false })
-    ]);
+    initPublicContentRealtime(sb);
+    const professionals = await fetchPublicProfessionals(sb);
+    const approved = professionals.data || [];
 
-    if (profileError) {
-      grid.innerHTML = '<div class="professional-loading">Não foi possível carregar os profissionais.</div>';
-      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+    if (professionals.error) {
+      console.error("[Pale Ascendancy] directory:", professionals.error);
+      grid.innerHTML = '<div class="professional-loading">Não foi possível carregar os profissionais agora.</div>';
+      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os trabalhos agora.</div>';
       return;
     }
 
-    const approved = profiles || [];
     if (!approved.length) {
-      grid.innerHTML = '<div class="professional-loading">Ainda não há profissionais aprovados na rede.</div>';
+      grid.innerHTML = '<div class="professional-loading">Ainda não há profissionais publicados na rede.</div>';
     } else {
       grid.innerHTML = approved.map((profile) => {
         const name = profile.nome_artistico || profile.nome || "Profissional";
-        const categories = [profile.especialidade, ...(Array.isArray(profile.editor_categories) ? profile.editor_categories : [])].filter(Boolean).map(String);
-        const tags = [...new Set(categories)].slice(0, 5).map((item) => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[item] || item)}</span>`).join("");
+        const categories = [profile.especialidade, ...(Array.isArray(profile.editor_categories) ? profile.editor_categories : [])]
+          .filter(Boolean).map(String);
+        const tags = [...new Set(categories)].slice(0, 5)
+          .map((item) => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[item] || item)}</span>`)
+          .join("");
         const avatar = profile.avatar_url
           ? `<img class="editor-avatar editor-photo" src="${escapeHTML(profile.avatar_url)}" alt="Foto de perfil de ${escapeHTML(name)}" loading="lazy">`
           : `<div class="editor-avatar placeholder-icon">${escapeHTML(name.charAt(0).toUpperCase())}</div>`;
         const role = professionalRole(profile);
         const searchText = `${name} ${profile.especialidade || ""} ${categories.join(" ")} ${profile.bio || ""} ${profile.editor_software || ""}`.toLowerCase();
+
         return `<article class="editor-profile dynamic-professional" data-profile-id="${escapeHTML(profile.id)}" data-category="${escapeHTML(categories.join(" ").toLowerCase())}" data-search="${escapeHTML(searchText)}">
           <div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${escapeHTML(profile.is_featured ? "Destaque" : professionalAvailability(profile.availability))}</div>
           ${avatar}
           <h2>${escapeHTML(name)}</h2>
-          <div class="editor-role">${role}</div>
+          <div class="editor-role">${escapeHTML(role)}</div>
           <p class="editor-description">${escapeHTML(profile.bio || `${role.toLowerCase()} com foco em ${PROFESSIONAL_CATEGORY_MAP[profile.especialidade] || profile.especialidade || "criação audiovisual"}.`)}</p>
           <div class="editor-tags">${tags || '<span class="editor-tag">Portfólio</span>'}${profile.is_featured ? '<span class="editor-tag">Destaque</span>' : ''}</div>
           <div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(profile.id)}">Ver perfil →</a></div>
@@ -248,25 +276,51 @@
     window.__PA_EDITOR_FILTER_APPLY__?.();
 
     if (!reels) return;
+
+    const { data: items, error: itemError } = await sb.from("editor_portfolio_items")
+      .select("id,editor_id,title,description,item_type,url,sort_order,created_at")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false });
+
     if (itemError) {
-      reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      console.error("[Pale Ascendancy] portfolio:", itemError);
+      reels.innerHTML = '<div class="portfolio-reels-empty">Os trabalhos não puderam ser carregados. Verifique a configuração do portfólio no Supabase.</div>';
       return;
     }
 
-    const profileMap = new Map(approved.map((profile) => [profile.id, profile]));
-    const validItems = (items || []).map((item) => ({ ...item, profile: profileMap.get(item.editor_id) })).filter((item) => item.profile);
+    const publicIds = new Set(approved.map(p => p.id));
+    const profileMap = new Map(approved.map(p => [p.id, p]));
+    const validItems = (items || [])
+      .filter(item => publicIds.has(item.editor_id))
+      .map(item => ({ ...item, profile: profileMap.get(item.editor_id) }));
+
     if (!validItems.length) {
-      reels.innerHTML = '<div class="portfolio-reels-empty">Os portfólios publicados pelos profissionais aparecerão aqui.</div>';
+      reels.innerHTML = '<div class="portfolio-reels-empty"><strong>Portfólio em destaque</strong><span>Os trabalhos publicados pelos profissionais aparecerão aqui.</span></div>';
       return;
     }
 
     reels.innerHTML = validItems.map((item) => {
       const profile = item.profile || {};
       const name = profile.nome_artistico || profile.nome || "Profissional";
-      const body = `<a class="portfolio-reel-media" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">${portfolioMediaMarkup(item)}</a>`;
+      const typeLabel = item.item_type === "video" ? "Vídeo" : item.item_type === "image" ? "Arte" : "Projeto";
+      const media = portfolioMediaMarkup(item);
+
       return `<article class="portfolio-reel-card">
-        <div class="portfolio-reel-visual">${body}<div class="portfolio-reel-gradient"></div><div class="portfolio-reel-overlay"><span>${escapeHTML(name)}</span><strong>${escapeHTML(item.title || "Projeto")}</strong></div></div>
-        <div class="portfolio-reel-copy"><strong>${escapeHTML(item.title || "Projeto")}</strong><span>${escapeHTML(name)} · ${item.item_type === "video" ? "Vídeo" : item.item_type === "image" ? "Arte" : "Projeto"}</span>${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}</div>
+        <div class="portfolio-reel-visual">
+          <a class="portfolio-reel-media" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${escapeHTML(item.title || "projeto")}">${media}</a>
+          <div class="portfolio-reel-gradient"></div>
+          <div class="portfolio-reel-play" aria-hidden="true">↗</div>
+          <div class="portfolio-reel-overlay">
+            <span>${escapeHTML(name)}</span>
+            <strong>${escapeHTML(item.title || "Projeto")}</strong>
+          </div>
+        </div>
+        <div class="portfolio-reel-copy">
+          <strong>${escapeHTML(item.title || "Projeto")}</strong>
+          <span>${escapeHTML(name)} · ${typeLabel}</span>
+          ${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}
+          <a class="portfolio-reel-link-button" href="editor-perfil.html?id=${encodeURIComponent(profile.id)}">Ver profissional</a>
+        </div>
       </article>`;
     }).join("");
   }
@@ -1426,6 +1480,460 @@
     }
   }
 
+
+  /* ---------------- PROFILE / PROFESSIONAL PAGES ---------------- */
+
+  async function uploadAvatar(c, userId, file) {
+    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+    const path = `${userId}/avatar-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const result = await c.storage.from("avatars").upload(path, file, {
+      upsert: false, contentType: file.type, cacheControl: "3600"
+    });
+    if (result.error) throw result.error;
+    return c.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+  }
+
+  async function finishPendingAvatar(c, userId) {
+    const raw = read("pa_pending_signup_avatar", "");
+    if (!raw) return null;
+    try {
+      const response = await fetch(raw);
+      const blob = await response.blob();
+      const url = await uploadAvatar(c, userId, blob);
+      const update = await c.from("profile").update({ avatar_url: url }).eq("id", userId);
+      if (update.error) throw update.error;
+      localStorage.removeItem("pa_pending_signup_avatar");
+      return url;
+    } catch (error) {
+      console.warn("[Pale Ascendancy] pending avatar:", error);
+      return null;
+    }
+  }
+
+  async function ensureOwnProfile(c, user) {
+    if (!c || !user) return null;
+
+    const result = await c.from("profile")
+      .select("id,email,nome,nome_artistico,especialidade,avatar_url,is_editor,is_designer,is_featured,professional_login_enabled,professional_plan,portfolio_limit,plan_status,plan_expires_at")
+      .eq("id", user.id).maybeSingle();
+
+    if (result.data) return result.data;
+
+    const meta = user.user_metadata || {};
+    const payload = {
+      id: user.id, email: user.email || "",
+      nome: meta.nome || "", nome_artistico: meta.nome_artistico || "",
+      especialidade: meta.especialidade || ""
+    };
+
+    const inserted = await c.from("profile").upsert(payload, { onConflict: "id" })
+      .select("id,email,nome,nome_artistico,especialidade,avatar_url,is_editor,is_designer,is_featured,professional_login_enabled,professional_plan,portfolio_limit,plan_status,plan_expires_at")
+      .maybeSingle();
+
+    return inserted.data || null;
+  }
+
+  async function initCommonProfile() {
+    const view = $("#profileView");
+    if (!view || view.dataset.paReady === "1") return;
+    view.dataset.paReady = "1";
+    view.hidden = true;
+
+    const c = await authClient();
+    if (!c) { location.replace("login.html"); return; }
+
+    try {
+      const { data } = await c.auth.getSession();
+      const user = data?.session?.user;
+      if (!user) {
+        localStorage.removeItem(STORE.profile);
+        location.replace("login.html");
+        return;
+      }
+
+      let p = await ensureOwnProfile(c, user);
+      if (!p) {
+        authMessage("profileMessage", "Não foi possível carregar sua conta. Tente novamente.", "error");
+        view.hidden = false;
+        return;
+      }
+
+      const pendingAvatar = await finishPendingAvatar(c, user.id);
+      if (pendingAvatar) p.avatar_url = pendingAvatar;
+
+      $("#profileNome").textContent = p.nome || "Não informado";
+      $("#profileNomeArtistico").textContent = p.nome_artistico || "Não informado";
+      $("#profileEmail").textContent = p.email || user.email || "Não informado";
+      $("#profileEspecialidade").textContent = PROFESSIONAL_CATEGORY_MAP[p.especialidade] || p.especialidade || "Não informado";
+
+      const initial = $("#profileInitial");
+      const image = $("#profileImage");
+      const displayName = p.nome_artistico || p.nome || p.email || "?";
+      if (initial) initial.textContent = displayName.charAt(0).toUpperCase();
+
+      if (image && p.avatar_url) {
+        image.src = `${p.avatar_url}${p.avatar_url.includes("?") ? "&" : "?"}v=${Date.now()}`;
+        image.hidden = false;
+        if (initial) initial.hidden = true;
+      } else if (image) {
+        image.hidden = true;
+        image.removeAttribute("src");
+        if (initial) initial.hidden = false;
+      }
+
+      const admin = await authIsAdmin(user.id);
+      const professional = !!(p.professional_login_enabled && (p.is_editor || p.is_designer));
+
+      const adminButton = $("#profileAdminButton");
+      const professionalButton = $("#profileProfessionalButton");
+      const specialActions = $("#profileSpecialActions");
+      if (adminButton) adminButton.hidden = !admin;
+      if (professionalButton) professionalButton.hidden = !professional;
+      if (specialActions) specialActions.hidden = !(admin || professional);
+
+      $("#logoutButton")?.addEventListener("click", async (event) => {
+        const button = event.currentTarget;
+        button.disabled = true;
+        button.textContent = "Saindo...";
+        try { await c.auth.signOut(); }
+        finally {
+          localStorage.removeItem(STORE.profile);
+          location.replace("index.html");
+        }
+      });
+
+      view.hidden = false;
+    } catch (error) {
+      console.error("[Pale Ascendancy] profile:", error);
+      location.replace("login.html");
+    }
+  }
+
+  async function initEditProfile() {
+    const form = $("#editForm");
+    if (!form || form.dataset.paReady === "1") return;
+    form.dataset.paReady = "1";
+
+    const c = await authClient();
+    if (!c) { location.replace("login.html"); return; }
+
+    const { data } = await c.auth.getSession();
+    const user = data?.session?.user;
+    if (!user) { location.replace("login.html"); return; }
+
+    const p = await ensureOwnProfile(c, user);
+    if (!p) { authMessage("message", "Perfil não encontrado.", "error"); return; }
+
+    $("#nome").value = p.nome || "";
+    $("#nomeArtistico").value = p.nome_artistico || "";
+    $("#especialidade").value = p.especialidade || "";
+
+    const image = $("#image"), initial = $("#initial");
+    initial.textContent = (p.nome_artistico || p.nome || "?").charAt(0).toUpperCase();
+    if (p.avatar_url) {
+      image.src = `${p.avatar_url}${p.avatar_url.includes("?") ? "&" : "?"}v=${Date.now()}`;
+      image.hidden = false; initial.hidden = true;
+    }
+
+    let avatarUrl = p.avatar_url || null;
+    $("#photo")?.addEventListener("change", () => {
+      const file = $("#photo").files?.[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) {
+        authMessage("message", "A foto precisa ter até 8 MB.", "error");
+        $("#photo").value = ""; return;
+      }
+      image.src = URL.createObjectURL(file); image.hidden = false; initial.hidden = true;
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true; authMessage("message", "Salvando...");
+      try {
+        const file = $("#photo").files?.[0];
+        if (file) avatarUrl = await uploadAvatar(c, user.id, file);
+        const update = await c.from("profile").update({
+          nome: $("#nome").value.trim(),
+          nome_artistico: $("#nomeArtistico").value.trim(),
+          especialidade: $("#especialidade").value || "",
+          avatar_url: avatarUrl
+        }).eq("id", user.id);
+        if (update.error) throw update.error;
+        authMessage("message", "Perfil atualizado.", "success");
+        setTimeout(() => location.replace("perfil.html"), 500);
+      } catch (error) {
+        authMessage("message", error.message || "Não foi possível salvar.", "error");
+        button.disabled = false;
+      }
+    });
+  }
+
+  function buildProfessionalCategories(holder, selected = []) {
+    if (!holder) return;
+    const values = new Set(Array.isArray(selected) ? selected : []);
+    holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) =>
+      `<label class="check-chip"><input type="checkbox" value="${value}" ${values.has(value) ? "checked" : ""}><span>${label}</span></label>`
+    ).join("");
+  }
+
+  function selectedProfessionalCategories(holder) {
+    return $$("input[type=checkbox]:checked", holder).map(input => input.value);
+  }
+
+  async function initEditorPanel() {
+    const form = $("#editorForm");
+    if (!form || form.dataset.paReady === "1") return;
+    form.dataset.paReady = "1";
+
+    const c = await authClient();
+    if (!c) { location.replace("login-profissional.html"); return; }
+    const { data } = await c.auth.getSession();
+    const user = data?.session?.user;
+    if (!user) { location.replace("login-profissional.html"); return; }
+
+    const p = await authProfile(user.id);
+    if (!p || !p.professional_login_enabled || !(p.is_editor || p.is_designer)) {
+      await c.auth.signOut();
+      location.replace("login-profissional.html");
+      return;
+    }
+
+    const result = await c.from("profile")
+      .select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,portfolio_limit,plan_status,plan_expires_at,tiktok,instagram,youtube,discord,professional_login_enabled")
+      .eq("id", user.id).maybeSingle();
+    const pData = result.data || p;
+
+    const role = pData.is_editor && pData.is_designer ? "Editor + Designer" : pData.is_designer ? "Designer" : "Editor";
+    $("#role").value = role;
+    $("#nomeArtistico").value = pData.nome_artistico || "";
+    $("#especialidade").innerHTML = AUTH_CATEGORIES.map(([v,l]) => `<option value="${v}">${l}</option>`).join("");
+    $("#especialidade").value = pData.especialidade || "";
+    $("#bio").value = pData.bio || "";
+    $("#software").value = pData.editor_software || "";
+    $("#availability").value = pData.availability || "disponivel";
+    $("#portfolioUrl").value = pData.portfolio_url || "";
+    $("#tiktok").value = pData.tiktok || "";
+    $("#instagram").value = pData.instagram || "";
+    $("#youtube").value = pData.youtube || "";
+    $("#discord").value = pData.discord || "";
+
+    buildProfessionalCategories($("#categoryGrid"), pData.editor_categories || []);
+
+    const initial = $("#avatarInitial"), image = $("#avatarImage");
+    initial.textContent = (pData.nome_artistico || pData.nome || "?").charAt(0).toUpperCase();
+    if (pData.avatar_url) {
+      image.src = `${pData.avatar_url}${pData.avatar_url.includes("?") ? "&" : "?"}v=${Date.now()}`;
+      image.hidden = false; initial.hidden = true;
+    }
+
+    $("#publicProfile").href = `editor-perfil.html?id=${encodeURIComponent(user.id)}`;
+
+    const plan = ({free:["Gratuito",2],premium:["Premium",5],pro:["Pro",10],studio:["Studio",20],elite:["Elite",40]})[pData.professional_plan] || ["Gratuito",2];
+    $("#planName").textContent = plan[0];
+    $("#limit").textContent = plan[1];
+    $("#planDesc").textContent = `${plan[1]} espaços de portfólio${pData.plan_status === "active" && pData.professional_plan !== "free" ? " ativos" : ""}`;
+
+    await loadPortfolioManager(c, user.id, plan[1]);
+
+    $("#avatarFile")?.addEventListener("change", async () => {
+      const file = $("#avatarFile").files?.[0];
+      if (!file) return;
+      try {
+        if (file.size > 8 * 1024 * 1024) throw new Error("A foto precisa ter até 8 MB.");
+        $("#avatarStatus").textContent = "Enviando...";
+        const url = await uploadAvatar(c, user.id, file);
+        const update = await c.from("profile").update({ avatar_url: url }).eq("id", user.id);
+        if (update.error) throw update.error;
+        image.src = `${url}?v=${Date.now()}`; image.hidden = false; initial.hidden = true;
+        $("#avatarStatus").textContent = "Foto atualizada.";
+      } catch (error) { $("#avatarStatus").textContent = error.message || "Erro ao enviar foto."; }
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = $("#saveEditor"); button.disabled = true;
+      authMessage("editorMessage", "Salvando...");
+      const update = await c.from("profile").update({
+        nome_artistico: $("#nomeArtistico").value.trim(),
+        especialidade: $("#especialidade").value,
+        editor_categories: selectedProfessionalCategories($("#categoryGrid")),
+        bio: $("#bio").value.trim(),
+        editor_software: $("#software").value.trim(),
+        availability: $("#availability").value,
+        portfolio_url: $("#portfolioUrl").value.trim(),
+        tiktok: $("#tiktok").value.trim(),
+        instagram: $("#instagram").value.trim(),
+        youtube: $("#youtube").value.trim(),
+        discord: $("#discord").value.trim()
+      }).eq("id", user.id);
+
+      if (update.error) {
+        authMessage("editorMessage", update.error.message, "error");
+        button.disabled = false; return;
+      }
+      authMessage("editorMessage", "Perfil profissional salvo.", "success");
+      button.disabled = false;
+      loadProfessionalDirectory();
+    });
+  }
+
+  async function loadPortfolioManager(c, userId, limit) {
+    const list = $("#portfolioList");
+    if (!list) return;
+    const result = await c.from("editor_portfolio_items")
+      .select("id,title,description,item_type,url,sort_order,created_at")
+      .eq("editor_id", userId)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (result.error) {
+      list.innerHTML = `<div class="portfolio-empty">${escapeHTML(result.error.message)}</div>`;
+      return;
+    }
+
+    const items = result.data || [];
+    $("#count").textContent = items.length; $("#limit").textContent = limit;
+    list.innerHTML = items.map(item => {
+      const media = item.item_type === "video"
+        ? `<video src="${escapeHTML(item.url)}" controls playsinline preload="metadata"></video>`
+        : item.item_type === "image"
+          ? `<img src="${escapeHTML(item.url)}" alt="${escapeHTML(item.title)}">`
+          : `<div class="portfolio-link-preview"><span>↗</span><strong>Projeto externo</strong><small>${escapeHTML(item.url)}</small></div>`;
+      return `<article class="portfolio-manager-item"><div class="portfolio-manager-media">${media}</div><div class="portfolio-manager-copy"><span class="portfolio-type-label">${item.item_type === "video" ? "VÍDEO" : item.item_type === "image" ? "ARTE" : "LINK"}</span><h3>${escapeHTML(item.title)}</h3>${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}<div class="portfolio-item-actions">${item.item_type === "link" ? `<a class="secondary-button" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">Abrir</a>` : ""}<button type="button" class="secondary-button danger-button portfolio-delete" data-id="${escapeHTML(item.id)}">Excluir</button></div></div></article>`;
+    }).join("") || `<div class="portfolio-empty"><strong>Nenhum trabalho ainda.</strong><span>Adicione seu primeiro projeto para começar a montar seu portfólio.</span></div>`;
+
+    $$(".portfolio-delete", list).forEach(button => button.addEventListener("click", async () => {
+      if (!confirm("Excluir este item do portfólio?")) return;
+      button.disabled = true;
+      const del = await c.from("editor_portfolio_items").delete().eq("id", button.dataset.id).eq("editor_id", userId);
+      if (del.error) { authMessage("portfolioMessage", del.error.message, "error"); button.disabled = false; return; }
+      await loadPortfolioManager(c, userId, limit);
+      loadProfessionalDirectory();
+    }));
+  }
+
+  function initPortfolioForm() {
+    const form = $("#portfolioForm");
+    if (!form || form.dataset.paReady === "1") return;
+    form.dataset.paReady = "1";
+
+    const type = $("#itemType"), fileRow = $("#itemFileRow"), urlRow = $("#itemUrlRow");
+    const fileInput = $("#itemFile"), urlInput = $("#itemUrl");
+    const toggle = () => {
+      const isLink = type.value === "link";
+      fileRow.hidden = isLink; urlRow.hidden = !isLink;
+      fileInput.required = !isLink; urlInput.required = isLink;
+    };
+    type.addEventListener("change", toggle); toggle();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const c = await authClient();
+      const sessionResult = await c?.auth.getSession();
+      const user = sessionResult?.data?.session?.user;
+      if (!user) { location.replace("login-profissional.html"); return; }
+
+      const button = $("#addPortfolio");
+      button.disabled = true; authMessage("portfolioMessage", "Enviando trabalho...");
+      try {
+        const title = $("#itemTitle").value.trim();
+        const description = $("#itemDesc").value.trim();
+        const itemType = type.value;
+        let url = urlInput.value.trim();
+
+        if (!title) throw new Error("Informe um título.");
+        if (itemType !== "link") {
+          const file = fileInput.files?.[0];
+          if (!file) throw new Error("Escolha um arquivo.");
+          if (file.size > 50 * 1024 * 1024) throw new Error("O arquivo precisa ter até 50 MB.");
+          if (itemType === "video" && !/^video\/(mp4|webm)$/i.test(file.type)) throw new Error("Use MP4 ou WebM para vídeos.");
+          if (itemType === "image" && !/^image\/(jpeg|png|webp)$/i.test(file.type)) throw new Error("Use JPG, PNG ou WebP para imagens.");
+
+          const ext = (file.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "");
+          const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
+          const upload = await c.storage.from("portfolio").upload(path, file, {
+            upsert: false, contentType: file.type, cacheControl: "31536000"
+          });
+          if (upload.error) throw upload.error;
+          url = c.storage.from("portfolio").getPublicUrl(path).data.publicUrl;
+        }
+
+        const insert = await c.from("editor_portfolio_items").insert({
+          editor_id: user.id, title, description, item_type: itemType, url, sort_order: Date.now()
+        });
+        if (insert.error) throw insert.error;
+
+        form.reset(); toggle();
+        authMessage("portfolioMessage", "Trabalho publicado no portfólio.", "success");
+
+        const p = await authProfile(user.id);
+        const limit = ({free:2,premium:5,pro:10,studio:20,elite:40})[p?.professional_plan] || 2;
+        await loadPortfolioManager(c, user.id, limit);
+        loadProfessionalDirectory();
+      } catch (error) {
+        console.error("[Pale Ascendancy] portfolio upload:", error);
+        authMessage("portfolioMessage", error.message || "Não foi possível publicar o trabalho.", "error");
+      } finally { button.disabled = false; }
+    });
+  }
+
+  async function initPublicEditorProfile() {
+    const root = $("#publicProfile");
+    if (!root || root.dataset.paReady === "1") return;
+    root.dataset.paReady = "1";
+
+    const c = await authClient();
+    if (!c) return;
+    const id = new URLSearchParams(location.search).get("id");
+    if (!id) { $("#profileContent").innerHTML = `<div class="admin-empty">Profissional não encontrado.</div>`; return; }
+
+    let result = await c.from("editor_directory").select("*").eq("id", id).maybeSingle();
+    if (result.error) {
+      result = await c.from("profile")
+        .select("id,nome,nome_artistico,email,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,plan_status,plan_expires_at,is_public,tiktok,instagram,youtube,discord")
+        .eq("id", id).maybeSingle();
+    }
+
+    const p = result.data;
+    if (result.error || !p || p.is_public === false || !(p.is_editor || p.is_designer)) {
+      $("#profileContent").innerHTML = `<div class="admin-empty">Profissional não encontrado ou não publicado.</div>`;
+      return;
+    }
+
+    const itemResult = await c.from("editor_portfolio_items")
+      .select("id,title,description,item_type,url,sort_order,created_at")
+      .eq("editor_id", id)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
+    const items = itemResult.data || [];
+    const cats = (p.editor_categories?.length ? p.editor_categories : [p.especialidade]).filter(Boolean);
+    const planName = ({free:"Gratuito",premium:"Premium",pro:"Pro",studio:"Studio",elite:"Elite"})[p.professional_plan] || "Gratuito";
+
+    const portfolio = items.map(item => {
+      if (item.item_type === "video") return `<article class="portfolio-public-item"><div class="portfolio-public-media"><video src="${escapeHTML(item.url)}" controls playsinline preload="metadata"></video></div><div class="portfolio-public-copy"><span class="portfolio-type-label">VÍDEO</span><h3>${escapeHTML(item.title)}</h3>${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}</div></article>`;
+      if (item.item_type === "image") return `<article class="portfolio-public-item"><div class="portfolio-public-media"><img src="${escapeHTML(item.url)}" alt="${escapeHTML(item.title)}" loading="lazy"></div><div class="portfolio-public-copy"><span class="portfolio-type-label">ARTE</span><h3>${escapeHTML(item.title)}</h3>${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}</div></article>`;
+      return `<article class="portfolio-public-item"><div class="portfolio-public-link"><span>↗</span><strong>${escapeHTML(item.title)}</strong><small>${escapeHTML(item.url)}</small></div><div class="portfolio-public-copy">${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}<a class="secondary-button" target="_blank" rel="noopener noreferrer" href="${escapeHTML(item.url)}">Abrir projeto</a></div></article>`;
+    }).join("");
+
+    $("#profileContent").innerHTML = `
+      <div class="editor-public-top">
+        <div class="editor-public-avatar">${p.avatar_url ? `<img src="${escapeHTML(p.avatar_url)}" alt="Foto de ${escapeHTML(p.nome_artistico || "profissional")}">` : `<span>${escapeHTML((p.nome_artistico || p.nome || "P").charAt(0).toUpperCase())}</span>`}</div>
+        <div><p class="editor-role">${escapeHTML(professionalRole(p))}</p><h1>${escapeHTML(p.nome_artistico || p.nome || "Profissional")}</h1><span class="plan-badge">${escapeHTML(planName)}</span></div>
+      </div>
+      <div class="editor-tags">${cats.map(x => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[x] || x)}</span>`).join("")}</div>
+      <p class="editor-public-bio">${escapeHTML(p.bio || "Este profissional ainda não adicionou uma descrição.")}</p>
+      <div class="profile-info"><span class="profile-label">Programas</span><strong>${escapeHTML(p.editor_software || "Não informado")}</strong></div>
+      <div class="profile-info"><span class="profile-label">Disponibilidade</span><strong>${escapeHTML(professionalAvailability(p.availability))}</strong></div>
+      <div class="profile-socials">${socialButton("TikTok",p.tiktok)}${socialButton("Instagram",p.instagram)}${socialButton("YouTube",p.youtube)}${socialButton("Portfólio",p.portfolio_url)}${p.discord ? `<span class="secondary-button">Discord: ${escapeHTML(p.discord)}</span>` : ""}</div>
+      <section class="portfolio-public-section"><div class="section-heading"><p class="eyebrow">Portfólio</p><h2>Trabalhos em destaque.</h2></div><div class="portfolio-public-grid">${portfolio || `<div class="portfolio-public-empty"><strong>Nenhum trabalho publicado.</strong><span>Este profissional ainda está montando o portfólio.</span></div>`}</div></section>
+      <div class="editor-public-actions"><a class="secondary-button" href="editores.html">Voltar para profissionais</a></div>`;
+  }
+
+  function socialButton(label, url) {
+    return url ? `<a class="secondary-button" target="_blank" rel="noopener noreferrer" href="${escapeHTML(url)}">${escapeHTML(label)}</a>` : "";
+  }
+
   function boot() {
     authInitLoginPages();
     authInitRegisterPages();
@@ -1435,6 +1943,11 @@
     initEditorTools();
     initEditorPhotos();
     loadProfessionalDirectory();
+    initCommonProfile();
+    initEditProfile();
+    initEditorPanel();
+    initPortfolioForm();
+    initPublicEditorProfile();
     initMusic();
     initGlobalAppearance();
     ensureAccountMarkup();

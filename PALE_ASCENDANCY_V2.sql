@@ -125,6 +125,11 @@ drop policy if exists profile_select on public.profile;
 create policy profile_select on public.profile for select to authenticated
 using(auth.uid()=id or public.is_admin());
 
+
+drop policy if exists profile_public_professionals on public.profile;
+create policy profile_public_professionals on public.profile for select to anon,authenticated
+using((is_editor=true or is_designer=true) and is_public=true);
+
 drop policy if exists profile_insert on public.profile;
 create policy profile_insert on public.profile for insert to authenticated
 with check(auth.uid()=id);

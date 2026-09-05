@@ -995,3 +995,26 @@ html[data-surface-preset="minimal"] .bento-card,html[data-surface-preset="minima
   .admin-section-tabs{margin-inline:-2px;padding:6px}
   .admin-tab-panel{border-radius:18px!important}
 }
+
+/* V2.1 — stable auth + premium public reels */
+.profile-view[hidden], #profileSpecialActions[hidden], .portfolio-public-empty[hidden]{display:none!important}
+.professional-reels{margin:48px 0 30px;padding-top:30px;border-top:1px solid var(--line)}
+.professional-reels-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}
+.professional-reels-heading h2{margin:0;font-size:clamp(1.7rem,4vw,2.8rem);letter-spacing:-.04em}
+.professional-reels-heading h2 span{background:var(--title-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.professional-reels-heading p:last-child{margin:8px 0 0;color:var(--muted);font-size:.72rem;max-width:620px}
+.portfolio-reel-card{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.portfolio-reel-card:hover{transform:translateY(-5px)}
+.portfolio-reel-visual{box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.portfolio-reel-media{z-index:1}
+.portfolio-reel-play{position:absolute;top:13px;right:13px;z-index:4;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(8,7,12,.68);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);font-size:.8rem;color:#fff;pointer-events:none}
+.portfolio-reel-overlay{z-index:4}
+.portfolio-reel-copy{display:grid;gap:3px}
+.portfolio-reel-copy p{margin:7px 0 5px}
+.portfolio-reel-link-button{display:inline-flex;width:max-content;margin-top:5px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;color:var(--text-soft);font-size:.6rem;font-weight:800}
+.portfolio-reel-link-button:hover{color:var(--text);border-color:var(--line-strong);background:rgba(255,255,255,.04)}
+.editor-public-avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+@media(max-width:700px){.professional-reels{margin-top:38px}.professional-reels-heading{display:block}.professional-reels-heading h2{font-size:1.8rem}.portfolio-reel-card{flex-basis:min(278px,84vw)}}
+
+/* V2.1 — global hidden safety */
+[hidden]{display:none!important}
