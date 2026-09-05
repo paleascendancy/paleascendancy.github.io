@@ -274,7 +274,7 @@ const PERMISSION_DEFS=[
 ["users","Usuários"],["professionals","Profissionais"],["applications","Solicitações"],["plans","Planos"],["appearance","Aparência"],["content","Conteúdo"]
 ];
 function renderPermissionChecks(container,selected={}){if(!container)return;container.innerHTML=PERMISSION_DEFS.map(([key,label])=>`<label class="admin-permission-check"><input type="checkbox" data-permission="${key}" ${selected[key]!==false?"checked":""}><span>${label}</span></label>`).join("");}
-function permissionAllowed(key){return adminAccess.is_owner===true||adminAccess.permissions?.[key]===true;}
+function permissionAllowed(key){const permissionKey=key==="permissions"?"admins":key;return adminAccess.is_owner===true||adminAccess.permissions?.[permissionKey]===true||adminAccess?.[permissionKey]===true;}
 function grantOwnerAccess(){adminAccess={is_owner:true,role:"admin",permissions:{users:true,professionals:true,applications:true,plans:true,appearance:true,content:true,admins:true}};}
 function applyAdminPermissionUI(){
   document.querySelectorAll(".admin-tab").forEach(tab=>{
@@ -314,7 +314,7 @@ async function loadAdminPermissions(){
     // Administradores secundários continuam usando a RPC de permissões.
     const {data,error}=await client.rpc("get_admin_access");
     if(!error&&data){
-      adminAccess=data;
+      adminAccess=(data.permissions||data.is_owner!==undefined)?data:{is_owner:false,role:"admin",permissions:data||{}};
       adminPermissionNote.textContent=`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
     }else{
       // Se a leitura de permissões falhar, NÃO escondemos as abas já renderizadas.
