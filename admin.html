@@ -289,39 +289,41 @@ async function loadAdminPermissions(){
   if(!adminPermissionList)return;
   adminPermissionNote.textContent="Carregando permissões...";
 
-  // Primeiro, usa a fonte de verdade mais simples: admin_users.
-  // Se a conta atual for is_owner=true, ela recebe acesso total sem depender
-  // de role ou de uma RPC adicional. Isso mantém o administrador principal
-  // funcional mesmo durante uma migração incompleta das permissões.
+  // Primeiro confirma diretamente se a conta atual é o administrador principal.
+  // Se essa leitura estiver disponível, o owner recebe acesso total e nenhuma
+  // resposta posterior pode esconder suas abas.
+  let ownerConfirmed=false;
   try{
     const {data:sessionData}=await client.auth.getSession();
     const currentUser=sessionData?.session?.user;
     if(currentUser?.id){
-      const {data:ownerRow}=await client.from("admin_users").select("user_id,is_owner,permissions").eq("user_id",currentUser.id).maybeSingle();
-      if(ownerRow?.is_owner===true){
+      const {data:ownerRow,error:ownerError}=await client.from("admin_users").select("user_id,is_owner,permissions").eq("user_id",currentUser.id).maybeSingle();
+      if(!ownerError && ownerRow?.is_owner===true){
+        ownerConfirmed=true;
         grantOwnerAccess();
-        adminPermissionNote.textContent="Você é o administrador principal e possui acesso total.";
-        renderPermissionChecks(newAdminPermissions,{});
-        applyAdminPermissionUI();
       }
     }
   }catch(e){}
 
-  // A RPC continua sendo usada para administradores secundários.
-  const {data,error}=await client.rpc("get_admin_access");
-  if(!error&&data){
-    // Nunca deixa uma resposta secundária retirar o acesso total do owner.
-    if(adminAccess.is_owner===true){grantOwnerAccess();}
-    else{adminAccess=data;}
-  }else if(adminAccess.is_owner!==true){
-    // Falha na RPC não deve esconder o painel do administrador principal.
-    adminPermissionNote.textContent="Não foi possível carregar as permissões detalhadas. O painel principal continua disponível.";
-    applyAdminPermissionUI();
-    return;
+  if(ownerConfirmed){
+    adminPermissionNote.textContent="Você é o administrador principal e possui acesso total.";
+    renderPermissionChecks(newAdminPermissions,{});
+    // Importante: não chamamos uma RPC de permissões depois do owner confirmado.
+    // Isso evita o efeito de 'aparecer por um instante e sumir'.
+  }else{
+    // Administradores secundários continuam usando a RPC de permissões.
+    const {data,error}=await client.rpc("get_admin_access");
+    if(!error&&data){
+      adminAccess=data;
+      adminPermissionNote.textContent=`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
+    }else{
+      // Se a leitura de permissões falhar, NÃO escondemos as abas já renderizadas.
+      // Isso evita quebrar o painel por causa de uma falha temporária do schema cache.
+      adminPermissionNote.textContent="Não foi possível carregar as permissões detalhadas. O painel continua disponível.";
+      return;
+    }
+    renderPermissionChecks(newAdminPermissions,{});
   }
-  adminPermissionNote.textContent=adminAccess.is_owner?"Você é o administrador principal e possui acesso total.":`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
-  adminPermissionNote.textContent=adminAccess.is_owner?"Você é o administrador principal e possui acesso total.":`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
-  renderPermissionChecks(newAdminPermissions,{});
   const {data:rows,error:listError}=await client.rpc("list_admin_users");
   if(listError){adminPermissionList.innerHTML=`<div class="admin-empty">Não foi possível carregar administradores: ${esc(listError.message)}</div>`;return;}
   adminRows=rows||[];
