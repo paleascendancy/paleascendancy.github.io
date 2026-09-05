@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="style.css?v=25">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 <style>
-.admin-subsection{margin-top:28px}.admin-subsection .section-heading{margin-bottom:16px}.admin-application{display:flex;justify-content:space-between;gap:18px;align-items:center}.admin-application-meta{display:grid;gap:6px}.admin-role-badge{display:inline-flex;width:max-content;padding:7px 10px;border:1px solid rgba(159,232,255,.25);border-radius:999px;font-size:.8rem;font-weight:700}.admin-application-actions{display:flex;gap:10px;flex-wrap:wrap}.admin-actions .danger-button{border-color:rgba(255,100,100,.3)}@media(max-width:720px){.admin-application{align-items:flex-start;flex-direction:column}.admin-application-actions{width:100%}.admin-application-actions button{width:100%}}
+.admin-subsection{margin-top:28px}.admin-subsection .section-heading{margin-bottom:16px}.admin-application{display:flex;justify-content:space-between;gap:18px;align-items:center}.admin-application-meta{display:grid;gap:6px}.admin-role-badge{display:inline-flex;width:max-content;padding:7px 10px;border:1px solid rgba(159,232,255,.25);border-radius:999px;font-size:.8rem;font-weight:700}.admin-application-actions{display:flex;gap:10px;flex-wrap:wrap}.admin-actions .danger-button{border-color:rgba(255,100,100,.3)}.admin-user-status{display:inline-flex;width:max-content;padding:6px 9px;border-radius:999px;font-size:.75rem;font-weight:700;border:1px solid rgba(159,232,255,.2)}.admin-user-status.prof{border-color:rgba(168,148,255,.35)}.admin-user-status.active{border-color:rgba(159,232,255,.35)}.admin-user-status.pending{border-color:rgba(233,207,145,.35)}.admin-user-grid{display:grid;gap:14px}.admin-user-info{display:grid;gap:5px}.admin-user-info small{opacity:.72}.admin-user-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.admin-user-card{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.admin-user-meta{display:grid;gap:6px}.admin-user-meta h2{margin:0}.admin-user-meta p{margin:0;opacity:.78}.admin-user-side{display:grid;justify-items:end;gap:8px;text-align:right}.admin-user-empty{padding:24px;text-align:center;opacity:.75}@media(max-width:720px){.admin-user-card{flex-direction:column}.admin-user-side{justify-items:start;text-align:left}}@media(max-width:720px){.admin-application{align-items:flex-start;flex-direction:column}.admin-application-actions{width:100%}.admin-application-actions button{width:100%}}
 </style>
 </head>
 <body class="admin-page">
@@ -29,6 +29,7 @@
 
 <div class="admin-section-tabs" role="tablist" aria-label="Seções da administração">
 <button class="admin-tab active" type="button" data-admin-tab="overview">Visão geral</button>
+<button class="admin-tab" type="button" data-admin-tab="users">Usuários</button>
 <button class="admin-tab" type="button" data-admin-tab="appearance">Aparência do site</button>
 </div>
 
@@ -43,6 +44,13 @@
   <div class="admin-list" id="adminList"></div>
 </div>
 <p class="auth-message" id="adminMessage" aria-live="polite"></p>
+</section>
+
+<section class="admin-tab-panel" id="adminTabUsers" hidden>
+  <div class="admin-toolbar"><input id="adminUserSearch" type="search" placeholder="Pesquisar por nome ou e-mail..."><button class="secondary-button" id="adminUserRefresh" type="button">Atualizar</button></div>
+  <div class="section-heading"><p class="eyebrow">Contas cadastradas</p><h2>Usuários</h2><p>Visualize as contas da Pale Ascendancy e identifique rapidamente quem possui acesso profissional.</p></div>
+  <div class="admin-user-grid" id="adminUserList"></div>
+  <p class="auth-message" id="adminUserMessage" aria-live="polite"></p>
 </section>
 
 <section class="admin-tab-panel" id="adminTabAppearance" hidden>
@@ -93,8 +101,8 @@
 const SUPABASE_URL="https://fnyellunugdfesprmvzm.supabase.co";
 const SUPABASE_KEY="sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
 const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const content=document.getElementById("adminContent"),denied=document.getElementById("adminDenied"),list=document.getElementById("adminList"),applicationList=document.getElementById("applicationList"),stats=document.getElementById("adminStats"),search=document.getElementById("adminSearch"),message=document.getElementById("adminMessage");
-let profiles=[],applications=[];
+const content=document.getElementById("adminContent"),denied=document.getElementById("adminDenied"),list=document.getElementById("adminList"),applicationList=document.getElementById("applicationList"),stats=document.getElementById("adminStats"),search=document.getElementById("adminSearch"),message=document.getElementById("adminMessage"),userList=document.getElementById("adminUserList"),userSearch=document.getElementById("adminUserSearch"),userMessage=document.getElementById("adminUserMessage");
+let profiles=[],applications=[],users=[];
 const planMap={free:{label:"Gratuito — 2 espaços",limit:2},premium:{label:"Premium — 5 espaços · R$ 7/mês",limit:5},pro:{label:"Pro — 10 espaços · R$ 20/mês",limit:10},studio:{label:"Studio — 20 espaços · R$ 35/mês",limit:20},elite:{label:"Elite — 40 espaços · R$ 59/mês",limit:40}};
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 function specialty(v){const m={trailer:"Trailers",highlight:"Highlights",motion:"Motion Design",anime:"Anime / Mangá",gaming:"Gaming",tiktok:"TikTok",reels:"Reels",amv:"AMV",thumbnail:"Thumbnails",youtube:"YouTube",promo:"Promo",design:"Design Gráfico",branding:"Branding",uiux:"UI / UX",illustration:"Ilustração","3d":"3D",outros:"Outros"};return m[v]||v||"Não informado";}
@@ -107,6 +115,25 @@ function renderApplications(){
   const rows=applications.filter(a=>(`${a.profile?.nome||""} ${a.profile?.nome_artistico||""} ${a.profile?.email||""} ${requestedRoleLabel(a.requested_role)}`).toLowerCase().includes(term));
   if(!rows.length){applicationList.innerHTML='<div class="admin-empty">Nenhuma solicitação pendente.</div>';return;}
   applicationList.innerHTML=rows.map(a=>{const p=a.profile||{};return `<article class="admin-user admin-application"><div class="admin-application-meta"><h2>${esc(p.nome_artistico||p.nome||"Sem nome")}</h2><p>${esc(p.email||"")}</p><span class="admin-role-badge">Solicitou: ${esc(requestedRoleLabel(a.requested_role))}</span><small>Enviado em ${new Date(a.submitted_at).toLocaleString("pt-BR")}</small></div><div class="admin-application-actions"><button class="primary-button" type="button" data-application-id="${esc(a.id)}" data-decision="approved">Permitir login profissional</button><button class="secondary-button danger-button" type="button" data-application-id="${esc(a.id)}" data-decision="rejected">Recusar</button></div></article>`;}).join("");
+}
+function renderUsers(){
+  const term=userSearch.value.trim().toLowerCase();
+  const rows=users.filter(u=>(`${u.nome||""} ${u.nome_artistico||""} ${u.email||""}`).toLowerCase().includes(term));
+  if(!rows.length){userList.innerHTML='<div class="admin-user-empty">Nenhum usuário encontrado.</div>';return;}
+  userList.innerHTML=rows.map(u=>{
+    const professional=u.is_editor||u.is_designer;
+    const role=roleLabel(u);
+    const plan=professional?(planMap[u.professional_plan||"free"]?.label||"Plano gratuito"):"Conta comum";
+    const access=u.professional_login_enabled?"Login profissional liberado":"Login profissional não liberado";
+    const date=u.created_at?new Date(u.created_at).toLocaleDateString("pt-BR"):"Data não informada";
+    return `<article class="admin-user admin-user-card"><div class="admin-user-main"><div class="admin-avatar">${u.avatar_url?`<img src="${esc(u.avatar_url)}" alt="">`:esc((u.nome_artistico||u.nome||u.email||"U").charAt(0).toUpperCase())}</div><div class="admin-user-meta"><h2>${esc(u.nome_artistico||u.nome||"Sem nome")}</h2><p>${esc(u.email||"E-mail não informado")}</p><div class="admin-user-tags"><span class="admin-user-status ${professional?"prof":"active"}">${esc(role)}</span>${professional?`<span class="admin-user-status ${u.professional_login_enabled?"active":"pending"}">${esc(access)}</span>`:""}</div><small>Cadastrado em ${esc(date)}${professional?` · ${esc(plan)}`:""}</small></div></div><div class="admin-user-side"><strong>${professional?"Profissional":"Usuário"}</strong><small>${esc(plan)}</small></div></article>`;
+  }).join("");
+}
+async function loadUsers(){
+  userMessage.textContent="Carregando usuários...";
+  const {data,error}=await client.from("profile").select("id,email,nome,nome_artistico,avatar_url,is_editor,is_designer,is_featured,professional_login_enabled,created_at,professional_plan,plan_status,plan_expires_at").order("created_at",{ascending:false});
+  if(error){userMessage.textContent="Não foi possível carregar os usuários: "+error.message;userMessage.className="auth-message error";return;}
+  users=data||[];userMessage.textContent="";renderUsers();
 }
 function render(){
  const term=search.value.trim().toLowerCase();
@@ -156,7 +183,7 @@ async function saveAppearance(){
 }
 function applyGlobalAppearance(values){const root=document.documentElement;root.style.setProperty("--pa-primary",values.primary);root.style.setProperty("--pa-secondary",values.secondary);root.style.setProperty("--pa-background",values.background);root.style.setProperty("--pa-text",values.text);root.style.setProperty("--pa-accent",values.accent);}
 function initAppearance(){
-  document.querySelectorAll(".admin-tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".admin-tab-panel").forEach(x=>x.hidden=true);tab.classList.add("active");document.getElementById(tab.dataset.adminTab==="appearance"?"adminTabAppearance":"adminTabOverview").hidden=false;if(tab.dataset.adminTab==="appearance")loadAppearance();}));
+  document.querySelectorAll(".admin-tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".admin-tab-panel").forEach(x=>x.hidden=true);tab.classList.add("active");const panelMap={overview:"adminTabOverview",users:"adminTabUsers",appearance:"adminTabAppearance"};document.getElementById(panelMap[tab.dataset.adminTab]||"adminTabOverview").hidden=false;if(tab.dataset.adminTab==="appearance")loadAppearance();if(tab.dataset.adminTab==="users")loadUsers();}));
   Object.entries(appearanceFields).forEach(([_,[text,color]])=>{text.addEventListener("input",()=>{const v=normalizeHex(text.value,color.value);if(/^#[0-9a-fA-F]{6}$/.test(text.value.trim()))color.value=v;updateAppearancePreview();});color.addEventListener("input",()=>{text.value=color.value;updateAppearancePreview();});});
   document.getElementById("appearanceReset").addEventListener("click",()=>{setAppearanceForm(APPEARANCE_DEFAULTS);document.getElementById("appearanceStatus").textContent="Prévia restaurada. Clique em Salvar aparência para publicar.";});
   document.getElementById("appearanceSave").addEventListener("click",saveAppearance);
@@ -164,7 +191,7 @@ function initAppearance(){
 }
 list.addEventListener("change",async e=>{const input=e.target;if(input.tagName==="INPUT"&&input.type==="checkbox"){const id=input.dataset.id,field=input.dataset.field,value=input.checked;const ok=await updateProfile(id,{[field]:value},input);if(!ok)input.checked=!value;return;}if(input.tagName==="SELECT"&&input.dataset.field==="professional_plan"){const id=input.dataset.id,plan=input.value;const patch={professional_plan:plan,plan_status:plan==="free"?"inactive":"active",portfolio_limit:planMap[plan].limit};await updateProfile(id,patch,input);}});
 applicationList.addEventListener("click",async e=>{const button=e.target.closest("[data-application-id]");if(!button)return;const id=button.dataset.applicationId,decision=button.dataset.decision;button.disabled=true;const {error}=await client.rpc("review_professional_application",{p_application_id:id,p_decision:decision});button.disabled=false;if(error){showMessage("Não foi possível analisar a solicitação: "+error.message,"error");return;}showMessage(decision==="approved"?"Solicitação aprovada. O login profissional foi liberado.":"Solicitação recusada.","success");await load();});
-search.addEventListener("input",()=>{renderApplications();render();});document.getElementById("adminRefresh").addEventListener("click",load);
+search.addEventListener("input",()=>{renderApplications();render();});userSearch.addEventListener("input",renderUsers);document.getElementById("adminRefresh").addEventListener("click",load);document.getElementById("adminUserRefresh").addEventListener("click",loadUsers);
 (async()=>{try{const {data:sessionData}=await client.auth.getSession();if(!sessionData?.session?.user){denied.hidden=false;return;}const {data:isAdmin,error}=await client.rpc("is_admin");if(error||isAdmin!==true){denied.hidden=false;return;}content.hidden=false;initAppearance();await load();}catch(e){denied.hidden=false;}})();
 </script>
 </body>
