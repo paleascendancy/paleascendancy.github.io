@@ -18,12 +18,9 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=24" rel="stylesheet"/>
+<link href="style.css?v=28" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
-<style>
-.professional-discovery{margin-top:34px}.professional-discovery-heading{margin-bottom:18px}.professional-horizontal{display:flex;overflow-x:auto;gap:14px;padding:4px 4px 18px;scroll-snap-type:x mandatory;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.professional-horizontal .editor-profile{flex:0 0 min(300px,82vw);scroll-snap-align:start}.professional-loading{min-width:100%;padding:28px;text-align:center;border:1px solid rgba(255,255,255,.08);border-radius:18px;color:var(--muted)}.professional-reels{margin-top:38px}.portfolio-reels{display:flex;gap:16px;overflow-x:auto;padding:4px 4px 20px;scroll-snap-type:x mandatory;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.portfolio-reel-card{flex:0 0 min(245px,72vw);scroll-snap-align:start}.portfolio-reel-visual{position:relative;aspect-ratio:9/14;border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden;background:rgba(255,255,255,.03);box-shadow:0 18px 50px rgba(0,0,0,.25)}.portfolio-reel-media{display:block;width:100%;height:100%;color:inherit;text-decoration:none}.portfolio-reel-media img,.portfolio-reel-media video{display:block;width:100%;height:100%;object-fit:cover}.portfolio-reel-link{width:100%;height:100%;display:grid;place-items:center;align-content:center;gap:8px;padding:20px;text-align:center;background:radial-gradient(circle at 30% 20%,rgba(159,232,255,.13),transparent 45%),rgba(8,12,25,.95)}.portfolio-reel-link span{font-size:2rem;color:var(--cyan)}.portfolio-reel-link small{max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:.62rem}.portfolio-reel-gradient{position:absolute;inset:30% 0 0;background:linear-gradient(to bottom,transparent,rgba(0,0,0,.78));pointer-events:none}.portfolio-reel-overlay{position:absolute;left:14px;right:14px;bottom:13px;display:grid;gap:3px;color:#fff;pointer-events:none}.portfolio-reel-overlay span{font-size:.62rem;opacity:.75}.portfolio-reel-overlay strong{font-family:var(--font-display);font-size:.95rem}.portfolio-reel-copy{display:grid;gap:3px;padding:10px 3px}.portfolio-reel-copy>strong{font-size:.82rem}.portfolio-reel-copy>span{font-size:.62rem;color:var(--muted)}.portfolio-reel-copy p{margin:3px 0 0;color:var(--muted);font-size:.64rem;line-height:1.45}.portfolio-reels-empty{min-width:100%;padding:28px;border:1px solid rgba(255,255,255,.08);border-radius:18px;text-align:center;color:var(--muted)}
-@media(max-width:620px){.professional-horizontal .editor-profile{flex-basis:78vw}.portfolio-reel-card{flex-basis:68vw}.professional-horizontal,.portfolio-reels{padding-left:0;padding-right:0}}
-</style></head>
+</head>
 <body>
 <!-- ==================================================
      HEADER
@@ -143,14 +140,27 @@
 
 </section>
 
+<section class="premium-showcase-section" aria-label="Destaques Premium">
+  <div class="section-heading professional-discovery-heading">
+    <p class="eyebrow">Destaques Premium</p>
+    <h2>Profissionais em <span>destaque.</span></h2>
+    <p>Perfis Premium recebem uma apresentação especial e prioridade visual para seus trabalhos e links.</p>
+  </div>
+  <div class="premium-showcase-viewport" id="premiumHighlights" aria-live="polite">
+    <div class="portfolio-reels-empty">Carregando destaques...</div>
+  </div>
+</section>
+
 <section class="professional-reels" aria-label="Portfólios dos profissionais">
   <div class="section-heading professional-discovery-heading">
     <p class="eyebrow">Portfólios</p>
     <h2>Trabalhos em <span>formato reel.</span></h2>
-    <p>Os trabalhos publicados pelos profissionais aparecem aqui automaticamente para você explorar.</p>
+    <p>Explore os trabalhos publicados pela rede. A área possui rolagem própria para não mover a página ao navegar pelos Reels.</p>
   </div>
-  <div class="portfolio-reels" id="portfolioReels" aria-live="polite">
-    <div class="portfolio-reels-empty">Carregando portfólios...</div>
+  <div class="portfolio-reels-viewport" id="portfolioReelsViewport">
+    <div class="portfolio-reels" id="portfolioReels" aria-live="polite">
+      <div class="portfolio-reels-empty">Carregando portfólios...</div>
+    </div>
   </div>
 </section>
 <!-- ==================================================
