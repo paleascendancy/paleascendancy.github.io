@@ -3,17 +3,17 @@
   "use strict";
 
   const PLAYLIST = [
-    { title: "Meaningful Love", file: "music/01-meaningful-love.mp3" },
-    { title: "Better Days", file: "music/02-better-days.mp3" },
-    { title: "Chill Day", file: "music/03-chill-day.mp3" },
-    { title: "Canals", file: "music/04-canals.mp3" },
-    { title: "Tek It — Hoodtrap Remix", file: "music/05-tek-it-hoodtrap-remix.mp3" },
-    { title: "Star Shopping", file: "music/06-star-shopping.mp3" },
-    { title: "Earrings", file: "music/07-earrings.mp3" },
-    { title: "New Jeans Jersey Remix", file: "music/08-new-jeans-jersey-remix.mp3" },
-    { title: "Nuts — Instrumental Slowed", file: "music/09-nuts-instrumental-slowed.mp3" },
-    { title: "Sweater Weather — Instrumental", file: "music/10-sweater-weather-instrumental.mp3" },
-    { title: "Childish Gambino — Instrumental", file: "music/11-childish-gambino-instrumental.mp3" }
+    { title: "Meaningful Love", file: "assets/music/01-meaningful-love.mp3" },
+    { title: "Better Days", file: "assets/music/02-better-days.mp3" },
+    { title: "Chill Day", file: "assets/music/03-chill-day.mp3" },
+    { title: "Canals", file: "assets/music/04-canals.mp3" },
+    { title: "Tek It — Hoodtrap Remix", file: "assets/music/05-tek-it-hoodtrap-remix.mp3" },
+    { title: "Star Shopping", file: "assets/music/06-star-shopping.mp3" },
+    { title: "Earrings", file: "assets/music/07-earrings.mp3" },
+    { title: "New Jeans Jersey Remix", file: "assets/music/08-new-jeans-jersey-remix.mp3" },
+    { title: "Nuts — Instrumental Slowed", file: "assets/music/09-nuts-instrumental-slowed.mp3" },
+    { title: "Sweater Weather — Instrumental", file: "assets/music/10-sweater-weather-instrumental.mp3" },
+    { title: "Childish Gambino — Instrumental", file: "assets/music/11-childish-gambino-instrumental.mp3" }
   ];
 
   const STORE = {
@@ -795,8 +795,8 @@
       const sb = getSupabaseClient();
       if (!sb) return;
       try {
-        const { data } = await sb.from("site_settings").select("settings").eq("id", true).maybeSingle();
-        if (data?.settings) applySiteAppearance(data.settings);
+        const { data } = await sb.from("site_settings").select("theme").eq("id", "global").maybeSingle();
+        if (data?.theme) applySiteAppearance(data.theme);
       } catch (_) {}
     };
     if (window.supabase?.createClient) await load();
@@ -1228,7 +1228,207 @@
     );
   }
 
+
+  /* ---------------- AUTH COMPATIBILITY — V27 LINEAGE ---------------- */
+
+  async function authClient() {
+    if (!getSupabaseClient()) await ensureSupabase();
+    return getSupabaseClient();
+  }
+
+  async function authProfile(userId) {
+    const c = await authClient();
+    if (!c || !userId) return null;
+    try {
+      const { data } = await c.from("profile").select("id,email,nome,nome_artistico,avatar_url,is_editor,is_designer,is_featured,professional_login_enabled").eq("id", userId).maybeSingle();
+      return data || null;
+    } catch (_) { return null; }
+  }
+
+  async function authIsAdmin(userId) {
+    const c = await authClient();
+    if (!c || !userId) return false;
+    try {
+      const { data, error } = await c.rpc("is_admin");
+      return !error && data === true;
+    } catch (_) { return false; }
+  }
+
+  function authMessage(id, text, type = "") {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text || "";
+    el.className = `auth-message${type ? ` ${type}` : ""}`;
+  }
+
+  async function authHandleLogin(form, mode) {
+    const c = await authClient();
+    if (!c) { authMessage(mode === "admin" ? "adminLoginMessage" : mode === "professional" ? "professionalLoginMessage" : "loginMessage", "Não foi possível conectar ao serviço de autenticação.", "error"); return; }
+    const email = document.getElementById("email")?.value.trim();
+    const password = document.getElementById("senha")?.value || "";
+    const messageId = mode === "admin" ? "adminLoginMessage" : mode === "professional" ? "professionalLoginMessage" : "loginMessage";
+    const button = form.querySelector('button[type="submit"]');
+    if (button) { button.disabled = true; button.textContent = mode === "admin" ? "Verificando..." : "Entrando..."; }
+    authMessage(messageId, "");
+    const { data, error } = await c.auth.signInWithPassword({ email, password });
+    if (error) {
+      authMessage(messageId, "E-mail ou senha incorretos, ou conta não confirmada.", "error");
+      if (button) { button.disabled = false; button.textContent = mode === "admin" ? "Entrar na administração" : mode === "professional" ? "Entrar na área profissional" : "Entrar"; }
+      return;
+    }
+    const user = data?.user;
+    if (!user) return;
+    if (mode === "admin") {
+      if (!(await authIsAdmin(user.id))) {
+        await c.auth.signOut();
+        authMessage(messageId, "Esta conta não possui acesso administrativo.", "error");
+        if (button) { button.disabled = false; button.textContent = "Entrar na administração"; }
+        return;
+      }
+      location.replace("admin.html");
+      return;
+    }
+    if (mode === "professional") {
+      const p = await authProfile(user.id);
+      if (!(p?.professional_login_enabled && (p?.is_editor || p?.is_designer))) {
+        await c.auth.signOut();
+        authMessage(messageId, "A conta ainda não foi aprovada como profissional.", "error");
+        if (button) { button.disabled = false; button.textContent = "Entrar na área profissional"; }
+        return;
+      }
+      location.replace("editor-painel.html");
+      return;
+    }
+    location.replace((await authIsAdmin(user.id)) ? "admin.html" : "perfil.html");
+  }
+
+  function authInitLoginPages() {
+    const common = document.getElementById("loginForm");
+    if (common && common.dataset.paAuthReady !== "1") {
+      common.dataset.paAuthReady = "1";
+      common.addEventListener("submit", (e) => { e.preventDefault(); authHandleLogin(common, "common"); });
+    }
+    const professional = document.getElementById("professionalLoginForm");
+    if (professional && professional.dataset.paAuthReady !== "1") {
+      professional.dataset.paAuthReady = "1";
+      professional.addEventListener("submit", (e) => { e.preventDefault(); authHandleLogin(professional, "professional"); });
+    }
+    const admin = document.getElementById("adminLoginForm");
+    if (admin && admin.dataset.paAuthReady !== "1") {
+      admin.dataset.paAuthReady = "1";
+      admin.addEventListener("submit", (e) => { e.preventDefault(); authHandleLogin(admin, "admin"); });
+    }
+  }
+
+  const AUTH_CATEGORIES = [
+    ["trailer", "Trailers"], ["highlight", "Highlights"], ["motion", "Motion Design"], ["anime", "Anime / Mangá"],
+    ["gaming", "Gaming"], ["tiktok", "TikTok"], ["reels", "Reels"], ["amv", "AMV"], ["thumbnail", "Thumbnails"],
+    ["youtube", "YouTube"], ["promo", "Promo"], ["design", "Design Gráfico"], ["branding", "Branding"], ["uiux", "UI / UX"],
+    ["illustration", "Ilustração"], ["3d", "3D"], ["outros", "Outros"]
+  ];
+
+  function authCategoryButtons(holder, selected = "") {
+    if (!holder) return;
+    holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) => `<button type="button" class="category-choice ${selected === value ? "selected" : ""}" data-v="${value}">${label}</button>`).join("");
+    holder.onclick = (e) => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      [...holder.querySelectorAll("button")].forEach(x => x.classList.remove("selected"));
+      b.classList.add("selected");
+    };
+  }
+
+  function authSelectedCategory(holder) { return holder?.querySelector("button.selected")?.dataset.v || ""; }
+
+  function authFileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function authInitRegisterPages() {
+    const form = document.getElementById("registerForm");
+    if (form && form.dataset.paAuthReady !== "1") {
+      form.dataset.paAuthReady = "1";
+      const holder = document.getElementById("categoryChoices");
+      authCategoryButtons(holder);
+      const file = document.getElementById("signupAvatar");
+      const image = document.getElementById("signupImage");
+      const initial = document.getElementById("signupInitial");
+      file?.addEventListener("change", () => {
+        const f = file.files?.[0];
+        if (!f) return;
+        if (f.size > 5 * 1024 * 1024) { authMessage("registerMessage", "A foto precisa ter até 5 MB.", "error"); file.value = ""; return; }
+        if (image) { image.src = URL.createObjectURL(f); image.hidden = false; }
+        if (initial) initial.hidden = true;
+      });
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const c = await authClient();
+        const button = document.getElementById("registerButton");
+        const category = authSelectedCategory(holder);
+        const accepted = document.getElementById("termos")?.checked;
+        if (!accepted) { authMessage("registerMessage", "Aceite os termos para continuar.", "error"); return; }
+        if (!c) { authMessage("registerMessage", "Serviço de autenticação indisponível.", "error"); return; }
+        if (button) { button.disabled = true; button.textContent = "Criando..."; }
+        const { data, error } = await c.auth.signUp({
+          email: document.getElementById("email")?.value.trim(),
+          password: document.getElementById("senha")?.value || "",
+          options: { emailRedirectTo: new URL("perfil.html", location.href).href, data: {
+            nome: document.getElementById("nome")?.value.trim(), nome_artistico: document.getElementById("nomeArtistico")?.value.trim(),
+            especialidade: category, professional_application: false, requested_role: null
+          }}
+        });
+        if (error) {
+          authMessage("registerMessage", error.message || "Não foi possível criar a conta.", "error");
+          if (button) { button.disabled = false; button.textContent = "Criar conta"; }
+          return;
+        }
+        const avatar = file?.files?.[0];
+        if (avatar) { try { localStorage.setItem("pa_pending_signup_avatar", await authFileToDataURL(avatar)); } catch (_) {} }
+        authMessage("registerMessage", data?.session ? "Conta criada. Abrindo seu perfil..." : "Conta criada. Confirme seu e-mail e depois entre para concluir o perfil.", "success");
+        if (data?.session) setTimeout(() => location.replace("perfil.html"), 500);
+        else if (button) { button.disabled = false; button.textContent = "Criar conta"; }
+      });
+    }
+
+    const professional = document.getElementById("professionalRegisterForm");
+    if (professional && professional.dataset.paAuthReady !== "1") {
+      professional.dataset.paAuthReady = "1";
+      const holder = document.getElementById("categoryChoices");
+      authCategoryButtons(holder);
+      professional.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const c = await authClient();
+        const button = document.getElementById("professionalRegisterButton");
+        const requestedRole = document.getElementById("tipo")?.value || "editor";
+        const category = authSelectedCategory(holder);
+        if (!c) { authMessage("professionalRegisterMessage", "Serviço de autenticação indisponível.", "error"); return; }
+        if (button) { button.disabled = true; button.textContent = "Enviando..."; }
+        const { data, error } = await c.auth.signUp({
+          email: document.getElementById("email")?.value.trim(), password: document.getElementById("senha")?.value || "",
+          options: { emailRedirectTo: new URL("login-profissional.html", location.href).href, data: {
+            nome: document.getElementById("nome")?.value.trim(), nome_artistico: document.getElementById("nomeArtistico")?.value.trim(),
+            especialidade: category, professional_application: true, requested_role: requestedRole
+          }}
+        });
+        if (error) {
+          authMessage("professionalRegisterMessage", error.message || "Não foi possível enviar a candidatura.", "error");
+          if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
+          return;
+        }
+        authMessage("professionalRegisterMessage", data?.session ? "Solicitação enviada. Aguarde a aprovação da administração." : "Solicitação enviada. Confirme seu e-mail e aguarde a aprovação da administração.", "success");
+        if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
+      });
+    }
+  }
+
   function boot() {
+    authInitLoginPages();
+    authInitRegisterPages();
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     initMobileMenu();
     initNavigation();
