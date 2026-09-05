@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=25" rel="stylesheet"/>
+<link href="style.css?v=26" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -171,7 +171,7 @@
     </small>
 <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-<script src="script.js?v=25"></script>
+<script src="script.js?v=26"></script>
 <!-- ==================================================
      SUPABASE
 ================================================== -->
@@ -352,9 +352,15 @@ async function setupProfileActions(profile) {
     const professionalButton = document.getElementById("profileProfessionalButton");
     let isAdmin = false;
     try {
-        const { data } = await supabaseClient.rpc("is_admin");
-        isAdmin = data === true;
+        const result = await supabaseClient.rpc("is_admin");
+        isAdmin = result.data === true && !result.error;
     } catch (_) {}
+    if (!isAdmin) {
+        try {
+            const result = await supabaseClient.from("admin_users").select("user_id").eq("user_id", currentUser?.id || "").maybeSingle();
+            isAdmin = !!result.data && !result.error;
+        } catch (_) {}
+    }
     const isProfessional = profile?.is_editor === true || profile?.is_designer === true;
     if (adminButton) adminButton.hidden = !isAdmin;
     if (professionalButton) professionalButton.hidden = !isProfessional;
@@ -363,7 +369,7 @@ async function setupProfileActions(profile) {
 
 async function finishPendingSignupAvatar(user) {
     try {
-        const pending = sessionStorage.getItem("pa_pending_signup_avatar");
+        const pending = localStorage.getItem("pa_pending_signup_avatar");
         if (!pending) return null;
         const response = await fetch(pending);
         const blob = await response.blob();
@@ -372,7 +378,7 @@ async function finishPendingSignupAvatar(user) {
         if (error) throw error;
         const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
         await supabaseClient.from("profile").update({ avatar_url: data.publicUrl }).eq("id", user.id);
-        sessionStorage.removeItem("pa_pending_signup_avatar");
+        localStorage.removeItem("pa_pending_signup_avatar");
         return data.publicUrl;
     } catch (error) {
         console.warn("Não foi possível concluir a foto pendente:", error);

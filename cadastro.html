@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=25" rel="stylesheet"/>
+<link href="style.css?v=26" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -171,7 +171,7 @@
     </small>
 <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-<script src="script.js?v=25"></script>
+<script src="script.js?v=26"></script>
 <!-- ==================================================
      SUPABASE
 ================================================== -->
@@ -219,6 +219,13 @@ const registerButton =
 
 const categoryInput = document.getElementById("especialidade");
 const categoryButtons = [...document.querySelectorAll(".category-choice")];
+if (categoryInput && !categoryButtons.length) {
+  const holder = document.getElementById("categoryChoices");
+  if (holder) {
+    const values = [["trailer","Trailers"],["highlight","Highlights"],["motion","Motion Design"],["anime","Anime / Mangá"],["gaming","Gaming"],["tiktok","TikTok"],["reels","Reels"],["amv","AMV"],["thumbnail","Thumbnails"],["youtube","YouTube"],["design","Design Gráfico"],["branding","Branding"],["uiux","UI / UX"],["illustration","Ilustração"],["3d","3D"],["outros","Outros"]];
+    holder.innerHTML = values.map(([value,label]) => `<button type="button" class="category-choice" data-value="${value}">${label}</button>`).join("");
+  }
+}
 const signupAvatarInput = document.getElementById("signupAvatar");
 const signupAvatarImage = document.getElementById("signupAvatarImage");
 const signupAvatarInitial = document.getElementById("signupAvatarInitial");
@@ -494,7 +501,7 @@ registerForm.addEventListener(
                   }
                 } else {
                   const compressed = await compressSignupAvatar(signupAvatarFile);
-                  sessionStorage.setItem("pa_pending_signup_avatar", compressed);
+                  localStorage.setItem("pa_pending_signup_avatar", compressed);
                 }
               } catch (avatarError) {
                 console.warn("A foto será concluída no perfil após a confirmação do e-mail.", avatarError);
