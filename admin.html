@@ -285,46 +285,43 @@ function applyAdminPermissionUI(){
 async function loadAdminPermissions(){
   if(!adminPermissionList)return;
   adminPermissionNote.textContent="Carregando permissões...";
-
-  // Primeiro confirma diretamente se a conta atual é o administrador principal.
-  // Se essa leitura estiver disponível, o owner recebe acesso total e nenhuma
-  // resposta posterior pode esconder suas abas.
-  let ownerConfirmed=false;
   try{
     const {data:sessionData}=await client.auth.getSession();
     const currentUser=sessionData?.session?.user;
-    if(currentUser?.id){
-      const {data:ownerRow,error:ownerError}=await client.from("admin_users").select("user_id,is_owner,permissions").eq("user_id",currentUser.id).maybeSingle();
-      if(!ownerError && ownerRow?.is_owner===true){
-        ownerConfirmed=true;
-        grantOwnerAccess();
-      }
-    }
-  }catch(e){}
+    if(!currentUser?.id){adminPermissionNote.textContent="Sessão não encontrada.";return;}
 
-  if(ownerConfirmed){
-    adminPermissionNote.textContent="Você é o administrador principal e possui acesso total.";
-    renderPermissionChecks(newAdminPermissions,{});
-    // Importante: não chamamos uma RPC de permissões depois do owner confirmado.
-    // Isso evita o efeito de 'aparecer por um instante e sumir'.
-  }else{
-    // Administradores secundários continuam usando a RPC de permissões.
-    const {data,error}=await client.rpc("get_admin_access");
-    if(!error&&data){
-      adminAccess=(data.permissions||data.is_owner!==undefined)?data:{is_owner:false,role:"admin",permissions:data||{}};
-      adminPermissionNote.textContent=`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
+    // A conta que passou por is_admin() é uma conta administrativa.
+    // Primeiro tentamos ler sua linha diretamente. Se ela for owner, o acesso é total.
+    const {data:ownerRow,error:ownerError}=await client.from("admin_users").select("user_id,is_owner,permissions").eq("user_id",currentUser.id).maybeSingle();
+    if(!ownerError && ownerRow){
+      if(ownerRow.is_owner===true){
+        grantOwnerAccess();
+        adminPermissionNote.textContent="Você é o administrador principal e possui acesso total.";
+      }else{
+        const perms=ownerRow.permissions && typeof ownerRow.permissions==="object" ? ownerRow.permissions : {};
+        adminAccess={is_owner:false,role:"admin",permissions:perms};
+        adminPermissionNote.textContent="Permissões carregadas da sua conta.";
+      }
     }else{
-      // Se a leitura de permissões falhar, NÃO escondemos as abas já renderizadas.
-      // Isso evita quebrar o painel por causa de uma falha temporária do schema cache.
-      adminPermissionNote.textContent="Não foi possível carregar as permissões detalhadas. O painel continua disponível.";
-      return;
+      // Fallback para a função do banco, caso a leitura direta esteja bloqueada por RLS.
+      const {data,error}=await client.rpc("get_admin_access");
+      if(!error && data){
+        if(data.is_owner===true){grantOwnerAccess();}
+        else if(data.permissions && typeof data.permissions==="object") adminAccess={is_owner:false,role:data.role||"admin",permissions:data.permissions};
+        else if(typeof data==="object") adminAccess={is_owner:false,role:"admin",permissions:data};
+      }
+      if(adminAccess.is_owner===true) adminPermissionNote.textContent="Você é o administrador principal e possui acesso total.";
+      else adminPermissionNote.textContent="Permissões carregadas da sua conta.";
     }
+
     renderPermissionChecks(newAdminPermissions,{});
+    const {data:rows,error:listError}=await client.rpc("list_admin_users");
+    if(listError){adminPermissionList.innerHTML=`<div class="admin-empty">Não foi possível carregar administradores: ${esc(listError.message)}</div>`;return;}
+    adminRows=rows||[];
+    adminPermissionList.innerHTML=adminRows.map(a=>{const tags=PERMISSION_DEFS.filter(([k])=>a.is_owner||a.permissions?.[k]).map(([,label])=>`<span class="admin-permission-tag">${esc(label)}</span>`).join("");return `<article class="admin-permission-row"><div><h3>${esc(a.email||"Conta")}</h3><p>${a.is_owner?"Administrador principal":esc(a.role||"admin")} · desde ${a.created_at?new Date(a.created_at).toLocaleDateString("pt-BR"):"—"}</p><div class="admin-permission-tags">${a.is_owner?'<span class="admin-permission-tag admin-permission-owner">Acesso total</span>':tags||'<span class="admin-permission-tag">Sem permissões</span>'}</div></div>${a.is_owner?"":`<div class="admin-permission-actions"><select data-admin-role="${esc(a.user_id)}"><option value="admin" ${a.role==="admin"?"selected":""}>Administrador</option><option value="moderator" ${a.role==="moderator"?"selected":""}>Moderador</option></select><button class="secondary-button" type="button" data-admin-edit="${esc(a.user_id)}">Editar</button></div>`}</article>`;}).join("");
+  }catch(e){
+    adminPermissionNote.textContent="Não foi possível carregar as permissões.";
   }
-  const {data:rows,error:listError}=await client.rpc("list_admin_users");
-  if(listError){adminPermissionList.innerHTML=`<div class="admin-empty">Não foi possível carregar administradores: ${esc(listError.message)}</div>`;return;}
-  adminRows=rows||[];
-  adminPermissionList.innerHTML=adminRows.map(a=>{const tags=PERMISSION_DEFS.filter(([k])=>a.is_owner||a.permissions?.[k]).map(([,label])=>`<span class="admin-permission-tag">${esc(label)}</span>`).join("");return `<article class="admin-permission-row"><div><h3>${esc(a.email||"Conta")}</h3><p>${a.is_owner?"Administrador principal":esc(a.role||"admin")} · desde ${a.created_at?new Date(a.created_at).toLocaleDateString("pt-BR"):"—"}</p><div class="admin-permission-tags">${a.is_owner?'<span class="admin-permission-tag admin-permission-owner">Acesso total</span>':tags||'<span class="admin-permission-tag">Sem permissões</span>'}</div></div>${a.is_owner?"":`<div class="admin-permission-actions"><select data-admin-role="${esc(a.user_id)}"><option value="admin" ${a.role==="admin"?"selected":""}>Administrador</option><option value="moderator" ${a.role==="moderator"?"selected":""}>Moderador</option></select><button class="secondary-button" type="button" data-admin-edit="${esc(a.user_id)}">Editar</button></div>`}</article>`;}).join("");
 }
 async function addAdmin(){const email=newAdminEmail.value.trim().toLowerCase();if(!email){adminPermissionFormMessage.textContent="Informe o e-mail da conta.";return;}const permissions=Object.fromEntries([...newAdminPermissions.querySelectorAll("[data-permission]")].map(i=>[i.dataset.permission,i.checked]));addAdminButton.disabled=true;adminPermissionFormMessage.textContent="Adicionando...";const {error}=await client.rpc("upsert_admin_user",{p_email:email,p_role:newAdminRole.value,p_permissions:permissions});addAdminButton.disabled=false;if(error){adminPermissionFormMessage.textContent="Não foi possível adicionar: "+error.message;adminPermissionFormMessage.className="auth-message error";return;}adminPermissionFormMessage.textContent="Administrador adicionado.";adminPermissionFormMessage.className="auth-message success";newAdminEmail.value="";await loadAdminPermissions();}
 newAdminPermissions&&renderPermissionChecks(newAdminPermissions,{});
