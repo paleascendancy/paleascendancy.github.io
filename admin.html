@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=25">
+<link rel="stylesheet" href="style.css?v=26">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 <style>
 .admin-subsection{margin-top:28px}.admin-subsection .section-heading{margin-bottom:16px}.admin-application{display:flex;justify-content:space-between;gap:18px;align-items:center}.admin-application-meta{display:grid;gap:6px}.admin-role-badge{display:inline-flex;width:max-content;padding:7px 10px;border:1px solid rgba(159,232,255,.25);border-radius:999px;font-size:.8rem;font-weight:700}.admin-application-actions{display:flex;gap:10px;flex-wrap:wrap}.admin-actions .danger-button{border-color:rgba(255,100,100,.3)}.admin-user-status{display:inline-flex;width:max-content;padding:6px 9px;border-radius:999px;font-size:.75rem;font-weight:700;border:1px solid rgba(159,232,255,.2)}.admin-user-status.prof{border-color:rgba(168,148,255,.35)}.admin-user-status.active{border-color:rgba(159,232,255,.35)}.admin-user-status.pending{border-color:rgba(233,207,145,.35)}.admin-user-grid{display:grid;gap:14px}.admin-user-info{display:grid;gap:5px}.admin-user-info small{opacity:.72}.admin-user-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.admin-user-card{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.admin-user-meta{display:grid;gap:6px}.admin-user-meta h2{margin:0}.admin-user-meta p{margin:0;opacity:.78}.admin-user-side{display:grid;justify-items:end;gap:8px;text-align:right}.admin-user-empty{padding:24px;text-align:center;opacity:.75}@media(max-width:720px){.admin-user-card{flex-direction:column}.admin-user-side{justify-items:start;text-align:left}}@media(max-width:720px){.admin-application{align-items:flex-start;flex-direction:column}.admin-application-actions{width:100%}.admin-application-actions button{width:100%}}
@@ -81,6 +81,12 @@
   <div class="appearance-grid">
     <article class="appearance-card">
       <div class="appearance-card-head"><div><h3>Paleta principal</h3><p>Defina as cores usadas pelos elementos de destaque.</p></div></div>
+      <div class="appearance-presets" aria-label="Paletas prontas">
+        <div class="appearance-presets-head">
+          <div><h3>Paletas em harmonia</h3><p>Escolha uma identidade completa. Ela altera fundo, textos, títulos, bordas, destaques e botões.</p></div>
+        </div>
+        <div class="palette-grid" id="appearancePaletteGrid"></div>
+      </div>
       <div class="appearance-fields">
         <label class="color-field"><span>Cor principal</span><div><input type="color" id="appearancePrimaryColor"><input type="text" id="appearancePrimary" maxlength="7" spellcheck="false"></div></label>
         <label class="color-field"><span>Cor secundária</span><div><input type="color" id="appearanceSecondaryColor"><input type="text" id="appearanceSecondary" maxlength="7" spellcheck="false"></div></label>
@@ -108,7 +114,7 @@
 <section id="adminDenied" class="admin-denied" hidden><p class="eyebrow">Acesso bloqueado</p><h2>Esta área é somente para a administração.</h2><p>Entre com a conta autorizada da Pale Ascendancy.</p><a class="primary-button" href="login.html">Entrar</a></section>
 </main>
 <footer><div class="footer-brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Centro administrativo.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
-<script src="script.js?v=25"></script>
+<script src="script.js?v=26"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL="https://fnyellunugdfesprmvzm.supabase.co";
@@ -173,7 +179,15 @@ async function load(){
   if(appError){showMessage("Não foi possível carregar as solicitações: "+appError.message,"error");return;}
   profiles=data||[];applications=apps||[];showMessage("");renderApplications();render();renderPlans();
 }
-const APPEARANCE_DEFAULTS={primary:"#9fe8ff",secondary:"#a894ff",background:"#09080d",text:"#f7f4fb",accent:"#e9cf91",button_mode:"gradient"};
+const APPEARANCE_DEFAULTS={primary:"#9fe8ff",secondary:"#a894ff",background:"#09080d",text:"#f7f4fb",accent:"#e9cf91",muted:"#9c94a8",text_soft:"#ddd6e8",line:"rgba(235,225,250,.12)",line_strong:"rgba(235,225,250,.22)",button_mode:"gradient"};
+const APPEARANCE_PALETTES=[
+  {id:"aurora",name:"Aurora Cyan",primary:"#5de1ff",secondary:"#8b7cff",background:"#050914",text:"#eef7ff",accent:"#f1c76b",muted:"#91a8bd",text_soft:"#d4deea",line:"rgba(170,215,255,.15)",line_strong:"rgba(170,215,255,.28)",button_mode:"gradient"},
+  {id:"violet",name:"Violet Noir",primary:"#b99cff",secondary:"#6f8cff",background:"#08070f",text:"#f4f0ff",accent:"#d6b7ff",muted:"#aaa1bd",text_soft:"#ded7ee",line:"rgba(203,184,255,.14)",line_strong:"rgba(203,184,255,.28)",button_mode:"gradient"},
+  {id:"emerald",name:"Emerald Graphite",primary:"#65e6b0",secondary:"#49b7ff",background:"#06100d",text:"#f0fff8",accent:"#d7f58a",muted:"#8eafa2",text_soft:"#d2ebe1",line:"rgba(101,230,176,.14)",line_strong:"rgba(101,230,176,.28)",button_mode:"solid"},
+  {id:"crimson",name:"Crimson Luxe",primary:"#ff6b8a",secondary:"#b48cff",background:"#11070c",text:"#fff1f4",accent:"#ffc27a",muted:"#b69ca6",text_soft:"#f0dce2",line:"rgba(255,107,138,.15)",line_strong:"rgba(255,107,138,.30)",button_mode:"gradient"},
+  {id:"solar",name:"Solar Gold",primary:"#ffd166",secondary:"#ff8c42",background:"#100b05",text:"#fff9e8",accent:"#ffe9a8",muted:"#b7a98a",text_soft:"#eee3c4",line:"rgba(255,209,102,.14)",line_strong:"rgba(255,209,102,.28)",button_mode:"solid"},
+  {id:"arctic",name:"Arctic Steel",primary:"#9fe8ff",secondary:"#c7d2fe",background:"#071018",text:"#f3f7fb",accent:"#7dd3fc",muted:"#94a8b8",text_soft:"#d9e5ed",line:"rgba(159,232,255,.14)",line_strong:"rgba(159,232,255,.28)",button_mode:"glass"}
+];
 const appearanceFields={
   primary:[document.getElementById("appearancePrimary"),document.getElementById("appearancePrimaryColor")],
   secondary:[document.getElementById("appearanceSecondary"),document.getElementById("appearanceSecondaryColor")],
@@ -183,8 +197,14 @@ const appearanceFields={
 };
 const appearanceButtonMode=document.getElementById("appearanceButtonMode");
 function normalizeHex(v,fallback){const x=String(v||"").trim();return /^#[0-9a-fA-F]{6}$/.test(x)?x.toLowerCase():fallback;}
+function renderAppearancePalettes(){
+  const grid=document.getElementById("appearancePaletteGrid");
+  if(!grid)return;
+  grid.innerHTML=APPEARANCE_PALETTES.map(p=>`<button class="palette-option" type="button" data-palette="${p.id}" aria-label="Usar paleta ${esc(p.name)}"><span class="palette-swatches"><i style="background:${p.primary}"></i><i style="background:${p.secondary}"></i><i style="background:${p.accent}"></i><i style="background:${p.background}"></i></span><strong>${esc(p.name)}</strong><small>${p.button_mode==="glass"?"Vidro":p.button_mode==="solid"?"Sólido":"Gradiente"}</small></button>`).join("");
+  grid.querySelectorAll("[data-palette]").forEach(button=>button.addEventListener("click",()=>{const palette=APPEARANCE_PALETTES.find(x=>x.id===button.dataset.palette);if(!palette)return;setAppearanceForm(palette);grid.querySelectorAll("[data-palette]").forEach(x=>x.classList.toggle("active",x===button));document.getElementById("appearanceStatus").textContent=`Paleta ${palette.name} selecionada. Clique em Salvar aparência para publicar.`;}));
+}
 function setAppearanceForm(values){Object.entries(appearanceFields).forEach(([key,[text,color]])=>{const value=normalizeHex(values[key],APPEARANCE_DEFAULTS[key]);text.value=value;color.value=value;});if(appearanceButtonMode)appearanceButtonMode.value=["gradient","solid","outline","glass","minimal"].includes(values.button_mode)?values.button_mode:"gradient";updateAppearancePreview();}
-function getAppearanceForm(){const values=Object.fromEntries(Object.entries(appearanceFields).map(([key,[text]])=>[key,normalizeHex(text.value,APPEARANCE_DEFAULTS[key])]));values.button_mode=appearanceButtonMode?.value||"gradient";return values;}
+function getAppearanceForm(){const values=Object.fromEntries(Object.entries(appearanceFields).map(([key,[text]])=>[key,normalizeHex(text.value,APPEARANCE_DEFAULTS[key])]));const match=APPEARANCE_PALETTES.find(p=>p.primary===values.primary&&p.secondary===values.secondary&&p.background===values.background&&p.text===values.text&&p.accent===values.accent);if(match){values.muted=match.muted;values.text_soft=match.text_soft;values.line=match.line;values.line_strong=match.line_strong;}else{values.muted=APPEARANCE_DEFAULTS.muted;values.text_soft=APPEARANCE_DEFAULTS.text_soft;values.line=APPEARANCE_DEFAULTS.line;values.line_strong=APPEARANCE_DEFAULTS.line_strong;}values.button_mode=appearanceButtonMode?.value||"gradient";return values;}
 function applyAppearancePreview(values){const root=document.getElementById("appearancePreview");if(!root)return;root.style.setProperty("--preview-primary",values.primary);root.style.setProperty("--preview-secondary",values.secondary);root.style.setProperty("--preview-bg",values.background);root.style.setProperty("--preview-text",values.text);root.style.setProperty("--preview-accent",values.accent);root.dataset.buttonMode=values.button_mode||"gradient";}
 function updateAppearancePreview(){applyAppearancePreview(getAppearanceForm());}
 async function loadAppearance(){
@@ -202,8 +222,9 @@ async function saveAppearance(){
   localStorage.setItem("paAppearance",JSON.stringify(values));
   applyGlobalAppearance(values);status.textContent="Aparência salva com sucesso.";status.className="appearance-status success";
 }
-function applyGlobalAppearance(values){const root=document.documentElement;root.style.setProperty("--pa-primary",values.primary);root.style.setProperty("--pa-secondary",values.secondary);root.style.setProperty("--pa-background",values.background);root.style.setProperty("--pa-text",values.text);root.style.setProperty("--pa-accent",values.accent);}
+function applyGlobalAppearance(values){const root=document.documentElement;root.style.setProperty("--pa-primary",values.primary);root.style.setProperty("--pa-secondary",values.secondary);root.style.setProperty("--pa-background",values.background);root.style.setProperty("--pa-text",values.text);root.style.setProperty("--pa-accent",values.accent);root.style.setProperty("--pa-muted",values.muted||APPEARANCE_DEFAULTS.muted);root.style.setProperty("--pa-text-soft",values.text_soft||APPEARANCE_DEFAULTS.text_soft);root.style.setProperty("--pa-line",values.line||APPEARANCE_DEFAULTS.line);root.style.setProperty("--pa-line-strong",values.line_strong||APPEARANCE_DEFAULTS.line_strong);root.dataset.buttonMode=values.button_mode||"gradient";}
 function initAppearance(){
+  renderAppearancePalettes();
   document.querySelectorAll(".admin-tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".admin-tab-panel").forEach(x=>x.hidden=true);tab.classList.add("active");const panelMap={overview:"adminTabOverview",users:"adminTabUsers",plans:"adminTabPlans",appearance:"adminTabAppearance"};document.getElementById(panelMap[tab.dataset.adminTab]||"adminTabOverview").hidden=false;if(tab.dataset.adminTab==="appearance")loadAppearance();if(tab.dataset.adminTab==="users")loadUsers();if(tab.dataset.adminTab==="plans")renderPlans();}));
   Object.entries(appearanceFields).forEach(([_,[text,color]])=>{text.addEventListener("input",()=>{const v=normalizeHex(text.value,color.value);if(/^#[0-9a-fA-F]{6}$/.test(text.value.trim()))color.value=v;updateAppearancePreview();});color.addEventListener("input",()=>{text.value=color.value;updateAppearancePreview();});});
   appearanceButtonMode?.addEventListener("change",updateAppearancePreview);

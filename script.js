@@ -146,6 +146,7 @@
       });
     };
 
+    window.__PA_EDITOR_FILTER_APPLY__ = apply;
     input.addEventListener("input", apply);
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -156,6 +157,118 @@
     });
 
     apply();
+  }
+
+  /* ---------------- PROFESSIONAL DIRECTORY / REELS ---------------- */
+
+  const PROFESSIONAL_CATEGORY_MAP = {
+    trailer: "Trailers", highlight: "Highlights", motion: "Motion Design", anime: "Anime / Mangá",
+    gaming: "Gaming", tiktok: "TikTok", reels: "Reels", amv: "AMV", thumbnail: "Thumbnails",
+    youtube: "YouTube", promo: "Promo", design: "Design Gráfico", branding: "Branding", uiux: "UI / UX",
+    illustration: "Ilustração", "3d": "3D", outros: "Outros"
+  };
+
+  function professionalRole(profile) {
+    return profile.is_editor && profile.is_designer ? "EDITOR + DESIGNER" : profile.is_designer ? "DESIGNER" : "EDITOR";
+  }
+
+  function professionalAvailability(value) {
+    return value === "ocupado" ? "Ocupado" : value === "sob_consulta" ? "Sob consulta" : "Disponível";
+  }
+
+  function portfolioMediaMarkup(item) {
+    const title = escapeHTML(item.title || "Trabalho");
+    const url = escapeHTML(item.url || "");
+    if (item.item_type === "video") return `<video src="${url}" muted autoplay loop playsinline preload="metadata" aria-label="${title}"></video>`;
+    if (item.item_type === "image") return `<img src="${url}" alt="${title}" loading="lazy">`;
+    return `<div class="portfolio-reel-link"><span>↗</span><strong>Abrir projeto</strong><small>${url}</small></div>`;
+  }
+
+  async function loadProfessionalDirectory() {
+    const grid = $("#editorsGrid");
+    if (!grid) return;
+
+    const reels = $("#portfolioReels");
+    grid.innerHTML = '<div class="professional-loading">Carregando profissionais...</div>';
+    if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Carregando portfólios...</div>';
+
+    const client = getSupabaseClient();
+    if (!client) {
+      await ensureSupabase();
+    }
+    const sb = getSupabaseClient();
+    if (!sb) {
+      grid.innerHTML = '<div class="professional-loading">Não foi possível conectar aos profissionais.</div>';
+      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      return;
+    }
+
+    const [{ data: profiles, error: profileError }, { data: items, error: itemError }] = await Promise.all([
+      sb.from("editor_directory")
+        .select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer")
+        .order("is_featured", { ascending: false }),
+      sb.from("editor_portfolio_items")
+        .select("id,editor_id,title,description,item_type,url,sort_order,created_at")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false })
+    ]);
+
+    if (profileError) {
+      grid.innerHTML = '<div class="professional-loading">Não foi possível carregar os profissionais.</div>';
+      if (reels) reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      return;
+    }
+
+    const approved = profiles || [];
+    if (!approved.length) {
+      grid.innerHTML = '<div class="professional-loading">Ainda não há profissionais aprovados na rede.</div>';
+    } else {
+      grid.innerHTML = approved.map((profile) => {
+        const name = profile.nome_artistico || profile.nome || "Profissional";
+        const categories = [profile.especialidade, ...(Array.isArray(profile.editor_categories) ? profile.editor_categories : [])].filter(Boolean).map(String);
+        const tags = [...new Set(categories)].slice(0, 5).map((item) => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[item] || item)}</span>`).join("");
+        const avatar = profile.avatar_url
+          ? `<img class="editor-avatar editor-photo" src="${escapeHTML(profile.avatar_url)}" alt="Foto de perfil de ${escapeHTML(name)}" loading="lazy">`
+          : `<div class="editor-avatar placeholder-icon">${escapeHTML(name.charAt(0).toUpperCase())}</div>`;
+        const role = professionalRole(profile);
+        const searchText = `${name} ${profile.especialidade || ""} ${categories.join(" ")} ${profile.bio || ""} ${profile.editor_software || ""}`.toLowerCase();
+        return `<article class="editor-profile dynamic-professional" data-profile-id="${escapeHTML(profile.id)}" data-category="${escapeHTML(categories.join(" ").toLowerCase())}" data-search="${escapeHTML(searchText)}">
+          <div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${escapeHTML(profile.is_featured ? "Destaque" : professionalAvailability(profile.availability))}</div>
+          ${avatar}
+          <h2>${escapeHTML(name)}</h2>
+          <div class="editor-role">${role}</div>
+          <p class="editor-description">${escapeHTML(profile.bio || `${role.toLowerCase()} com foco em ${PROFESSIONAL_CATEGORY_MAP[profile.especialidade] || profile.especialidade || "criação audiovisual"}.`)}</p>
+          <div class="editor-tags">${tags || '<span class="editor-tag">Portfólio</span>'}${profile.is_featured ? '<span class="editor-tag">Destaque</span>' : ''}</div>
+          <div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(profile.id)}">Ver perfil →</a></div>
+        </article>`;
+      }).join("");
+    }
+
+    initEditorPhotos();
+    window.__PA_EDITOR_FILTER_APPLY__?.();
+
+    if (!reels) return;
+    if (itemError) {
+      reels.innerHTML = '<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';
+      return;
+    }
+
+    const profileMap = new Map(approved.map((profile) => [profile.id, profile]));
+    const validItems = (items || []).map((item) => ({ ...item, profile: profileMap.get(item.editor_id) })).filter((item) => item.profile);
+    if (!validItems.length) {
+      reels.innerHTML = '<div class="portfolio-reels-empty">Os portfólios publicados pelos profissionais aparecerão aqui.</div>';
+      return;
+    }
+
+    reels.innerHTML = validItems.map((item) => {
+      const profile = item.profile || {};
+      const name = profile.nome_artistico || profile.nome || "Profissional";
+      const body = `<a class="portfolio-reel-media" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">${portfolioMediaMarkup(item)}</a>`;
+      return `<article class="portfolio-reel-card">
+        <div class="portfolio-reel-visual">${body}<div class="portfolio-reel-gradient"></div><div class="portfolio-reel-overlay"><span>${escapeHTML(name)}</span><strong>${escapeHTML(item.title || "Projeto")}</strong></div></div>
+        <div class="portfolio-reel-copy"><strong>${escapeHTML(item.title || "Projeto")}</strong><span>${escapeHTML(name)} · ${item.item_type === "video" ? "Vídeo" : item.item_type === "image" ? "Arte" : "Projeto"}</span>${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}</div>
+      </article>`;
+    }).join("");
   }
 
   function initEditorPhotos() {
@@ -622,13 +735,26 @@
   function applySiteAppearance(settings) {
     if (!settings || typeof settings !== "object") return;
     const root = document.documentElement;
-    if (settings.primary) root.style.setProperty("--pa-primary", settings.primary);
-    if (settings.secondary) root.style.setProperty("--pa-secondary", settings.secondary);
-    if (settings.background) root.style.setProperty("--pa-background", settings.background);
-    if (settings.text) root.style.setProperty("--pa-text", settings.text);
-    if (settings.accent) root.style.setProperty("--pa-accent", settings.accent);
-    if (BUTTON_MODES.has(settings.button_mode)) root.dataset.buttonMode = settings.button_mode;
-    try { localStorage.setItem("paAppearance", JSON.stringify(settings)); } catch (_) {}
+    const primary = settings.primary || settings.cyan || "#5de1ff";
+    const secondary = settings.secondary || settings.violet || "#8b7cff";
+    const background = settings.background || "#050914";
+    const text = settings.text || "#eef7ff";
+    const accent = settings.accent || settings.gold || "#f1c76b";
+    const muted = settings.muted || "#91a8bd";
+    const textSoft = settings.text_soft || "#d4deea";
+    const line = settings.line || "rgba(170,215,255,.15)";
+    const lineStrong = settings.line_strong || "rgba(170,215,255,.28)";
+    root.style.setProperty("--pa-primary", primary);
+    root.style.setProperty("--pa-secondary", secondary);
+    root.style.setProperty("--pa-background", background);
+    root.style.setProperty("--pa-text", text);
+    root.style.setProperty("--pa-accent", accent);
+    root.style.setProperty("--pa-muted", muted);
+    root.style.setProperty("--pa-text-soft", textSoft);
+    root.style.setProperty("--pa-line", line);
+    root.style.setProperty("--pa-line-strong", lineStrong);
+    root.dataset.buttonMode = ["gradient", "solid", "outline", "glass", "minimal"].includes(settings.button_mode) ? settings.button_mode : "gradient";
+    try { localStorage.setItem("paAppearance", JSON.stringify({ ...settings, primary, secondary, background, text, accent, muted, text_soft: textSoft, line, line_strong: lineStrong })); } catch (_) {}
   }
 
   async function initGlobalAppearance() {
@@ -1022,6 +1148,7 @@
 
       initEditorTools();
       initEditorPhotos();
+      loadProfessionalDirectory();
       ensureAccountMarkup();
       handleAuthRedirect().finally(() => initAccountHeader());
       updateActiveLinks();
@@ -1078,6 +1205,7 @@
     initNavigation();
     initEditorTools();
     initEditorPhotos();
+    loadProfessionalDirectory();
     initMusic();
     initGlobalAppearance();
     ensureAccountMarkup();

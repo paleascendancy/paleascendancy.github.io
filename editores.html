@@ -140,6 +140,7 @@
     <p>Os perfis abaixo são alimentados automaticamente pelos profissionais aprovados pela administração.</p>
   </div>
   <div class="editors-grid professional-horizontal" id="editorsGrid" aria-live="polite"></div>
+
 </section>
 
 <section class="professional-reels" aria-label="Portfólios dos profissionais">
@@ -176,55 +177,6 @@
     </small>
 <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-<script src="script.js?v=24"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-(function(){
-  const sb=window.supabase.createClient("https://fnyellunugdfesprmvzm.supabase.co","sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK");
-  const grid=document.getElementById("editorsGrid");
-  const reels=document.getElementById("portfolioReels");
-  const search=document.getElementById("searchInput");
-  const map={trailer:"Trailers",highlight:"Highlights",motion:"Motion Design",anime:"Anime / Mangá",gaming:"Gaming",tiktok:"TikTok",reels:"Reels",amv:"AMV",thumbnail:"Thumbnails",youtube:"YouTube",promo:"Promo",design:"Design Gráfico",branding:"Branding",uiux:"UI / UX",illustration:"Ilustração","3d":"3D",outros:"Outros"};
-  function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
-  function role(p){return p.is_editor&&p.is_designer?"EDITOR + DESIGNER":p.is_designer?"DESIGNER":"EDITOR";}
-  function availability(v){return v==="ocupado"?"Ocupado":v==="sob_consulta"?"Sob consulta":"Disponível";}
-  function media(item){
-    const title=esc(item.title||"Trabalho");
-    if(item.item_type==="video") return `<video src="${esc(item.url)}" muted autoplay loop playsinline preload="metadata" aria-label="${title}"></video>`;
-    if(item.item_type==="image") return `<img src="${esc(item.url)}" alt="${title}" loading="lazy">`;
-    return `<div class="portfolio-reel-link"><span>↗</span><strong>Abrir projeto</strong><small>${esc(item.url)}</small></div>`;
-  }
-  async function load(){
-    grid.innerHTML='<div class="professional-loading">Carregando profissionais...</div>';
-    reels.innerHTML='<div class="portfolio-reels-empty">Carregando portfólios...</div>';
-    const [{data:profiles,error:profileError},{data:items,error:itemError}]=await Promise.all([
-      sb.from("editor_directory").select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer").order("is_featured",{ascending:false}),
-      sb.from("editor_portfolio_items").select("id,editor_id,title,description,item_type,url,sort_order,created_at").order("sort_order",{ascending:true}).order("created_at",{ascending:false})
-    ]);
-    if(profileError){grid.innerHTML='<div class="professional-loading">Não foi possível carregar os profissionais.</div>';}
-    const approved=profiles||[];
-    if(!approved.length) grid.innerHTML='<div class="professional-loading">Ainda não há profissionais aprovados na rede.</div>';
-    else grid.innerHTML=approved.map(p=>{
-      const name=p.nome_artistico||p.nome||"Profissional";
-      const cats=[p.especialidade,...(Array.isArray(p.editor_categories)?p.editor_categories:[])].filter(Boolean);
-      const tags=[...new Set(cats)].slice(0,5).map(x=>`<span class="editor-tag">${esc(map[x]||x)}</span>`).join("");
-      const avatar=p.avatar_url?`<img class="editor-avatar editor-photo" src="${esc(p.avatar_url)}" alt="Foto de perfil de ${esc(name)}" loading="lazy">`:`<div class="editor-avatar placeholder-icon">${esc(name.charAt(0).toUpperCase())}</div>`;
-      return `<article class="editor-profile dynamic-professional" data-profile-id="${esc(p.id)}" data-category="${esc(cats.join(" ").toLowerCase())}" data-search="${esc(`${name} ${p.especialidade||""} ${cats.join(" ")} ${p.bio||""} ${p.editor_software||""}`.toLowerCase())}"><div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${p.is_featured?"Destaque":availability(p.availability)}</div>${avatar}<h2>${esc(name)}</h2><div class="editor-role">${role(p)}</div><p class="editor-description">${esc(p.bio||`${role(p).toLowerCase()} com foco em ${map[p.especialidade]||p.especialidade||"criação audiovisual"}.`)}</p><div class="editor-tags">${tags||'<span class="editor-tag">Portfólio</span>'}${p.is_featured?'<span class="editor-tag">Destaque</span>':''}</div><div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Ver perfil →</a></div></article>`;
-    }).join("");
-    if(itemError){reels.innerHTML='<div class="portfolio-reels-empty">Não foi possível carregar os portfólios.</div>';return;}
-    const profileMap=new Map(approved.map(p=>[p.id,p]));
-    const valid=(items||[]).map(item=>({...item,profile:profileMap.get(item.editor_id)})).filter(i=>i.profile);
-    if(!valid.length){reels.innerHTML='<div class="portfolio-reels-empty">Os portfólios publicados pelos profissionais aparecerão aqui.</div>';return;}
-    reels.innerHTML=valid.map(item=>{
-      const p=item.profile||{}; const name=p.nome_artistico||"Profissional";
-      const body=item.item_type==="link"?`<a class="portfolio-reel-media" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${media(item)}</a>`:`<a class="portfolio-reel-media" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${media(item)}</a>`;
-      return `<article class="portfolio-reel-card"><div class="portfolio-reel-visual">${body}<div class="portfolio-reel-gradient"></div><div class="portfolio-reel-overlay"><span>${esc(name)}</span><strong>${esc(item.title||"Projeto")}</strong></div></div><div class="portfolio-reel-copy"><strong>${esc(item.title||"Projeto")}</strong><span>${esc(name)} · ${item.item_type==="video"?"Vídeo":item.item_type==="image"?"Arte":"Projeto"}</span>${item.description?`<p>${esc(item.description)}</p>`:""}</div></article>`;
-    }).join("");
-    if(search) search.dispatchEvent(new Event("input"));
-  }
-  load();
-})();
-</script>
+<script src="script.js?v=26"></script>
 </body>
 </html>
