@@ -259,34 +259,63 @@
 
   async function handleLogin(form, mode) {
     const c = await ensureClient();
-    const email = $("#email", form).value.trim(); const password = $("#senha", form).value;
+    const email = $("#email", form).value.trim();
+    const password = $("#senha", form).value;
     const message = mode === "admin" ? $("#adminLoginMessage") : mode === "professional" ? $("#professionalLoginMessage") : $("#loginMessage");
     const button = form.querySelector("button[type=submit]");
-    button.disabled = true; button.textContent = mode === "admin" ? "Verificando..." : "Entrando..."; setMsg(message, "");
-    const r = await c.auth.signInWithPassword({ email, password });
-    if (r.error) { setMsg(message, "E-mail ou senha incorretos, ou conta não confirmada.", "error"); button.disabled = false; button.textContent = mode === "admin" ? "Entrar na administração" : mode === "professional" ? "Entrar na área profissional" : "Entrar"; return; }
-    const user = r.data.user;
-    if (mode === "admin") {
-      if (!(await isAdmin(user.id))) { await c.auth.signOut(); setMsg(message, "Esta conta não possui acesso administrativo.", "error"); button.disabled = false; button.textContent = "Entrar na administração"; return; }
-      location.replace("admin.html"); return;
-    }
-    if (mode === "professional") {
-      const p = await profile(user.id);
-      if (!p) {
-        await c.auth.signOut();
-        setMsg(message, "Não foi possível carregar seu perfil profissional. Verifique a configuração do Supabase.", "error");
-        button.disabled = false; button.textContent = "Entrar na área profissional";
+    const originalText = mode === "admin" ? "Entrar na administração" : mode === "professional" ? "Entrar na área profissional" : "Entrar";
+    button.disabled = true;
+    button.textContent = mode === "admin" ? "Verificando..." : "Entrando...";
+    setMsg(message, "");
+
+    try {
+      const r = await c.auth.signInWithPassword({ email, password });
+      if (r.error) throw new Error("E-mail ou senha incorretos, ou conta não confirmada.");
+      const user = r.data.user;
+
+      if (mode === "admin") {
+        if (!(await isAdmin(user.id))) {
+          await c.auth.signOut();
+          throw new Error("Esta conta não possui acesso administrativo.");
+        }
+        location.replace("admin.html");
         return;
       }
-      if (!(p.is_editor || p.is_designer)) {
-        await c.auth.signOut();
-        setMsg(message, "A conta ainda não foi aprovada como profissional.", "error");
-        button.disabled = false; button.textContent = "Entrar na área profissional";
+
+      if (mode === "professional") {
+        // IMPORTANTE: aprovação é permanente enquanto is_editor/is_designer
+        // permanecer ativo. Não exigimos professional_login_enabled nem uma
+        // nova candidatura para quem já foi aprovado.
+        // Usamos o diretório público para verificar a aprovação sem depender
+        // das políticas de leitura da tabela profile.
+        const access = await c
+          .from("editor_directory")
+          .select("id,is_editor,is_designer")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (access.error) {
+          console.error("Erro ao verificar acesso profissional:", access.error);
+          throw new Error("Não foi possível verificar seu acesso profissional. Tente novamente.");
+        }
+
+        const approved = !!access.data && (access.data.is_editor === true || access.data.is_designer === true);
+        if (!approved) {
+          await c.auth.signOut();
+          throw new Error("Esta conta ainda não está aprovada como profissional.");
+        }
+
+        location.replace("editor-painel.html");
         return;
       }
-      location.replace("editor-painel.html"); return;
+
+      location.replace((await isAdmin(user.id)) ? "admin.html" : "perfil.html");
+    } catch (err) {
+      console.error("Erro no login:", err);
+      setMsg(message, err?.message || "Não foi possível entrar. Tente novamente.", "error");
+      button.disabled = false;
+      button.textContent = originalText;
     }
-    location.replace((await isAdmin(user.id)) ? "admin.html" : "perfil.html");
   }
 
   function initLoginPages() {
