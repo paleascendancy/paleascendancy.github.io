@@ -1038,10 +1038,33 @@
     );
   }
 
+  async function loadGlobalAppearance() {
+    try {
+      const ready = await ensureSupabase();
+      if (!ready) return;
+      const client = getSupabaseClient();
+      if (!client) return;
+      const { data, error } = await client
+        .from("site_settings")
+        .select("settings")
+        .eq("id", true)
+        .maybeSingle();
+      if (error || !data?.settings) return;
+      const values = data.settings;
+      const root = document.documentElement;
+      if (/^#[0-9a-fA-F]{6}$/.test(values.primary || "")) { root.style.setProperty("--pa-primary", values.primary); root.style.setProperty("--cyan", values.primary); }
+      if (/^#[0-9a-fA-F]{6}$/.test(values.secondary || "")) { root.style.setProperty("--pa-secondary", values.secondary); root.style.setProperty("--violet", values.secondary); }
+      if (/^#[0-9a-fA-F]{6}$/.test(values.background || "")) { root.style.setProperty("--pa-background", values.background); root.style.setProperty("--bg", values.background); root.style.setProperty("--bg-deep", values.background); }
+      if (/^#[0-9a-fA-F]{6}$/.test(values.text || "")) { root.style.setProperty("--pa-text", values.text); root.style.setProperty("--text", values.text); }
+      if (/^#[0-9a-fA-F]{6}$/.test(values.accent || "")) { root.style.setProperty("--pa-accent", values.accent); root.style.setProperty("--gold", values.accent); }
+    } catch (_) {}
+  }
+
   function boot() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     initMobileMenu();
     initNavigation();
+    loadGlobalAppearance();
     initEditorTools();
     initEditorPhotos();
     initMusic();

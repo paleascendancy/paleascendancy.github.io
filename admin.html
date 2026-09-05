@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=24">
+<link rel="stylesheet" href="style.css?v=25">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body class="admin-page">
@@ -23,14 +23,62 @@
 <section class="admin-hero"><p class="eyebrow">Área restrita</p><h1>Centro de <span>administração.</span></h1><p>Gerencie contas, aprove editores e designers, destaque profissionais e acompanhe o crescimento da Pale Ascendancy.</p></section>
 <section id="adminContent" hidden>
 <div class="admin-stats" id="adminStats"></div>
+
+<div class="admin-section-tabs" role="tablist" aria-label="Seções da administração">
+<button class="admin-tab active" type="button" data-admin-tab="overview">Visão geral</button>
+<button class="admin-tab" type="button" data-admin-tab="appearance">Aparência do site</button>
+</div>
+
+<section class="admin-tab-panel" id="adminTabOverview">
+
 <div class="admin-toolbar"><input id="adminSearch" type="search" placeholder="Pesquisar por nome, e-mail, especialidade ou atuação..."><button class="secondary-button" id="adminRefresh" type="button">Atualizar</button></div>
 <div class="admin-list" id="adminList"></div>
 <p class="auth-message" id="adminMessage" aria-live="polite"></p>
 </section>
-<section id="adminDenied" class="admin-denied" hidden><p class="eyebrow">Acesso bloqueado</p><h2>Esta área é somente para a administração.</h2><p>Entre com a conta autorizada da Pale Ascendancy.</p><a class="primary-button" href="login-admin.html">Entrar na administração</a></section>
+
+<section class="admin-tab-panel" id="adminTabAppearance" hidden>
+  <div class="appearance-head">
+    <div>
+      <p class="eyebrow">Identidade visual global</p>
+      <h2>Aparência do site</h2>
+      <p>Altere a paleta principal da Pale Ascendancy. As cores salvas aqui são aplicadas globalmente nas páginas que usam o sistema visual.</p>
+    </div>
+    <div class="appearance-actions">
+      <button class="secondary-button" id="appearanceReset" type="button">Restaurar padrão</button>
+      <button class="primary-button" id="appearanceSave" type="button">Salvar aparência</button>
+    </div>
+  </div>
+
+  <div class="appearance-grid">
+    <article class="appearance-card">
+      <div class="appearance-card-head"><div><h3>Paleta principal</h3><p>Defina as cores usadas pelos elementos de destaque.</p></div></div>
+      <div class="appearance-fields">
+        <label class="color-field"><span>Cor principal</span><div><input type="color" id="appearancePrimaryColor"><input type="text" id="appearancePrimary" maxlength="7" spellcheck="false"></div></label>
+        <label class="color-field"><span>Cor secundária</span><div><input type="color" id="appearanceSecondaryColor"><input type="text" id="appearanceSecondary" maxlength="7" spellcheck="false"></div></label>
+        <label class="color-field"><span>Fundo</span><div><input type="color" id="appearanceBackgroundColor"><input type="text" id="appearanceBackground" maxlength="7" spellcheck="false"></div></label>
+        <label class="color-field"><span>Textos</span><div><input type="color" id="appearanceTextColor"><input type="text" id="appearanceText" maxlength="7" spellcheck="false"></div></label>
+        <label class="color-field"><span>Destaques</span><div><input type="color" id="appearanceAccentColor"><input type="text" id="appearanceAccent" maxlength="7" spellcheck="false"></div></label>
+      </div>
+    </article>
+
+    <article class="appearance-card">
+      <div class="appearance-card-head"><div><h3>Prévia</h3><p>Veja a direção visual antes de publicar.</p></div></div>
+      <div class="appearance-preview" id="appearancePreview">
+        <div class="appearance-preview-glow"></div>
+        <span class="appearance-preview-kicker">PALE ASCENDANCY</span>
+        <strong>Uma identidade visual controlada pelo administrador.</strong>
+        <p>As cores abaixo simulam botões, textos e superfícies do site.</p>
+        <div class="appearance-preview-actions"><button type="button" id="appearancePreviewPrimary">Ação principal</button><button type="button" id="appearancePreviewSecondary">Ação secundária</button></div>
+      </div>
+      <div class="appearance-status" id="appearanceStatus" aria-live="polite"></div>
+    </article>
+  </div>
+</section>
+</section>
+<section id="adminDenied" class="admin-denied" hidden><p class="eyebrow">Acesso bloqueado</p><h2>Esta área é somente para a administração.</h2><p>Entre com a conta autorizada da Pale Ascendancy.</p><a class="primary-button" href="login.html">Entrar</a></section>
 </main>
 <footer><div class="footer-brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Centro administrativo.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
-<script src="script.js?v=24"></script>
+<script src="script.js?v=25"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL="https://fnyellunugdfesprmvzm.supabase.co";
@@ -53,9 +101,45 @@ function render(){
 }
 async function updateProfile(id,patch,control){control.disabled=true;const {error}=await client.from("profile").update(patch).eq("id",id);control.disabled=false;if(error){showMessage("Não foi possível salvar: "+error.message,"error");return false;}const p=profiles.find(x=>x.id===id);if(p)Object.assign(p,patch);render();showMessage("Alteração salva.","success");return true;}
 async function load(){showMessage("Carregando...");const {data,error}=await client.from("profile").select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,is_editor,is_designer,is_featured,created_at,professional_plan,plan_status,plan_expires_at").order("created_at",{ascending:false});if(error){showMessage("Não foi possível carregar os perfis: "+error.message,"error");return;}profiles=data||[];showMessage("");render();}
+const APPEARANCE_DEFAULTS={primary:"#9fe8ff",secondary:"#a894ff",background:"#09080d",text:"#f7f4fb",accent:"#e9cf91"};
+const appearanceFields={
+  primary:[document.getElementById("appearancePrimary"),document.getElementById("appearancePrimaryColor")],
+  secondary:[document.getElementById("appearanceSecondary"),document.getElementById("appearanceSecondaryColor")],
+  background:[document.getElementById("appearanceBackground"),document.getElementById("appearanceBackgroundColor")],
+  text:[document.getElementById("appearanceText"),document.getElementById("appearanceTextColor")],
+  accent:[document.getElementById("appearanceAccent"),document.getElementById("appearanceAccentColor")]
+};
+function normalizeHex(v,fallback){const x=String(v||"").trim();return /^#[0-9a-fA-F]{6}$/.test(x)?x.toLowerCase():fallback;}
+function setAppearanceForm(values){Object.entries(appearanceFields).forEach(([key,[text,color]])=>{const value=normalizeHex(values[key],APPEARANCE_DEFAULTS[key]);text.value=value;color.value=value;});updateAppearancePreview();}
+function getAppearanceForm(){return Object.fromEntries(Object.entries(appearanceFields).map(([key,[text]])=>[key,normalizeHex(text.value,APPEARANCE_DEFAULTS[key])]));}
+function applyAppearancePreview(values){const root=document.getElementById("appearancePreview");if(!root)return;root.style.setProperty("--preview-primary",values.primary);root.style.setProperty("--preview-secondary",values.secondary);root.style.setProperty("--preview-bg",values.background);root.style.setProperty("--preview-text",values.text);root.style.setProperty("--preview-accent",values.accent);}
+function updateAppearancePreview(){applyAppearancePreview(getAppearanceForm());}
+async function loadAppearance(){
+  setAppearanceForm(APPEARANCE_DEFAULTS);
+  const {data,error}=await client.from("site_settings").select("settings").eq("id",true).maybeSingle();
+  if(error){document.getElementById("appearanceStatus").textContent="A tabela de aparência ainda não está configurada no Supabase.";return;}
+  if(data?.settings)setAppearanceForm({...APPEARANCE_DEFAULTS,...data.settings});
+}
+async function saveAppearance(){
+  const button=document.getElementById("appearanceSave");const status=document.getElementById("appearanceStatus");const values=getAppearanceForm();
+  button.disabled=true;status.textContent="Salvando...";
+  const {error}=await client.rpc("save_site_appearance",{p_settings:values});
+  button.disabled=false;
+  if(error){status.textContent="Não foi possível salvar: "+error.message;status.className="appearance-status error";return;}
+  localStorage.setItem("paAppearance",JSON.stringify(values));
+  applyGlobalAppearance(values);status.textContent="Aparência salva com sucesso.";status.className="appearance-status success";
+}
+function applyGlobalAppearance(values){const root=document.documentElement;root.style.setProperty("--pa-primary",values.primary);root.style.setProperty("--pa-secondary",values.secondary);root.style.setProperty("--pa-background",values.background);root.style.setProperty("--pa-text",values.text);root.style.setProperty("--pa-accent",values.accent);}
+function initAppearance(){
+  document.querySelectorAll(".admin-tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".admin-tab-panel").forEach(x=>x.hidden=true);tab.classList.add("active");document.getElementById(tab.dataset.adminTab==="appearance"?"adminTabAppearance":"adminTabOverview").hidden=false;if(tab.dataset.adminTab==="appearance")loadAppearance();}));
+  Object.entries(appearanceFields).forEach(([_,[text,color]])=>{text.addEventListener("input",()=>{const v=normalizeHex(text.value,color.value);if(/^#[0-9a-fA-F]{6}$/.test(text.value.trim()))color.value=v;updateAppearancePreview();});color.addEventListener("input",()=>{text.value=color.value;updateAppearancePreview();});});
+  document.getElementById("appearanceReset").addEventListener("click",()=>{setAppearanceForm(APPEARANCE_DEFAULTS);document.getElementById("appearanceStatus").textContent="Prévia restaurada. Clique em Salvar aparência para publicar.";});
+  document.getElementById("appearanceSave").addEventListener("click",saveAppearance);
+  setAppearanceForm(APPEARANCE_DEFAULTS);
+}
 list.addEventListener("change",async e=>{const input=e.target;if(input.tagName==="INPUT"&&input.type==="checkbox"){const id=input.dataset.id,field=input.dataset.field,value=input.checked;const ok=await updateProfile(id,{[field]:value},input);if(!ok)input.checked=!value;return;}if(input.tagName==="SELECT"&&input.dataset.field==="professional_plan"){const id=input.dataset.id,plan=input.value;const patch={professional_plan:plan,plan_status:plan==="free"?"inactive":"active",portfolio_limit:planMap[plan].limit};await updateProfile(id,patch,input);}});
 search.addEventListener("input",render);document.getElementById("adminRefresh").addEventListener("click",load);
-(async()=>{try{const {data:sessionData}=await client.auth.getSession();if(!sessionData?.session?.user){denied.hidden=false;return;}const {data:isAdmin,error}=await client.rpc("is_admin");if(error||isAdmin!==true){denied.hidden=false;return;}content.hidden=false;await load();}catch(e){denied.hidden=false;}})();
+(async()=>{try{const {data:sessionData}=await client.auth.getSession();if(!sessionData?.session?.user){denied.hidden=false;return;}const {data:isAdmin,error}=await client.rpc("is_admin");if(error||isAdmin!==true){denied.hidden=false;return;}content.hidden=false;initAppearance();await load();}catch(e){denied.hidden=false;}})();
 </script>
 </body>
 </html>
