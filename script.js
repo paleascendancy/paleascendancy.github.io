@@ -5,17 +5,15 @@
   const SUPABASE_URL = "https://fnyellunugdfesprmvzm.supabase.co";
   const SUPABASE_KEY = "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
   const PLAYLIST = [
-    ["Meaningful Love", "music/01-meaningful-love.mp3"],
-    ["Better Days", "music/02-better-days.mp3"],
-    ["Chill Day", "music/03-chill-day.mp3"],
-    ["Canals", "music/04-canals.mp3"],
-    ["Tek It — Hoodtrap Remix", "music/05-tek-it-hoodtrap-remix.mp3"],
-    ["Star Shopping", "music/06-star-shopping.mp3"],
-    ["Earrings", "music/07-earrings.mp3"],
-    ["New Jeans Jersey Remix", "music/08-new-jeans-jersey-remix.mp3"],
-    ["Nuts — Instrumental Slowed", "music/09-nuts-instrumental-slowed.mp3"],
-    ["Sweater Weather — Instrumental", "music/10-sweater-weather-instrumental.mp3"],
-    ["Childish Gambino — Instrumental", "music/11-childish-gambino-instrumental.mp3"]
+    ["Meaningful Love", "audio/meaningful love (slowed instrumental)(MP3_160K).mp3"],
+    ["Canals", "audio/Joakim Karud - Canals(MP3_160K).mp3"],
+    ["Better Days", "audio/LAKEY INSPIRED - Better Days(MP3_160K).mp3"],
+    ["Chill Day", "audio/LAKEY INSPIRED - Chill Day(MP3_160K).mp3"],
+    ["New Jeans Jersey Remix SLOWED", "audio/New Jeans Jersey Remix SLOWED - (Jiandro x Dxrkaii)(MP3_160K).mp3"],
+    ["Nuts — Instrumental (Slowed)", "audio/Nuts Instrumental (Slowed)(MP3_160K).mp3"],
+    ["Sweater Weather — Instrumental", "audio/The Neighbourhood- Sweater Weather (Official Instrumental)(MP3_160K).mp3"],
+    ["Childish Gambino — Instrumental", "audio/les childish gambino instrumental _foryoupage _song _fyp _slowandreverb _instrumental _Mreso(MP3).mp3"],
+    ["Música", "audio/musica.mp3"]
   ];
   const CATEGORIES = [
     ["promo", "Promo"], ["trailer", "Trailers"], ["highlight", "Highlights"], ["motion", "Motion Design"],
@@ -166,8 +164,12 @@
     if (!s?.user) {
       area.innerHTML = `<a class="secondary-button account-login" href="login.html">Entrar</a><a class="primary-button account-register" href="cadastro.html">Criar conta</a>`;
       if (menu) {
-        menu.innerHTML = `<a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos profissionais</a><div class="mobile-account"><a href="login.html">Login comum</a><a href="login-profissional.html">Login profissional</a><a href="login-admin.html">Administração</a></div>`;
+        menu.innerHTML = `<a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos profissionais</a><div class="mobile-account"><a href="login.html">Login comum</a><a href="login-profissional.html">Login profissional</a></div>`;
       }
+      const manage = $("#editorManageBar");
+      const apply = $("#editorApplyBar");
+      if (manage) manage.hidden = true;
+      if (apply) apply.hidden = true;
       return;
     }
     const p = await profile(s.user.id);
@@ -193,7 +195,9 @@
       });
     }
     const manage = $("#editorManageBar");
+    const apply = $("#editorApplyBar");
     if (manage) manage.hidden = !professional;
+    if (apply) apply.hidden = !s?.user || professional;
   }
 
   async function applyTheme() {
