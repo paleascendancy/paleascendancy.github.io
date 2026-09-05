@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=26" rel="stylesheet"/>
+<link href="style.css?v=24" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -163,30 +163,20 @@
     </small>
 <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-<script src="script.js?v=26"></script>
+<script src="script.js?v=24"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function escapeHTMLLocal(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 (async function(){try{
- const sb=window.supabase.createClient("https://fnyellunugdfesprmvzm.supabase.co","sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
- const {data,error}=await sb.from("editor_directory").select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer,professional_plan,plan_status,plan_expires_at").order("is_featured",{ascending:false});
- if(error||!data?.length)return; const grid=document.getElementById("editorsGrid"); if(!grid)return;
- const ids=data.map(p=>p.id); let portfolio=[];
- if(ids.length){const r=await sb.from("editor_portfolio_items").select("id,editor_id,title,description,item_type,url,sort_order,created_at").in("editor_id",ids).order("sort_order",{ascending:true}).order("created_at",{ascending:false}); portfolio=r.data||[];}
- const map={promo:"Promo",trailer:"Trailers",highlight:"Highlights",motion:"Motion Design",anime:"Anime / Mangá",gaming:"Gaming",tiktok:"TikTok",reels:"Reels",amv:"AMV",thumbnail:"Thumbnails",youtube:"YouTube",design:"Design Gráfico",branding:"Branding",uiux:"UI / UX",illustration:"Ilustração","3d":"3D",outros:"Outros"};
- const placeholder=grid.querySelector(".editor-card-placeholder");
- data.forEach(p=>{if(grid.querySelector(`[data-profile-id="${p.id}"]`))return; const name=p.nome_artistico||"Profissional"; const items=portfolio.filter(x=>x.editor_id===p.id); const media=items.filter(x=>x.item_type!=="link").slice(0,5);
- const card=document.createElement("article"); card.className="editor-profile"; card.dataset.profileId=p.id; const cats=Array.isArray(p.editor_categories)?p.editor_categories:[]; const categoryTokens=[p.especialidade,...cats].filter(Boolean).map(String).join(" "); card.dataset.category=`${categoryTokens} ${p.is_featured?"featured":""}`.toLowerCase(); card.dataset.search=`${name} ${p.especialidade||""} ${cats.join(" ")} ${p.bio||""} ${p.editor_software||""}`.toLowerCase();
+ const sb=window.supabase.createClient("https://fnyellunugdfesprmvzm.supabase.co","sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK");
+ const {data,error}=await sb.from("editor_directory").select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer").order("is_featured",{ascending:false});
+ if(error||!data?.length)return;const grid=document.getElementById("editorsGrid");if(!grid)return;const placeholder=grid.querySelector(".editor-card-placeholder");
+ const map={trailer:"Trailers",highlight:"Highlights",motion:"Motion Design",anime:"Anime / Mangá",gaming:"Gaming",tiktok:"TikTok",reels:"Reels",amv:"AMV",thumbnail:"Thumbnails",youtube:"YouTube",promo:"Promo",design:"Design Gráfico",branding:"Branding",uiux:"UI / UX",illustration:"Ilustração","3d":"3D",outros:"Outros"};
+ data.forEach(p=>{if(grid.querySelector(`[data-profile-id="${p.id}"]`))return;const name=p.nome_artistico||"Profissional";const card=document.createElement("article");card.className="editor-profile";card.dataset.profileId=p.id;const cats=Array.isArray(p.editor_categories)?p.editor_categories:[];const categoryTokens=[p.especialidade,...cats].filter(Boolean).map(String).join(" ");card.dataset.category=`${categoryTokens} ${p.is_featured?"featured":""}`.toLowerCase();card.dataset.search=`${name} ${p.especialidade||""} ${cats.join(" ")} ${p.bio||""} ${p.editor_software||""}`.toLowerCase();
  const avatar=p.avatar_url?`<img class="editor-avatar editor-photo" src="${escapeHTMLLocal(p.avatar_url)}" alt="Foto de perfil de ${escapeHTMLLocal(name)}" loading="lazy">`:`<div class="editor-avatar placeholder-icon">${escapeHTMLLocal(name.charAt(0).toUpperCase())}</div>`;
- const reel=media.length?`<div class="editor-mini-reel" aria-label="Prévia do portfólio">${media.map((m,i)=>m.item_type==="image"?`<img src="${escapeHTMLLocal(m.url)}" alt="${escapeHTMLLocal(m.title)}" loading="lazy" class="${i===0?"active":""}">`:`<video src="${escapeHTMLLocal(m.url)}" muted playsinline preload="metadata" class="${i===0?"active":""}"></video>`).join("")}<span class="reel-count">${media.length} ${media.length===1?"trabalho":"trabalhos"}</span></div>`:`<div class="editor-mini-reel editor-mini-empty"><span>Portfólio em construção</span></div>`;
- const tags=[...new Set([p.especialidade,...cats].filter(Boolean))].slice(0,6).map(x=>`<span class="editor-tag">${escapeHTMLLocal(map[x]||x)}</span>`).join(""); const role=p.is_editor&&p.is_designer?"EDITOR + DESIGNER":p.is_designer?"DESIGNER":"EDITOR"; const availability=p.availability==="ocupado"?"Ocupado":p.availability==="sob_consulta"?"Sob consulta":"Disponível";
- card.innerHTML=`<div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${escapeHTMLLocal(p.is_featured?"Destaque":availability)}</div>${reel}<div class="editor-card-identity">${avatar}<div><h2>${escapeHTMLLocal(name)}</h2><div class="editor-role">${role}</div></div></div><p class="editor-description">${escapeHTMLLocal(p.bio||`${role.charAt(0)+role.slice(1).toLowerCase()} de ${map[p.especialidade]||p.especialidade||"criação"}.`)}</p><div class="editor-tags">${tags||'<span class="editor-tag">Portfólio</span>'}${p.is_featured?'<span class="editor-tag">Destaque</span>':''}</div><div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Ver perfil →</a>${p.tiktok?`<a class="card-link" href="${escapeHTMLLocal(p.tiktok)}" target="_blank" rel="noopener noreferrer">TikTok →</a>`:""}</div>`;
- if(placeholder)grid.insertBefore(card,placeholder);else grid.appendChild(card);
- });
- document.getElementById("searchInput")?.dispatchEvent(new Event("input"));
- // Mini-reel: cycle media previews without sound.
- document.querySelectorAll(".editor-mini-reel").forEach(reel=>{const media=[...reel.querySelectorAll("img,video")];if(!media.length)return;let i=0;const sync=()=>{media.forEach((m,n)=>{m.classList.toggle("active",n===i);if(m.tagName==="VIDEO"){if(n===i){m.currentTime=0;m.play().catch(()=>{});}else{m.pause();}}});};sync();if(media.length>1)setInterval(()=>{i=(i+1)%media.length;sync();},2600);});
+ const socials=[p.tiktok,p.instagram,p.youtube,p.portfolio_url].filter(Boolean);const tags=[...new Set([p.especialidade,...cats].filter(Boolean))].slice(0,6).map(x=>`<span class="editor-tag">${escapeHTMLLocal(map[x]||x)}</span>`).join("");const role=p.is_editor&&p.is_designer?"EDITOR + DESIGNER":p.is_designer?"DESIGNER":"EDITOR";const availability=p.availability==="ocupado"?"Ocupado":p.availability==="sob_consulta"?"Sob consulta":"Disponível";
+ card.innerHTML=`<div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${escapeHTMLLocal(p.is_featured?"Destaque":availability)}</div>${avatar}<h2>${escapeHTMLLocal(name)}</h2><div class="editor-role">${role}</div><p class="editor-description">${escapeHTMLLocal(p.bio||`${role.charAt(0)+role.slice(1).toLowerCase()} de ${map[p.especialidade]||p.especialidade||"criação"}.`)}</p><div class="editor-tags">${tags||'<span class="editor-tag">Portfólio</span>'}${p.is_featured?'<span class="editor-tag">Destaque</span>':''}</div><div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Ver perfil →</a>${socials[0]?`<a class="card-link" href="${escapeHTMLLocal(socials[0])}" target="_blank" rel="noopener noreferrer">Link →</a>`:""}</div>`;if(placeholder)grid.insertBefore(card,placeholder);else grid.appendChild(card);});document.getElementById("searchInput")?.dispatchEvent(new Event("input"));
 }catch(e){console.warn("Diretório profissional indisponível",e);}})();
 </script>
 </body>

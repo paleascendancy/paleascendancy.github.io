@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=26" rel="stylesheet"/>
+<link href="style.css?v=24" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -145,7 +145,7 @@
 <!-- ==================================================
      SCRIPT PRINCIPAL
 ================================================== -->
-<script src="script.js?v=26"></script>
+<script src="script.js?v=24"></script>
 <!-- ==================================================
      SUPABASE
 ================================================== -->
@@ -319,16 +319,16 @@ loginForm.addEventListener(
              * O usuário será levado para o perfil.
              */
 
-            setTimeout(async function() {
-                try {
-                    const { data: adminResult } = await supabaseClient.rpc("is_admin");
-                    if (adminResult === true) {
-                        window.location.replace("admin.html");
-                        return;
-                    }
-                } catch (_) {}
-                window.location.replace("perfil.html");
-            }, 250);
+            setTimeout(
+                function() {
+
+                    window.location.replace(
+                        "perfil.html"
+                    );
+
+                },
+                500
+            );
 
 
         } catch (error) {
@@ -418,14 +418,9 @@ async function checkExistingSession() {
                 "success"
             );
 
-            setTimeout(async () => {
-                try {
-                    const { data: adminResult } = await supabaseClient.rpc("is_admin");
-                    window.location.replace(adminResult === true ? "admin.html" : "perfil.html");
-                } catch (_) {
-                    window.location.replace("perfil.html");
-                }
-            }, 250);
+            setTimeout(() => {
+                window.location.replace("perfil.html");
+            }, 350);
         }
 
     } catch (error) {
@@ -448,9 +443,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN" && session?.user) {
 
         if (window.location.pathname.endsWith("login.html")) {
-            supabaseClient.rpc("is_admin").then(({ data }) => {
-                window.location.replace(data === true ? "admin.html" : "perfil.html");
-            }).catch(() => window.location.replace("perfil.html"));
+            window.location.replace("perfil.html");
         }
 
     }
