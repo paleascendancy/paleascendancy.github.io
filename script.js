@@ -1383,16 +1383,31 @@
 
   function authCategoryButtons(holder, selected = "") {
     if (!holder) return;
-    holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) => `<button type="button" class="category-choice ${selected === value ? "selected" : ""}" data-v="${value}">${label}</button>`).join("");
+    holder.setAttribute("role", "radiogroup");
+    holder.setAttribute("aria-label", "Área de interesse");
+    holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) => `
+      <button type="button" class="category-choice ${selected === value ? "selected" : ""}" data-v="${value}" role="radio" aria-checked="${selected === value ? "true" : "false"}">
+        <span class="category-choice-dot" aria-hidden="true"></span>
+        <span class="category-choice-label">${label}</span>
+      </button>`).join("");
+
     holder.onclick = (e) => {
-      const b = e.target.closest("button");
-      if (!b) return;
-      [...holder.querySelectorAll("button")].forEach(x => x.classList.remove("selected"));
-      b.classList.add("selected");
+      const b = e.target.closest("button.category-choice");
+      if (!b || !holder.contains(b)) return;
+      holder.querySelectorAll("button.category-choice").forEach(x => {
+        const active = x === b;
+        x.classList.toggle("selected", active);
+        x.setAttribute("aria-checked", active ? "true" : "false");
+      });
+      const hidden = holder.parentElement?.querySelector('input[type="hidden"]#especialidade');
+      if (hidden) hidden.value = b.dataset.v || "";
+      holder.dispatchEvent(new CustomEvent("categorychange", { detail: { value: b.dataset.v || "" } }));
     };
   }
 
-  function authSelectedCategory(holder) { return holder?.querySelector("button.selected")?.dataset.v || ""; }
+  function authSelectedCategory(holder) {
+    return holder?.querySelector("button.category-choice.selected")?.dataset.v || holder?.parentElement?.querySelector('input[type="hidden"]#especialidade')?.value || "";
+  }
 
   function authFileToDataURL(file) {
     return new Promise((resolve, reject) => {

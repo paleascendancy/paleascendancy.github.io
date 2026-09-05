@@ -996,6 +996,76 @@ html[data-surface-preset="minimal"] .bento-card,html[data-surface-preset="minima
   .admin-tab-panel{border-radius:18px!important}
 }
 
+/* V2.2 — premium auth category selector */
+.category-choice-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-top:2px;
+}
+.category-choice{
+  position:relative;
+  min-width:0;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid rgba(183,205,232,.13);
+  border-radius:13px;
+  background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015));
+  color:var(--muted);
+  text-align:left;
+  font:700 .70rem/1.25 var(--font-body);
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  appearance:none;
+  -webkit-appearance:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+.category-choice:hover{
+  transform:translateY(-1px);
+  color:var(--text);
+  border-color:rgba(98,217,245,.30);
+  background:linear-gradient(145deg,rgba(98,217,245,.075),rgba(154,140,255,.045));
+}
+.category-choice:focus-visible{
+  outline:0;
+  border-color:rgba(98,217,245,.58);
+  box-shadow:0 0 0 3px rgba(98,217,245,.10);
+}
+.category-choice.selected{
+  color:var(--text);
+  border-color:rgba(98,217,245,.52);
+  background:linear-gradient(135deg,rgba(98,217,245,.14),rgba(154,140,255,.10));
+  box-shadow:0 10px 28px rgba(98,217,245,.08),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.category-choice-dot{
+  width:10px;
+  height:10px;
+  min-width:10px;
+  border-radius:50%;
+  border:1px solid rgba(183,205,232,.30);
+  background:rgba(255,255,255,.025);
+  box-shadow:inset 0 0 0 2px rgba(5,9,20,.72);
+  transition:.16s ease;
+}
+.category-choice.selected .category-choice-dot{
+  border-color:var(--cyan);
+  background:var(--cyan);
+  box-shadow:0 0 0 2px rgba(98,217,245,.12),0 0 14px rgba(98,217,245,.28);
+}
+.category-choice-label{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media(max-width:520px){
+  .category-choice-grid{grid-template-columns:1fr;}
+  .category-choice{min-height:46px;padding:10px 11px;}
+}
+
 /* V2.1 — stable auth + premium public reels */
 .profile-view[hidden], #profileSpecialActions[hidden], .portfolio-public-empty[hidden]{display:none!important}
 .professional-reels{margin:48px 0 30px;padding-top:30px;border-top:1px solid var(--line)}
