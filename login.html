@@ -1,1 +1,111 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Entrar — Pale Ascendancy</title><meta name="description" content="Login da conta comum da Pale Ascendancy."><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="style.css?v=27"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script></head><body><header class="header"><a class="brand" href="index.html"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="36" height="36"><span>PALE ASCENDANCY</span></a><nav class="nav"><a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos</a></nav><button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span class="menu-icon"></span></button></header><div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos profissionais</a></div><main class="auth-page"><div class="hero-glow"></div><section class="auth-container"><div class="auth-heading"><p class="eyebrow">Conta comum</p><h1>Entrar na <span>Pale Ascendancy.</span></h1><p>Acesse seu perfil e os recursos da comunidade.</p></div><form class="auth-form" id="loginForm"><div class="form-row"><label>E-mail</label><input id="email" type="email" autocomplete="email" required></div><div class="form-row"><label>Senha</label><input id="senha" type="password" autocomplete="current-password" required></div><p id="loginMessage" class="auth-message" aria-live="polite"></p><button class="primary-button auth-submit" id="loginButton">Entrar</button></form><div class="auth-choice-grid"><a class="auth-choice" href="login-profissional.html"><strong>Área profissional</strong><span>Para editores e designers aprovados.</span></a><a class="auth-choice" href="login-admin.html"><strong>Administração</strong><span>Acesso privado para administradores.</span></a></div><div class="auth-footer"><p>Não possui conta?</p><a href="cadastro.html">Criar conta comum</a></div></section></main><footer><div class="footer-brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Editores, designers, contratantes e projetos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer><script src="script.js?v=27"></script><script>const c=window.PaleAscendancy.supabase();const f=document.getElementById("loginForm"),m=document.getElementById("loginMessage"),b=document.getElementById("loginButton");f.addEventListener("submit",async e=>{e.preventDefault();b.disabled=true;b.textContent="Entrando...";m.textContent="";const {data,error}=await c.auth.signInWithPassword({email:email.value.trim(),password:senha.value});if(error){m.textContent=error.message.includes("Invalid login")?"E-mail ou senha incorretos.":error.message.includes("not confirmed")?"Confirme seu e-mail antes de entrar.":"Não foi possível entrar.";m.className="auth-message error";b.disabled=false;b.textContent="Entrar";return}const isA=(await c.rpc("is_admin")).data===true;location.href=isA?"admin.html":"perfil.html"});</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Entrar — Pale Ascendancy</title>
+  <meta name="description" content="Login da conta comum da Pale Ascendancy.">
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="style.css?v=27">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="header">
+  <a class="brand" href="index.html"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="36" height="36"><span>PALE ASCENDANCY</span></a>
+  <nav class="nav"><a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos</a></nav>
+  <button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span class="menu-icon"></span></button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="editores.html">Editores &amp; Designers</a>
+  <a href="servicos.html">Serviços</a>
+  <a href="planos.html">Planos profissionais</a>
+</div>
+
+<main class="auth-page">
+  <div class="hero-glow"></div>
+  <section class="auth-container">
+    <div class="auth-heading">
+      <p class="eyebrow">Conta comum</p>
+      <h1>Entrar na <span>Pale Ascendancy.</span></h1>
+      <p>Acesse seu perfil e os recursos da comunidade.</p>
+    </div>
+    <form class="auth-form" id="loginForm">
+      <div class="form-row">
+        <label for="emailInput">E-mail</label>
+        <input id="emailInput" type="email" autocomplete="email" required>
+      </div>
+      <div class="form-row">
+        <label for="senhaInput">Senha</label>
+        <input id="senhaInput" type="password" autocomplete="current-password" required>
+      </div>
+      <p id="loginMessage" class="auth-message" aria-live="polite"></p>
+      <button class="primary-button auth-submit" id="loginButton" type="submit">Entrar</button>
+    </form>
+    <div class="auth-choice-grid">
+      <a class="auth-choice" href="login-profissional.html"><strong>Área profissional</strong><span>Para editores e designers aprovados.</span></a>
+      <a class="auth-choice" href="login-admin.html"><strong>Administração</strong><span>Acesso privado para administradores.</span></a>
+    </div>
+    <div class="auth-footer">
+      <p>Não possui conta?</p>
+      <a href="cadastro.html">Criar conta comum</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div>
+  <p>Editores, designers, contratantes e projetos em um só lugar.</p>
+  <small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small>
+  <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js?v=27"></script>
+<script>
+  const supabase = window.PaleAscendancy ? window.PaleAscendancy.supabase() : null;
+  const loginForm = document.getElementById("loginForm");
+  const loginMessage = document.getElementById("loginMessage");
+  const loginButton = document.getElementById("loginButton");
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const emailVal = document.getElementById("emailInput").value.trim();
+    const senhaVal = document.getElementById("senhaInput").value;
+
+    loginButton.disabled = true;
+    loginButton.textContent = "Entrando...";
+    loginMessage.textContent = "";
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: emailVal,
+        password: senhaVal
+      });
+
+      if (error) {
+        if (error.message.includes("Invalid login")) {
+          loginMessage.textContent = "E-mail ou senha incorretos.";
+        } else if (error.message.includes("not confirmed")) {
+          loginMessage.textContent = "Confirme seu e-mail antes de entrar.";
+        } else {
+          loginMessage.textContent = "Erro ao efetuar login. Verifique os dados.";
+        }
+        loginMessage.className = "auth-message error";
+        loginButton.disabled = false;
+        loginButton.textContent = "Entrar";
+        return;
+      }
+
+      const isAdmin = (await supabase.rpc("is_admin")).data === true;
+      location.href = isAdmin ? "admin.html" : "perfil.html";
+    } catch (err) {
+      loginMessage.textContent = "Ocorreu um erro inesperado. Tente novamente.";
+      loginMessage.className = "auth-message error";
+      loginButton.disabled = false;
+      loginButton.textContent = "Entrar";
+    }
+  });
+</script>
+</body>
+</html>
