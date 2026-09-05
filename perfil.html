@@ -1,2 +1,774 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Meu perfil — Pale Ascendancy</title><meta content="Perfil da sua conta Pale Ascendancy." name="description"/><link href="favicon.svg" rel="icon"/><link href="style.css?v=27.1" rel="stylesheet"/><script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938"></script></head><body><header class="header"><a class="brand" href="index.html"><img alt="Pale Ascendancy" height="36" src="assets/pale-ascendancy-logo.png" width="36"/><span>PALE ASCENDANCY</span></a><nav class="nav"><a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos</a></nav><button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button"><span class="menu-icon"></span></button></header><div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="editores.html">Editores &amp; Designers</a><a href="servicos.html">Serviços</a><a href="planos.html">Planos profissionais</a></div><main class="auth-page"><div class="hero-glow"></div><section class="profile-view" id="profileView"><div class="auth-heading"><p class="eyebrow">Minha conta</p><h1>Seu <span>perfil.</span></h1></div><div class="profile-photo-area"><div class="profile-photo" id="profilePhoto"><span id="profileInitial">?</span><img alt="Foto de perfil" hidden="" id="profileImage"/></div></div><div class="profile-info"><span class="profile-label">Nome</span><strong id="profileNome">Carregando...</strong></div><div class="profile-info"><span class="profile-label">Nome artístico</span><strong id="profileNomeArtistico">—</strong></div><div class="profile-info"><span class="profile-label">E-mail</span><strong id="profileEmail">—</strong></div><div class="profile-info"><span class="profile-label">Área de interesse</span><strong id="profileEspecialidade">—</strong></div><p class="auth-message" id="profileMessage"></p><div class="hero-buttons" hidden="" id="profileSpecialActions"><a class="primary-button" hidden="" href="admin.html" id="profileAdminButton">Administração</a><a class="secondary-button" hidden="" href="editor-painel.html" id="profileProfessionalButton">Área profissional</a></div><div class="hero-buttons"><a class="secondary-button" href="editar-perfil.html">Editar perfil</a><button class="secondary-button" id="logoutButton" type="button">Sair</button></div></section></main><footer><div class="footer-brand"><img alt="Pale Ascendancy" height="28" src="assets/pale-ascendancy-logo.png" width="28"/><span>PALE ASCENDANCY</span></div><p>Editores, designers, contratantes e projetos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer><script src="script.js?v=27.1"></script></body></html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Meu Perfil — Pale Ascendancy</title>
+<meta content="Visualize seu perfil de editor na Pale Ascendancy." name="description"/>
+<meta content="#050914" name="theme-color"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="style.css?v=26" rel="stylesheet"/>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="header">
+<a class="brand" href="index.html">
+<img alt="Pale Ascendancy" height="36" src="pale-ascendancy-logo.png" width="36"/>
+<span>
+            PALE ASCENDANCY
+        </span>
+</a>
+<nav aria-label="Navegação principal" class="nav">
+<a href="index.html">
+            Home
+        </a>
+<a href="index.html#sobre">
+            Sobre
+        </a>
+<a href="servicos.html">
+            Serviços
+        </a>
+<a href="editores.html">
+            Editores &amp; Designers
+        </a>
+<a href="index.html#contato">
+            Contato
+        </a>
+</nav>
+<a class="discord-button" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
+        Entrar no Discord
+    </a>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-button" id="menuButton" type="button">
+<span aria-hidden="true" class="menu-icon"></span>
+</button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+<a href="index.html">
+        Home
+    </a>
+<a href="index.html#sobre">
+        Sobre
+    </a>
+<a href="servicos.html">
+        Serviços
+    </a>
+<a href="editores.html">
+        Editores &amp; Designers
+    </a>
+<a href="index.html#contato">
+        Contato
+    </a>
+<a class="mobile-discord" href="https://discord.gg/H3mnq7Nfp" rel="noopener noreferrer" target="_blank">
+        Entrar no Discord
+    </a>
+</div>
+<main class="auth-page">
+<div aria-hidden="true" class="hero-glow"></div>
+<section class="auth-container">
+<div class="auth-heading">
+<p class="eyebrow">
+                Minha conta
+            </p>
+<h1>
+                Meu <span>perfil.</span>
+</h1>
+<p>
+                Visualize as informações da sua conta na Pale Ascendancy.
+            </p>
+</div>
+<!-- PERFIL -->
+<div class="profile-view">
+<!-- FOTO -->
+<div class="profile-photo-area">
+<div class="profile-photo" id="profilePhoto">
+<span id="profileInitial">
+                        ?
+                    </span>
+<img alt="Foto de perfil" hidden="" id="profileImage" src=""/>
+</div>
+</div>
+<!-- NOME ARTÍSTICO -->
+<div class="profile-info">
+<span class="profile-label">
+                    Nome artístico
+                </span>
+<strong id="profileNomeArtistico">
+                    Carregando...
+                </strong>
+</div>
+<!-- NOME -->
+<div class="profile-info">
+<span class="profile-label">
+                    Nome
+                </span>
+<strong id="profileNome">
+                    Carregando...
+                </strong>
+</div>
+<!-- E-MAIL -->
+<div class="profile-info">
+<span class="profile-label">
+                    E-mail
+                </span>
+<strong id="profileEmail">
+                    Carregando...
+                </strong>
+</div>
+<!-- ESPECIALIDADE -->
+<div class="profile-info">
+<span class="profile-label">
+                    Função
+                </span>
+<strong id="profileEspecialidade">
+                    Carregando...
+                </strong>
+</div>
+<!-- BIO -->
+<div class="profile-info">
+<span class="profile-label">
+                    Sobre
+                </span>
+<p id="profileBio">
+                    Nenhuma descrição adicionada.
+                </p>
+</div>
+<!-- REDES -->
+<div class="profile-socials" id="profileSocials">
+</div>
+<!-- MENSAGEM -->
+<p aria-live="polite" class="auth-message" id="profileMessage"></p>
+<!-- EDITAR -->
+<a class="primary-button auth-submit" href="editar-perfil.html">
+                Editar perfil
+            </a>
+<div id="profileSpecialActions" class="profile-special-actions" hidden>
+  <a class="secondary-button auth-submit" id="profileAdminButton" href="admin.html" hidden>Administração</a>
+  <a class="secondary-button auth-submit" id="profileProfessionalButton" href="editor-painel.html" hidden>Área profissional</a>
+</div>
+<!-- SAIR -->
+<button class="secondary-button auth-submit" id="logoutButton" type="button">
+                Sair da conta
+            </button>
+</div>
+</section>
+</main>
+<footer>
+<div class="footer-brand">
+<img alt="Pale Ascendancy" height="28" src="pale-ascendancy-logo.png" width="28"/>
+<span>
+            PALE ASCENDANCY
+        </span>
+</div>
+<p>
+        Editores, designers, contratantes e projetos em um só lugar.
+    </p>
+<small>
+        © 2026 Pale Ascendancy. Todos os direitos reservados.
+    </small>
+<div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
+</footer>
+<script src="script.js?v=26"></script>
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+/* ==================================================
+   SUPABASE
+================================================== */
+
+const SUPABASE_URL =
+    "https://fnyellunugdfesprmvzm.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+
+
+
+/* ==================================================
+   ELEMENTOS
+================================================== */
+
+const profileMessage =
+    document.getElementById(
+        "profileMessage"
+    );
+
+const logoutButton =
+    document.getElementById(
+        "logoutButton"
+    );
+
+const profileImage =
+    document.getElementById(
+        "profileImage"
+    );
+
+const profileInitial =
+    document.getElementById(
+        "profileInitial"
+    );
+
+
+
+/* ==================================================
+   MENSAGEM
+================================================== */
+
+function showMessage(text, type) {
+
+    profileMessage.textContent =
+        text;
+
+    profileMessage.className =
+        "auth-message";
+
+
+    if (type) {
+
+        profileMessage.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+
+/* ==================================================
+   FORMATAR ESPECIALIDADE
+================================================== */
+
+function formatSpecialty(value) {
+
+    const specialties = {
+
+        promo: "Promo",
+
+        trailer: "Trailers",
+
+        highlight: "Highlights",
+
+        motion: "Motion Design",
+
+        anime: "Anime / Mangá",
+
+        gaming: "Gaming",
+
+        outros: "Outros"
+
+    };
+
+
+    return specialties[value] || value || "Não informado";
+
+}
+
+
+
+/* ==================================================
+   INICIAL
+================================================== */
+
+function updateInitial(
+    nomeArtistico,
+    nome,
+    email
+) {
+
+    const text =
+        nomeArtistico ||
+        nome ||
+        email ||
+        "?";
+
+
+    profileInitial.textContent =
+        text
+            .charAt(0)
+            .toUpperCase();
+
+}
+
+
+
+/* ==================================================
+   CACHE VISUAL — mostra os dados conhecidos imediatamente
+================================================== */
+
+function showCachedProfile() {
+    try {
+        const cached = JSON.parse(
+            localStorage.getItem("pa_profile_cache") || "null"
+        );
+
+        if (!cached) return;
+
+        const name = cached.name || "";
+        const initial = document.getElementById("profileInitial");
+        const nameArtist = document.getElementById("profileNomeArtistico");
+
+        if (initial && name) {
+            initial.textContent = name.charAt(0).toUpperCase();
+        }
+
+        if (nameArtist && name) {
+            nameArtist.textContent = name;
+        }
+
+        if (cached.avatar_url) {
+            profileImage.src = cached.avatar_url;
+            profileImage.hidden = false;
+            if (initial) initial.hidden = true;
+        }
+    } catch (_) {}
+}
+
+showCachedProfile();
+
+async function setupProfileActions(profile) {
+    const actions = document.getElementById("profileSpecialActions");
+    const adminButton = document.getElementById("profileAdminButton");
+    const professionalButton = document.getElementById("profileProfessionalButton");
+    let isAdmin = false;
+    try {
+        const result = await supabaseClient.rpc("is_admin");
+        isAdmin = result.data === true && !result.error;
+    } catch (_) {}
+    if (!isAdmin) {
+        try {
+            const result = await supabaseClient.from("admin_users").select("user_id").eq("user_id", currentUser?.id || "").maybeSingle();
+            isAdmin = !!result.data && !result.error;
+        } catch (_) {}
+    }
+    const isProfessional = profile?.is_editor === true || profile?.is_designer === true;
+    if (adminButton) adminButton.hidden = !isAdmin;
+    if (professionalButton) professionalButton.hidden = !isProfessional;
+    if (actions) actions.hidden = !(isAdmin || isProfessional);
+}
+
+async function finishPendingSignupAvatar(user) {
+    try {
+        const pending = localStorage.getItem("pa_pending_signup_avatar");
+        if (!pending) return null;
+        const response = await fetch(pending);
+        const blob = await response.blob();
+        const path = `${user.id}/avatar-${Date.now()}.jpg`;
+        const { error } = await supabaseClient.storage.from("avatars").upload(path, blob, { upsert: false, contentType: "image/jpeg" });
+        if (error) throw error;
+        const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
+        await supabaseClient.from("profile").update({ avatar_url: data.publicUrl }).eq("id", user.id);
+        localStorage.removeItem("pa_pending_signup_avatar");
+        return data.publicUrl;
+    } catch (error) {
+        console.warn("Não foi possível concluir a foto pendente:", error);
+        return null;
+    }
+}
+
+/* ==================================================
+   CARREGAR PERFIL
+================================================== */
+
+async function loadProfile() {
+
+    try {
+
+
+        /* ==========================================
+           PEGAR USUÁRIO LOGADO
+        ========================================== */
+
+        const {
+            data: sessionData,
+            error: sessionError
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (sessionError) {
+
+            throw sessionError;
+
+        }
+
+
+        const session =
+            sessionData.session;
+
+
+        if (!session) {
+
+            window.location.replace(
+                "login.html"
+            );
+
+            return;
+
+        }
+
+
+        const user =
+            session.user;
+
+
+
+        /* ==========================================
+           BUSCAR PERFIL
+        ========================================== */
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+                .from("profile")
+                .select("nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,is_editor,is_designer,professional_plan,plan_status,plan_expires_at")
+                .eq("id", user.id)
+                .maybeSingle();
+
+
+        if (profileError) {
+
+            console.error(
+                "Erro ao buscar perfil:",
+                profileError
+            );
+
+            throw profileError;
+
+        }
+
+
+
+        const pendingAvatarUrl = await finishPendingSignupAvatar(user);
+        if (pendingAvatarUrl && profile) profile.avatar_url = pendingAvatarUrl;
+
+        /* ==========================================
+           SE NÃO EXISTIR PERFIL
+        ========================================== */
+
+        if (!profile) {
+            // Fallback for the instant immediately after email confirmation:
+            // the Auth metadata already contains the registration fields even
+            // if the database trigger is still propagating.
+            const meta = user.user_metadata || {};
+            const fallback = {
+                nome: meta.nome || "",
+                nome_artistico: meta.nome_artistico || "",
+                email: user.email || "",
+                especialidade: meta.especialidade || "",
+                bio: "",
+                avatar_url: "",
+                tiktok: "",
+                instagram: "",
+                youtube: "",
+                discord: ""
+            };
+
+            document.getElementById("profileNome").textContent = fallback.nome || "Não informado";
+            document.getElementById("profileNomeArtistico").textContent = fallback.nome_artistico || "Não informado";
+            document.getElementById("profileEmail").textContent = fallback.email || "Não informado";
+            document.getElementById("profileEspecialidade").textContent = formatSpecialty(fallback.especialidade);
+            document.getElementById("profileBio").textContent = "Seu perfil foi criado. Você pode adicionar uma descrição em Editar perfil.";
+            updateInitial(fallback.nome_artistico, fallback.nome, fallback.email);
+            showMessage("Conta confirmada. Seu perfil está pronto.", "success");
+            await setupProfileActions(fallback);
+            return;
+        }
+
+
+
+        /* ==========================================
+           PREENCHER PERFIL
+        ========================================== */
+
+        const nome =
+            profile.nome || "";
+
+        const nomeArtistico =
+            profile.nome_artistico || "";
+
+        const email =
+            profile.email ||
+            user.email ||
+            "";
+
+        const especialidade =
+            profile.especialidade || "";
+
+        let bio =
+            profile.bio || "";
+
+        // Loki faz parte da administração como desenvolvedor, não como editor.
+        if (nomeArtistico.trim().toLowerCase() === "loki") {
+            bio = "Desenvolvedor web e criador de servidores Discord. Um dos responsáveis pela criação e desenvolvimento da Pale Ascendancy.";
+        }
+
+
+
+        document
+            .getElementById(
+                "profileNome"
+            )
+            .textContent =
+                nome ||
+                "Não informado";
+
+
+        document
+            .getElementById(
+                "profileNomeArtistico"
+            )
+            .textContent =
+                nomeArtistico ||
+                "Não informado";
+
+
+        document
+            .getElementById(
+                "profileEmail"
+            )
+            .textContent =
+                email ||
+                "Não informado";
+
+
+        document
+            .getElementById(
+                "profileEspecialidade"
+            )
+            .textContent =
+                nomeArtistico.trim().toLowerCase() === "loki"
+                    ? "Desenvolvedor Web & Discord"
+                    : formatSpecialty(especialidade);
+
+
+        document
+            .getElementById(
+                "profileBio"
+            )
+            .textContent =
+                bio ||
+                "Nenhuma descrição adicionada.";
+
+
+
+        /* ==========================================
+           INICIAL
+        ========================================== */
+
+        updateInitial(
+            nomeArtistico,
+            nome,
+            email
+        );
+
+
+
+        /* ==========================================
+           FOTO
+        ========================================== */
+
+        if (profile.avatar_url) {
+
+            profileImage.src =
+                profile.avatar_url;
+
+            profileImage.hidden =
+                false;
+
+            profileInitial.hidden =
+                true;
+
+        } else {
+
+            profileImage.hidden =
+                true;
+
+            profileInitial.hidden =
+                false;
+
+        }
+
+
+
+        /* ==========================================
+           REDES SOCIAIS
+        ========================================== */
+
+        const socials =
+            document.getElementById(
+                "profileSocials"
+            );
+
+
+        socials.innerHTML = "";
+
+
+
+        if (profile.tiktok) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                profile.tiktok;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "TikTok";
+
+            socials.appendChild(
+                link
+            );
+
+        }
+
+
+        if (profile.instagram) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                profile.instagram;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "Instagram";
+
+            socials.appendChild(
+                link
+            );
+
+        }
+
+
+        if (profile.youtube) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                profile.youtube;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "YouTube";
+
+            socials.appendChild(
+                link
+            );
+
+        }
+
+
+        if (profile.discord) {
+
+            const discord =
+                document.createElement(
+                    "span"
+                );
+
+            discord.textContent =
+                "Discord: " +
+                profile.discord;
+
+            socials.appendChild(
+                discord
+            );
+
+        }
+
+        await setupProfileActions(profile);
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao carregar perfil:",
+            error
+        );
+
+
+        showMessage(
+            "Não foi possível carregar seu perfil: " +
+            (error.message || "erro desconhecido"),
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+logoutButton.addEventListener(
+    "click",
+    async function() {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.replace(
+            "login.html"
+        );
+
+    }
+);
+
+
+
+/* ==================================================
+   INICIAR
+================================================== */
+
+loadProfile();
+
+</script>
+</body>
+</html>
