@@ -277,13 +277,10 @@ function renderPermissionChecks(container,selected={}){if(!container)return;cont
 function permissionAllowed(key){const permissionKey=key==="permissions"?"admins":key;return adminAccess.is_owner===true||adminAccess.permissions?.[permissionKey]===true||adminAccess?.[permissionKey]===true;}
 function grantOwnerAccess(){adminAccess={is_owner:true,role:"admin",permissions:{users:true,professionals:true,applications:true,plans:true,appearance:true,content:true,admins:true}};}
 function applyAdminPermissionUI(){
-  document.querySelectorAll(".admin-tab").forEach(tab=>{
-    const key=tab.dataset.adminTab;
-    const allowed=key==="overview"||permissionAllowed(key);
-    tab.hidden=!allowed;
-  });
-  const active=document.querySelector(".admin-tab.active");
-  if(active?.hidden){document.querySelector('.admin-tab:not([hidden])')?.click();}
+  // As abas do painel permanecem sempre visíveis. A autorização de cada
+  // operação é aplicada dentro de cada seção/ação, evitando que uma falha
+  // momentânea de leitura de permissões faça as abas desaparecerem.
+  document.querySelectorAll(".admin-tab").forEach(tab=>{ tab.hidden=false; });
 }
 async function loadAdminPermissions(){
   if(!adminPermissionList)return;
