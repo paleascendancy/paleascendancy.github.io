@@ -1,16 +1,15 @@
-# PALE ASCENDANCY — V23
+# Pale Ascendancy V24
 
-Pacote atualizado do site.
+Versão com sistema de Editores + Designers, portfólio, acesso profissional separado, planos e correção do menu mobile.
 
-## Antes de publicar
-1. Envie os arquivos do pacote para o GitHub Pages/Vercel.
-2. No Supabase SQL Editor, execute **o conteúdo** de `PALE_ASCENDANCY_V23_EDITORS_PORTFOLIO.sql`.
-3. Não cole o nome do arquivo no SQL Editor; abra o arquivo e copie o SQL.
-4. Entre no painel `/admin.html` e aprove os usuários como Editor, Designer ou ambos.
+## Supabase
+Execute o conteúdo de `PALE_ASCENDANCY_V24_PLANS.sql` depois de ter executado as estruturas anteriores de profissionais/portfólio.
 
-## Área profissional
-- `/login-editor.html`
-- `/editor-painel.html`
-- `/editor-perfil.html?id=ID_DO_USUARIO`
+## Publicação
+Envie os arquivos da raiz para GitHub Pages/Vercel.
 
-A área profissional permite editar perfil, foto, especialidades, redes e portfólio.
+## Acessos
+- Conta comum: `login.html`
+- Profissional: `login-profissional.html`
+- Administração: `admin.html`
+- Planos: `planos.html`

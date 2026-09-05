@@ -9,16 +9,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=23">
+<link rel="stylesheet" href="style.css?v=24">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body class="admin-page">
 <header class="header">
 <a class="brand" href="index.html"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="36" height="36"><span>PALE ASCENDANCY</span></a>
-<nav class="nav" aria-label="Navegação principal"><a href="index.html">Home</a><a href="index.html#sobre">Sobre</a><a href="servicos.html">Serviços</a><a href="editores.html">Editores</a><a href="index.html#contato">Contato</a></nav>
+<nav class="nav" aria-label="Navegação principal"><a href="index.html">Home</a><a href="index.html#sobre">Sobre</a><a href="servicos.html">Serviços</a><a href="editores.html">Editores &amp; Designers</a><a href="planos.html">Planos</a><a href="index.html#contato">Contato</a></nav>
 <button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span class="menu-icon"></span></button>
 </header>
-<div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="servicos.html">Serviços</a><a href="editores.html">Editores</a></div>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="servicos.html">Serviços</a><a href="editores.html">Editores &amp; Designers</a><a href="planos.html">Planos profissionais</a></div>
 <main class="admin-shell">
 <section class="admin-hero"><p class="eyebrow">Área restrita</p><h1>Centro de <span>administração.</span></h1><p>Gerencie contas, aprove editores e designers, destaque profissionais e acompanhe o crescimento da Pale Ascendancy.</p></section>
 <section id="adminContent" hidden>
@@ -30,7 +30,7 @@
 <section id="adminDenied" class="admin-denied" hidden><p class="eyebrow">Acesso bloqueado</p><h2>Esta área é somente para a administração.</h2><p>Entre com a conta autorizada da Pale Ascendancy.</p><a class="primary-button" href="login.html">Entrar</a></section>
 </main>
 <footer><div class="footer-brand"><img src="pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Centro administrativo.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
-<script src="script.js?v=23"></script>
+<script src="script.js?v=24"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL="https://fnyellunugdfesprmvzm.supabase.co";
@@ -38,19 +38,22 @@ const SUPABASE_KEY="sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
 const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const content=document.getElementById("adminContent"),denied=document.getElementById("adminDenied"),list=document.getElementById("adminList"),stats=document.getElementById("adminStats"),search=document.getElementById("adminSearch"),message=document.getElementById("adminMessage");
 let profiles=[];
+const planMap={free:{label:"Gratuito — 2 espaços",limit:2},premium:{label:"Premium — 5 espaços · R$ 7/mês",limit:5},pro:{label:"Pro — 10 espaços · R$ 20/mês",limit:10},studio:{label:"Studio — 20 espaços · R$ 35/mês",limit:20},elite:{label:"Elite — 40 espaços · R$ 59/mês",limit:40}};
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 function specialty(v){const m={trailer:"Trailers",highlight:"Highlights",motion:"Motion Design",anime:"Anime / Mangá",gaming:"Gaming",tiktok:"TikTok",reels:"Reels",amv:"AMV",thumbnail:"Thumbnails",youtube:"YouTube",promo:"Promo",design:"Design Gráfico",branding:"Branding",uiux:"UI / UX",illustration:"Ilustração","3d":"3D",outros:"Outros"};return m[v]||v||"Não informado";}
 function roleLabel(p){return p.is_editor&&p.is_designer?"Editor + Designer":p.is_designer?"Designer":p.is_editor?"Editor":"Membro";}
 function showMessage(t,type=""){message.textContent=t;message.className="auth-message "+type;}
+function planOptions(p){return Object.entries(planMap).map(([key,val])=>`<option value="${key}" ${String(p.professional_plan||"free")===key?"selected":""}>${val.label}</option>`).join("");}
 function render(){
  const term=search.value.trim().toLowerCase();
- const rows=profiles.filter(p=>(`${p.nome||""} ${p.nome_artistico||""} ${p.email||""} ${p.especialidade||""} ${roleLabel(p)}`).toLowerCase().includes(term));
+ const rows=profiles.filter(p=>(`${p.nome||""} ${p.nome_artistico||""} ${p.email||""} ${p.especialidade||""} ${roleLabel(p)} ${p.professional_plan||"free"}`).toLowerCase().includes(term));
  stats.innerHTML=`<div><strong>${profiles.length}</strong><span>Contas</span></div><div><strong>${profiles.filter(p=>p.is_editor).length}</strong><span>Editores</span></div><div><strong>${profiles.filter(p=>p.is_designer).length}</strong><span>Designers</span></div><div><strong>${profiles.filter(p=>p.is_featured).length}</strong><span>Destacados</span></div>`;
  if(!rows.length){list.innerHTML='<div class="admin-empty">Nenhum perfil encontrado.</div>';return;}
- list.innerHTML=rows.map(p=>`<article class="admin-user"><div class="admin-user-main"><div class="admin-avatar">${p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:esc((p.nome_artistico||p.nome||p.email||"U").charAt(0).toUpperCase())}</div><div><h2>${esc(p.nome_artistico||p.nome||"Sem nome")}</h2><p>${esc(p.email||"")}</p><small>${esc(roleLabel(p))} · ${esc(specialty(p.especialidade))}</small></div></div><div class="admin-actions"><label><input type="checkbox" data-id="${p.id}" data-field="is_editor" ${p.is_editor?"checked":""}> Editor</label><label><input type="checkbox" data-id="${p.id}" data-field="is_designer" ${p.is_designer?"checked":""}> Designer</label><label><input type="checkbox" data-id="${p.id}" data-field="is_featured" ${p.is_featured?"checked":""}> Destaque</label><a href="perfil.html" class="secondary-button">Perfil</a></div></article>`).join("");
+ list.innerHTML=rows.map(p=>`<article class="admin-user"><div class="admin-user-main"><div class="admin-avatar">${p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="">`:esc((p.nome_artistico||p.nome||p.email||"U").charAt(0).toUpperCase())}</div><div><h2>${esc(p.nome_artistico||p.nome||"Sem nome")}</h2><p>${esc(p.email||"")}</p><small>${esc(roleLabel(p))} · ${esc(specialty(p.especialidade))} · ${esc(planMap[p.professional_plan||"free"]?.label||"Plano gratuito")}</small></div></div><div class="admin-actions"><label><input type="checkbox" data-id="${p.id}" data-field="is_editor" ${p.is_editor?"checked":""}> Editor</label><label><input type="checkbox" data-id="${p.id}" data-field="is_designer" ${p.is_designer?"checked":""}> Designer</label><label><input type="checkbox" data-id="${p.id}" data-field="is_featured" ${p.is_featured?"checked":""}> Destaque</label><label class="admin-plan-field"><span>Plano</span><select data-id="${p.id}" data-field="professional_plan">${planOptions(p)}</select></label></div></article>`).join("");
 }
-async function load(){showMessage("Carregando...");const {data,error}=await client.from("profile").select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,is_editor,is_designer,is_featured,created_at").order("created_at",{ascending:false});if(error){showMessage("Não foi possível carregar os perfis: "+error.message,"error");return;}profiles=data||[];showMessage("");render();}
-list.addEventListener("change",async e=>{const input=e.target;if(input.tagName!=="INPUT"||input.type!=="checkbox")return;const id=input.dataset.id,field=input.dataset.field,value=input.checked;input.disabled=true;const patch={};patch[field]=value;const {error}=await client.from("profile").update(patch).eq("id",id);input.disabled=false;if(error){input.checked=!value;showMessage("Não foi possível salvar: "+error.message,"error");return;}const p=profiles.find(x=>x.id===id);if(p)p[field]=value;render();showMessage("Alteração salva.","success");});
+async function updateProfile(id,patch,control){control.disabled=true;const {error}=await client.from("profile").update(patch).eq("id",id);control.disabled=false;if(error){showMessage("Não foi possível salvar: "+error.message,"error");return false;}const p=profiles.find(x=>x.id===id);if(p)Object.assign(p,patch);render();showMessage("Alteração salva.","success");return true;}
+async function load(){showMessage("Carregando...");const {data,error}=await client.from("profile").select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,is_editor,is_designer,is_featured,created_at,professional_plan,plan_status,plan_expires_at").order("created_at",{ascending:false});if(error){showMessage("Não foi possível carregar os perfis: "+error.message,"error");return;}profiles=data||[];showMessage("");render();}
+list.addEventListener("change",async e=>{const input=e.target;if(input.tagName==="INPUT"&&input.type==="checkbox"){const id=input.dataset.id,field=input.dataset.field,value=input.checked;const ok=await updateProfile(id,{[field]:value},input);if(!ok)input.checked=!value;return;}if(input.tagName==="SELECT"&&input.dataset.field==="professional_plan"){const id=input.dataset.id,plan=input.value;const patch={professional_plan:plan,plan_status:plan==="free"?"inactive":"active",portfolio_limit:planMap[plan].limit};await updateProfile(id,patch,input);}});
 search.addEventListener("input",render);document.getElementById("adminRefresh").addEventListener("click",load);
 (async()=>{try{const {data:sessionData}=await client.auth.getSession();if(!sessionData?.session?.user){denied.hidden=false;return;}const {data:isAdmin,error}=await client.rpc("is_admin");if(error||isAdmin!==true){denied.hidden=false;return;}content.hidden=false;await load();}catch(e){denied.hidden=false;}})();
 </script>
