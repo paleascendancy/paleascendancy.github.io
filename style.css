@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&family=Sora:wght@400;500;600;700;800&family=Syne:wght@500;600;700;800&display=swap');
 :root{
   --bg:#050914;
   --bg-deep:#030711;
@@ -954,3 +955,43 @@ body{
 .professional-discovery{margin-top:42px}.professional-discovery-heading{margin-bottom:16px}.professional-horizontal{display:flex!important;grid-template-columns:none!important;gap:13px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 14px;scroll-snap-type:x mandatory;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.professional-horizontal .editor-profile{flex:0 0 min(300px,82vw);scroll-snap-align:start}.professional-horizontal .professional-loading{min-width:100%;padding:24px;border:1px dashed var(--line);border-radius:18px;color:var(--muted);text-align:center}.professional-reels{margin-top:40px}.portfolio-reels{display:flex;gap:13px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 15px;scroll-snap-type:x mandatory;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.portfolio-reel-card{flex:0 0 min(290px,82vw);scroll-snap-align:start;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:rgba(10,9,15,.92);box-shadow:0 18px 55px rgba(0,0,0,.25)}.portfolio-reel-visual{position:relative;aspect-ratio:9/14;overflow:hidden;background:#05050a}.portfolio-reel-media{position:absolute;inset:0;display:block}.portfolio-reel-media img,.portfolio-reel-media video{width:100%;height:100%;object-fit:cover;display:block}.portfolio-reel-link{height:100%;display:grid;place-items:center;align-content:center;gap:8px;padding:20px;text-align:center;color:var(--text)}.portfolio-reel-link span{font-size:2.4rem;color:var(--cyan)}.portfolio-reel-link strong{font:900 1rem "Nunito",sans-serif}.portfolio-reel-link small{max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:.55rem}.portfolio-reel-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78),transparent 48%,rgba(0,0,0,.12));pointer-events:none}.portfolio-reel-overlay{position:absolute;left:14px;right:14px;bottom:14px;display:grid;gap:3px;color:#fff;pointer-events:none}.portfolio-reel-overlay span{font-size:.58rem;opacity:.78}.portfolio-reel-overlay strong{font:900 1rem/1.15 "Nunito",sans-serif}.portfolio-reel-copy{padding:12px 14px 15px}.portfolio-reel-copy strong,.portfolio-reel-copy span{display:block}.portfolio-reel-copy strong{font:900 .82rem "Nunito",sans-serif}.portfolio-reel-copy span{margin-top:3px;color:var(--muted);font-size:.58rem}.portfolio-reel-copy p{margin:7px 0 0;color:var(--muted);font-size:.62rem;line-height:1.45}.portfolio-reels-empty{width:100%;padding:25px;border:1px dashed var(--line);border-radius:17px;color:var(--muted);text-align:center;font-size:.7rem}
 @media(max-width:700px){.appearance-grid{grid-template-columns:1fr}.palette-grid{grid-template-columns:1fr 1fr}.appearance-actions>*{flex:1;min-width:140px}.appearance-card{padding:18px}.professional-horizontal .editor-profile,.portfolio-reel-card{flex-basis:min(278px,84vw)}}
 @media(max-width:430px){.palette-grid{grid-template-columns:1fr}.appearance-actions{display:grid}.appearance-actions>*{width:100%}}
+
+/* V27 — identidade visual completa: tipografia, superfícies e componentes */
+html{
+  --font-display:var(--pa-font-display,"Space Grotesk",system-ui,sans-serif);
+  --font-body:var(--pa-font-body,"Manrope",system-ui,sans-serif);
+  --font-mono:var(--pa-font-mono,"JetBrains Mono",monospace);
+  --card-bg:var(--pa-card-bg,rgba(12,10,17,.86));
+  --card-border:var(--pa-card-border,var(--line));
+  --card-shadow:var(--pa-card-shadow,0 18px 60px rgba(0,0,0,.22));
+  --card-hover:var(--pa-card-hover,0 24px 70px rgba(0,0,0,.34));
+  --radius:var(--pa-radius,22px);
+}
+body,button,input,select,textarea{font-family:var(--font-body)}
+h1,h2,h3,h4,h5,h6,.brand,.section-heading h2,.hero-content h1,.editors-heading h1,.plans-hero h1,.admin-hero h1,.admin-user h2,.admin-plan-card h3,.plan-card h2,.portfolio-reel-overlay strong,.portfolio-reel-copy strong{font-family:var(--font-display)}
+code,pre,.mono{font-family:var(--font-mono)}
+
+.bento-card,.service-preview,.editor-profile,.auth-form,.profile-view,.join-card,.contact-panel,.editors-cta,.showcase-card,.legal-card,.admin-user,.admin-stats>div,.plan-card,.appearance-card,.admin-tab-panel,.portfolio-reel-card,.portfolio-public-item,.portfolio-add-form,.portfolio-manager-item,.plans-note{
+  background:var(--card-bg)!important;
+  border-color:var(--card-border)!important;
+  box-shadow:var(--card-shadow)!important;
+  border-radius:var(--radius)!important;
+}
+.editor-profile:hover,.showcase-card:hover,.portfolio-reel-card:hover,.plan-card:hover{box-shadow:var(--card-hover)!important}
+.primary-button{color:var(--pa-button-text,#061018)}
+.admin-section-tabs{box-shadow:var(--card-shadow)!important}
+.admin-tab-panel{min-width:0}
+
+/* Surface presets can also tune media and nested boxes consistently. */
+html[data-surface-preset="glass"] .bento-card,html[data-surface-preset="glass"] .service-preview,html[data-surface-preset="glass"] .editor-profile,html[data-surface-preset="glass"] .plan-card,html[data-surface-preset="glass"] .admin-user{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+html[data-surface-preset="minimal"] .bento-card,html[data-surface-preset="minimal"] .service-preview,html[data-surface-preset="minimal"] .editor-profile,html[data-surface-preset="minimal"] .plan-card{box-shadow:none!important}
+
+/* Six coherent text tones across headings, body copy, forms and labels. */
+.section-heading p:last-child,.hero-lead,.editor-description,.plan-card>p:not(.eyebrow),.auth-heading>p:last-child,.join-card p,.contact-owner p,.portfolio-public-copy p,.portfolio-reel-copy p{color:var(--pa-text-soft,#ddd6e8)}
+.search-box,input,select,textarea{color:var(--pa-text,#f7f4fb);border-color:var(--line)}
+.search-box:focus,input:focus,select:focus,textarea:focus{border-color:color-mix(in srgb,var(--pa-primary,#9fe8ff) 58%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--pa-primary,#9fe8ff) 10%,transparent)}
+
+@media(max-width:700px){
+  .admin-section-tabs{margin-inline:-2px;padding:6px}
+  .admin-tab-panel{border-radius:18px!important}
+}

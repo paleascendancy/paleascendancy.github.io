@@ -753,7 +753,36 @@
     root.style.setProperty("--pa-text-soft", textSoft);
     root.style.setProperty("--pa-line", line);
     root.style.setProperty("--pa-line-strong", lineStrong);
+    const surfaces = {
+      obsidian:{radius:"22px",card_bg:"rgba(12,10,17,.86)",card_border:"rgba(255,255,255,.11)",card_shadow:"0 18px 60px rgba(0,0,0,.22)",card_hover:"0 24px 70px rgba(0,0,0,.34)"},
+      glass:{radius:"24px",card_bg:"rgba(255,255,255,.045)",card_border:"rgba(255,255,255,.16)",card_shadow:"0 22px 70px rgba(0,0,0,.28)",card_hover:"0 28px 90px rgba(0,0,0,.38)"},
+      soft:{radius:"18px",card_bg:"rgba(255,255,255,.028)",card_border:"rgba(255,255,255,.08)",card_shadow:"0 12px 38px rgba(0,0,0,.18)",card_hover:"0 18px 50px rgba(0,0,0,.25)"},
+      neon:{radius:"20px",card_bg:"rgba(7,12,24,.82)",card_border:"color-mix(in srgb,var(--pa-primary,#9fe8ff) 28%,transparent)",card_shadow:"0 20px 70px color-mix(in srgb,var(--pa-primary,#9fe8ff) 10%,transparent)",card_hover:"0 26px 90px color-mix(in srgb,var(--pa-primary,#9fe8ff) 16%,transparent)"},
+      editorial:{radius:"14px",card_bg:"rgba(20,17,28,.92)",card_border:"rgba(235,225,250,.14)",card_shadow:"0 16px 48px rgba(0,0,0,.22)",card_hover:"0 20px 60px rgba(0,0,0,.3)"},
+      minimal:{radius:"10px",card_bg:"rgba(255,255,255,.012)",card_border:"rgba(255,255,255,.06)",card_shadow:"none",card_hover:"0 10px 30px rgba(0,0,0,.16)"}
+    };
+    const fonts = {
+      modern:{display:'"Space Grotesk",system-ui,sans-serif',body:'"Manrope",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      editorial:{display:'"Sora",system-ui,sans-serif',body:'"DM Sans",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      clean:{display:'"Inter",system-ui,sans-serif',body:'"DM Sans",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      neo:{display:'"Syne",system-ui,sans-serif',body:'"Inter",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      elegant:{display:'"Playfair Display",Georgia,serif',body:'"Manrope",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'},
+      technical:{display:'"IBM Plex Sans",system-ui,sans-serif',body:'"IBM Plex Sans",system-ui,sans-serif',mono:'"JetBrains Mono",monospace'}
+    };
+    const surface = surfaces[settings.surface_preset] || surfaces.obsidian;
+    const font = fonts[settings.font_preset] || fonts.modern;
+    root.style.setProperty("--pa-card-bg", settings.card_bg || surface.card_bg);
+    root.style.setProperty("--pa-card-border", settings.card_border || surface.card_border);
+    root.style.setProperty("--pa-card-shadow", settings.card_shadow || surface.card_shadow);
+    root.style.setProperty("--pa-card-hover", settings.card_hover || surface.card_hover);
+    root.style.setProperty("--pa-radius", settings.radius || surface.radius);
+    root.style.setProperty("--pa-font-display", settings.font_display || font.display);
+    root.style.setProperty("--pa-font-body", settings.font_body || font.body);
+    root.style.setProperty("--pa-font-mono", settings.font_mono || font.mono);
+    root.style.setProperty("--pa-button-text", settings.button_text || "#061018");
     root.dataset.buttonMode = ["gradient", "solid", "outline", "glass", "minimal"].includes(settings.button_mode) ? settings.button_mode : "gradient";
+    root.dataset.surfacePreset = settings.surface_preset || "obsidian";
+    root.dataset.fontPreset = settings.font_preset || "modern";
     try { localStorage.setItem("paAppearance", JSON.stringify({ ...settings, primary, secondary, background, text, accent, muted, text_soft: textSoft, line, line_strong: lineStrong })); } catch (_) {}
   }
 
