@@ -275,13 +275,51 @@ const PERMISSION_DEFS=[
 ];
 function renderPermissionChecks(container,selected={}){if(!container)return;container.innerHTML=PERMISSION_DEFS.map(([key,label])=>`<label class="admin-permission-check"><input type="checkbox" data-permission="${key}" ${selected[key]!==false?"checked":""}><span>${label}</span></label>`).join("");}
 function permissionAllowed(key){return adminAccess.is_owner===true||adminAccess.permissions?.[key]===true;}
-function applyAdminPermissionUI(){document.querySelectorAll(".admin-tab").forEach(tab=>{const key=tab.dataset.adminTab;const allowed=key==="overview"||permissionAllowed(key);tab.hidden=!allowed;});const active=document.querySelector(".admin-tab.active");if(active?.hidden){document.querySelector('.admin-tab:not([hidden])')?.click();}}
+function grantOwnerAccess(){adminAccess={is_owner:true,role:"admin",permissions:{users:true,professionals:true,applications:true,plans:true,appearance:true,content:true,admins:true}};}
+function applyAdminPermissionUI(){
+  document.querySelectorAll(".admin-tab").forEach(tab=>{
+    const key=tab.dataset.adminTab;
+    const allowed=key==="overview"||permissionAllowed(key);
+    tab.hidden=!allowed;
+  });
+  const active=document.querySelector(".admin-tab.active");
+  if(active?.hidden){document.querySelector('.admin-tab:not([hidden])')?.click();}
+}
 async function loadAdminPermissions(){
   if(!adminPermissionList)return;
   adminPermissionNote.textContent="Carregando permissões...";
+
+  // Primeiro, usa a fonte de verdade mais simples: admin_users.
+  // Se a conta atual for is_owner=true, ela recebe acesso total sem depender
+  // de role ou de uma RPC adicional. Isso mantém o administrador principal
+  // funcional mesmo durante uma migração incompleta das permissões.
+  try{
+    const {data:sessionData}=await client.auth.getSession();
+    const currentUser=sessionData?.session?.user;
+    if(currentUser?.id){
+      const {data:ownerRow}=await client.from("admin_users").select("user_id,is_owner,permissions").eq("user_id",currentUser.id).maybeSingle();
+      if(ownerRow?.is_owner===true){
+        grantOwnerAccess();
+        adminPermissionNote.textContent="Você é o administrador principal e possui acesso total.";
+        renderPermissionChecks(newAdminPermissions,{});
+        applyAdminPermissionUI();
+      }
+    }
+  }catch(e){}
+
+  // A RPC continua sendo usada para administradores secundários.
   const {data,error}=await client.rpc("get_admin_access");
-  if(error){adminPermissionNote.textContent="Execute o SQL de permissões desta versão no Supabase para ativar este recurso.";return;}
-  adminAccess=data||adminAccess;
+  if(!error&&data){
+    // Nunca deixa uma resposta secundária retirar o acesso total do owner.
+    if(adminAccess.is_owner===true){grantOwnerAccess();}
+    else{adminAccess=data;}
+  }else if(adminAccess.is_owner!==true){
+    // Falha na RPC não deve esconder o painel do administrador principal.
+    adminPermissionNote.textContent="Não foi possível carregar as permissões detalhadas. O painel principal continua disponível.";
+    applyAdminPermissionUI();
+    return;
+  }
+  adminPermissionNote.textContent=adminAccess.is_owner?"Você é o administrador principal e possui acesso total.":`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
   adminPermissionNote.textContent=adminAccess.is_owner?"Você é o administrador principal e possui acesso total.":`Seu nível: ${adminAccess.role||"admin"}. As permissões abaixo controlam seu acesso.`;
   renderPermissionChecks(newAdminPermissions,{});
   const {data:rows,error:listError}=await client.rpc("list_admin_users");
