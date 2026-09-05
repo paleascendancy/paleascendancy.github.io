@@ -893,3 +893,14 @@ h3 span,
 .plan-badge-public{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:5px 8px;border:1px solid rgba(159,232,255,.2);border-radius:8px;color:var(--cyan);background:rgba(159,232,255,.055);font:800 .52rem "Manrope",sans-serif;letter-spacing:.08em;text-transform:uppercase}
 @media(max-width:900px){.plans-grid{grid-template-columns:1fr 1fr}.plans-note-grid{grid-template-columns:1fr 1fr}.professional-plan-card{grid-template-columns:1fr auto}.professional-plan-card .secondary-button{grid-column:1/-1;width:100%;text-align:center}}
 @media(max-width:700px){.plans-page{padding-top:44px}.plans-grid{grid-template-columns:1fr}.plans-note-grid{grid-template-columns:1fr}.plan-card{padding:19px}.professional-plan-card{grid-template-columns:1fr}.plan-usage{justify-items:start}.admin-plan-field select{max-width:100%;width:100%}}
+
+/* V25 — cadastro: seleção de categoria confiável no celular */
+.category-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:7px}
+.category-choice{min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);color:var(--text-soft);font:700 .72rem "Manrope",sans-serif;text-align:left;cursor:pointer;touch-action:manipulation}
+.category-choice:hover,.category-choice.selected{border-color:rgba(159,232,255,.48);background:linear-gradient(135deg,rgba(159,232,255,.11),rgba(168,148,255,.10));color:var(--text);box-shadow:0 0 0 2px rgba(159,232,255,.04)}
+.signup-avatar-picker{display:grid;gap:9px;justify-items:start}
+.signup-avatar-picker .profile-photo{margin:0}
+@media(max-width:650px){.category-choice-grid{grid-template-columns:1fr 1fr}.category-choice{min-height:50px}}
+
+/* V25 — ações especiais da conta */
+.profile-special-actions{display:grid;gap:8px;margin-top:8px}.profile-special-actions[hidden]{display:none!important}.profile-special-actions .auth-submit{width:100%;text-align:center}

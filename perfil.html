@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=24" rel="stylesheet"/>
+<link href="style.css?v=25" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -145,6 +145,10 @@
 <a class="primary-button auth-submit" href="editar-perfil.html">
                 Editar perfil
             </a>
+<div id="profileSpecialActions" class="profile-special-actions" hidden>
+  <a class="secondary-button auth-submit" id="profileAdminButton" href="admin.html" hidden>Administração</a>
+  <a class="secondary-button auth-submit" id="profileProfessionalButton" href="editor-painel.html" hidden>Área profissional</a>
+</div>
 <!-- SAIR -->
 <button class="secondary-button auth-submit" id="logoutButton" type="button">
                 Sair da conta
@@ -167,7 +171,7 @@
     </small>
 <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-<script src="script.js?v=24"></script>
+<script src="script.js?v=25"></script>
 <!-- ==================================================
      SUPABASE
 ================================================== -->
@@ -342,6 +346,40 @@ function showCachedProfile() {
 
 showCachedProfile();
 
+async function setupProfileActions(profile) {
+    const actions = document.getElementById("profileSpecialActions");
+    const adminButton = document.getElementById("profileAdminButton");
+    const professionalButton = document.getElementById("profileProfessionalButton");
+    let isAdmin = false;
+    try {
+        const { data } = await supabaseClient.rpc("is_admin");
+        isAdmin = data === true;
+    } catch (_) {}
+    const isProfessional = profile?.is_editor === true || profile?.is_designer === true;
+    if (adminButton) adminButton.hidden = !isAdmin;
+    if (professionalButton) professionalButton.hidden = !isProfessional;
+    if (actions) actions.hidden = !(isAdmin || isProfessional);
+}
+
+async function finishPendingSignupAvatar(user) {
+    try {
+        const pending = sessionStorage.getItem("pa_pending_signup_avatar");
+        if (!pending) return null;
+        const response = await fetch(pending);
+        const blob = await response.blob();
+        const path = `${user.id}/avatar-${Date.now()}.jpg`;
+        const { error } = await supabaseClient.storage.from("avatars").upload(path, blob, { upsert: false, contentType: "image/jpeg" });
+        if (error) throw error;
+        const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
+        await supabaseClient.from("profile").update({ avatar_url: data.publicUrl }).eq("id", user.id);
+        sessionStorage.removeItem("pa_pending_signup_avatar");
+        return data.publicUrl;
+    } catch (error) {
+        console.warn("Não foi possível concluir a foto pendente:", error);
+        return null;
+    }
+}
+
 /* ==================================================
    CARREGAR PERFIL
 ================================================== */
@@ -399,7 +437,7 @@ async function loadProfile() {
         } =
             await supabaseClient
                 .from("profile")
-                .select("nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord")
+                .select("nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,is_editor,is_designer,professional_plan,plan_status,plan_expires_at")
                 .eq("id", user.id)
                 .maybeSingle();
 
@@ -416,6 +454,9 @@ async function loadProfile() {
         }
 
 
+
+        const pendingAvatarUrl = await finishPendingSignupAvatar(user);
+        if (pendingAvatarUrl && profile) profile.avatar_url = pendingAvatarUrl;
 
         /* ==========================================
            SE NÃO EXISTIR PERFIL
@@ -446,6 +487,7 @@ async function loadProfile() {
             document.getElementById("profileBio").textContent = "Seu perfil foi criado. Você pode adicionar uma descrição em Editar perfil.";
             updateInitial(fallback.nome_artistico, fallback.nome, fallback.email);
             showMessage("Conta confirmada. Seu perfil está pronto.", "success");
+            await setupProfileActions(fallback);
             return;
         }
 
@@ -674,6 +716,7 @@ async function loadProfile() {
 
         }
 
+        await setupProfileActions(profile);
 
     } catch (error) {
 
