@@ -33,7 +33,6 @@
     "editor-painel.html",
     "login-editor.html",
     "login-profissional.html",
-    "login-admin.html",
     "planos.html",
     "editor-perfil.html"
   ]);
@@ -1082,113 +1081,6 @@
     } catch (_) {}
   }
 
-
-  /* ---------------- AUTHENTICATION ---------------- */
-
-  async function isAdminAccount(userId) {
-    const client = getSupabaseClient();
-    if (!client || !userId) return false;
-    try {
-      const result = await client.rpc("is_admin");
-      return !result.error && result.data === true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  async function handleLoginForm(form, mode) {
-    const client = getSupabaseClient() || (await ensureSupabase(), getSupabaseClient());
-    if (!client) {
-      const message = mode === "admin" ? $("#adminLoginMessage") : mode === "professional" ? $("#professionalLoginMessage") : $("#loginMessage");
-      if (message) {
-        message.textContent = "Não foi possível conectar ao sistema de login. Tente novamente.";
-        message.className = "auth-message error";
-      }
-      return;
-    }
-
-    const emailInput = $("#email", form);
-    const passwordInput = $("#senha", form);
-    const message = mode === "admin" ? $("#adminLoginMessage") : mode === "professional" ? $("#professionalLoginMessage") : $("#loginMessage");
-    const button = form.querySelector("button[type=submit]");
-    const email = emailInput?.value.trim() || "";
-    const password = passwordInput?.value || "";
-
-    if (button) {
-      button.disabled = true;
-      button.textContent = mode === "admin" ? "Verificando..." : "Entrando...";
-    }
-    if (message) {
-      message.textContent = "";
-      message.className = "auth-message";
-    }
-
-    try {
-      const result = await client.auth.signInWithPassword({ email, password });
-      if (result.error) throw result.error;
-
-      const user = result.data?.user;
-      if (!user) throw new Error("Sessão não criada.");
-
-      if (mode === "admin") {
-        if (!(await isAdminAccount(user.id))) {
-          await client.auth.signOut();
-          throw new Error("Esta conta não possui acesso administrativo.");
-        }
-        location.replace("admin.html");
-        return;
-      }
-
-      if (mode === "professional") {
-        const profileResult = await client
-          .from("profile")
-          .select("is_editor,is_designer,professional_login_enabled")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        const profile = profileResult.data;
-        const enabled = profile?.professional_login_enabled === true;
-        const professional = profile?.is_editor === true || profile?.is_designer === true;
-
-        if (profileResult.error || !professional || !enabled) {
-          await client.auth.signOut();
-          throw new Error("Esta conta ainda não tem o login profissional liberado pela administração.");
-        }
-
-        location.replace("editor-painel.html");
-        return;
-      }
-
-      location.replace((await isAdminAccount(user.id)) ? "admin.html" : "perfil.html");
-    } catch (error) {
-      if (message) {
-        message.textContent = error?.message || "Não foi possível entrar. Confira seus dados.";
-        message.className = "auth-message error";
-      }
-      if (button) {
-        button.disabled = false;
-        button.textContent = mode === "admin" ? "Entrar na administração" : mode === "professional" ? "Entrar na área profissional" : "Entrar";
-      }
-    }
-  }
-
-  function initLoginPages() {
-    const forms = [
-      [$("#loginForm"), "common"],
-      [$("#professionalLoginForm"), "professional"],
-      [$("#adminLoginForm"), "admin"]
-    ];
-
-    forms.forEach(([form, mode]) => {
-      if (!form || form.dataset.paLoginReady === "1") return;
-      form.dataset.paLoginReady = "1";
-      form.addEventListener("submit", event => {
-        event.preventDefault();
-        handleLoginForm(form, mode);
-      });
-    });
-  }
-
   /* ---------------- NAVIGATION ---------------- */
 
   function pageName(pathname) {
@@ -1285,7 +1177,6 @@
 
       initEditorTools();
       initEditorPhotos();
-      initLoginPages();
       loadProfessionalDirectory();
       ensureAccountMarkup();
       handleAuthRedirect().finally(() => initAccountHeader());
@@ -1343,7 +1234,6 @@
     initNavigation();
     initEditorTools();
     initEditorPhotos();
-    initLoginPages();
     loadProfessionalDirectory();
     initMusic();
     initGlobalAppearance();
