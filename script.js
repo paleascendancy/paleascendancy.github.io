@@ -1315,6 +1315,30 @@
     el.className = `auth-message${type ? ` ${type}` : ""}`;
   }
 
+  async function syncProfessionalApplication(c, user) {
+    if (!c || !user?.id) return { ok: false, pending: false };
+    const meta = user.user_metadata || {};
+    if (meta.professional_application !== true) return { ok: true, pending: false };
+    const requestedRole = meta.requested_role || "editor";
+    const patch = {
+      nome: meta.nome || undefined,
+      nome_artistico: meta.nome_artistico || undefined,
+      especialidade: meta.especialidade || undefined,
+      is_editor: requestedRole === "editor" || requestedRole === "editor_designer",
+      is_designer: requestedRole === "designer" || requestedRole === "editor_designer",
+      professional_login_enabled: false,
+      is_public: false
+    };
+    Object.keys(patch).forEach(k => patch[k] === undefined && delete patch[k]);
+    try {
+      const { data, error } = await c.from("profile").update(patch).eq("id", user.id).select("id,is_editor,is_designer,professional_login_enabled,is_public,especialidade,nome,nome_artistico").maybeSingle();
+      if (error) return { ok: false, pending: false, error };
+      return { ok: true, pending: true, profile: data || null };
+    } catch (error) {
+      return { ok: false, pending: false, error };
+    }
+  }
+
   async function authHandleLogin(form, mode) {
     const c = await authClient();
     if (!c) { authMessage(mode === "admin" ? "adminLoginMessage" : mode === "professional" ? "professionalLoginMessage" : "loginMessage", "Não foi possível conectar ao serviço de autenticação.", "error"); return; }
@@ -1343,6 +1367,7 @@
       return;
     }
     if (mode === "professional") {
+      await syncProfessionalApplication(c, user);
       const p = await authProfile(user.id);
       if (!(p?.professional_login_enabled && (p?.is_editor || p?.is_designer))) {
         await c.auth.signOut();
@@ -1495,7 +1520,23 @@
           if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
           return;
         }
-        authMessage("professionalRegisterMessage", data?.session ? "Solicitação enviada. Aguarde a aprovação da administração." : "Solicitação registrada. Confirme seu e-mail e aguarde a aprovação da administração.", "success");
+        if (data?.user) {
+          try {
+            localStorage.setItem("pa_pending_professional_application", JSON.stringify({
+              professional_application: true,
+              requested_role: requestedRole,
+              especialidade: category,
+              nome: document.getElementById("nome")?.value.trim() || "",
+              nome_artistico: document.getElementById("nomeArtistico")?.value.trim() || ""
+            }));
+          } catch (_) {}
+        }
+        if (data?.session && data?.user) {
+          await syncProfessionalApplication(c, data.user);
+          authMessage("professionalRegisterMessage", "Solicitação enviada. Aguarde a aprovação da administração.", "success");
+        } else {
+          authMessage("professionalRegisterMessage", "Solicitação registrada. Confirme seu e-mail e depois entre em Já tenho acesso profissional para concluir o envio.", "success");
+        }
         if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
       });
     }

@@ -143,7 +143,7 @@
 <section id="adminDenied" class="admin-denied" hidden><p class="eyebrow">Acesso bloqueado</p><h2>Esta área é somente para a administração.</h2><p>Entre com a conta autorizada da Pale Ascendancy.</p><a class="primary-button" href="login.html">Entrar</a></section>
 </main>
 <footer><div class="footer-brand"><img src="assets/pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Centro administrativo.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
-<script src="script.js?v=v2.5"></script>
+<script src="script.js?v=v2.6"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL="https://fnyellunugdfesprmvzm.supabase.co";
@@ -217,12 +217,14 @@ function render(){
 async function updateProfile(id,patch,control){control.disabled=true;const {data,error}=await client.rpc("admin_update_profile",{p_profile_id:id,p_patch:patch});control.disabled=false;if(error){showMessage("Não foi possível salvar: "+error.message,"error");return false;}const p=profiles.find(x=>x.id===id);if(p)Object.assign(p,data||patch);render();showMessage("Alteração salva.","success");return true;}
 async function load(){
   showMessage("Carregando...");
-  const {data,error}=await client.from("profile").select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,is_editor,is_designer,is_featured,is_public,professional_login_enabled,created_at,professional_plan,plan_status,plan_expires_at,professional_application,requested_role").order("created_at",{ascending:false});
+  const {data,error}=await client.from("profile").select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,is_editor,is_designer,is_featured,is_public,professional_login_enabled,created_at,professional_plan,plan_status,plan_expires_at").order("created_at",{ascending:false});
   if(error){showMessage("Não foi possível carregar os profissionais: "+error.message,"error");return;}
   const all=data||[];
   profiles=all.filter(p=>p.is_editor||p.is_designer);
-  applications=all.filter(p=>p.professional_application===true && !p.professional_login_enabled && p.requested_role).map(p=>({
-    id:p.id, profile_id:p.id, requested_role:p.requested_role, status:"pending", submitted_at:p.created_at, note:null, profile:p
+  // Compatibilidade com o banco atual: candidaturas pendentes são profissionais marcados
+  // como editor/designer, sem login liberado e ocultos do site.
+  applications=all.filter(p=>(p.is_editor||p.is_designer) && p.professional_login_enabled!==true && p.is_public===false).map(p=>({
+    id:p.id, profile_id:p.id, requested_role:p.is_editor&&p.is_designer?"editor_designer":p.is_designer?"designer":"editor", status:"pending", submitted_at:p.created_at, note:null, profile:p
   }));
   showMessage("");renderApplications();render();renderPlans();renderContentProfessionals();
 }
@@ -367,11 +369,14 @@ applicationList.addEventListener("click",async e=>{
   if(!permissionAllowed("applications")){button.disabled=false;showMessage("Você não possui permissão para analisar solicitações.","error");return;}
   const role=application.requested_role;
   const patch=decision==="approved"
-    ? {professional_login_enabled:true,professional_application:false,is_editor:role==="editor"||role==="editor_designer",is_designer:role==="designer"||role==="editor_designer"}
-    : {professional_login_enabled:false,professional_application:false};
-  const {error}=await client.rpc("admin_update_profile",{p_profile_id:id,p_patch:patch});
+    ? {professional_login_enabled:true,is_public:true,is_editor:role==="editor"||role==="editor_designer",is_designer:role==="designer"||role==="editor_designer"}
+    : {professional_login_enabled:false,is_public:false,is_editor:false,is_designer:false};
+  let result=await client.rpc("admin_update_profile",{p_profile_id:id,p_patch:patch});
+  if(result.error){
+    result=await client.from("profile").update(patch).eq("id",id);
+  }
   button.disabled=false;
-  if(error){showMessage("Não foi possível analisar a solicitação: "+error.message,"error");return;}
+  if(result.error){showMessage("Não foi possível analisar a solicitação: "+result.error.message,"error");return;}
   showMessage(decision==="approved"?"Solicitação aprovada. O login profissional foi liberado.":"Solicitação recusada.","success");
   await load();
 });
