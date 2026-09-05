@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Nunito:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=19" rel="stylesheet"/>
+<link href="style.css?v=22" rel="stylesheet"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7641546771857938" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -99,6 +99,17 @@
                 antes de escolher quem combina com o seu projeto.
             </p>
 </section>
+<section class="editor-manage-bar" id="editorManageBar" hidden>
+  <div>
+    <span class="eyebrow">Seu perfil</span>
+    <strong>Você é um editor aprovado.</strong>
+    <p>Atualize sua foto, categorias, descrição, portfólio e redes sempre que quiser.</p>
+  </div>
+  <div class="editor-manage-actions">
+    <a class="primary-button" href="editor-painel.html">Editar meu perfil de editor</a>
+    <a class="secondary-button" href="editor-perfil.html">Ver meu perfil público</a>
+  </div>
+</section>
 <!-- ==================================================
              BUSCA E FILTROS
         ================================================== -->
@@ -133,7 +144,7 @@
 <!-- ==================================================
              CTA
         ================================================== -->
-<section class="editors-cta"><p class="eyebrow">Entrada na rede</p><h2>Quer trabalhar com a Pale Ascendancy?</h2><p>Apresente seu portfólio e fale diretamente com a administração. As vagas de Promo são avaliadas diretamente pela administração.</p><a class="primary-button" href="quero-ser-editor.html">Quero ser editor</a></section>
+<section class="editors-cta"><p class="eyebrow">Entrada na rede</p><h2>Quer trabalhar com a Pale Ascendancy?</h2><p>Apresente seu portfólio e fale diretamente com a administração. As vagas de Promo são avaliadas diretamente pela administração.</p><div class="editor-cta-actions"><a class="primary-button" href="quero-ser-editor.html">Quero ser editor</a><a class="secondary-button" href="login-editor.html">Já sou editor</a></div></section>
 </div>
 </main>
 <!-- ==================================================
@@ -154,14 +165,15 @@
     </small>
 <div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div>
 </footer>
-<script src="script.js?v=19"></script>
+<script src="script.js?v=22"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+function escapeHTMLLocal(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 (async function(){
   try {
     const sb=window.supabase.createClient("https://fnyellunugdfesprmvzm.supabase.co","sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK");
-    const {data,error}=await sb.from("editor_directory").select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,is_featured").order("is_featured",{ascending:false});
+    const {data,error}=await sb.from("editor_directory").select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured").order("is_featured",{ascending:false});
     if(error||!data?.length)return;
     const grid=document.getElementById("editorsGrid");
     if(!grid)return;
@@ -173,11 +185,14 @@
       const card=document.createElement("article");
       card.className="editor-profile";
       card.dataset.profileId=p.id;
-      card.dataset.category=`${p.especialidade||"outros"} ${p.is_featured?"featured":""}`;
-      card.dataset.search=`${name} ${p.especialidade||""} ${p.bio||""}`.toLowerCase();
+      const cats = Array.isArray(p.editor_categories) ? p.editor_categories : [];
+      const categoryTokens = [p.especialidade, ...cats].filter(Boolean).map(String).join(" ");
+      card.dataset.category=`${categoryTokens} ${p.is_featured?"featured":""}`.toLowerCase();
+      card.dataset.search=`${name} ${p.especialidade||""} ${cats.join(" ")} ${p.bio||""} ${p.editor_software||""}`.toLowerCase();
       const avatar=p.avatar_url?`<img class="editor-avatar editor-photo" src="${String(p.avatar_url).replaceAll('"','&quot;')}" alt="Foto de perfil de ${String(name).replaceAll('"','&quot;')}" loading="lazy">`:`<div class="editor-avatar placeholder-icon">${String(name).charAt(0).toUpperCase()}</div>`;
-      const socials=p.tiktok||p.instagram||p.youtube;
-      card.innerHTML=`<div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${p.is_featured?"Destaque":"Disponível"}</div>${avatar}<h2>${String(name).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}</h2><div class="editor-role">EDITOR</div><p class="editor-description">${String(p.bio||`Editor de ${map[p.especialidade]||p.especialidade||"vídeo"}.`).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}</p><div class="editor-tags"><span class="editor-tag">${String(map[p.especialidade]||p.especialidade||"Edição")}</span>${p.is_featured?'<span class="editor-tag">Destaque</span>':''}</div><div class="editor-footer">${socials?`<a class="card-link" href="${String(socials).replaceAll('"','&quot;')}" target="_blank" rel="noopener noreferrer">Contato →</a>`:'<span class="editor-specialty-label">Perfil na rede</span>'}</div>`;
+      const socials=[p.tiktok,p.instagram,p.youtube,p.portfolio_url].filter(Boolean);
+      const tags=[...new Set([p.especialidade,...cats].filter(Boolean))].slice(0,5).map(x=>`<span class="editor-tag">${escapeHTMLLocal(map[x]||x)}</span>`).join("");
+      card.innerHTML=`<div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${p.is_featured?"Destaque":"Disponível"}</div>${avatar}<h2>${escapeHTMLLocal(name)}</h2><div class="editor-role">EDITOR</div><p class="editor-description">${escapeHTMLLocal(p.bio||`Editor de ${map[p.especialidade]||p.especialidade||"vídeo"}.`)}</p><div class="editor-tags">${tags||'<span class="editor-tag">Edição</span>'}${p.is_featured?'<span class="editor-tag">Destaque</span>':''}</div><div class="editor-footer"><a class="card-link" href="editor-perfil.html?id=${encodeURIComponent(p.id)}">Ver perfil →</a>${socials[0]?`<a class="card-link" href="${String(socials[0]).replaceAll('"','&quot;')}" target="_blank" rel="noopener noreferrer">Link →</a>`:''}</div>`;
       if(placeholder)grid.insertBefore(card,placeholder);else grid.appendChild(card);
     });
     document.getElementById("searchInput")?.dispatchEvent(new Event("input"));
