@@ -1383,30 +1383,36 @@
 
   function authCategoryButtons(holder, selected = "") {
     if (!holder) return;
-    holder.setAttribute("role", "radiogroup");
-    holder.setAttribute("aria-label", "Área de interesse");
-    holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) => `
-      <button type="button" class="category-choice ${selected === value ? "selected" : ""}" data-v="${value}" role="radio" aria-checked="${selected === value ? "true" : "false"}">
-        <span class="category-choice-dot" aria-hidden="true"></span>
-        <span class="category-choice-label">${label}</span>
-      </button>`).join("");
-
+    if (holder.tagName === "SELECT") {
+      holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) =>
+        `<option value="${escapeHTML(value)}">${escapeHTML(label)}</option>`
+      ).join("");
+      holder.value = selected || "";
+      const sync = () => {
+        const hidden = holder.parentElement?.querySelector("#especialidade");
+        if (hidden) hidden.value = holder.value || "";
+      };
+      holder.addEventListener("change", sync);
+      sync();
+      return;
+    }
+    holder.innerHTML = AUTH_CATEGORIES.map(([value, label]) =>
+      `<button type="button" class="category-choice ${selected === value ? "selected" : ""}" data-v="${value}">${label}</button>`
+    ).join("");
     holder.onclick = (e) => {
-      const b = e.target.closest("button.category-choice");
-      if (!b || !holder.contains(b)) return;
-      holder.querySelectorAll("button.category-choice").forEach(x => {
-        const active = x === b;
-        x.classList.toggle("selected", active);
-        x.setAttribute("aria-checked", active ? "true" : "false");
-      });
-      const hidden = holder.parentElement?.querySelector('input[type="hidden"]#especialidade');
+      const b = e.target.closest("button");
+      if (!b) return;
+      [...holder.querySelectorAll("button")].forEach(x => x.classList.remove("selected"));
+      b.classList.add("selected");
+      const hidden = holder.parentElement?.querySelector("#especialidade");
       if (hidden) hidden.value = b.dataset.v || "";
-      holder.dispatchEvent(new CustomEvent("categorychange", { detail: { value: b.dataset.v || "" } }));
     };
   }
 
   function authSelectedCategory(holder) {
-    return holder?.querySelector("button.category-choice.selected")?.dataset.v || holder?.parentElement?.querySelector('input[type="hidden"]#especialidade')?.value || "";
+    if (!holder) return "";
+    if (holder.tagName === "SELECT") return holder.value || "";
+    return holder.querySelector("button.selected")?.dataset.v || "";
   }
 
   function authFileToDataURL(file) {
@@ -1438,7 +1444,7 @@
         e.preventDefault();
         const c = await authClient();
         const button = document.getElementById("registerButton");
-        const category = authSelectedCategory(holder);
+        const category = authSelectedCategory(holder) || document.getElementById("especialidade")?.value || "";
         const accepted = document.getElementById("termos")?.checked;
         if (!accepted) { authMessage("registerMessage", "Aceite os termos para continuar.", "error"); return; }
         if (!c) { authMessage("registerMessage", "Serviço de autenticação indisponível.", "error"); return; }
@@ -1474,7 +1480,7 @@
         const c = await authClient();
         const button = document.getElementById("professionalRegisterButton");
         const requestedRole = document.getElementById("tipo")?.value || "editor";
-        const category = authSelectedCategory(holder);
+        const category = authSelectedCategory(holder) || document.getElementById("especialidade")?.value || "";
         if (!c) { authMessage("professionalRegisterMessage", "Serviço de autenticação indisponível.", "error"); return; }
         if (button) { button.disabled = true; button.textContent = "Enviando..."; }
         const { data, error } = await c.auth.signUp({
@@ -1489,7 +1495,16 @@
           if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
           return;
         }
-        authMessage("professionalRegisterMessage", data?.session ? "Solicitação enviada. Aguarde a aprovação da administração." : "Solicitação enviada. Confirme seu e-mail e aguarde a aprovação da administração.", "success");
+        if (data?.session?.user?.id) {
+          try {
+            await c.from("professional_applications").insert({
+              profile_id: data.session.user.id,
+              requested_role: requestedRole,
+              status: "pending"
+            });
+          } catch (_) {}
+        }
+        authMessage("professionalRegisterMessage", data?.session ? "Solicitação enviada. Aguarde a aprovação da administração." : "Solicitação registrada. Confirme seu e-mail e aguarde a aprovação da administração.", "success");
         if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
       });
     }
