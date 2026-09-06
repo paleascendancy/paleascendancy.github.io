@@ -19,8 +19,26 @@ create table if not exists public.project_requests (
 
 alter table public.project_requests enable row level security;
 
+-- Server-side validation used by public inserts. SECURITY DEFINER is limited to
+-- returning whether the target profile is an active public professional.
+create or replace function public.is_public_professional(target_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profile p
+    where p.id = target_id
+      and coalesce(p.is_public, false) = true
+      and (coalesce(p.is_editor, false) = true or coalesce(p.is_designer, false) = true)
+  );
+$$;
+
 -- Anyone may submit a project request from the public briefing form.
--- Inserts are constrained to status=new and no arbitrary authenticated identity.
+-- A professional id is accepted only when it resolves to a public professional.
 drop policy if exists "project_requests_public_insert" on public.project_requests;
 create policy "project_requests_public_insert"
 on public.project_requests for insert
@@ -28,6 +46,7 @@ to anon, authenticated
 with check (
   status = 'new'
   and (client_id is null or client_id = auth.uid())
+  and (professional_id is null or public.is_public_professional(professional_id))
 );
 
 -- Logged-in clients can see requests tied to their own account.
