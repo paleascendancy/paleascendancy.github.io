@@ -711,8 +711,6 @@
     setTrack(index, false, savedTime);
 
     if (shouldPlay) {
-      // Give the page time to settle before requesting autoplay.
-      // If the browser blocks sound, the first meaningful interaction unlocks it.
       setTimeout(() => {
         playMusic().then((started) => {
           if (!started) installAutoplayUnlock();
@@ -1121,9 +1119,6 @@
     if (!client) return;
 
     try {
-      // Supabase can return from email confirmation using either a hash session
-      // or a PKCE `code`. The client is configured to detect the URL; this
-      // explicit exchange covers hosted-email configurations that use PKCE.
       const code = new URLSearchParams(location.search).get("code");
       if (code && typeof client.auth.exchangeCodeForSession === "function") {
         await client.auth.exchangeCodeForSession(code);
@@ -1332,9 +1327,11 @@
       if (existing) return { ok: true, pending: true, application: existing };
 
       const { data, error } = await c.from("professional_applications").insert({
+        user_id: user.id,
         profile_id: user.id,
         requested_role: role,
-        status: "pending"
+        status: "pending",
+        professional_login_enabled: false
       }).select("id,status,requested_role").single();
       if (error) return { ok: false, pending: false, error };
 
