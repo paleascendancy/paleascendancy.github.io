@@ -1,0 +1,27 @@
+/* Pale Ascendancy V3 — bridge admin appearance into V3 components */
+body[class*="v3-"]{
+  background-color:var(--pa-background,#05080e)!important;
+  color:var(--pa-text,#f5f7fb)!important;
+}
+body[class*="v3-"] .eyebrow,
+body[class*="v3-"] .v3-audience-label,
+body[class*="v3-"] .showcase-kicker,
+body[class*="v3-"] .portfolio-type-label{color:var(--pa-primary,#e71947)!important}
+body[class*="v3-"] .section-heading p,
+body[class*="v3-"] .hero-lead,
+body[class*="v3-"] .editor-public-bio{color:var(--pa-muted,#929dac)!important}
+body[class*="v3-"] .primary-button{
+  background:linear-gradient(135deg,var(--pa-primary,#e71947),var(--pa-secondary,#8b5cf6))!important;
+  color:var(--pa-button-text,#fff)!important;
+  border-color:color-mix(in srgb,var(--pa-primary,#e71947) 32%,transparent)!important;
+}
+body[class*="v3-"] .secondary-button{
+  color:var(--pa-text,#f5f7fb)!important;
+  border-color:var(--pa-line,rgba(210,220,235,.16))!important;
+}
+body[class*="v3-"] .v3-kicker:before,
+body[class*="v3-"] .status-dot{background:var(--pa-primary,#e71947)!important}
+body[class*="v3-"] .editor-tag{
+  border-color:color-mix(in srgb,var(--pa-primary,#e71947) 22%,transparent)!important;
+  background:color-mix(in srgb,var(--pa-primary,#e71947) 8%,transparent)!important;
+}
