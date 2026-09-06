@@ -32,6 +32,14 @@
     content.appendChild(stats);
   }
 
+  function ensureWaveform(){
+    const bars = document.getElementById("beatBars");
+    if (!bars || bars.dataset.waveformReady === "1") return;
+    const target = 28;
+    while (bars.children.length < target) bars.appendChild(document.createElement("i"));
+    bars.dataset.waveformReady = "1";
+  }
+
   function ensureMusicSlot(){
     const visual = document.querySelector(".v3-home .hero-visual");
     const player = document.getElementById("musicPlayer");
@@ -104,6 +112,7 @@
   function apply(){
     accentTitle();
     ensureStats();
+    ensureWaveform();
     ensureMusicSlot();
     if (mq.matches) loadRecent();
   }
