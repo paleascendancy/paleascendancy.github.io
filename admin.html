@@ -223,12 +223,15 @@ async function load(){
 
   profiles=all.filter(p=>(p.is_editor||p.is_designer) && p.professional_login_enabled===true);
 
-  const appResult=await client.rpc("list_professional_applications");
+  const appResult=await client.from("professional_applications")
+    .select("id,profile_id,requested_role,status,submitted_at,reviewed_at,reviewed_by,note,profile:profile_id(id,email,nome,nome_artistico,especialidade,avatar_url,is_editor,is_designer,is_public,professional_login_enabled)")
+    .eq("status","pending")
+    .order("submitted_at",{ascending:false});
   if(appResult.error){
     applications=[];
     showMessage("Profissionais carregados, mas não foi possível carregar as solicitações: "+appResult.error.message,"error");
   }else{
-    applications=(appResult.data||[]).map(a=>({...a,profile:a.profile||{}}));
+    applications=appResult.data||[];
     showMessage("");
   }
 
@@ -373,7 +376,16 @@ applicationList.addEventListener("click",async e=>{
   const id=button.dataset.applicationId,decision=button.dataset.decision;
   if(!permissionAllowed("applications")){showMessage("Você não possui permissão para analisar solicitações.","error");return;}
   button.disabled=true;
-  const result=await client.rpc("decide_professional_application",{p_application_id:id,p_decision:decision});
+  let result;
+  if(decision==="approved"){
+    const role=application.requested_role;
+    const profileResult=await client.from("profile").update({professional_login_enabled:true,is_public:true,is_editor:role==="editor"||role==="editor_designer",is_designer:role==="designer"||role==="editor_designer"}).eq("id",application.profile_id);
+    if(profileResult.error){showMessage("Não foi possível aprovar o profissional: "+profileResult.error.message,"error");return;}
+  }else{
+    const profileResult=await client.from("profile").update({professional_login_enabled:false,is_public:false,is_editor:false,is_designer:false}).eq("id",application.profile_id);
+    if(profileResult.error){showMessage("Não foi possível recusar o profissional: "+profileResult.error.message,"error");return;}
+  }
+  result=await client.from("professional_applications").update({status:decision,reviewed_at:new Date().toISOString(),reviewed_by:currentUser.id}).eq("id",id);
   button.disabled=false;
   if(result.error){showMessage("Não foi possível analisar a solicitação: "+result.error.message,"error");return;}
   showMessage(decision==="approved"?"Solicitação aprovada. O login profissional foi liberado.":"Solicitação recusada.","success");

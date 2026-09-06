@@ -102,28 +102,30 @@
     if (window.__PA_MENU_READY__) return;
     window.__PA_MENU_READY__ = true;
 
-    document.addEventListener("click", (event) => {
-      const target = event.target instanceof Element ? event.target : null;
-      if (!target) return;
-
-      const button = target.closest("#menuButton");
-      if (button) {
+    const bindMenuButton = () => {
+      const button = document.getElementById("menuButton");
+      if (!button || button.dataset.paMenuReady === "1") return;
+      button.dataset.paMenuReady = "1";
+      button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
         const menu = getMobileMenu();
-        if (menu) setMobileMenu(!menu.classList.contains("open"));
-        return;
-      }
+        setMobileMenu(!(menu && (menu.classList.contains("open") || menu.classList.contains("active"))));
+      }, { passive: false });
+    };
 
+    bindMenuButton();
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
       const menu = getMobileMenu();
-      if (menu?.classList.contains("open") && !target.closest("#mobileMenu")) closeMobileMenu();
+      if (menu?.classList.contains("open") && !target.closest("#menuButton, #mobileMenu")) closeMobileMenu();
     });
-
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeMobileMenu();
     });
+    document.addEventListener("DOMContentLoaded", bindMenuButton, { once: true });
   }
-
   /* ---------------- SEARCH / FILTERS ---------------- */
 
   function initEditorTools() {
@@ -1321,20 +1323,36 @@
     const requestedRole = requestedRoleOverride || meta.requested_role || "editor";
     const role = requestedRole === "both" ? "editor_designer" : requestedRole;
     try {
-      const { data, error } = await c.rpc("submit_professional_application", {
-        p_profile_id: user.id,
-        p_requested_role: role,
-        p_nome: meta.nome || null,
-        p_nome_artistico: meta.nome_artistico || null,
-        p_especialidade: meta.especialidade || null
-      });
+      const { data: existing, error: existingError } = await c.from("professional_applications")
+        .select("id,status,requested_role")
+        .eq("profile_id", user.id)
+        .eq("status", "pending")
+        .maybeSingle();
+      if (existingError) return { ok: false, pending: false, error: existingError };
+      if (existing) return { ok: true, pending: true, application: existing };
+
+      const { data, error } = await c.from("professional_applications").insert({
+        profile_id: user.id,
+        requested_role: role,
+        status: "pending"
+      }).select("id,status,requested_role").single();
       if (error) return { ok: false, pending: false, error };
-      return { ok: true, pending: true, application: data || null };
+
+      const { error: profileError } = await c.from("profile").update({
+        nome: meta.nome || undefined,
+        nome_artistico: meta.nome_artistico || undefined,
+        especialidade: meta.especialidade || undefined,
+        is_editor: false,
+        is_designer: false,
+        professional_login_enabled: false,
+        is_public: false
+      }).eq("id", user.id);
+      if (profileError) console.warn("[Pale Ascendancy] perfil pendente:", profileError.message);
+      return { ok: true, pending: true, application: data };
     } catch (error) {
       return { ok: false, pending: false, error };
     }
   }
-
   async function authHandleLogin(form, mode) {
     const c = await authClient();
     if (!c) { authMessage(mode === "admin" ? "adminLoginMessage" : mode === "professional" ? "professionalLoginMessage" : "loginMessage", "Não foi possível conectar ao serviço de autenticação.", "error"); return; }
@@ -1535,26 +1553,6 @@
         try { localStorage.removeItem("pa_pending_professional_application"); } catch (_) {}
         authMessage("professionalRegisterMessage", "Cadastro realizado. Sua solicitação foi enviada para a administração e está aguardando aprovação.", "success");
         if (button) { button.disabled = true; button.textContent = "Solicitação enviada"; }
-          return;
-        }
-        if (data?.user) {
-          try {
-            localStorage.setItem("pa_pending_professional_application", JSON.stringify({
-              professional_application: true,
-              requested_role: requestedRole,
-              especialidade: category,
-              nome: document.getElementById("nome")?.value.trim() || "",
-              nome_artistico: document.getElementById("nomeArtistico")?.value.trim() || ""
-            }));
-          } catch (_) {}
-        }
-        if (data?.session && data?.user) {
-          await syncProfessionalApplication(c, data.user);
-          authMessage("professionalRegisterMessage", "Solicitação enviada. Aguarde a aprovação da administração.", "success");
-        } else {
-          authMessage("professionalRegisterMessage", "Solicitação registrada. Confirme seu e-mail e depois entre em Já tenho acesso profissional para concluir o envio.", "success");
-        }
-        if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
       });
     }
   }
