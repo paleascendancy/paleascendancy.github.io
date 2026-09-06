@@ -8,6 +8,24 @@
     }
   } catch (_) {}
 
+  // Homepage-only mobile reference layer. Kept separate so desktop remains easy to roll back.
+  if (document.body.classList.contains('v3-home')) {
+    if (!document.querySelector('link[data-pa-mobile-reference]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'v3-mobile-reference.css?v=1';
+      link.dataset.paMobileReference = '1';
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-pa-mobile-reference]')) {
+      const script = document.createElement('script');
+      script.src = 'mobile-reference.js?v=1';
+      script.defer = true;
+      script.dataset.paMobileReference = '1';
+      document.head.appendChild(script);
+    }
+  }
+
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
