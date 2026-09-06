@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contratar profissional — Pale Ascendancy</title>
+<meta name="description" content="Descreva seu projeto e inicie uma contratação pela Pale Ascendancy.">
+<meta name="theme-color" content="#050914">
+<meta property="og:title" content="Contratar profissional — Pale Ascendancy">
+<meta property="og:description" content="Crie um briefing e entre em contato com o profissional ideal para seu projeto.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="style.css?v=v3">
+<link rel="stylesheet" href="v3.css?v=4">
+<link rel="stylesheet" href="v3-hire.css?v=1">
+</head>
+<body class="v3-hire-page">
+<header class="header"><a class="brand" href="index.html"><img src="assets/pale-ascendancy-logo.png" alt="Pale Ascendancy" width="36" height="36"><span>PALE ASCENDANCY</span></a><nav class="nav"><a href="index.html">Home</a><a href="editores.html">Profissionais</a><a href="servicos.html">Serviços</a></nav><button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span class="menu-icon"></span></button></header>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="editores.html">Profissionais</a><a href="servicos.html">Serviços</a></div>
+<main class="v3-hire-main"><div class="hero-glow"></div><div class="v3-hire-wrap">
+<section class="v3-hire-intro"><p class="eyebrow">Iniciar projeto</p><h1>Transforme sua ideia em um <span>briefing claro.</span></h1><p>Descreva o que você precisa. Se você veio de um perfil profissional, o projeto já ficará associado a ele.</p><div class="v3-selected-pro" id="selectedProfessional" hidden><span>Profissional selecionado</span><strong id="selectedProfessionalName">Carregando...</strong><a id="selectedProfessionalLink" href="editores.html">Ver perfil</a></div></section>
+<section class="v3-hire-card"><form id="hireForm" class="v3-hire-form">
+<div class="v3-form-grid"><label><span>Seu nome</span><input id="clientName" name="clientName" autocomplete="name" required maxlength="80"></label><label><span>Contato</span><input id="clientContact" name="clientContact" placeholder="WhatsApp, Discord ou e-mail" required maxlength="120"></label></div>
+<div class="v3-form-grid"><label><span>Tipo de projeto</span><select id="projectType" required><option value="">Selecione</option><option>Promo</option><option>Trailer</option><option>Highlight</option><option>Motion Design</option><option>Anime / AMV</option><option>Gaming</option><option>Reels / TikTok</option><option>Thumbnail / Design</option><option>Branding</option><option>Outro</option></select></label><label><span>Prazo desejado</span><input id="deadline" type="text" placeholder="Ex.: até 20 de setembro" maxlength="80"></label></div>
+<label><span>Orçamento aproximado</span><input id="budget" type="text" placeholder="Ex.: R$ 100–200 ou a combinar" maxlength="80"></label>
+<label><span>Descreva o projeto</span><textarea id="description" rows="7" required maxlength="2500" placeholder="Explique objetivo, duração, estilo, referências, formato e qualquer detalhe importante."></textarea></label>
+<label><span>Referências ou links</span><textarea id="references" rows="3" maxlength="1200" placeholder="Links de vídeos, imagens, Drive ou referências visuais."></textarea></label>
+<label class="v3-check"><input id="agree" type="checkbox" required><span>Confirmo que as informações acima representam o projeto que desejo discutir.</span></label>
+<div class="v3-hire-actions"><button class="primary-button" type="submit" id="submitHire">Preparar contato</button><a class="secondary-button" href="editores.html">Escolher outro profissional</a></div>
+<p id="hireStatus" class="auth-message" aria-live="polite"></p>
+</form>
+<div id="hireResult" class="v3-hire-result" hidden><p class="eyebrow">Briefing pronto</p><h2>Seu projeto está organizado.</h2><p>Você pode copiar o briefing ou abrir o contato oficial da Pale Ascendancy com a mensagem preparada.</p><textarea id="briefingOutput" readonly rows="12"></textarea><div class="v3-hire-actions"><button class="secondary-button" id="copyBriefing" type="button">Copiar briefing</button><a class="primary-button" id="whatsappBriefing" target="_blank" rel="noopener noreferrer">Abrir no WhatsApp</a></div></div>
+</section></div></main>
+<footer><div class="footer-brand"><img src="assets/pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Editores, designers, clientes e projetos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
+<script src="script.js?v=v3"></script><script src="contratar.js?v=1"></script>
+</body></html>
