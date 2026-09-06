@@ -8,17 +8,17 @@ body[class*="v3-"] .primary-button{color:#fff!important;text-shadow:0 1px 1px rg
 body[class*="v3-"] .secondary-button{color:var(--pa-safe-text)!important}
 body[class*="v3-"] .v3-kicker{color:#c7ccd4!important;background:rgba(255,255,255,.02)!important}
 
-/* Home hero: phone and visualizer are separate zones. */
+/* Home hero: phone and visualizer are physically separate zones. */
 .v3-home .hero{overflow:visible!important}
 .v3-home .hero-content h1{max-width:560px!important;text-wrap:balance!important;overflow-wrap:normal!important;word-break:normal!important}
-.v3-home .hero-visual{display:grid!important;grid-template-rows:auto 42px!important;align-items:center!important;justify-items:center!important;gap:14px!important;overflow:visible!important}
+.v3-home .hero-visual{display:grid!important;grid-template-rows:auto 42px!important;align-items:center!important;justify-items:center!important;gap:16px!important;overflow:visible!important}
 .v3-home .phone-scene{display:grid!important;place-items:center!important;height:auto!important;min-height:0!important;padding:10px 0!important;overflow:visible!important}
 .v3-home .phone{position:relative!important;z-index:2!important;margin:0!important}
 .v3-home .beat-ring{display:none!important}
-.v3-home .beat-bars{position:relative!important;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important;z-index:1!important;width:154px!important;height:28px!important;margin:0!important;align-self:center!important}
-.v3-home .beat-bars i{max-height:26px!important;min-height:4px!important;transition:height .08s linear,opacity .08s linear!important}
+.v3-home .beat-bars{position:relative!important;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important;z-index:1!important;width:154px!important;height:30px!important;margin:0!important;align-self:center!important;pointer-events:none!important}
+.v3-home .beat-bars i{max-height:28px!important;min-height:4px!important;transition:height .08s linear,opacity .08s linear!important}
 
-/* Compact, premium player that does not cover the phone/content. */
+/* Compact player: utility, never the hero. */
 body[class*="v3-"] .music-player{width:178px!important;right:12px!important;bottom:12px!important;padding:5px!important;border-radius:999px!important;background:rgba(7,9,13,.96)!important;border:1px solid var(--pa-safe-line)!important;box-shadow:0 14px 34px rgba(0,0,0,.34)!important}
 body[class*="v3-"] .music-player-main{gap:5px!important}
 body[class*="v3-"] .music-play,body[class*="v3-"] .music-next{width:32px!important;height:32px!important;min-width:32px!important;border-radius:50%!important;border:1px solid var(--pa-safe-line)!important}
@@ -28,46 +28,50 @@ body[class*="v3-"] .music-title-button{min-width:0!important;padding:0 3px!impor
 body[class*="v3-"] .music-title-button strong{font-size:.68rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#eef1f5!important}
 body[class*="v3-"] .music-label,body[class*="v3-"] #musicStatus{display:none!important}
 
-/* Reels: true horizontal touch scroll on phones. */
+/* Reels: small cards with true touch scroll. */
 .v3-editors-page .professional-reels{overflow:visible!important}
-.v3-editors-page .portfolio-reels{width:100%!important;max-width:100%!important;display:flex!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 12px!important;scroll-snap-type:x proximity!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x!important;overscroll-behavior-inline:contain!important}
-.v3-editors-page .portfolio-reels::-webkit-scrollbar{display:none!important}
+.v3-editors-page .portfolio-reels{width:100%!important;max-width:100%!important;display:flex!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 14px!important;scroll-snap-type:x proximity!important;scrollbar-width:thin!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x!important;overscroll-behavior-inline:contain!important;cursor:grab!important}
+.v3-editors-page .portfolio-reels:active{cursor:grabbing!important}
 .v3-editors-page .portfolio-reel-card{flex:0 0 150px!important;width:150px!important;max-width:150px!important;min-width:150px!important;scroll-snap-align:start!important;border-radius:12px!important;background:var(--pa-safe-surface)!important;border:1px solid var(--pa-safe-line)!important;overflow:hidden!important;box-shadow:none!important}
 .v3-editors-page .portfolio-reel-visual{width:100%!important;aspect-ratio:9/12!important;max-height:200px!important;overflow:hidden!important}
-.v3-editors-page .portfolio-reel-media,.v3-editors-page .portfolio-reel-media img,.v3-editors-page .portfolio-reel-media video{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+.v3-editors-page .portfolio-reel-media{display:block!important;width:100%!important;height:100%!important;touch-action:pan-x!important;-webkit-user-drag:none!important;user-select:none!important}
+.v3-editors-page .portfolio-reel-media img,.v3-editors-page .portfolio-reel-media video{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;pointer-events:none!important;-webkit-user-drag:none!important;user-select:none!important}
 .v3-editors-page .portfolio-reel-copy{padding:8px 9px!important}
-.v3-editors-page .portfolio-reel-overlay{padding:8px!important}
+.v3-editors-page .portfolio-reel-overlay{padding:8px!important;pointer-events:none!important}
 .v3-editors-page .portfolio-reel-copy strong,.v3-editors-page .portfolio-reel-overlay strong{font-size:.74rem!important;line-height:1.25!important}
 .v3-editors-page .portfolio-reel-copy span,.v3-editors-page .portfolio-reel-overlay span{font-size:.62rem!important}
 
 @media(max-width:820px){
   .v3-home .hero{width:calc(100% - 32px)!important;padding:34px 0 24px!important}
-  .v3-home .hero-grid{grid-template-columns:1fr!important;gap:30px!important}
+  .v3-home .hero-grid{grid-template-columns:1fr!important;gap:28px!important}
   .v3-home .hero-content{max-width:100%!important}
-  .v3-home .hero-content h1{font-size:clamp(2.15rem,8.2vw,2.8rem)!important;line-height:1.04!important;letter-spacing:-.04em!important;max-width:470px!important;margin-top:14px!important}
+  .v3-home .hero-content h1{font-size:clamp(2rem,7.6vw,2.65rem)!important;line-height:1.05!important;letter-spacing:-.038em!important;max-width:450px!important;margin-top:14px!important}
   .v3-home .hero-lead{font-size:.92rem!important;line-height:1.58!important;max-width:480px!important;margin:16px 0 20px!important}
   .v3-home .hero-buttons{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;width:100%!important}
   .v3-home .hero-buttons a{min-width:0!important;width:100%!important;min-height:44px!important;padding:9px 10px!important;font-size:.76rem!important}
-  .v3-home .hero-visual{grid-template-rows:auto 38px!important;gap:12px!important;padding-bottom:30px!important}
-  .v3-home .phone{width:152px!important;max-width:44vw!important;border-radius:28px!important}
+  .v3-home .hero-visual{grid-template-rows:auto 38px!important;gap:14px!important;padding-bottom:24px!important}
+  .v3-home .phone-scene{overflow:visible!important;padding:4px 0!important}
+  .v3-home .phone{width:148px!important;max-width:42vw!important;border-radius:28px!important;transform:none!important}
   .v3-home .phone-frame,.v3-home .phone-screen{border-radius:22px!important}
-  .v3-home .beat-bars{width:130px!important;height:26px!important}
-  body[class*="v3-"] .music-player{width:108px!important}
+  .v3-home .beat-bars{width:126px!important;height:26px!important}
+  body[class*="v3-"] .music-player{width:96px!important}
   body[class*="v3-"] .music-title-button{display:none!important}
   .v3-editors-page .portfolio-reel-card{flex-basis:132px!important;width:132px!important;max-width:132px!important;min-width:132px!important}
   .v3-editors-page .portfolio-reel-visual{max-height:176px!important}
 }
 
 @media(max-width:430px){
-  .v3-home .hero{width:calc(100% - 28px)!important;padding-top:30px!important}
-  .v3-home .hero-content h1{font-size:2.22rem!important;line-height:1.05!important;max-width:350px!important}
-  .v3-home .hero-lead{font-size:.88rem!important}
+  .v3-home .hero{width:calc(100% - 28px)!important;padding-top:28px!important}
+  .v3-home .hero-content h1{font-size:1.95rem!important;line-height:1.07!important;letter-spacing:-.032em!important;max-width:330px!important}
+  .v3-home .hero-lead{font-size:.87rem!important;line-height:1.56!important}
   .v3-home .hero-buttons{grid-template-columns:1fr!important}
-  .v3-home .phone{width:138px!important;max-width:42vw!important}
-  .v3-home .hero-visual{padding-bottom:36px!important}
-  body[class*="v3-"] .music-player{width:76px!important;padding:5px!important}
-  body[class*="v3-"] .music-next{display:none!important}
-  body[class*="v3-"] .music-player-main{justify-content:center!important}
+  .v3-home .phone{width:132px!important;max-width:40vw!important;transform:none!important}
+  .v3-home .hero-visual{padding-bottom:30px!important;gap:12px!important}
+  .v3-home .beat-bars{width:116px!important;height:24px!important}
+  body[class*="v3-"] .music-player{width:44px!important;height:44px!important;padding:4px!important;border-radius:50%!important;right:10px!important;bottom:10px!important}
+  body[class*="v3-"] .music-play{width:34px!important;height:34px!important;min-width:34px!important}
+  body[class*="v3-"] .music-next,body[class*="v3-"] .music-title-button{display:none!important}
+  body[class*="v3-"] .music-player-main{justify-content:center!important;gap:0!important}
   .v3-editors-page .portfolio-reel-card{flex-basis:124px!important;width:124px!important;max-width:124px!important;min-width:124px!important}
   .v3-editors-page .portfolio-reel-visual{max-height:166px!important}
 }
