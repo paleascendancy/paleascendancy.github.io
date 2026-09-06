@@ -1,6 +1,13 @@
 (() => {
   'use strict';
 
+  // New visitors should opt in to music instead of having playback armed by default.
+  try {
+    if (localStorage.getItem('pa_music_playing') === null) {
+      localStorage.setItem('pa_music_playing', '0');
+    }
+  } catch (_) {}
+
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -16,7 +23,7 @@
     try { url = new URL(href, location.href); } catch (_) { return; }
     if (url.origin !== location.origin) return;
 
-    // Same-page anchors should keep the browser's normal anchor behavior.
+    // Same-page anchors keep the browser's normal behavior.
     if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
 
     const last = url.pathname.split('/').pop() || '';
