@@ -11,6 +11,10 @@ A partir da V3, novas mudanças de banco devem entrar em `database/migrations/` 
 
 ## Migration V3 atual
 
-`20260906_v3_project_requests.sql` cria o fluxo de pedidos de projeto (`project_requests`) com RLS para cliente, profissional e administração.
+`migrations/20260906_v3_project_requests.sql` cria o fluxo de pedidos de projeto (`project_requests`) com RLS para cliente, profissional e administração, incluindo validação de perfil profissional público.
 
-Os arquivos SQL históricos na raiz foram preservados por enquanto para não perder contexto de versões anteriores. Novas migrations não devem voltar para a raiz.
+## Histórico
+
+Os SQL de versões anteriores foram movidos para `archive/legacy/`. Eles existem para auditoria e recuperação de contexto, não como sequência oficial de instalação da V3.
+
+Novas migrations não devem ser adicionadas à raiz do repositório nem ao diretório de arquivo.
