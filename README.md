@@ -33,7 +33,7 @@ Novas mudanças de banco devem ser adicionadas em `database/migrations/`.
 
 A migration `database/migrations/20260906_v3_project_requests.sql` cria a tabela `project_requests` com RLS e validação do profissional selecionado. Ela não é aplicada automaticamente pelo site: revise e execute no Supabase SQL Editor antes de depender de persistência interna.
 
-Os SQL históricos da raiz foram preservados como referência de versões anteriores. Eles não devem ser usados como padrão para novas migrations.
+Os SQL históricos foram movidos para `database/archive/legacy/`. Eles servem como referência de versões anteriores e não devem ser tratados como sequência oficial de instalação da V3.
 
 ## Publicação
 
