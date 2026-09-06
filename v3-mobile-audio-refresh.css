@@ -1,0 +1,122 @@
+/* Pale Ascendancy — mobile audio + palette refinement */
+@media (max-width:820px){
+  .v3-home{
+    --m-primary:var(--pa-primary,#e71947);
+    --m-secondary:var(--pa-secondary,#8b5cf6);
+    --m-bg:var(--pa-background,#05080e);
+    --m-text:var(--pa-text,#f5f7fb);
+    --m-muted:var(--pa-muted,#929dac);
+    background:
+      radial-gradient(circle at 75% 14%,color-mix(in srgb,var(--m-secondary) 18%,transparent),transparent 24rem),
+      radial-gradient(circle at 12% 48%,color-mix(in srgb,var(--m-primary) 10%,transparent),transparent 22rem),
+      var(--m-bg)!important;
+  }
+
+  html[data-button-mode] .v3-home .primary-button,
+  .v3-home .primary-button{
+    background:linear-gradient(135deg,var(--m-primary),color-mix(in srgb,var(--m-primary) 72%,var(--m-secondary) 28%))!important;
+    color:#fff!important;
+    border-color:color-mix(in srgb,var(--m-primary) 34%,transparent)!important;
+    box-shadow:0 12px 34px color-mix(in srgb,var(--m-primary) 22%,transparent)!important;
+  }
+  html[data-button-mode] .v3-home .secondary-button,
+  .v3-home .secondary-button{
+    background:color-mix(in srgb,var(--m-bg) 86%,white 14%)!important;
+    color:var(--m-text)!important;
+    border-color:color-mix(in srgb,var(--m-secondary) 26%,transparent)!important;
+  }
+
+  .v3-home .hero-content h1{color:var(--m-text)!important}
+  .v3-home .hero-content h1 .mobile-accent{color:var(--m-primary)!important}
+  .v3-home .hero-lead{color:var(--m-muted)!important}
+
+  /* Real waveform: large, clean and detached from the phone. */
+  .v3-home .hero-visual{gap:34px!important}
+  .v3-home .hero-visualizer{
+    width:min(340px,88vw)!important;
+    min-height:82px!important;
+    margin:6px auto 0!important;
+    padding:12px 8px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  .v3-home .hero-visualizer::before,
+  .v3-home .hero-visualizer::after{content:none!important;display:none!important}
+  .v3-home .beat-bars{
+    position:relative!important;
+    width:100%!important;
+    height:70px!important;
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    overflow:visible!important;
+    transform:none!important;
+  }
+  .v3-home .beat-bars::before{
+    content:"";
+    position:absolute;
+    inset:10px 4% 8px;
+    border-radius:50%;
+    background:radial-gradient(ellipse at center,color-mix(in srgb,var(--m-secondary) 13%,transparent),transparent 66%);
+    filter:blur(16px);
+    pointer-events:none;
+  }
+  .v3-home .beat-bars i{
+    position:relative;
+    z-index:1;
+    flex:0 0 5px!important;
+    width:5px!important;
+    min-height:7px!important;
+    max-height:62px!important;
+    border-radius:999px!important;
+    background:linear-gradient(180deg,
+      color-mix(in srgb,#ffffff 68%,var(--m-secondary) 32%) 0%,
+      var(--m-secondary) 46%,
+      var(--m-primary) 100%)!important;
+    box-shadow:0 0 12px color-mix(in srgb,var(--m-primary) 28%,transparent)!important;
+    opacity:.92!important;
+    transform-origin:center!important;
+  }
+
+  /* Give the idle waveform a deliberate silhouette before playback starts. */
+  .v3-home .beat-bars i:nth-child(1),.v3-home .beat-bars i:nth-child(28){height:8px!important}
+  .v3-home .beat-bars i:nth-child(2),.v3-home .beat-bars i:nth-child(27){height:14px!important}
+  .v3-home .beat-bars i:nth-child(3),.v3-home .beat-bars i:nth-child(26){height:20px!important}
+  .v3-home .beat-bars i:nth-child(4),.v3-home .beat-bars i:nth-child(25){height:27px!important}
+  .v3-home .beat-bars i:nth-child(5),.v3-home .beat-bars i:nth-child(24){height:34px!important}
+  .v3-home .beat-bars i:nth-child(6),.v3-home .beat-bars i:nth-child(23){height:42px!important}
+  .v3-home .beat-bars i:nth-child(7),.v3-home .beat-bars i:nth-child(22){height:31px!important}
+  .v3-home .beat-bars i:nth-child(8),.v3-home .beat-bars i:nth-child(21){height:46px!important}
+  .v3-home .beat-bars i:nth-child(9),.v3-home .beat-bars i:nth-child(20){height:53px!important}
+  .v3-home .beat-bars i:nth-child(10),.v3-home .beat-bars i:nth-child(19){height:38px!important}
+  .v3-home .beat-bars i:nth-child(11),.v3-home .beat-bars i:nth-child(18){height:48px!important}
+  .v3-home .beat-bars i:nth-child(12),.v3-home .beat-bars i:nth-child(17){height:57px!important}
+  .v3-home .beat-bars i:nth-child(13),.v3-home .beat-bars i:nth-child(16){height:46px!important}
+  .v3-home .beat-bars i:nth-child(14),.v3-home .beat-bars i:nth-child(15){height:62px!important}
+
+  .mobile-music-slot .music-player{
+    background:color-mix(in srgb,var(--m-bg) 88%,#111827 12%)!important;
+    border-color:color-mix(in srgb,var(--m-secondary) 20%,transparent)!important;
+  }
+  .mobile-music-slot .music-play{
+    background:linear-gradient(135deg,var(--m-primary),color-mix(in srgb,var(--m-primary) 70%,var(--m-secondary) 30%))!important;
+    color:#fff!important;
+  }
+  .mobile-music-slot .music-next,
+  .mobile-music-slot .music-library-button{
+    color:var(--m-text)!important;
+    border-color:color-mix(in srgb,var(--m-secondary) 18%,transparent)!important;
+  }
+  .mobile-recent-kicker,.mobile-recent-head a{color:var(--m-primary)!important}
+}
+
+@media(max-width:430px){
+  .v3-home .hero-visualizer{width:min(320px,92vw)!important}
+  .v3-home .beat-bars{gap:4px!important}
+  .v3-home .beat-bars i{flex-basis:4px!important;width:4px!important}
+}
