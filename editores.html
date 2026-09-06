@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Profissionais — Pale Ascendancy</title>
-<meta name="description" content="Explore editores e designers da Pale Ascendancy por especialidade, disponibilidade e portfólio.">
+<meta name="description" content="Encontre editores e designers, compare especialidades, disponibilidade e portfólios para escolher o profissional ideal para seu projeto.">
 <meta name="theme-color" content="#050914">
 <meta property="og:title" content="Profissionais — Pale Ascendancy">
 <meta property="og:description" content="Descubra editores e designers, compare estilos e explore portfólios na Pale Ascendancy.">
@@ -12,6 +12,7 @@
 <link rel="icon" href="favicon.svg">
 <link rel="stylesheet" href="style.css?v=v3">
 <link rel="stylesheet" href="v3.css?v=4">
+<link rel="stylesheet" href="v3-audit.css?v=1">
 </head>
 <body class="v3-editors-page">
 <header class="header">
@@ -24,19 +25,20 @@
   <div class="hero-glow"></div>
   <div class="editors-container">
     <section class="editors-heading v3-directory-heading">
-      <p class="eyebrow">Diretório profissional</p>
+      <p class="eyebrow">Profissionais</p>
       <h1>Encontre talento pelo <span>trabalho.</span></h1>
-      <p>Pesquise por nome ou especialidade, explore portfólios e encontre profissionais que combinam com o seu projeto.</p>
+      <p>Busque por nome ou especialidade, compare portfólios e encontre profissionais compatíveis com o seu projeto.</p>
       <div class="v3-directory-points" aria-label="Recursos do diretório"><span>Perfis aprovados</span><span>Portfólios</span><span>Especialidades</span><span>Disponibilidade</span></div>
     </section>
     <section id="editorManageBar" class="editor-manage-bar" hidden><div><span class="eyebrow">Seu perfil profissional</span><strong>Você está publicado na rede.</strong><p>Atualize apresentação, especialidades, portfólio e redes sempre que precisar.</p></div><div class="editor-manage-actions"><a class="primary-button" href="editor-painel.html">Gerenciar perfil</a></div></section>
-    <section class="v3-discovery-panel" aria-labelledby="directorySearchTitle"><div class="v3-discovery-copy"><span class="v3-audience-label">Descoberta</span><h2 id="directorySearchTitle">Que tipo de profissional você procura?</h2><p>Use a busca e os filtros para reduzir a lista até encontrar estilos compatíveis com sua ideia.</p></div><div class="editors-tools"><label class="v3-search-label" for="searchInput">Buscar profissional</label><input id="searchInput" type="search" placeholder="Nome, especialidade ou categoria..." autocomplete="off"><div class="filter-row" aria-label="Filtrar profissionais por categoria"><button class="filter-button active" data-filter="todos">Todos</button><button class="filter-button" data-filter="promo">Promo</button><button class="filter-button" data-filter="trailer">Trailers</button><button class="filter-button" data-filter="motion">Motion</button><button class="filter-button" data-filter="anime">Anime</button><button class="filter-button" data-filter="gaming">Gaming</button><button class="filter-button" data-filter="design">Design</button></div></div></section>
+    <section class="v3-discovery-panel" aria-labelledby="directorySearchTitle"><div class="v3-discovery-copy"><span class="v3-audience-label">Busca</span><h2 id="directorySearchTitle">Que profissional você procura?</h2><p>Use a busca e os filtros para chegar mais rápido aos estilos que combinam com sua ideia.</p></div><div class="editors-tools"><label class="v3-search-label" for="searchInput">Buscar profissional</label><input id="searchInput" type="search" placeholder="Nome, especialidade ou categoria..." autocomplete="off"><div class="filter-row" aria-label="Filtrar profissionais por categoria"><button class="filter-button active" data-filter="todos">Todos</button><button class="filter-button" data-filter="promo">Promo</button><button class="filter-button" data-filter="trailer">Trailers</button><button class="filter-button" data-filter="motion">Motion</button><button class="filter-button" data-filter="anime">Anime</button><button class="filter-button" data-filter="gaming">Gaming</button><button class="filter-button" data-filter="design">Design</button></div></div></section>
     <section class="v3-results-section" aria-labelledby="directoryResultsTitle"><div class="v3-results-heading"><div><p class="eyebrow">Resultados</p><h2 id="directoryResultsTitle">Profissionais da rede</h2></div><span class="v3-live-note">Dados carregados da plataforma</span></div><div class="editors-grid" id="editorsGrid"><div class="admin-empty">Carregando profissionais...</div></div></section>
-    <section class="professional-reels" id="reels"><div class="professional-reels-heading"><div><p class="eyebrow">Portfólios em movimento</p><h2>Veja o trabalho antes de <span>escolher.</span></h2><p>Uma seleção visual de projetos publicados pelos profissionais da rede.</p></div></div><div class="portfolio-reels" id="portfolioReels" aria-live="polite"></div></section>
-    <section class="editors-cta v3-directory-cta"><p class="eyebrow">Não encontrou ainda?</p><h2>Comece pelo <span>briefing.</span></h2><p>Explique seu projeto primeiro e use o briefing para orientar a busca pelo profissional adequado.</p><div class="hero-buttons"><a class="primary-button" href="contratar.html">Descrever meu projeto</a><a class="secondary-button" href="cadastro-profissional.html">Entrar como profissional</a></div></section>
+    <section class="professional-reels" id="reels"><div class="professional-reels-heading"><div><p class="eyebrow">Portfólios</p><h2>Veja o trabalho antes de <span>escolher.</span></h2><p>Projetos publicados pelos profissionais da rede para ajudar você a comparar estilos.</p></div></div><div class="portfolio-reels" id="portfolioReels" aria-live="polite"></div></section>
+    <section class="editors-cta v3-directory-cta"><p class="eyebrow">Não encontrou ainda?</p><h2>Comece pelo <span>briefing.</span></h2><p>Descreva seu projeto e use o briefing para orientar a busca pelo profissional adequado.</p><div class="hero-buttons"><a class="primary-button" href="contratar.html">Descrever meu projeto</a><a class="secondary-button" href="cadastro-profissional.html">Entrar como profissional</a></div></section>
   </div>
 </main>
-<footer><div class="footer-brand"><img src="assets/pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Editores, designers, clientes e projetos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
+<footer><div class="footer-brand"><img src="assets/pale-ascendancy-logo.png" alt="Pale Ascendancy" width="28" height="28"><span>PALE ASCENDANCY</span></div><p>Profissionais, clientes e projetos criativos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
 <script src="script.js?v=v3"></script>
+<script src="v3-nav-fix.js?v=1"></script>
 </body>
 </html>
