@@ -1,4 +1,4 @@
-/* PALE ASCENDANCY V3 — HOME FOUNDATION */
+/* PALE ASCENDANCY V3 — VISUAL FOUNDATION */
 
 :root {
   --v3-bg: #050914;
@@ -11,7 +11,8 @@
   --v3-accent-soft: rgba(217,31,71,.14);
 }
 
-body.v3-home {
+body.v3-home,
+body.v3-directory {
   background:
     radial-gradient(circle at 18% 10%, rgba(217,31,71,.12), transparent 28rem),
     radial-gradient(circle at 86% 34%, rgba(67,92,255,.08), transparent 30rem),
@@ -19,7 +20,8 @@ body.v3-home {
   color: var(--v3-text);
 }
 
-.v3-home .header {
+.v3-home .header,
+.v3-directory .header {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--v3-line);
@@ -190,19 +192,103 @@ body.v3-home {
 .v3-home .service-preview,
 .v3-home .contact-panel { border-color: var(--v3-line); }
 
+/* DIRECTORY V3 */
+.v3-directory .editors-page { min-height: 100vh; }
+.v3-directory .editors-container { position: relative; z-index: 1; }
+.v3-directory-heading { max-width: 820px; padding-top: clamp(3rem, 8vw, 6rem); }
+.v3-directory-heading h1 { max-width: 780px; letter-spacing: -.045em; }
+.v3-directory-heading > p:last-of-type { max-width: 650px; color: var(--v3-muted); }
+
+.v3-directory-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin-top: 1.2rem;
+}
+.v3-directory-points span {
+  padding: .5rem .72rem;
+  border: 1px solid var(--v3-line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.025);
+  color: #c7d0de;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.v3-discovery-panel {
+  display: grid;
+  grid-template-columns: .85fr 1.4fr;
+  gap: clamp(1.3rem, 4vw, 3rem);
+  align-items: center;
+  margin: clamp(2rem, 6vw, 4.5rem) 0 2rem;
+  padding: clamp(1.35rem, 3vw, 2.2rem);
+  border: 1px solid var(--v3-line);
+  border-radius: 26px;
+  background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+  box-shadow: 0 22px 70px rgba(0,0,0,.2);
+}
+.v3-discovery-copy h2 { margin: .5rem 0 .65rem; font-size: clamp(1.4rem, 3vw, 2.2rem); }
+.v3-discovery-copy p { margin: 0; color: var(--v3-muted); }
+.v3-directory .editors-tools { margin: 0; }
+.v3-search-label {
+  display: block;
+  margin-bottom: .55rem;
+  font-size: .8rem;
+  font-weight: 800;
+  color: #cdd6e5;
+}
+.v3-directory #searchInput {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,.11);
+  background: rgba(3,8,18,.72);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.v3-results-section { margin-top: 2.5rem; }
+.v3-results-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.v3-results-heading h2 { margin: .25rem 0 0; }
+.v3-live-note {
+  padding: .48rem .65rem;
+  border: 1px solid var(--v3-line);
+  border-radius: 999px;
+  color: var(--v3-muted);
+  font-size: .76rem;
+  white-space: nowrap;
+}
+.v3-directory .editor-card {
+  border-color: var(--v3-line);
+  background: linear-gradient(160deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+}
+.v3-directory .professional-reels { margin-top: clamp(4rem, 8vw, 7rem); }
+.v3-directory-cta {
+  margin-top: clamp(4rem, 8vw, 7rem);
+  border: 1px solid var(--v3-line);
+  border-radius: 26px;
+  background: radial-gradient(circle at 85% 20%, rgba(217,31,71,.13), transparent 22rem), rgba(255,255,255,.02);
+}
+
 @media (max-width: 820px) {
   .v3-trust-strip,
   .v3-process-grid,
   .v3-audience-grid,
-  .v3-edith-card { grid-template-columns: 1fr; }
+  .v3-edith-card,
+  .v3-discovery-panel { grid-template-columns: 1fr; }
   .v3-trust-strip { margin-top: 0; }
   .v3-trust-item { border-right: 0; border-bottom: 1px solid var(--v3-line); }
   .v3-trust-item:last-child { border-bottom: 0; }
   .v3-edith-status { justify-self: start; }
+  .v3-results-heading { align-items: flex-start; flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .v3-home *, .v3-home *::before, .v3-home *::after {
+  .v3-home *, .v3-home *::before, .v3-home *::after,
+  .v3-directory *, .v3-directory *::before, .v3-directory *::after {
     scroll-behavior: auto !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
