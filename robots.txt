@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
-
+Disallow: /admin.html
+Disallow: /login-admin.html
+Disallow: /editor-painel.html
+Disallow: /editar-perfil.html
 Sitemap: https://paleascendancy.github.io/sitemap.xml
