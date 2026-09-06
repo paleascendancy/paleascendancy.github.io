@@ -4,4 +4,9 @@ Disallow: /admin.html
 Disallow: /login-admin.html
 Disallow: /editor-painel.html
 Disallow: /editar-perfil.html
-Sitemap: https://paleascendancy.github.io/sitemap.xml
+Disallow: /perfil.html
+Disallow: /login.html
+Disallow: /login-profissional.html
+Disallow: /cadastro.html
+Disallow: /cadastro-profissional.html
+Sitemap: https://paleascendancy.vercel.app/sitemap.xml
