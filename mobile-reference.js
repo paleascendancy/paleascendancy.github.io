@@ -4,8 +4,6 @@
   const SB_URL = "https://fnyellunugdfesprmvzm.supabase.co";
   const SB_KEY = "sb_publishable_clf6HlhhxdftO1_XZU7YsA_pRmkCEJK";
   const mq = window.matchMedia("(max-width:820px)");
-  let playerHome = null;
-  let playerNext = null;
   let recentBuilt = false;
 
   function accentTitle(){
@@ -40,25 +38,11 @@
     bars.dataset.waveformReady = "1";
   }
 
-  function ensureMusicSlot(){
-    const visual = document.querySelector(".v3-home .hero-visual");
+  function ensureFloatingPlayer(){
     const player = document.getElementById("musicPlayer");
-    if (!visual || !player) return;
-    let slot = visual.querySelector(".mobile-music-slot");
-    if (!slot) {
-      slot = document.createElement("div");
-      slot.className = "mobile-music-slot";
-      visual.appendChild(slot);
-    }
-    if (!playerHome) {
-      playerHome = player.parentNode;
-      playerNext = player.nextSibling;
-    }
-    if (mq.matches && player.parentNode !== slot) slot.appendChild(player);
-    if (!mq.matches && playerHome && player.parentNode !== playerHome) {
-      if (playerNext && playerNext.parentNode === playerHome) playerHome.insertBefore(player, playerNext);
-      else playerHome.appendChild(player);
-    }
+    if (!player) return;
+    if (player.parentElement !== document.body) document.body.appendChild(player);
+    document.querySelectorAll(".mobile-music-slot").forEach(slot => slot.remove());
   }
 
   function recentShell(){
@@ -113,11 +97,11 @@
     accentTitle();
     ensureStats();
     ensureWaveform();
-    ensureMusicSlot();
+    ensureFloatingPlayer();
     if (mq.matches) loadRecent();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true});
   else apply();
-  mq.addEventListener?.("change", ensureMusicSlot);
+  mq.addEventListener?.("change", ensureFloatingPlayer);
 })();
