@@ -1,30 +1,38 @@
-# Configuração do Supabase — Pale Ascendancy V18
+# Configuração do Supabase — Pale Ascendancy V3
 
-## 1. SQL
-Abra o SQL Editor e execute `PALE_ASCENDANCY_V18_SUPABASE.sql`.
+## URL de produção
 
-Antes do bloco final, substitua `SEU_EMAIL_AQUI` pelo e-mail exato da sua conta de administrador.
+A implantação pública atual é:
 
-## 2. Redirect do e-mail
-Em Authentication → URL Configuration, configure o Site URL para:
+`https://paleascendancy.vercel.app`
 
-`https://paleascendancy.github.io`
+Em **Authentication → URL Configuration**, configure o **Site URL** para esse domínio e permita os redirects usados pela autenticação, incluindo:
 
-Adicione também o Redirect URL:
+`https://paleascendancy.vercel.app/perfil.html`
 
-`https://paleascendancy.github.io/perfil.html`
+Se GitHub Pages continuar disponível apenas como hospedagem alternativa, ele não deve substituir o domínio de produção nas configurações principais.
 
-Se usar o endereço de projeto da Vercel, adicione também o domínio/URL correspondente.
+## Banco de dados
 
-O cadastro envia `emailRedirectTo` para `perfil.html`, então, depois de confirmar o e-mail, o Supabase pode devolver o usuário ao site com a sessão autenticada.
+As mudanças novas da V3 ficam em `database/migrations/`.
 
-## 3. Teste
-1. Execute o SQL.
-2. Cadastre uma conta nova.
-3. Confirme o e-mail.
-4. O link deve retornar para `perfil.html`.
-5. O perfil deve existir automaticamente na tabela `profile`.
-6. Entre no painel em `admin.html` com a conta marcada em `admin_users`.
+A migration atual de pedidos é:
 
-## 4. Segurança
-Nunca coloque uma `service_role` key no HTML/JavaScript. O site usa somente a chave publicável.
+`database/migrations/20260906_v3_project_requests.sql`
+
+Ela cria `project_requests`, RLS, índices e validação de profissional público. A migration precisa ser revisada e executada manualmente no Supabase SQL Editor; o commit no GitHub não altera o banco automaticamente.
+
+Os arquivos SQL antigos da raiz pertencem a versões anteriores e servem apenas como histórico até serem arquivados de forma segura.
+
+## Testes de autenticação
+
+1. Cadastre uma conta de teste.
+2. Confirme o e-mail, quando a confirmação estiver habilitada.
+3. Verifique se o retorno acontece no domínio Vercel.
+4. Confirme que o perfil correspondente existe em `profile`.
+5. Teste login comum, login profissional aprovado e login administrativo separadamente.
+6. Teste logout e retorno para a Home com recarregamento completo da página.
+
+## Segurança
+
+Nunca coloque uma `service_role` key no HTML ou JavaScript. O frontend deve usar somente a chave publicável, enquanto permissões reais ficam em RLS, funções controladas e políticas do banco.
