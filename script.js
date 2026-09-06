@@ -1315,25 +1315,21 @@
     el.className = `auth-message${type ? ` ${type}` : ""}`;
   }
 
-  async function syncProfessionalApplication(c, user) {
+  async function syncProfessionalApplication(c, user, requestedRoleOverride = null) {
     if (!c || !user?.id) return { ok: false, pending: false };
     const meta = user.user_metadata || {};
-    if (meta.professional_application !== true) return { ok: true, pending: false };
-    const requestedRole = meta.requested_role || "editor";
-    const patch = {
-      nome: meta.nome || undefined,
-      nome_artistico: meta.nome_artistico || undefined,
-      especialidade: meta.especialidade || undefined,
-      is_editor: requestedRole === "editor" || requestedRole === "editor_designer",
-      is_designer: requestedRole === "designer" || requestedRole === "editor_designer",
-      professional_login_enabled: false,
-      is_public: false
-    };
-    Object.keys(patch).forEach(k => patch[k] === undefined && delete patch[k]);
+    const requestedRole = requestedRoleOverride || meta.requested_role || "editor";
+    const role = requestedRole === "both" ? "editor_designer" : requestedRole;
     try {
-      const { data, error } = await c.from("profile").update(patch).eq("id", user.id).select("id,is_editor,is_designer,professional_login_enabled,is_public,especialidade,nome,nome_artistico").maybeSingle();
+      const { data, error } = await c.rpc("submit_professional_application", {
+        p_profile_id: user.id,
+        p_requested_role: role,
+        p_nome: meta.nome || null,
+        p_nome_artistico: meta.nome_artistico || null,
+        p_especialidade: meta.especialidade || null
+      });
       if (error) return { ok: false, pending: false, error };
-      return { ok: true, pending: true, profile: data || null };
+      return { ok: true, pending: true, application: data || null };
     } catch (error) {
       return { ok: false, pending: false, error };
     }
@@ -1367,7 +1363,7 @@
       return;
     }
     if (mode === "professional") {
-      await syncProfessionalApplication(c, user);
+      const sync = await syncProfessionalApplication(c, user);
       const p = await authProfile(user.id);
       if (!(p?.professional_login_enabled && (p?.is_editor || p?.is_designer))) {
         await c.auth.signOut();
@@ -1509,15 +1505,36 @@
         if (!c) { authMessage("professionalRegisterMessage", "Serviço de autenticação indisponível.", "error"); return; }
         if (button) { button.disabled = true; button.textContent = "Enviando..."; }
         const { data, error } = await c.auth.signUp({
-          email: document.getElementById("email")?.value.trim(), password: document.getElementById("senha")?.value || "",
-          options: { emailRedirectTo: new URL("login-profissional.html", location.href).href, data: {
-            nome: document.getElementById("nome")?.value.trim(), nome_artistico: document.getElementById("nomeArtistico")?.value.trim(),
-            especialidade: category, professional_application: true, requested_role: requestedRole
+          email: document.getElementById("email")?.value.trim(),
+          password: document.getElementById("senha")?.value || "",
+          options: { data: {
+            nome: document.getElementById("nome")?.value.trim(),
+            nome_artistico: document.getElementById("nomeArtistico")?.value.trim(),
+            especialidade: category,
+            requested_role: requestedRole
           }}
         });
         if (error) {
-          authMessage("professionalRegisterMessage", error.message || "Não foi possível enviar a candidatura.", "error");
+          authMessage("professionalRegisterMessage", error.message || "Não foi possível criar o acesso.", "error");
           if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
+          return;
+        }
+        if (!data?.user) {
+          authMessage("professionalRegisterMessage", "Não foi possível criar a conta profissional.", "error");
+          if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
+          return;
+        }
+
+        const application = await syncProfessionalApplication(c, data.user, requestedRole);
+        if (!application.ok) {
+          authMessage("professionalRegisterMessage", "A conta foi criada, mas não foi possível registrar a solicitação. Tente novamente pelo cadastro profissional.", "error");
+          if (button) { button.disabled = false; button.textContent = "Criar acesso profissional"; }
+          return;
+        }
+
+        try { localStorage.removeItem("pa_pending_professional_application"); } catch (_) {}
+        authMessage("professionalRegisterMessage", "Cadastro realizado. Sua solicitação foi enviada para a administração e está aguardando aprovação.", "success");
+        if (button) { button.disabled = true; button.textContent = "Solicitação enviada"; }
           return;
         }
         if (data?.user) {
