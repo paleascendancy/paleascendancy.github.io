@@ -31,6 +31,24 @@
     document.head.appendChild(script);
   }
 
+  const currentPage = location.pathname.split('/').pop() || 'index.html';
+  if (currentPage === 'editor-painel.html') {
+    if (!document.querySelector('link[data-pa-v44-avatar]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'v44-avatar-fix.css?v=1';
+      link.dataset.paV44Avatar = '1';
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-pa-v44-avatar]')) {
+      const script = document.createElement('script');
+      script.src = 'v44-avatar-fix.js?v=1';
+      script.defer = true;
+      script.dataset.paV44Avatar = '1';
+      document.head.appendChild(script);
+    }
+  }
+
   if (document.body.classList.contains('v3-home')) {
     if (!document.querySelector('link[data-pa-mobile-reference]')) {
       const link = document.createElement('link');
