@@ -15,6 +15,22 @@
     document.head.appendChild(link);
   }
 
+  if (!document.querySelector('link[data-pa-v43-stability]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'v43-stability.css?v=1';
+    link.dataset.paV43Stability = '1';
+    document.head.appendChild(link);
+  }
+
+  if (!document.querySelector('script[data-pa-v43-stability]')) {
+    const script = document.createElement('script');
+    script.src = 'v43-stability.js?v=1';
+    script.defer = true;
+    script.dataset.paV43Stability = '1';
+    document.head.appendChild(script);
+  }
+
   if (document.body.classList.contains('v3-home')) {
     if (!document.querySelector('link[data-pa-mobile-reference]')) {
       const link = document.createElement('link');
