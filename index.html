@@ -1,47 +1,417 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pale Ascendancy — Editores, Designers e Projetos Criativos</title>
-<meta name="description" content="Encontre editores e designers, veja portfólios e crie um briefing claro para iniciar seu projeto na Pale Ascendancy.">
-<meta name="theme-color" content="#07090d">
-<meta property="og:title" content="Pale Ascendancy — Profissionais e Projetos Criativos">
-<meta property="og:description" content="Encontre profissionais, compare portfólios e organize seu projeto antes do contato.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://paleascendancy.vercel.app/">
-<link rel="canonical" href="https://paleascendancy.vercel.app/">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=v3">
-<link rel="stylesheet" href="v3.css?v=4">
-<link rel="stylesheet" href="v3-audit.css?v=3">
-<link rel="stylesheet" href="v3-home-luxury.css?v=1">
-<link rel="stylesheet" href="music-library-premium.css?v=2">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Pale Ascendancy","url":"https://paleascendancy.vercel.app/","logo":"https://paleascendancy.vercel.app/assets/pale-ascendancy-logo.png"}</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pale Ascendancy — Em reforma</title>
+  <meta name="description" content="A Pale Ascendancy está em reforma. Conheça o objetivo da plataforma, suas funções planejadas e as responsabilidades de uso.">
+  <meta name="theme-color" content="#090b10">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090d;
+      --bg-soft: #0e1219;
+      --panel: rgba(17, 22, 31, .88);
+      --panel-2: rgba(25, 31, 43, .78);
+      --line: rgba(255,255,255,.08);
+      --text: #f5f7fb;
+      --muted: #aeb7c6;
+      --accent: #9f8cff;
+      --accent-2: #63d9ff;
+      --gold: #d6b56e;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(111, 83, 255, .18), transparent 34%),
+        radial-gradient(circle at 90% 20%, rgba(74, 202, 255, .12), transparent 28%),
+        linear-gradient(180deg, #07090d 0%, #090d13 55%, #07090d 100%);
+      font-family: "Manrope", system-ui, sans-serif;
+      line-height: 1.65;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.75), transparent 78%);
+    }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      letter-spacing: .08em;
+      font-size: .96rem;
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      box-shadow: 0 0 34px rgba(159,140,255,.18);
+    }
+
+    .hero {
+      padding: 88px 0 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid rgba(159,140,255,.25);
+      background: rgba(159,140,255,.08);
+      border-radius: 999px;
+      color: #d8d0ff;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      font-family: "Space Grotesk", sans-serif;
+      line-height: 1.08;
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 18px;
+      font-size: clamp(2.6rem, 6vw, 5.6rem);
+      letter-spacing: -.045em;
+      max-width: 820px;
+    }
+
+    .lead {
+      margin: 22px 0 0;
+      max-width: 730px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+
+    .status-card {
+      padding: 26px;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(24,30,42,.92), rgba(13,17,24,.92));
+      box-shadow: 0 18px 70px rgba(0,0,0,.3);
+    }
+
+    .status-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: #ffcc6e;
+      box-shadow: 0 0 18px rgba(255,204,110,.55);
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .status-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .status-card p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 18px;
+      padding: 18px 0 54px;
+    }
+
+    .card {
+      min-height: 220px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border-radius: 24px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.16);
+    }
+
+    .card span {
+      display: inline-block;
+      color: var(--accent-2);
+      font-weight: 800;
+      font-size: .76rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    section {
+      padding: 54px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      margin: 14px 0 0;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      letter-spacing: -.035em;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .feature {
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .feature b {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .feature small {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .legal {
+      padding: 28px;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(214,181,110,.09), rgba(159,140,255,.07));
+      border: 1px solid rgba(214,181,110,.18);
+    }
+
+    .legal p {
+      color: var(--muted);
+      margin: 12px 0 0;
+    }
+
+    .legal strong { color: var(--text); }
+
+    .notice {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border-left: 3px solid var(--accent);
+      background: rgba(159,140,255,.06);
+      color: #d8d9e5;
+      border-radius: 0 14px 14px 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 30px 0 48px;
+      color: #7f8998;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding-top: 64px; }
+      .grid { grid-template-columns: 1fr; }
+      .feature-list { grid-template-columns: 1fr; }
+      .status-card { order: 2; }
+    }
+  </style>
 </head>
-<body class="v3-home">
-<header class="header">
-  <a class="brand" href="index.html"><img alt="Pale Ascendancy" height="36" width="36" src="assets/pale-ascendancy-logo.png"><span>PALE ASCENDANCY</span></a>
-  <nav class="nav" aria-label="Navegação principal"><a href="index.html">Home</a><a href="#como-funciona">Como funciona</a><a href="servicos.html">Serviços</a><a href="editores.html">Profissionais</a><a href="contratar.html">Iniciar projeto</a></nav>
-  <div class="account-area" id="accountArea"><div class="logged-out-area" hidden id="loggedOutArea"><a class="account-login" href="login.html">Entrar</a><a class="account-register" href="cadastro.html">Criar conta</a></div><div class="logged-in-area" hidden id="loggedInArea"><a class="profile-link" href="perfil.html" aria-label="Abrir meu perfil"><span class="profile-avatar-small"><span id="headerProfileInitial">?</span><img alt="Foto de perfil" hidden id="headerProfileImage" src=""></span><span class="profile-link-text">Perfil</span></a></div></div>
-  <button class="menu-button" id="menuButton" type="button" aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu"><span class="menu-icon" aria-hidden="true"></span></button>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <img src="assets/pale-ascendancy-logo.png" alt="Logo Pale Ascendancy">
+      <span>PALE ASCENDANCY</span>
+    </div>
+  </div>
 </header>
-<div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="#como-funciona">Como funciona</a><a href="servicos.html">Serviços</a><a href="editores.html">Profissionais</a><a href="contratar.html">Iniciar projeto</a><div class="mobile-account" id="mobileAccount"><div id="mobileLoggedOut"><a href="login.html">Entrar</a><a href="cadastro.html">Criar conta</a></div><div hidden id="mobileLoggedIn"><a href="perfil.html">Meu perfil</a></div></div></div>
-<main>
-<section class="hero"><div class="hero-glow"></div><div class="hero-grid"><div class="hero-content"><div class="v3-kicker">Pale Ascendancy</div><h1>Encontre o profissional certo para seu projeto.</h1><p class="hero-lead">Explore trabalhos reais, compare especialidades e organize seu briefing antes de iniciar a conversa.</p><div class="hero-buttons"><a class="primary-button" href="contratar.html">Iniciar projeto</a><a class="secondary-button" href="editores.html">Explorar profissionais</a></div></div><div class="hero-visual"><div class="phone-scene" id="phoneScene" aria-label="Visualização da Pale Ascendancy"><div class="phone"><div class="phone-frame"><img class="phone-screen" src="./assets/file_000000000428820e9367024538cb1a95.png" alt="Visualização de perfil na Pale Ascendancy" loading="eager"></div></div></div><div class="hero-visualizer" aria-label="Visualizador da música"><div class="beat-bars" id="beatBars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div></div></section>
-<div class="v3-trust-strip" aria-label="Benefícios da plataforma"><div class="v3-trust-item"><strong>Perfis profissionais</strong><span>Especialidades, disponibilidade e portfólio em um único lugar.</span></div><div class="v3-trust-item"><strong>Briefing organizado</strong><span>Prazo, orçamento, referências e objetivo antes do contato.</span></div><div class="v3-trust-item"><strong>Escolha com contexto</strong><span>Compare trabalhos antes de iniciar uma conversa.</span></div></div>
-<section class="section" id="como-funciona"><div class="section-heading"><p class="eyebrow">Como funciona</p><h2>Do projeto ao profissional certo.</h2><p>Você pode começar pela ideia ou por um perfil profissional.</p></div><div class="v3-process-grid"><article class="v3-process-card"><span class="v3-process-number">01</span><h3>Descreva a necessidade</h3><p>Organize tipo de projeto, objetivo, prazo, orçamento e referências.</p></article><article class="v3-process-card"><span class="v3-process-number">02</span><h3>Compare profissionais</h3><p>Veja especialidades, portfólios e disponibilidade antes de escolher.</p></article><article class="v3-process-card"><span class="v3-process-number">03</span><h3>Inicie a conversa</h3><p>Envie um briefing claro e alinhe escopo, prazo e condições.</p></article></div></section>
-<section class="section"><div class="section-heading"><p class="eyebrow">Dois caminhos</p><h2>Comece do jeito que faz sentido para você.</h2></div><div class="v3-audience-grid"><article class="v3-audience-card"><span class="v3-audience-label">Tenho um projeto</span><h3>Crie o briefing primeiro.</h3><p>Explique o que você precisa e use o resumo para orientar o contato ou a busca.</p><a class="primary-button" href="contratar.html">Criar briefing</a></article><article class="v3-audience-card"><span class="v3-audience-label">Quero escolher alguém</span><h3>Explore os profissionais.</h3><p>Pesquise por especialidade, compare portfólios e abra o perfil completo.</p><a class="secondary-button" href="editores.html">Ver profissionais</a></article></div></section>
-<section class="section" id="servicos"><div class="section-heading"><p class="eyebrow">Serviços</p><h2>Profissionais para diferentes formatos.</h2><p>Promos, trailers, highlights, motion design, design e outras especialidades criativas.</p></div><div class="service-preview"><div class="service-preview-content"><h2>Comece pelo tipo de projeto.</h2><p>Veja as categorias de trabalho e escolha entre explorar profissionais ou criar um briefing.</p><div class="section-action"><a class="primary-button" href="servicos.html">Ver serviços</a></div></div><div class="service-preview-list"><div><strong>Promos</strong><span>Conteúdo promocional e comercial.</span></div><div><strong>Trailers</strong><span>Narrativa, ritmo e impacto visual.</span></div><div><strong>Highlights</strong><span>Melhores momentos em destaque.</span></div><div><strong>Motion Design</strong><span>Tipografia, animação e composição.</span></div></div></div></section>
-<section class="section showcase-section" id="projetos"><div class="section-heading"><p class="eyebrow">Pale Ascendancy</p><h2>Contrate ou apresente seu trabalho.</h2><p>Use a plataforma para iniciar um projeto ou construir sua presença profissional.</p></div><div class="showcase-grid"><a class="showcase-card" href="editores.html"><span class="showcase-kicker">PROFISSIONAIS</span><strong>Explore perfis e portfólios</strong><span>Descubra especialidades e profissionais disponíveis.</span><b>Explorar →</b></a><a class="showcase-card" href="contratar.html"><span class="showcase-kicker">PROJETO</span><strong>Organize seu briefing</strong><span>Transforme sua necessidade em uma mensagem clara.</span><b>Começar →</b></a><a class="showcase-card" href="cadastro-profissional.html"><span class="showcase-kicker">PROFISSIONAIS</span><strong>Apresente seu trabalho</strong><span>Solicite participação e construa seu perfil profissional.</span><b>Participar →</b></a></div></section>
-<section class="section" id="contato"><div class="section-heading"><p class="eyebrow">Contato</p><h2>Fale com a Pale Ascendancy.</h2><p>Para projetos, suporte ou assuntos da plataforma, utilize os canais oficiais.</p></div><div class="contact-panel"><div class="contact-owner"><span class="contact-label">ADMINISTRAÇÃO</span><h3>Equipe Pale Ascendancy</h3><p>Administração, desenvolvimento da plataforma e organização da comunidade.</p></div><div class="contact-actions-grid"><a class="primary-button" href="https://wa.me/5595991501077" target="_blank" rel="noopener noreferrer">WhatsApp</a><a class="secondary-button" href="https://discord.gg/H3mnq7Nfp" target="_blank" rel="noopener noreferrer">Discord</a></div></div></section>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Plataforma em reforma</div>
+      <h1>Estamos reconstruindo a Pale Ascendancy.</h1>
+      <p class="lead">
+        A Pale Ascendancy é uma plataforma criada para aproximar editores, designers,
+        criadores de conteúdo e clientes em um ambiente mais organizado, profissional e claro.
+        Neste momento, o site está passando por uma reforma estrutural e visual antes de voltar ao acesso público.
+      </p>
+    </div>
+
+    <aside class="status-card" aria-label="Status atual da plataforma">
+      <strong><span class="status-dot"></span>Status atual</strong>
+      <p>
+        O acesso público está temporariamente limitado. Recursos, textos, regras, experiência visual
+        e fluxos da plataforma estão sendo revisados antes de uma nova liberação.
+      </p>
+    </aside>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <span>Objetivo</span>
+      <h3>Conectar pessoas e projetos</h3>
+      <p>
+        Facilitar a descoberta de profissionais criativos, a apresentação de portfólios
+        e o início de projetos com mais contexto e organização.
+      </p>
+    </article>
+
+    <article class="card">
+      <span>Experiência</span>
+      <h3>Design moderno e intuitivo</h3>
+      <p>
+        A interface está sendo reformulada para ficar mais elegante, responsiva e simples de usar
+        tanto no celular quanto no computador.
+      </p>
+    </article>
+
+    <article class="card">
+      <span>Estrutura</span>
+      <h3>Mais clareza para todos</h3>
+      <p>
+        O projeto inclui áreas de serviços, profissionais, portfólios, briefing, suporte,
+        termos de uso, responsabilidades e orientações de segurança.
+      </p>
+    </article>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>O que a Pale Ascendancy pretende oferecer</h2>
+      <p>
+        A plataforma está sendo organizada para atender tanto quem procura um profissional quanto
+        quem deseja apresentar seu trabalho e participar de novos projetos.
+      </p>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature">
+        <b>Perfis e portfólios profissionais</b>
+        <small>Especialidades, trabalhos, disponibilidade e apresentação profissional em um só lugar.</small>
+      </div>
+      <div class="feature">
+        <b>Busca por serviços</b>
+        <small>Organização por tipos de trabalho como edição, design, promos, trailers, highlights e motion.</small>
+      </div>
+      <div class="feature">
+        <b>Briefing estruturado</b>
+        <small>Objetivo, prazo, orçamento e referências antes do início de uma conversa.</small>
+      </div>
+      <div class="feature">
+        <b>Oportunidades para profissionais</b>
+        <small>Espaço para apresentação de trabalho e futura participação em projetos e oportunidades.</small>
+      </div>
+      <div class="feature">
+        <b>Suporte e organização</b>
+        <small>Fluxos mais claros para contato, dúvidas, atendimento e comunicação entre as partes.</small>
+      </div>
+      <div class="feature">
+        <b>Regras e segurança</b>
+        <small>Termos, responsabilidades e orientações para reduzir confusões durante negociações e serviços.</small>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Termos e responsabilidades</h2>
+      <p>
+        A reforma também inclui uma revisão das regras da plataforma para deixar claro o papel da Pale Ascendancy
+        e a responsabilidade de cada pessoa durante o uso.
+      </p>
+    </div>
+
+    <div class="legal">
+      <strong>A Pale Ascendancy funciona como uma plataforma de organização e conexão.</strong>
+      <p>
+        Ela não substitui contratos, garantias profissionais, meios de pagamento, assessoria jurídica
+        ou a responsabilidade individual de clientes e profissionais.
+      </p>
+      <p>
+        Cada usuário é responsável pelas informações que fornece, pelos acordos que realiza,
+        pelo cumprimento de prazos, valores, direitos autorais, entregas e demais condições definidas entre as partes.
+      </p>
+      <p>
+        Regras, termos e políticas poderão ser atualizados durante a reforma antes da nova abertura pública.
+      </p>
+    </div>
+
+    <div class="notice">
+      <strong>Importante:</strong> esta página é informativa e representa o estado atual do projeto.
+      Algumas funções descritas ainda podem estar em desenvolvimento, revisão ou planejamento.
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Por que o link não está sendo divulgado agora?</h2>
+      <p>
+        Porque a prioridade neste momento é concluir a reforma com mais qualidade. A Pale Ascendancy será divulgada
+        novamente quando as áreas principais estiverem revisadas, estáveis e preparadas para oferecer uma experiência melhor.
+      </p>
+    </div>
+  </section>
 </main>
-<div class="music-player" id="musicPlayer" aria-label="Player de música"><div class="music-player-main"><button class="music-play" id="musicPlay" type="button" aria-label="Reproduzir música">▶</button><button class="music-title-button" id="musicTitleButton" type="button" aria-label="Abrir lista de músicas"><span class="music-label">PALE ASCENDANCY</span><strong id="musicTitle">Meaningful Love</strong><span id="musicStatus">Toque para começar</span></button><button class="music-next" id="musicNext" type="button" aria-label="Próxima música">›</button></div><audio id="musicAudio" preload="metadata" playsinline></audio></div>
-<footer><div class="footer-brand"><img alt="Pale Ascendancy" height="28" width="28" src="assets/pale-ascendancy-logo.png"><span>PALE ASCENDANCY</span></div><p>Profissionais, clientes e projetos criativos em um só lugar.</p><small>© 2026 Pale Ascendancy. Todos os direitos reservados.</small><div class="footer-legal"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></footer>
-<script src="script.js?v=v3"></script>
-<script src="music-ui.js?v=2"></script>
-<script src="v3-nav-fix.js?v=1"></script>
+
+<footer>
+  <div class="wrap">
+    Pale Ascendancy — Página temporária de reforma e apresentação do projeto.
+  </div>
+</footer>
 </body>
 </html>
