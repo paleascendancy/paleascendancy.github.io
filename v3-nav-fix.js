@@ -47,6 +47,30 @@
       script.dataset.paV44Avatar = '1';
       document.head.appendChild(script);
     }
+    if (!document.querySelector('link[data-pa-v45-profile-appearance]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'v45-profile-appearance.css?v=2';
+      link.dataset.paV45ProfileAppearance = '1';
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-pa-v45-profile-appearance]')) {
+      const script = document.createElement('script');
+      script.src = 'v45-profile-appearance.js?v=2';
+      script.defer = true;
+      script.dataset.paV45ProfileAppearance = '1';
+      document.head.appendChild(script);
+    }
+  }
+
+  if (currentPage === 'editor-perfil.html') {
+    if (!document.querySelector('link[data-pa-v45-profile-appearance]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'v45-profile-appearance.css?v=2';
+      link.dataset.paV45ProfileAppearance = '1';
+      document.head.appendChild(link);
+    }
   }
 
   if (document.body.classList.contains('v3-home')) {
