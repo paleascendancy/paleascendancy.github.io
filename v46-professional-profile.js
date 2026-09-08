@@ -42,7 +42,7 @@
   function showImage(image, initial, url) {
     if (!image || !url) return;
     const finalUrl = `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
-    image.src = finalUrl;
+    if (!image.src || !image.src.startsWith(url)) image.src = finalUrl;
     image.hidden = false;
     image.style.display = 'block';
     image.style.opacity = '1';
@@ -136,10 +136,12 @@
       if (!link) return;
       const label = professionalCtaLabel(card);
       link.classList.add('professional-card-cta');
-      link.textContent = label;
       const name = card.querySelector('h2')?.textContent?.trim();
       if (name) link.setAttribute('aria-label', `${label}: ${name}`);
-      if (!link.querySelector('.professional-card-cta-arrow')) {
+
+      if (link.dataset.v46Label !== label) {
+        link.dataset.v46Label = label;
+        link.replaceChildren(document.createTextNode(label));
         const arrow = document.createElement('span');
         arrow.className = 'professional-card-cta-arrow';
         arrow.setAttribute('aria-hidden', 'true');
