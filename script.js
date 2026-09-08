@@ -478,8 +478,11 @@
     const status = $("#musicStatus");
     if (title && track) title.textContent = track.title;
     if (play) {
-      play.textContent = audio && !audio.paused ? "Ⅱ" : "▶";
-      play.setAttribute("aria-label", audio && !audio.paused ? "Pausar música" : "Reproduzir música");
+      const isPlaying = Boolean(audio && !audio.paused);
+      play.textContent = isPlaying ? "Ⅱ" : "▶";
+      play.setAttribute("aria-label", isPlaying ? "Pausar música" : "Reproduzir música");
+      play.classList.toggle("is-playing", isPlaying);
+      $("#musicPlayer")?.classList.toggle("is-playing", isPlaying);
     }
     if (status) status.textContent = audio && !audio.paused ? "Reproduzindo" : "Pausado";
     renderPlaylist($("#musicSearch")?.value || "");
