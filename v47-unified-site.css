@@ -1,0 +1,130 @@
+/* Pale Ascendancy V4.7 — modelo visual unificado do site */
+:root{
+  --u-bg:#080808;--u-bg2:#0c0c0c;--u-text:#f4f1eb;--u-muted:#9d9991;
+  --u-line:rgba(255,255,255,.11);--u-line2:rgba(255,255,255,.19);
+  --u-accent:#ef2855;--u-violet:#a66cff;--u-blue:#6bc8ff;
+  --u-max:1280px;--u-pad:clamp(20px,4vw,56px);
+}
+html,body{background:var(--u-bg)!important;color:var(--u-text)!important}
+body{font-family:'Manrope',system-ui,sans-serif!important;overflow-x:hidden!important}
+body::before,body::after{display:none!important}
+main{background:var(--u-bg)!important;color:var(--u-text)!important}
+
+/* Cabeçalho consistente com a Home V4 */
+.header{
+  min-height:72px!important;padding:0 var(--u-pad)!important;
+  background:rgba(8,8,8,.94)!important;border:0!important;border-bottom:1px solid var(--u-line)!important;
+  border-radius:0!important;box-shadow:none!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;
+}
+.header .brand,.header .brand span,.nav a,.account-login,.profile-link,.mobile-menu a{color:var(--u-text)!important}
+.header .brand span{font-size:.74rem!important;letter-spacing:.12em!important;font-weight:700!important}
+.nav{gap:clamp(18px,2.5vw,34px)!important}
+.nav a{font-size:.76rem!important;font-weight:600!important;opacity:.76!important;text-decoration:none!important}
+.nav a:hover{opacity:1!important}
+.account-register,.primary-button{
+  background:var(--u-text)!important;color:#0a0a0a!important;border:1px solid var(--u-text)!important;
+}
+.secondary-button,.account-login{
+  background:transparent!important;color:var(--u-text)!important;border:1px solid var(--u-line2)!important;
+}
+.primary-button,.secondary-button,.account-register,.account-login,.file-button{
+  border-radius:999px!important;box-shadow:none!important;font-weight:700!important;
+}
+.mobile-menu{background:#0a0a0a!important;border-color:var(--u-line)!important;box-shadow:none!important}
+
+/* Largura e ritmo das páginas */
+:is(.editors-container,.service-container,.profile-container,.auth-container,.plans-container,.v3-profile-container,.editor-dashboard-container,.hire-container,.legal-container,.admin-shell,.container){
+  width:min(var(--u-max),calc(100% - (var(--u-pad)*2)))!important;max-width:none!important;margin-inline:auto!important;
+}
+:is(.auth-page,.editors-page,.services-page,.plans-page,.profile-page,.legal-page,.v3-profile-main,.v3-hire-page,.editor-dashboard){
+  background:var(--u-bg)!important;padding-top:clamp(56px,8vw,110px)!important;
+}
+section{border-color:var(--u-line)!important}
+
+/* Tipografia editorial */
+:is(h1,h2,h3,.section-title,.editors-heading h1,.service-heading h1,.auth-heading h1,.plans-heading h1,.legal-heading h1){
+  font-family:'Space Grotesk','Manrope',system-ui,sans-serif!important;color:var(--u-text)!important;
+}
+:is(.editors-heading,.service-heading,.auth-heading,.plans-heading,.legal-heading) h1{
+  font-size:clamp(2.7rem,7vw,6.6rem)!important;line-height:.95!important;letter-spacing:-.06em!important;font-weight:560!important;
+}
+:is(.section-heading,.v3-profile-page .editor-public-top) h2{letter-spacing:-.045em!important}
+:is(p,.editor-description,.service-card p,.plan-card p,.auth-heading>p:last-child,.editors-heading>p:last-child,.service-heading>p:last-child){color:var(--u-muted)!important}
+.eyebrow,.v3-audience-label,.portfolio-type-label,.profile-label,.contact-label{color:#8d8880!important;letter-spacing:.14em!important;text-transform:uppercase!important}
+
+/* Tira a aparência de “cards genéricos” */
+:is(.auth-container,.auth-form,.editors-tools,.v3-discovery-panel,.service-preview,.professional-plan-card,.plan-card,.v3-audience-card,.v3-process-card,.v3-edith-card,.profile-info,.editor-manage-bar,.editor-avatar-upload,.appearance-card,.request-card,.legal-card,.terms-card,.privacy-card,.admin-card,.v3-hire-explainer,.v3-hire-form,.editor-public-profile){
+  background:transparent!important;box-shadow:none!important;border-radius:0!important;
+}
+:is(.auth-form,.editors-tools,.v3-discovery-panel,.professional-plan-card,.plan-card,.profile-info,.editor-manage-bar,.editor-avatar-upload,.appearance-card,.request-card,.legal-card,.terms-card,.privacy-card,.admin-card,.v3-hire-explainer,.v3-hire-form){
+  border:0!important;border-top:1px solid var(--u-line)!important;border-bottom:1px solid var(--u-line)!important;
+}
+
+/* Formulários iguais ao sistema da Home */
+.auth-container{padding:0!important;border:0!important}
+.auth-heading{margin-bottom:clamp(36px,6vw,72px)!important}
+.auth-form{padding:0!important}
+.form-row{display:grid!important;grid-template-columns:minmax(130px,.32fr) minmax(0,1fr)!important;gap:clamp(16px,4vw,52px)!important;padding:20px 0!important;margin:0!important;border-bottom:1px solid var(--u-line)!important}
+.form-row>label,.form-row>span{color:#aaa59d!important;padding-top:12px!important;font-size:.76rem!important}
+input,textarea,select{
+  background:transparent!important;color:var(--u-text)!important;border:0!important;border-bottom:1px solid rgba(255,255,255,.18)!important;
+  border-radius:0!important;box-shadow:none!important;outline:none!important;
+}
+input:focus,textarea:focus,select:focus{border-bottom-color:#fff!important;background:rgba(255,255,255,.018)!important}
+
+/* Diretório profissional */
+.v3-editors-page .editors-heading{padding-top:clamp(18px,4vw,44px)!important}
+.v3-editors-page .v3-directory-intro{gap:0!important;border-top:1px solid var(--u-line)!important;border-bottom:1px solid var(--u-line)!important}
+.v3-directory-intro-card{background:transparent!important;border:0!important;border-radius:0!important;padding:24px 0!important}
+.v3-directory-intro-card+ .v3-directory-intro-card{border-left:1px solid var(--u-line)!important;padding-left:28px!important}
+.v3-editors-page .editors-tools{position:relative!important;top:auto!important;padding:22px 0!important;backdrop-filter:none!important}
+.v3-editors-page .editors-grid{border-top:0!important}
+
+/* Serviços e planos como listas editoriais */
+:is(.service-grid,.services-grid,.plans-grid,.bento-grid){border-top:1px solid var(--u-line)!important;gap:0!important}
+:is(.service-card,.plan-card){background:transparent!important;border:0!important;border-bottom:1px solid var(--u-line)!important;border-radius:0!important;box-shadow:none!important;padding:clamp(28px,5vw,60px) 0!important}
+:is(.service-card,.plan-card) h2,:is(.service-card,.plan-card) h3{font-size:clamp(1.8rem,4vw,4.2rem)!important;line-height:.98!important;letter-spacing:-.055em!important}
+.v3-audience-grid,.v3-process-grid{gap:0!important;border-top:1px solid var(--u-line)!important;border-bottom:1px solid var(--u-line)!important}
+.v3-audience-card,.v3-process-card{border:0!important;border-right:1px solid var(--u-line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.v3-audience-card:last-child,.v3-process-card:last-child{border-right:0!important}
+
+/* Perfis */
+.v3-profile-page .editor-public-profile{border:0!important;border-top:1px solid var(--u-line)!important;border-bottom:1px solid var(--u-line)!important;background:transparent!important;border-radius:0!important;box-shadow:none!important;padding:clamp(28px,4vw,52px) 0!important}
+.v3-profile-page .editor-public-top{border-color:var(--u-line)!important}
+.v3-profile-page .editor-public-top h1{font-size:clamp(2.6rem,7vw,6rem)!important;font-weight:560!important}
+.v3-profile-page .profile-info{padding:18px 0!important}
+.portfolio-public-grid{gap:1px!important;background:var(--u-line)!important;border:1px solid var(--u-line)!important}
+.portfolio-public-item{background:#0c0c0c!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+
+/* Painel profissional */
+.editor-dashboard-container,.profile-container{background:transparent!important}
+.editor-manage-bar,.editor-avatar-upload{padding:24px 0!important}
+.profile-style-option{border-radius:0!important;background:transparent!important;box-shadow:none!important;border:1px solid var(--u-line)!important}
+.profile-style-option:has(input:checked),.profile-style-option.is-selected{border-color:var(--u-violet)!important;background:rgba(166,108,255,.06)!important}
+
+/* Jurídico */
+.legal-container{max-width:980px!important}
+:is(.legal-card,.terms-card,.privacy-card){padding:26px 0!important}
+:is(.legal-card,.terms-card,.privacy-card) h2{font-size:clamp(1.5rem,3vw,2.5rem)!important;letter-spacing:-.035em!important}
+
+/* Footer */
+footer{background:#080808!important;border:0!important;border-top:1px solid var(--u-line)!important;border-radius:0!important;box-shadow:none!important}
+footer,footer a,footer small{color:#938f87!important}
+
+/* Interações rápidas */
+[data-v4-reveal],.pa-motion-reveal{transition-duration:.36s!important;transition-delay:0s!important;filter:none!important}
+:is(.primary-button,.secondary-button,.account-register,.account-login,.filter-button,.file-button){transition:transform .2s ease,background .2s ease,border-color .2s ease!important}
+:is(.primary-button,.secondary-button,.account-register,.account-login,.filter-button,.file-button):active{transform:scale(.97)!important}
+
+@media(max-width:820px){
+  .header{min-height:64px!important;padding-inline:20px!important}
+  .form-row{grid-template-columns:1fr!important;gap:8px!important}.form-row>label,.form-row>span{padding-top:0!important}
+  .v3-directory-intro-card+ .v3-directory-intro-card{border-left:0!important;border-top:1px solid var(--u-line)!important;padding-left:0!important}
+  .v3-audience-card,.v3-process-card{border-right:0!important;border-bottom:1px solid var(--u-line)!important}
+  .v3-audience-card:last-child,.v3-process-card:last-child{border-bottom:0!important}
+}
+@media(max-width:560px){
+  :is(.editors-container,.service-container,.profile-container,.auth-container,.plans-container,.v3-profile-container,.editor-dashboard-container,.hire-container,.legal-container,.admin-shell,.container){width:calc(100% - 36px)!important}
+  :is(.editors-heading,.service-heading,.auth-heading,.plans-heading,.legal-heading) h1{font-size:clamp(2.55rem,13vw,4.5rem)!important}
+}
+@media(prefers-reduced-motion:reduce){[data-v4-reveal],.pa-motion-reveal{transition:none!important;transform:none!important;opacity:1!important}}
