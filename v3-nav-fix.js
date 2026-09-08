@@ -1,11 +1,39 @@
 (() => {
   'use strict';
 
-  try {
-    if (localStorage.getItem('pa_music_playing') === null) {
-      localStorage.setItem('pa_music_playing', '0');
-    }
-  } catch (_) {}
+  function removeMusicUI() {
+    const audio = document.getElementById('musicAudio');
+    try { audio?.pause(); } catch (_) {}
+
+    [
+      '#musicPlayer', '#musicPanel', '#musicAudio',
+      '.music-player', '.music-library-panel', '.music-panel',
+      '.mobile-music-slot', '.music-library'
+    ].forEach(selector => {
+      document.querySelectorAll(selector).forEach(node => node.remove());
+    });
+
+    document.querySelectorAll('audio').forEach(node => {
+      if (node.id === 'musicAudio' || /music\//i.test(node.getAttribute('src') || '')) {
+        try { node.pause(); } catch (_) {}
+        node.remove();
+      }
+    });
+
+    try {
+      ['pa_music_index','pa_music_time','pa_music_playing','pa_music_suggestions']
+        .forEach(key => localStorage.removeItem(key));
+    } catch (_) {}
+  }
+
+  const musicKillStyle = document.createElement('style');
+  musicKillStyle.dataset.paNoMusic = '1';
+  musicKillStyle.textContent = '#musicPlayer,#musicPanel,#musicAudio,.music-player,.music-library-panel,.music-panel,.mobile-music-slot,.music-library{display:none!important;visibility:hidden!important;pointer-events:none!important}';
+  document.head.appendChild(musicKillStyle);
+  removeMusicUI();
+
+  const musicObserver = new MutationObserver(removeMusicUI);
+  musicObserver.observe(document.documentElement, { childList: true, subtree: true });
 
   if (!document.querySelector('link[data-pa-theme-bridge]')) {
     const link = document.createElement('link');
@@ -96,13 +124,6 @@
       link.rel = 'stylesheet';
       link.href = 'v3-mobile-reference.css?v=1';
       link.dataset.paMobileReference = '1';
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('link[data-pa-mobile-audio]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'v3-mobile-audio-refresh.css?v=1';
-      link.dataset.paMobileAudio = '1';
       document.head.appendChild(link);
     }
     if (!document.querySelector('script[data-pa-mobile-reference]')) {
