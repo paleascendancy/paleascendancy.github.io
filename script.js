@@ -1845,6 +1845,24 @@
     initProfileAppearanceControls(pData.avatar_border_style, pData.profile_card_style);
     buildProfessionalCategories($("#categoryGrid"), pData.editor_categories || []);
 
+    const appearanceName = $("#profileAppearanceName");
+    const appearanceInitial = $("#profileAppearanceInitial");
+    const appearanceImage = $("#profileAppearanceImage");
+    const appearanceDisplayName = pData.nome_artistico || pData.nome || "Seu perfil";
+    if (appearanceName) appearanceName.textContent = appearanceDisplayName;
+    if (appearanceInitial) appearanceInitial.textContent = appearanceDisplayName.charAt(0).toUpperCase();
+    if (appearanceImage && pData.avatar_url) {
+      appearanceImage.src = `${pData.avatar_url}${pData.avatar_url.includes("?") ? "&" : "?"}v=${Date.now()}`;
+      appearanceImage.hidden = false;
+      if (appearanceInitial) appearanceInitial.hidden = true;
+    }
+
+    $("#nomeArtistico")?.addEventListener("input", () => {
+      const value = $("#nomeArtistico").value.trim() || "Seu perfil";
+      if (appearanceName) appearanceName.textContent = value;
+      if (appearanceInitial && appearanceImage?.hidden !== false) appearanceInitial.textContent = value.charAt(0).toUpperCase();
+    });
+
     const initial = $("#avatarInitial"), image = $("#avatarImage");
     initial.textContent = (pData.nome_artistico || pData.nome || "?").charAt(0).toUpperCase();
     if (pData.avatar_url) {
@@ -1871,6 +1889,11 @@
         const update = await c.from("profile").update({ avatar_url: url }).eq("id", user.id);
         if (update.error) throw update.error;
         image.src = `${url}?v=${Date.now()}`; image.hidden = false; initial.hidden = true;
+        if (appearanceImage) {
+          appearanceImage.src = `${url}?v=${Date.now()}`;
+          appearanceImage.hidden = false;
+          if (appearanceInitial) appearanceInitial.hidden = true;
+        }
         $("#avatarStatus").textContent = "Foto atualizada.";
       } catch (error) { $("#avatarStatus").textContent = error.message || "Erro ao enviar foto."; }
     });
