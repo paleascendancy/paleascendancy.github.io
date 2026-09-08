@@ -1,0 +1,186 @@
+/* Pale Ascendancy V4.1 — Hyprland-inspired motion and non-card editorial layout */
+:root{
+  --v41-spring:cubic-bezier(.16,1,.3,1);
+  --v41-overshoot:cubic-bezier(.34,1.56,.64,1);
+  --v41-line:rgba(255,255,255,.13);
+}
+
+/* Replace the generic box/card language with editorial rows */
+.v4-service-grid{
+  display:block!important;
+  border-top:1px solid var(--v41-line);
+}
+.v4-service-card{
+  position:relative!important;
+  min-height:0!important;
+  padding:clamp(34px,6vw,74px) 0!important;
+  display:grid!important;
+  grid-template-columns:minmax(110px,18%) minmax(0,1fr) auto!important;
+  align-items:end!important;
+  gap:clamp(18px,4vw,58px)!important;
+  border:0!important;
+  border-bottom:1px solid var(--v41-line)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  overflow:hidden!important;
+  box-shadow:none!important;
+  isolation:isolate;
+  transform:none!important;
+}
+.v4-service-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-1px;
+  width:0;
+  height:1px;
+  background:linear-gradient(90deg,#ef2855,#a66cff,#6bc8ff);
+  transition:width .7s var(--v41-spring);
+}
+.v4-service-card::after{
+  content:"↗";
+  grid-column:3;
+  grid-row:1;
+  align-self:center;
+  justify-self:end;
+  font:500 clamp(1.2rem,2vw,2rem)/1 var(--v4-display);
+  color:#6f6b64;
+  transform:translate3d(-8px,8px,0) rotate(-18deg);
+  opacity:.5;
+  transition:transform .55s var(--v41-overshoot),color .35s ease,opacity .35s ease;
+}
+.v4-service-card>span{
+  grid-column:1;
+  grid-row:1;
+  align-self:start;
+  margin-top:5px;
+  color:#77736d!important;
+  font-size:.7rem!important;
+  letter-spacing:.16em!important;
+}
+.v4-service-card>div{
+  grid-column:2;
+  grid-row:1;
+  max-width:850px;
+}
+.v4-service-card h3{
+  margin:0 0 16px!important;
+  font-size:clamp(2.2rem,5.2vw,5.4rem)!important;
+  line-height:.94!important;
+  letter-spacing:-.06em!important;
+  font-weight:560!important;
+  transition:transform .55s var(--v41-spring),color .3s ease;
+}
+.v4-service-card p{
+  max-width:58ch!important;
+  font-size:clamp(.98rem,1.5vw,1.12rem)!important;
+  line-height:1.65!important;
+}
+.v4-service-card:hover::before{width:100%}
+.v4-service-card:hover::after{transform:translate3d(0,0,0) rotate(0);color:#f2f0ea;opacity:1}
+.v4-service-card:hover h3{transform:translateX(12px);color:#fff}
+.v4-service-card:nth-child(even)>div{transform:translateX(clamp(0px,4vw,72px))}
+
+/* Section headers should feel like composition, not component headers */
+.v4-section-head{position:relative}
+.v4-section-head::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:calc(clamp(34px,6vw,72px) * -.55);
+  height:1px;
+  opacity:.25;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  transform:scaleX(.35);
+  transform-origin:left;
+  transition:transform 1s var(--v41-spring),opacity .8s ease;
+}
+.v4-section-head.is-visible::after{transform:scaleX(1);opacity:.75}
+
+/* Hyprland-like spring / pop / slide motion */
+[data-v4-reveal]{
+  opacity:0;
+  transform:translate3d(0,34px,0) scale(.985);
+  filter:blur(7px);
+  clip-path:inset(0 0 18% 0 round 0);
+  transition:
+    opacity .75s ease,
+    transform .9s var(--v41-spring),
+    filter .55s ease,
+    clip-path .9s var(--v41-spring);
+}
+[data-v4-reveal].is-visible{
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+  filter:blur(0);
+  clip-path:inset(0 0 0 0 round 0);
+}
+
+/* Springy interactive surfaces without turning them into cards */
+.v4-work-card{transition:transform .5s var(--v41-spring),padding .5s var(--v41-spring),background .35s ease!important}
+.v4-work-card:hover{transform:translateX(8px)}
+.v4-work-media{transition:clip-path .7s var(--v41-spring),transform .65s var(--v41-spring)!important;clip-path:inset(0 0 0 0 round var(--v4-radius))}
+.v4-work-card:hover .v4-work-media{clip-path:inset(1.5% 1.5% 1.5% 1.5% round 24px);transform:scale(.985)}
+
+/* Reactive ambient field — deliberately subtle on desktop */
+.v41-pointer-field{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(520px circle at var(--v41-x,50%) var(--v41-y,35%),rgba(166,108,255,.10),transparent 62%),
+    radial-gradient(360px circle at calc(var(--v41-x,50%) - 12%) calc(var(--v41-y,35%) + 12%),rgba(239,40,85,.08),transparent 68%);
+  opacity:.7;
+}
+
+/* Moving scan line across the hero: more OS-like, less template-like */
+.v4-hero{position:relative;overflow:hidden}
+.v4-hero::after{
+  content:"";
+  position:absolute;
+  left:-20vw;
+  right:-20vw;
+  top:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(166,108,255,.0),rgba(166,108,255,.7),rgba(107,200,255,.45),transparent);
+  opacity:.35;
+  animation:v41Scan 8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes v41Scan{
+  0%{transform:translateY(8vh);opacity:0}
+  18%{opacity:.42}
+  50%{transform:translateY(58vh);opacity:.22}
+  100%{transform:translateY(88vh);opacity:0}
+}
+
+/* Header reacts as a floating OS layer only after scroll */
+.header{transition:background .35s ease,border-color .35s ease,transform .5s var(--v41-spring)!important}
+.header.v41-scrolled{background:rgba(9,9,9,.94)!important;border-bottom-color:rgba(255,255,255,.2)!important}
+
+/* tiny overshoot for buttons */
+.primary-button,.secondary-button{transition:transform .38s var(--v41-overshoot),background .25s ease,border-color .25s ease!important}
+.primary-button:active,.secondary-button:active{transform:scale(.96)!important}
+
+@media(max-width:820px){
+  .v4-service-card{
+    grid-template-columns:1fr auto!important;
+    gap:18px!important;
+    padding:38px 0!important;
+  }
+  .v4-service-card>span{grid-column:1;grid-row:1}
+  .v4-service-card>div{grid-column:1 / -1;grid-row:2;transform:none!important}
+  .v4-service-card::after{grid-column:2;grid-row:1}
+  .v4-service-card h3{font-size:clamp(2rem,10vw,3.6rem)!important}
+  .v4-service-card:hover h3{transform:none}
+  .v41-pointer-field{display:none}
+  .v4-hero::after{animation-duration:11s;opacity:.2}
+}
+
+@media(prefers-reduced-motion:reduce){
+  [data-v4-reveal]{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;transition:none!important}
+  .v4-hero::after{animation:none!important}
+  .v41-pointer-field{display:none!important}
+}
