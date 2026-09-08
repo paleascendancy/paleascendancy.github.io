@@ -263,10 +263,120 @@
     }
 
     @media (max-width: 820px) {
-      .hero { grid-template-columns: 1fr; padding-top: 64px; }
-      .grid { grid-template-columns: 1fr; }
-      .feature-list { grid-template-columns: 1fr; }
-      .status-card { order: 2; }
+      body { line-height: 1.5; }
+      .wrap { width: min(calc(100% - 28px), var(--max)); }
+      header { padding: 18px 0; }
+      .brand { gap: 10px; font-size: .82rem; letter-spacing: .06em; }
+      .brand img { width: 32px; height: 32px; border-radius: 10px; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 42px 0 28px;
+        gap: 22px;
+      }
+
+      .eyebrow {
+        padding: 7px 10px;
+        font-size: .68rem;
+        letter-spacing: .1em;
+      }
+
+      h1 {
+        margin-top: 14px;
+        font-size: clamp(2.15rem, 11vw, 3.3rem);
+        line-height: 1.02;
+        letter-spacing: -.05em;
+      }
+
+      .lead {
+        margin-top: 16px;
+        font-size: .98rem;
+        line-height: 1.6;
+      }
+
+      .status-card {
+        order: 2;
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .status-card strong { font-size: 1rem; margin-bottom: 8px; }
+      .status-card p { font-size: .94rem; }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 8px 0 34px;
+      }
+
+      .card {
+        min-height: auto;
+        padding: 19px;
+        border-radius: 20px;
+      }
+
+      .card span {
+        margin-bottom: 10px;
+        font-size: .68rem;
+      }
+
+      .card h3 {
+        font-size: 1.18rem;
+        margin-bottom: 8px;
+      }
+
+      .card p { font-size: .94rem; }
+
+      section { padding: 36px 0; }
+
+      .section-head { margin-bottom: 20px; }
+      .section-head h2 {
+        font-size: clamp(1.65rem, 8vw, 2.25rem);
+        line-height: 1.08;
+      }
+      .section-head p {
+        margin-top: 10px;
+        font-size: .95rem;
+      }
+
+      .feature-list {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .feature {
+        padding: 15px 16px;
+        border-radius: 16px;
+      }
+
+      .feature b { font-size: .98rem; }
+      .feature small { font-size: .9rem; line-height: 1.45; }
+
+      .legal {
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .legal,
+      .notice { font-size: .93rem; }
+
+      .notice {
+        margin-top: 18px;
+        padding: 15px 16px;
+      }
+
+      footer {
+        padding: 24px 0 34px;
+        font-size: .82rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .wrap { width: min(calc(100% - 24px), var(--max)); }
+      .hero { padding-top: 34px; }
+      h1 { font-size: 2.35rem; }
+      .lead { font-size: .94rem; }
+      .status-card, .card, .legal { border-radius: 18px; }
     }
   </style>
 </head>
@@ -284,19 +394,16 @@
   <div class="hero">
     <div>
       <div class="eyebrow">Plataforma em reforma</div>
-      <h1>Estamos reconstruindo a Pale Ascendancy.</h1>
+      <h1>A Pale Ascendancy está em reforma.</h1>
       <p class="lead">
-        A Pale Ascendancy é uma plataforma criada para aproximar editores, designers,
-        criadores de conteúdo e clientes em um ambiente mais organizado, profissional e claro.
-        Neste momento, o site está passando por uma reforma estrutural e visual antes de voltar ao acesso público.
+        Estamos reorganizando a plataforma, melhorando o visual e revisando seus recursos antes de uma nova abertura pública.
       </p>
     </div>
 
     <aside class="status-card" aria-label="Status atual da plataforma">
       <strong><span class="status-dot"></span>Status atual</strong>
       <p>
-        O acesso público está temporariamente limitado. Recursos, textos, regras, experiência visual
-        e fluxos da plataforma estão sendo revisados antes de uma nova liberação.
+        O acesso público está temporariamente limitado enquanto revisamos recursos, regras e experiência de uso.
       </p>
     </aside>
   </div>
