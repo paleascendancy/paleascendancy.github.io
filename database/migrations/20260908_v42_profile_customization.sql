@@ -63,6 +63,8 @@ from public.profile
 where coalesce(is_public,false) = true
   and (coalesce(is_editor,false) = true or coalesce(is_designer,false) = true);
 
+alter view public.editor_directory set (security_invoker = true);
+
 grant select on public.editor_directory to anon, authenticated;
 
 comment on column public.profile.avatar_border_style is 'Borda visual escolhida pelo profissional para o avatar.';
