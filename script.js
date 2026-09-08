@@ -170,6 +170,19 @@
     illustration: "Ilustração", "3d": "3D", outros: "Outros"
   };
 
+  const PROFILE_CARD_STYLES = new Set(["editorial", "glass", "frame", "spotlight"]);
+  const AVATAR_BORDER_STYLES = new Set(["minimal", "halo", "aurora", "chrome", "circuit", "pulse"]);
+
+  function profileCardStyle(value) {
+    const style = String(value || "editorial").toLowerCase();
+    return PROFILE_CARD_STYLES.has(style) ? style : "editorial";
+  }
+
+  function avatarBorderStyle(value) {
+    const style = String(value || "minimal").toLowerCase();
+    return AVATAR_BORDER_STYLES.has(style) ? style : "minimal";
+  }
+
   function professionalRole(profile) {
     return profile.is_editor && profile.is_designer ? "EDITOR + DESIGNER" : profile.is_designer ? "DESIGNER" : "EDITOR";
   }
@@ -204,14 +217,14 @@
 
   async function fetchPublicProfessionals(sb) {
     const viewResult = await sb.from("editor_directory")
-      .select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer")
+      .select("id,nome_artistico,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer,avatar_border_style,profile_card_style")
       .order("is_featured", { ascending: false })
       .order("nome_artistico", { ascending: true });
 
     if (!viewResult.error) return { data: viewResult.data || [], error: null };
 
     const direct = await sb.from("profile")
-      .select("id,nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer,is_public")
+      .select("id,nome,nome_artistico,email,especialidade,bio,avatar_url,tiktok,instagram,youtube,discord,editor_categories,portfolio_url,editor_software,availability,is_featured,is_editor,is_designer,is_public,avatar_border_style,profile_card_style")
       .or("is_editor.eq.true,is_designer.eq.true")
       .order("is_featured", { ascending: false })
       .order("nome_artistico", { ascending: true });
@@ -256,15 +269,18 @@
         const tags = [...new Set(categories)].slice(0, 5)
           .map((item) => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[item] || item)}</span>`)
           .join("");
+        const cardStyle = profileCardStyle(profile.profile_card_style);
+        const borderStyle = avatarBorderStyle(profile.avatar_border_style);
         const avatar = profile.avatar_url
           ? `<img class="editor-avatar editor-photo" src="${escapeHTML(profile.avatar_url)}" alt="Foto de perfil de ${escapeHTML(name)}" loading="lazy">`
           : `<div class="editor-avatar placeholder-icon">${escapeHTML(name.charAt(0).toUpperCase())}</div>`;
         const role = professionalRole(profile);
         const searchText = `${name} ${profile.especialidade || ""} ${categories.join(" ")} ${profile.bio || ""} ${profile.editor_software || ""}`.toLowerCase();
 
-        return `<article class="editor-profile dynamic-professional" data-profile-id="${escapeHTML(profile.id)}" data-category="${escapeHTML(categories.join(" ").toLowerCase())}" data-search="${escapeHTML(searchText)}">
+        return `<article class="editor-profile dynamic-professional profile-card-${cardStyle}" data-profile-id="${escapeHTML(profile.id)}" data-card-style="${cardStyle}" data-avatar-border="${borderStyle}" data-category="${escapeHTML(categories.join(" ").toLowerCase())}" data-search="${escapeHTML(searchText)}">
+          <div class="editor-card-index" aria-hidden="true">${String(approved.indexOf(profile) + 1).padStart(2, "0")}</div>
           <div class="editor-status"><span class="status-dot" aria-hidden="true"></span>${escapeHTML(profile.is_featured ? "Destaque" : professionalAvailability(profile.availability))}</div>
-          ${avatar}
+          <div class="editor-avatar-frame avatar-border-${borderStyle}">${avatar}</div>
           <h2>${escapeHTML(name)}</h2>
           <div class="editor-role">${escapeHTML(role)}</div>
           <p class="editor-description">${escapeHTML(profile.bio || `${role.toLowerCase()} com foco em ${PROFESSIONAL_CATEGORY_MAP[profile.especialidade] || profile.especialidade || "criação audiovisual"}.`)}</p>
@@ -275,6 +291,8 @@
     }
 
     initEditorPhotos();
+    initHorizontalEditorRail();
+    initGlobalMotionNodes(grid);
     window.__PA_EDITOR_FILTER_APPLY__?.();
 
     if (!reels) return;
@@ -1758,6 +1776,35 @@
     return $$("input[type=checkbox]:checked", holder).map(input => input.value);
   }
 
+  function syncProfileAppearancePreview() {
+    const preview = $("#profileAppearancePreview");
+    if (!preview) return;
+    const border = avatarBorderStyle($('input[name="avatarBorderStyle"]:checked')?.value);
+    const card = profileCardStyle($('input[name="profileCardStyle"]:checked')?.value);
+    preview.dataset.cardStyle = card;
+    preview.className = `profile-appearance-preview profile-card-${card}`;
+    const frame = $(".profile-appearance-avatar-frame", preview);
+    if (frame) frame.className = `profile-appearance-avatar-frame avatar-border-${border}`;
+  }
+
+  function initProfileAppearanceControls(borderStyle = "minimal", cardStyle = "editorial") {
+    $('input[name="avatarBorderStyle"]').forEach((input) => {
+      input.checked = input.value === avatarBorderStyle(borderStyle);
+      if (input.dataset.paAppearanceReady !== "1") {
+        input.dataset.paAppearanceReady = "1";
+        input.addEventListener("change", syncProfileAppearancePreview);
+      }
+    });
+    $('input[name="profileCardStyle"]').forEach((input) => {
+      input.checked = input.value === profileCardStyle(cardStyle);
+      if (input.dataset.paAppearanceReady !== "1") {
+        input.dataset.paAppearanceReady = "1";
+        input.addEventListener("change", syncProfileAppearancePreview);
+      }
+    });
+    syncProfileAppearancePreview();
+  }
+
   async function initEditorPanel() {
     const form = $("#editorForm");
     if (!form || form.dataset.paReady === "1") return;
@@ -1777,7 +1824,7 @@
     }
 
     const result = await c.from("profile")
-      .select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,portfolio_limit,plan_status,plan_expires_at,tiktok,instagram,youtube,discord,professional_login_enabled")
+      .select("id,email,nome,nome_artistico,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,portfolio_limit,plan_status,plan_expires_at,tiktok,instagram,youtube,discord,professional_login_enabled,avatar_border_style,profile_card_style")
       .eq("id", user.id).maybeSingle();
     const pData = result.data || p;
 
@@ -1795,7 +1842,26 @@
     $("#youtube").value = pData.youtube || "";
     $("#discord").value = pData.discord || "";
 
+    initProfileAppearanceControls(pData.avatar_border_style, pData.profile_card_style);
     buildProfessionalCategories($("#categoryGrid"), pData.editor_categories || []);
+
+    const appearanceName = $("#profileAppearanceName");
+    const appearanceInitial = $("#profileAppearanceInitial");
+    const appearanceImage = $("#profileAppearanceImage");
+    const appearanceDisplayName = pData.nome_artistico || pData.nome || "Seu perfil";
+    if (appearanceName) appearanceName.textContent = appearanceDisplayName;
+    if (appearanceInitial) appearanceInitial.textContent = appearanceDisplayName.charAt(0).toUpperCase();
+    if (appearanceImage && pData.avatar_url) {
+      appearanceImage.src = `${pData.avatar_url}${pData.avatar_url.includes("?") ? "&" : "?"}v=${Date.now()}`;
+      appearanceImage.hidden = false;
+      if (appearanceInitial) appearanceInitial.hidden = true;
+    }
+
+    $("#nomeArtistico")?.addEventListener("input", () => {
+      const value = $("#nomeArtistico").value.trim() || "Seu perfil";
+      if (appearanceName) appearanceName.textContent = value;
+      if (appearanceInitial && appearanceImage?.hidden !== false) appearanceInitial.textContent = value.charAt(0).toUpperCase();
+    });
 
     const initial = $("#avatarInitial"), image = $("#avatarImage");
     initial.textContent = (pData.nome_artistico || pData.nome || "?").charAt(0).toUpperCase();
@@ -1823,6 +1889,11 @@
         const update = await c.from("profile").update({ avatar_url: url }).eq("id", user.id);
         if (update.error) throw update.error;
         image.src = `${url}?v=${Date.now()}`; image.hidden = false; initial.hidden = true;
+        if (appearanceImage) {
+          appearanceImage.src = `${url}?v=${Date.now()}`;
+          appearanceImage.hidden = false;
+          if (appearanceInitial) appearanceInitial.hidden = true;
+        }
         $("#avatarStatus").textContent = "Foto atualizada.";
       } catch (error) { $("#avatarStatus").textContent = error.message || "Erro ao enviar foto."; }
     });
@@ -1842,7 +1913,9 @@
         tiktok: $("#tiktok").value.trim(),
         instagram: $("#instagram").value.trim(),
         youtube: $("#youtube").value.trim(),
-        discord: $("#discord").value.trim()
+        discord: $("#discord").value.trim(),
+        avatar_border_style: avatarBorderStyle($('input[name="avatarBorderStyle"]:checked')?.value),
+        profile_card_style: profileCardStyle($('input[name="profileCardStyle"]:checked')?.value)
       }).eq("id", user.id);
 
       if (update.error) {
@@ -1968,7 +2041,7 @@
     let result = await c.from("editor_directory").select("*").eq("id", id).maybeSingle();
     if (result.error) {
       result = await c.from("profile")
-        .select("id,nome,nome_artistico,email,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,plan_status,plan_expires_at,is_public,tiktok,instagram,youtube,discord")
+        .select("id,nome,nome_artistico,email,especialidade,bio,avatar_url,is_editor,is_designer,is_featured,editor_categories,portfolio_url,editor_software,availability,professional_plan,plan_status,plan_expires_at,is_public,tiktok,instagram,youtube,discord,avatar_border_style,profile_card_style")
         .eq("id", id).maybeSingle();
     }
 
@@ -1993,9 +2066,14 @@
       return `<article class="portfolio-public-item"><div class="portfolio-public-link"><span>↗</span><strong>${escapeHTML(item.title)}</strong><small>${escapeHTML(item.url)}</small></div><div class="portfolio-public-copy">${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}<a class="secondary-button" target="_blank" rel="noopener noreferrer" href="${escapeHTML(item.url)}">Abrir projeto</a></div></article>`;
     }).join("");
 
+    const publicBorderStyle = avatarBorderStyle(p.avatar_border_style);
+    const publicCardStyle = profileCardStyle(p.profile_card_style);
+    root.dataset.cardStyle = publicCardStyle;
+    root.classList.add(`profile-card-${publicCardStyle}`);
+
     $("#profileContent").innerHTML = `
       <div class="editor-public-top">
-        <div class="editor-public-avatar">${p.avatar_url ? `<img src="${escapeHTML(p.avatar_url)}" alt="Foto de ${escapeHTML(p.nome_artistico || "profissional")}">` : `<span>${escapeHTML((p.nome_artistico || p.nome || "P").charAt(0).toUpperCase())}</span>`}</div>
+        <div class="editor-public-avatar-shell avatar-border-${publicBorderStyle}"><div class="editor-public-avatar">${p.avatar_url ? `<img src="${escapeHTML(p.avatar_url)}" alt="Foto de ${escapeHTML(p.nome_artistico || "profissional")}">` : `<span>${escapeHTML((p.nome_artistico || p.nome || "P").charAt(0).toUpperCase())}</span>`}</div></div>
         <div><p class="editor-role">${escapeHTML(professionalRole(p))}</p><h1>${escapeHTML(p.nome_artistico || p.nome || "Profissional")}</h1><span class="plan-badge">${escapeHTML(planName)}</span></div>
       </div>
       <div class="editor-tags">${cats.map(x => `<span class="editor-tag">${escapeHTML(PROFESSIONAL_CATEGORY_MAP[x] || x)}</span>`).join("")}</div>
@@ -2011,6 +2089,127 @@
     return url ? `<a class="secondary-button" target="_blank" rel="noopener noreferrer" href="${escapeHTML(url)}">${escapeHTML(label)}</a>` : "";
   }
 
+  let globalMotionObserver = null;
+
+  function initGlobalMotionNodes(root = document) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const selectors = [
+      ".auth-heading", ".section-heading", ".editors-heading", ".service-heading", ".plans-heading",
+      ".professional-plan-card", ".admin-card", ".editor-manage-bar", ".v3-discovery-panel",
+      ".v3-results-section", ".professional-reels", ".portfolio-public-section", ".form-row",
+      ".service-card", ".plan-card", ".portfolio-public-item", ".portfolio-reel-card", ".editor-profile"
+    ];
+    const nodes = [...root.querySelectorAll(selectors.join(","))].filter((node) => node.dataset.paMotionReady !== "1");
+    if (!nodes.length) return;
+    nodes.forEach((node) => {
+      node.dataset.paMotionReady = "1";
+      node.classList.add("pa-motion-reveal");
+    });
+    if (reduce || !("IntersectionObserver" in window)) {
+      nodes.forEach((node) => node.classList.add("is-visible"));
+      return;
+    }
+    if (!globalMotionObserver) {
+      globalMotionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          globalMotionObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    }
+    nodes.forEach((node) => globalMotionObserver.observe(node));
+  }
+
+  function initHorizontalEditorRail() {
+    const rail = $("#editorsGrid");
+    if (!rail || rail.dataset.paRailReady === "1") return;
+    rail.dataset.paRailReady = "1";
+    rail.classList.add("pa-profile-rail");
+
+    let dragging = false, startX = 0, startScroll = 0;
+    rail.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || event.target.closest("a,button,input,select,textarea,label")) return;
+      dragging = true;
+      startX = event.clientX;
+      startScroll = rail.scrollLeft;
+      rail.classList.add("is-dragging");
+      rail.setPointerCapture?.(event.pointerId);
+    });
+    rail.addEventListener("pointermove", (event) => {
+      const card = event.target.closest(".editor-profile");
+      if (card && window.matchMedia("(pointer:fine)").matches) {
+        const rect = card.getBoundingClientRect();
+        const nx = (event.clientX - rect.left) / rect.width;
+        const ny = (event.clientY - rect.top) / rect.height;
+        card.style.setProperty("--pa-card-rx", `${((.5 - ny) * 1.5).toFixed(2)}deg`);
+        card.style.setProperty("--pa-card-ry", `${((nx - .5) * 1.5).toFixed(2)}deg`);
+        card.style.setProperty("--pa-card-px", `${(nx * 100).toFixed(1)}%`);
+        card.style.setProperty("--pa-card-py", `${(ny * 100).toFixed(1)}%`);
+      }
+      if (!dragging) return;
+      event.preventDefault();
+      rail.scrollLeft = startScroll - (event.clientX - startX) * 1.15;
+    });
+    const stop = (event) => {
+      if (!dragging) return;
+      dragging = false;
+      rail.classList.remove("is-dragging");
+      try { rail.releasePointerCapture?.(event.pointerId); } catch (_) {}
+    };
+    rail.addEventListener("pointerup", stop);
+    rail.addEventListener("pointercancel", stop);
+    rail.addEventListener("pointerout", (event) => {
+      const card = event.target.closest?.(".editor-profile");
+      if (!card || card.contains(event.relatedTarget)) return;
+      ["--pa-card-rx","--pa-card-ry","--pa-card-px","--pa-card-py"].forEach((name) => card.style.removeProperty(name));
+    });
+  }
+
+  function initGlobalMotion() {
+    if (document.body.dataset.paGlobalMotion === "1") {
+      initGlobalMotionNodes(document);
+      initHorizontalEditorRail();
+      return;
+    }
+    document.body.dataset.paGlobalMotion = "1";
+    document.body.classList.add("pa-global-motion");
+
+    const progress = document.createElement("div");
+    progress.className = "pa-scroll-progress";
+    progress.setAttribute("aria-hidden", "true");
+    document.body.appendChild(progress);
+
+    const pointerField = document.createElement("div");
+    pointerField.className = "pa-global-pointer-field";
+    pointerField.setAttribute("aria-hidden", "true");
+    document.body.prepend(pointerField);
+
+    const header = $(".header");
+    const updateScroll = () => {
+      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      document.documentElement.style.setProperty("--pa-scroll-progress", Math.min(1, scrollY / max));
+      header?.classList.toggle("pa-scrolled", scrollY > 18);
+    };
+    updateScroll();
+    addEventListener("scroll", updateScroll, { passive: true });
+
+    if (window.matchMedia("(pointer:fine) and (prefers-reduced-motion:no-preference)").matches) {
+      let raf = 0;
+      addEventListener("pointermove", (event) => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          document.documentElement.style.setProperty("--pa-pointer-x", `${event.clientX}px`);
+          document.documentElement.style.setProperty("--pa-pointer-y", `${event.clientY}px`);
+        });
+      }, { passive: true });
+    }
+
+    initGlobalMotionNodes(document);
+    initHorizontalEditorRail();
+  }
+
   function boot() {
     authInitLoginPages();
     authInitRegisterPages();
@@ -2019,6 +2218,7 @@
     initNavigation();
     initEditorTools();
     initEditorPhotos();
+    initGlobalMotion();
     loadProfessionalDirectory();
     initCommonProfile();
     initEditProfile();
