@@ -1,3 +1,4 @@
+@import url("./v4-global-system.css?v=1");
 /* Pale Ascendancy V4.1 — Hyprland-inspired motion and non-card editorial layout */
 :root{
   --v41-spring:cubic-bezier(.16,1,.3,1);
