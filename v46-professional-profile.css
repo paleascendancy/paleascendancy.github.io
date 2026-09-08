@@ -1,0 +1,125 @@
+/* Pale Ascendancy V4.6 — perfil profissional, trilho e CTA */
+
+/* Foto do painel: a imagem real sempre vence o placeholder */
+#avatarImage:not([hidden]),
+#profileAppearanceImage:not([hidden]){
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+#avatarImage:not([hidden]) + #avatarInitial,
+#profileAppearanceImage:not([hidden]) + #profileAppearanceInitial{display:none!important}
+.editor-avatar-preview:has(#avatarImage:not([hidden])) #avatarInitial,
+.profile-appearance-avatar-frame:has(#profileAppearanceImage:not([hidden])) #profileAppearanceInitial{display:none!important}
+
+/* Trilho horizontal com scrollbar alinhada à linguagem visual do site */
+#editorsGrid.pa-personalized-rail{
+  scrollbar-width:thin!important;
+  scrollbar-color:#a66cff rgba(255,255,255,.055)!important;
+  padding-bottom:24px!important;
+}
+#editorsGrid.pa-personalized-rail::-webkit-scrollbar{height:7px!important}
+#editorsGrid.pa-personalized-rail::-webkit-scrollbar-track{
+  background:rgba(255,255,255,.05)!important;
+  border-radius:999px!important;
+}
+#editorsGrid.pa-personalized-rail::-webkit-scrollbar-thumb{
+  background:linear-gradient(90deg,#ef2855 0%,#a66cff 52%,#6bc8ff 100%)!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  border-radius:999px!important;
+  box-shadow:0 0 14px rgba(166,108,255,.34)!important;
+}
+
+/* Cada card mantém e evidencia a personalização escolhida pelo profissional */
+.editor-profile.pa-personalized-card.profile-card-editorial{
+  border-radius:5px!important;
+  border-left:2px solid rgba(239,40,85,.75)!important;
+}
+.editor-profile.pa-personalized-card.profile-card-glass{
+  border-radius:24px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.018))!important;
+  backdrop-filter:blur(18px) saturate(1.08)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.08)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 22px 70px rgba(0,0,0,.30)!important;
+}
+.editor-profile.pa-personalized-card.profile-card-frame{
+  border-radius:0!important;
+  clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)!important;
+  border-color:rgba(166,108,255,.34)!important;
+}
+.editor-profile.pa-personalized-card.profile-card-frame::before{
+  background:
+    linear-gradient(90deg,rgba(166,108,255,.10) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px)!important;
+  background-size:34px 34px!important;
+}
+.editor-profile.pa-personalized-card.profile-card-spotlight{
+  border-radius:16px 16px 46px 16px!important;
+  background:
+    radial-gradient(560px circle at 84% 4%,rgba(166,108,255,.20),transparent 42%),
+    radial-gradient(420px circle at 4% 94%,rgba(239,40,85,.10),transparent 48%),
+    #0d0d0f!important;
+  border-color:rgba(166,108,255,.28)!important;
+}
+
+/* CTA real em cada card, em vez de um link perdido no rodapé */
+.editor-profile .editor-footer{
+  margin-top:20px!important;
+  padding-top:16px!important;
+  border-top:1px solid rgba(255,255,255,.11)!important;
+}
+.editor-profile .professional-card-cta{
+  width:100%!important;
+  min-height:46px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  padding:12px 14px!important;
+  text-decoration:none!important;
+  font:700 .78rem/1.1 'Space Grotesk',system-ui,sans-serif!important;
+  letter-spacing:.02em!important;
+  color:#f4f1eb!important;
+  border:1px solid rgba(255,255,255,.15)!important;
+  background:rgba(255,255,255,.025)!important;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s ease,background .3s ease,box-shadow .3s ease!important;
+}
+.editor-profile .professional-card-cta::after{display:none!important}
+.editor-profile .professional-card-cta:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(255,255,255,.30)!important;
+  background:rgba(255,255,255,.055)!important;
+}
+.editor-profile .professional-card-cta-arrow{
+  font-size:1rem!important;
+  color:#a66cff!important;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1)!important;
+}
+.editor-profile .professional-card-cta:hover .professional-card-cta-arrow{transform:translate(3px,-3px)}
+
+.editor-profile.profile-card-editorial .professional-card-cta{border-radius:2px!important;border-left:2px solid #ef2855!important}
+.editor-profile.profile-card-glass .professional-card-cta{border-radius:14px!important;background:rgba(255,255,255,.05)!important;backdrop-filter:blur(10px)!important}
+.editor-profile.profile-card-frame .professional-card-cta{
+  border-radius:0!important;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)!important;
+  border-color:rgba(166,108,255,.38)!important;
+}
+.editor-profile.profile-card-spotlight .professional-card-cta{
+  border-radius:5px 5px 16px 5px!important;
+  background:linear-gradient(100deg,rgba(239,40,85,.08),rgba(166,108,255,.10))!important;
+  box-shadow:0 0 24px rgba(166,108,255,.08)!important;
+}
+
+@media(max-width:700px){
+  #editorsGrid.pa-personalized-rail{padding-bottom:20px!important}
+  #editorsGrid.pa-personalized-rail::-webkit-scrollbar{height:6px!important}
+  .editor-profile .professional-card-cta{min-height:44px!important;padding:11px 13px!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .editor-profile .professional-card-cta,
+  .editor-profile .professional-card-cta-arrow{transition:none!important;transform:none!important}
+}
