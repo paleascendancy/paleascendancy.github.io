@@ -407,8 +407,8 @@ footer{
 
 .editor-profile,
 .v3-editors-page .editor-profile{
-  --card-rx:calc(var(--pa-card-y,0) * -1.2deg);
-  --card-ry:calc(var(--pa-card-x,0) * 1.2deg);
+  --card-rx:var(--pa-card-rx,0deg);
+  --card-ry:var(--pa-card-ry,0deg);
   position:relative!important;
   isolation:isolate!important;
   flex:0 0 clamp(320px,31vw,390px)!important;
@@ -441,7 +441,7 @@ footer{
   pointer-events:none;
   background:
     linear-gradient(135deg,rgba(255,255,255,.045),transparent 28%),
-    radial-gradient(440px circle at calc((var(--pa-card-x,.5) + .5) * 100%) calc((var(--pa-card-y,.5) + .5) * 100%),rgba(166,108,255,.10),transparent 52%);
+    radial-gradient(440px circle at var(--pa-card-px,70%) var(--pa-card-py,18%),rgba(166,108,255,.10),transparent 52%);
   opacity:.82;
 }
 .editor-profile::after{
