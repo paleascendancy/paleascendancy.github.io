@@ -1,4 +1,5 @@
 @import url("./v4-editorial.css?v=1");
+@import url("./v4-hypr-motion.css?v=1");
 /* PALE ASCENDANCY V3 */
 :root{--v3-bg:#050914;--v3-panel:rgba(11,17,32,.72);--v3-panel-strong:#0c1424;--v3-line:rgba(255,255,255,.09);--v3-text:#f7f9ff;--v3-muted:#9da9bc;--v3-accent:#d91f47;--v3-accent-soft:rgba(217,31,71,.14)}
 body.v3-home,body.v3-editors-page,body.v3-profile-page{background:radial-gradient(circle at 18% 10%,rgba(217,31,71,.12),transparent 28rem),radial-gradient(circle at 86% 34%,rgba(67,92,255,.08),transparent 30rem),var(--v3-bg);color:var(--v3-text)}
