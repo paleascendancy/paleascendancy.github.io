@@ -2140,8 +2140,12 @@
       const card = event.target.closest(".editor-profile");
       if (card && window.matchMedia("(pointer:fine)").matches) {
         const rect = card.getBoundingClientRect();
-        card.style.setProperty("--pa-card-x", String((event.clientX - rect.left) / rect.width - .5));
-        card.style.setProperty("--pa-card-y", String((event.clientY - rect.top) / rect.height - .5));
+        const nx = (event.clientX - rect.left) / rect.width;
+        const ny = (event.clientY - rect.top) / rect.height;
+        card.style.setProperty("--pa-card-rx", `${((.5 - ny) * 1.5).toFixed(2)}deg`);
+        card.style.setProperty("--pa-card-ry", `${((nx - .5) * 1.5).toFixed(2)}deg`);
+        card.style.setProperty("--pa-card-px", `${(nx * 100).toFixed(1)}%`);
+        card.style.setProperty("--pa-card-py", `${(ny * 100).toFixed(1)}%`);
       }
       if (!dragging) return;
       event.preventDefault();
@@ -2155,8 +2159,10 @@
     };
     rail.addEventListener("pointerup", stop);
     rail.addEventListener("pointercancel", stop);
-    rail.addEventListener("pointerleave", (event) => {
-      event.target.closest?.(".editor-profile")?.style.removeProperty("--pa-card-x");
+    rail.addEventListener("pointerout", (event) => {
+      const card = event.target.closest?.(".editor-profile");
+      if (!card || card.contains(event.relatedTarget)) return;
+      ["--pa-card-rx","--pa-card-ry","--pa-card-px","--pa-card-py"].forEach((name) => card.style.removeProperty(name));
     });
   }
 
