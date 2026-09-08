@@ -1,0 +1,1 @@
+Root cause V4.5: initProfileAppearanceControls used the single-element helper $() and then called .forEach(), throwing before the panel could finish binding its profile customization/save flow. V4.5 adds an independent robust appearance controller and visible CSS variants.
