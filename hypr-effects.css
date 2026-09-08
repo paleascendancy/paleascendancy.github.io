@@ -1,0 +1,167 @@
+/* Pale Ascendancy — Hyprland-inspired motion layer
+   Original implementation: glass header, springy hover, scroll reveals,
+   ambient gradient orbs, subtle grid drift and pointer parallax.
+*/
+
+:root{
+  --hypr-motion-fast:180ms;
+  --hypr-motion-mid:420ms;
+  --hypr-motion-slow:900ms;
+  --hypr-spring:cubic-bezier(.2,.9,.2,1.08);
+  --hypr-ease:cubic-bezier(.22,.61,.36,1);
+  --hypr-glass:rgba(8,12,18,.58);
+  --hypr-line:rgba(255,255,255,.10);
+  --hypr-glow-a:rgba(201,47,82,.24);
+  --hypr-glow-b:rgba(113,90,171,.20);
+}
+
+html{scroll-behavior:smooth}
+body.hypr-motion-enabled{overflow-x:hidden}
+
+/* floating translucent header */
+body.hypr-motion-enabled .header{
+  top:10px;
+  left:50%;
+  width:min(1180px,calc(100% - 20px));
+  transform:translateX(-50%);
+  border:1px solid var(--hypr-line);
+  border-radius:22px;
+  background:var(--hypr-glass);
+  box-shadow:0 18px 50px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(18px) saturate(1.18);
+  -webkit-backdrop-filter:blur(18px) saturate(1.18);
+  transition:background var(--hypr-motion-mid) var(--hypr-ease),
+             box-shadow var(--hypr-motion-mid) var(--hypr-ease),
+             transform var(--hypr-motion-mid) var(--hypr-spring);
+}
+body.hypr-motion-enabled .header.hypr-scrolled{
+  background:rgba(7,10,15,.82);
+  box-shadow:0 22px 70px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+/* reveal on scroll */
+.hypr-reveal{
+  opacity:0;
+  transform:translate3d(0,26px,0) scale(.985);
+  filter:blur(6px);
+  transition:opacity var(--hypr-motion-slow) var(--hypr-ease),
+             transform var(--hypr-motion-slow) var(--hypr-spring),
+             filter var(--hypr-motion-mid) ease;
+  transition-delay:var(--hypr-delay,0ms);
+  will-change:transform,opacity,filter;
+}
+.hypr-reveal.hypr-visible{
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+  filter:blur(0);
+}
+
+/* spring cards and buttons */
+body.hypr-motion-enabled :is(.v3-process-card,.v3-audience-card,.showcase-card,.service-preview,.contact-panel,.primary-button,.secondary-button){
+  transition:transform var(--hypr-motion-mid) var(--hypr-spring),
+             border-color var(--hypr-motion-fast) ease,
+             box-shadow var(--hypr-motion-mid) ease,
+             background-color var(--hypr-motion-fast) ease;
+}
+body.hypr-motion-enabled :is(.v3-process-card,.v3-audience-card,.showcase-card):hover{
+  transform:translateY(-7px) scale(1.012);
+  box-shadow:0 26px 70px rgba(0,0,0,.26);
+  border-color:rgba(255,255,255,.18);
+}
+body.hypr-motion-enabled :is(.primary-button,.secondary-button):hover{
+  transform:translateY(-2px) scale(1.025);
+}
+body.hypr-motion-enabled :is(.primary-button,.secondary-button):active{
+  transform:translateY(0) scale(.975);
+  transition-duration:90ms;
+}
+
+/* animated underline similar to Hyprland's lively navigation */
+body.hypr-motion-enabled .nav a{position:relative}
+body.hypr-motion-enabled .nav a::after{
+  content:"";
+  position:absolute;
+  left:12%; right:12%; bottom:-5px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,#d8bd82 30%,#c92f52 75%,transparent);
+  transform:scaleX(0);
+  transform-origin:center;
+  opacity:.8;
+  transition:transform var(--hypr-motion-mid) var(--hypr-spring);
+}
+body.hypr-motion-enabled .nav a:hover::after,
+body.hypr-motion-enabled .nav a:focus-visible::after{transform:scaleX(1)}
+
+/* ambient mouse-reactive glow */
+.hypr-pointer-glow{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.58;
+  background:
+    radial-gradient(460px circle at var(--hypr-x,50%) var(--hypr-y,35%), rgba(201,47,82,.13), transparent 65%),
+    radial-gradient(700px circle at calc(var(--hypr-x,50%) + 18%) calc(var(--hypr-y,35%) + 16%), rgba(97,104,179,.08), transparent 70%);
+  transition:opacity .3s ease;
+}
+
+/* hero parallax */
+body.hypr-motion-enabled .hero-content,
+body.hypr-motion-enabled .hero-visual{
+  transform:translate3d(var(--hypr-parallax-x,0),var(--hypr-parallax-y,0),0);
+  transition:transform 140ms ease-out;
+}
+body.hypr-motion-enabled .hero-visual{transition-duration:190ms}
+
+/* soft "window pop" on hero device */
+body.hypr-motion-enabled .phone{
+  animation:hyprPhoneIn 850ms var(--hypr-spring) both;
+}
+@keyframes hyprPhoneIn{
+  0%{opacity:0;transform:translateY(32px) scale(.82) rotate(-2deg);filter:blur(8px)}
+  70%{opacity:1;transform:translateY(-3px) scale(1.02) rotate(.25deg);filter:blur(0)}
+  100%{opacity:1;transform:none;filter:blur(0)}
+}
+
+/* subtle animated edge glow */
+body.hypr-motion-enabled .hero-visualizer,
+body.hypr-motion-enabled .music-player{
+  position:relative;
+  isolation:isolate;
+}
+body.hypr-motion-enabled .hero-visualizer::after,
+body.hypr-motion-enabled .music-player::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  z-index:-1;
+  border-radius:inherit;
+  background:linear-gradient(120deg,transparent 10%,rgba(216,189,130,.28),rgba(201,47,82,.25),transparent 88%);
+  opacity:.32;
+  filter:blur(8px);
+  animation:hyprEdgePulse 5.5s ease-in-out infinite alternate;
+}
+@keyframes hyprEdgePulse{from{opacity:.18;transform:scale(.99)}to{opacity:.46;transform:scale(1.015)}}
+
+@media(max-width:820px){
+  body.hypr-motion-enabled .header{
+    top:6px;
+    width:calc(100% - 12px);
+    border-radius:18px;
+    backdrop-filter:blur(14px) saturate(1.1);
+    -webkit-backdrop-filter:blur(14px) saturate(1.1);
+  }
+  .hypr-pointer-glow{opacity:.30}
+  body.hypr-motion-enabled .hero-content,
+  body.hypr-motion-enabled .hero-visual{transform:none!important}
+  body.hypr-motion-enabled :is(.v3-process-card,.v3-audience-card,.showcase-card):hover{transform:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hypr-reveal{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+  body.hypr-motion-enabled .phone{animation:none!important}
+  body.hypr-motion-enabled *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .hypr-pointer-glow{display:none}
+}
