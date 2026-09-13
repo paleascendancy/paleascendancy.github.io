@@ -1,163 +1,91 @@
 (() => {
   'use strict';
 
-  function removeMusicUI() {
-    const audio = document.getElementById('musicAudio');
-    try { audio?.pause(); } catch (_) {}
+  const page = location.pathname.split('/').pop() || 'index.html';
 
-    [
-      '#musicPlayer', '#musicPanel', '#musicAudio',
-      '.music-player', '.music-library-panel', '.music-panel',
-      '.mobile-music-slot', '.music-library'
-    ].forEach(selector => {
-      document.querySelectorAll(selector).forEach(node => node.remove());
-    });
+  function appendStyle(href, key) {
+    if (document.querySelector(`link[data-pa-${key}]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset[`pa${key.replace(/-([a-z])/g,(_,c)=>c.toUpperCase()).replace(/^(.)/,m=>m.toUpperCase())}`] = '1';
+    link.setAttribute(`data-pa-${key}`, '1');
+    document.head.appendChild(link);
+  }
 
+  function appendScript(src, key) {
+    if (document.querySelector(`script[data-pa-${key}]`)) return;
+    const script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    script.setAttribute(`data-pa-${key}`, '1');
+    document.head.appendChild(script);
+  }
+
+  function removeLegacyMusic() {
+    try { ['pa_music_index','pa_music_time','pa_music_playing','pa_music_suggestions'].forEach(k => localStorage.removeItem(k)); } catch (_) {}
+    document.querySelectorAll('#musicPlayer,#musicPanel,#musicAudio,.music-player,.music-library-panel,.music-panel,.mobile-music-slot,.music-library').forEach(node => node.remove());
     document.querySelectorAll('audio').forEach(node => {
       if (node.id === 'musicAudio' || /music\//i.test(node.getAttribute('src') || '')) {
         try { node.pause(); } catch (_) {}
         node.remove();
       }
     });
-
-    try {
-      ['pa_music_index','pa_music_time','pa_music_playing','pa_music_suggestions']
-        .forEach(key => localStorage.removeItem(key));
-    } catch (_) {}
   }
 
-  const musicKillStyle = document.createElement('style');
-  musicKillStyle.dataset.paNoMusic = '1';
-  musicKillStyle.textContent = '#musicPlayer,#musicPanel,#musicAudio,.music-player,.music-library-panel,.music-panel,.mobile-music-slot,.music-library{display:none!important;visibility:hidden!important;pointer-events:none!important}';
-  document.head.appendChild(musicKillStyle);
-  removeMusicUI();
+  function bindMenu() {
+    const button = document.getElementById('menuButton');
+    const menu = document.getElementById('mobileMenu');
+    if (!button || !menu || button.dataset.paV5Menu === '1') return;
+    button.dataset.paV5Menu = '1';
 
-  const musicObserver = new MutationObserver(removeMusicUI);
-  musicObserver.observe(document.documentElement, { childList: true, subtree: true });
+    const setOpen = open => {
+      menu.classList.toggle('open', open);
+      menu.classList.toggle('active', open);
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      button.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+      document.body.classList.toggle('mobile-menu-open', open);
+    };
 
-  if (!document.querySelector('link[data-pa-theme-bridge]')) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'v3-theme-bridge.css?v=1';
-    link.dataset.paThemeBridge = '1';
-    document.head.appendChild(link);
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      setOpen(!(menu.classList.contains('open') || menu.classList.contains('active')));
+    });
+    menu.addEventListener('click', event => { if (event.target.closest('a')) setOpen(false); });
+    document.addEventListener('click', event => {
+      if (!menu.classList.contains('open') || event.target.closest('#menuButton,#mobileMenu')) return;
+      setOpen(false);
+    });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') setOpen(false); });
   }
 
-  if (!document.querySelector('link[data-pa-v43-stability]')) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'v43-stability.css?v=1';
-    link.dataset.paV43Stability = '1';
-    document.head.appendChild(link);
+  /* V5 vira a camada visual canônica. */
+  appendStyle('v47-unified-site.css?v=5', 'v5-unified');
+  appendScript('pa-runtime.js?v=1', 'v5-runtime');
+
+  /* Mantemos apenas patches que ainda contêm comportamento funcional real. */
+  appendStyle('v43-stability.css?v=2', 'v43-stability');
+  appendScript('v43-stability.js?v=2', 'v43-stability');
+
+  if (page === 'editor-painel.html') {
+    appendStyle('v44-avatar-fix.css?v=2', 'v44-avatar');
+    appendScript('v44-avatar-fix.js?v=2', 'v44-avatar');
+    appendStyle('v45-profile-appearance.css?v=3', 'v45-profile-appearance');
+    appendScript('v45-profile-appearance.js?v=3', 'v45-profile-appearance');
   }
 
-  if (!document.querySelector('script[data-pa-v43-stability]')) {
-    const script = document.createElement('script');
-    script.src = 'v43-stability.js?v=1';
-    script.defer = true;
-    script.dataset.paV43Stability = '1';
-    document.head.appendChild(script);
+  if (page === 'editor-perfil.html') appendStyle('v45-profile-appearance.css?v=3', 'v45-profile-appearance');
+
+  if (page === 'editor-painel.html' || page === 'editores.html') {
+    appendStyle('v46-professional-profile.css?v=2', 'v46-professional-profile');
+    appendScript('v46-professional-profile.js?v=2', 'v46-professional-profile');
   }
 
-  const currentPage = location.pathname.split('/').pop() || 'index.html';
-  if (currentPage === 'editor-painel.html') {
-    if (!document.querySelector('link[data-pa-v44-avatar]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'v44-avatar-fix.css?v=1';
-      link.dataset.paV44Avatar = '1';
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('script[data-pa-v44-avatar]')) {
-      const script = document.createElement('script');
-      script.src = 'v44-avatar-fix.js?v=1';
-      script.defer = true;
-      script.dataset.paV44Avatar = '1';
-      document.head.appendChild(script);
-    }
-    if (!document.querySelector('link[data-pa-v45-profile-appearance]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'v45-profile-appearance.css?v=2';
-      link.dataset.paV45ProfileAppearance = '1';
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('script[data-pa-v45-profile-appearance]')) {
-      const script = document.createElement('script');
-      script.src = 'v45-profile-appearance.js?v=2';
-      script.defer = true;
-      script.dataset.paV45ProfileAppearance = '1';
-      document.head.appendChild(script);
-    }
+  removeLegacyMusic();
+  bindMenu();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { removeLegacyMusic(); bindMenu(); }, { once:true });
   }
-
-  if (currentPage === 'editor-perfil.html') {
-    if (!document.querySelector('link[data-pa-v45-profile-appearance]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'v45-profile-appearance.css?v=2';
-      link.dataset.paV45ProfileAppearance = '1';
-      document.head.appendChild(link);
-    }
-  }
-
-  if (currentPage === 'editor-painel.html' || currentPage === 'editores.html') {
-    if (!document.querySelector('link[data-pa-v46-professional-profile]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'v46-professional-profile.css?v=1';
-      link.dataset.paV46ProfessionalProfile = '1';
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('script[data-pa-v46-professional-profile]')) {
-      const script = document.createElement('script');
-      script.src = 'v46-professional-profile.js?v=1';
-      script.defer = true;
-      script.dataset.paV46ProfessionalProfile = '1';
-      document.head.appendChild(script);
-    }
-  }
-
-  if (document.body.classList.contains('v3-home')) {
-    if (!document.querySelector('link[data-pa-mobile-reference]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'v3-mobile-reference.css?v=1';
-      link.dataset.paMobileReference = '1';
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('script[data-pa-mobile-reference]')) {
-      const script = document.createElement('script');
-      script.src = 'mobile-reference.js?v=2';
-      script.defer = true;
-      script.dataset.paMobileReference = '1';
-      document.head.appendChild(script);
-    }
-  }
-
-  document.addEventListener('click', (event) => {
-    if (event.defaultPrevented || event.button !== 0) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-
-    const target = event.target instanceof Element ? event.target : null;
-    const link = target?.closest('a[href]');
-    if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
-
-    const href = link.getAttribute('href') || '';
-    if (!href || /^(mailto:|tel:|javascript:)/i.test(href)) return;
-
-    let url;
-    try { url = new URL(href, location.href); } catch (_) { return; }
-    if (url.origin !== location.origin) return;
-
-    if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
-
-    const last = url.pathname.split('/').pop() || '';
-    const extension = last.includes('.') ? last.split('.').pop().toLowerCase() : '';
-    if (extension && !['html', 'htm'].includes(extension)) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    location.href = url.href;
-  }, true);
+  setTimeout(removeLegacyMusic, 400);
+  setTimeout(removeLegacyMusic, 1400);
 })();
