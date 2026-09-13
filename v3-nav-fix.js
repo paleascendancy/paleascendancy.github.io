@@ -81,6 +81,10 @@
     appendScript('v46-professional-profile.js?v=2', 'v46-professional-profile');
   }
 
+  /* V5.1: correções finais de responsividade/contraste devem vir depois dos patches legados. */
+  appendStyle('v51-mobile-hotfix.css?v=1', 'v51-mobile-hotfix');
+  appendScript('v51-hotfix.js?v=1', 'v51-hotfix');
+
   removeLegacyMusic();
   bindMenu();
   if (document.readyState === 'loading') {
