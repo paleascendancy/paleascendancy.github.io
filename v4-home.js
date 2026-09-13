@@ -1,19 +1,36 @@
 (() => {
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const nodes = [...document.querySelectorAll('[data-v4-reveal]')];
+  'use strict';
 
-  if (reduce || !('IntersectionObserver' in window)) {
-    nodes.forEach(node => node.classList.add('is-visible'));
-    return;
+  function forceHomeVisible() {
+    if (!document.body.classList.contains('v4-home')) return;
+
+    document.querySelectorAll('[data-v4-reveal]').forEach(node => {
+      node.classList.add('is-visible');
+      node.style.setProperty('opacity', '1', 'important');
+      node.style.setProperty('visibility', 'visible', 'important');
+      node.style.setProperty('transform', 'none', 'important');
+      node.style.setProperty('filter', 'none', 'important');
+      node.style.setProperty('clip-path', 'none', 'important');
+    });
   }
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
+  function boot() {
+    forceHomeVisible();
+    requestAnimationFrame(forceHomeVisible);
+    setTimeout(forceHomeVisible, 60);
+    setTimeout(forceHomeVisible, 250);
+  }
 
-  nodes.forEach(node => observer.observe(node));
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once:true });
+  } else {
+    boot();
+  }
+
+  /* Chrome/Android pode restaurar a página inteira pelo back-forward cache. */
+  window.addEventListener('pageshow', forceHomeVisible);
+  window.addEventListener('popstate', forceHomeVisible);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) forceHomeVisible();
+  });
 })();
