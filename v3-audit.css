@@ -1,10 +1,15 @@
-/* Pale Ascendancy V3 — authoritative repair layer */
-@import url("v3-premium-repair.css?v=1");
-
-:root{--pa-accent:#d91f47;--pa-bg:#07090d;--pa-text:#f5f7fa;--pa-muted:#9aa2ad;--pa-line:rgba(255,255,255,.10)}
-body[class*="v3-"]{background:#07090d!important;color:var(--pa-text)!important}
-body[class*="v3-"] .header{background:rgba(7,9,13,.94)!important;border-bottom:1px solid var(--pa-line)!important;box-shadow:none!important}
+/* Pale Ascendancy — fallback visual leve para páginas V3.
+   Mantém a paleta correta enquanto o design system global é inicializado. */
+:root{
+  --pa-accent:#4286cb;
+  --pa-bg:#03111d;
+  --pa-text:#f6f9fc;
+  --pa-muted:#93a9bc;
+  --pa-line:rgba(88,151,221,.20);
+}
+body[class*="v3-"]{background:var(--pa-bg)!important;color:var(--pa-text)!important}
+body[class*="v3-"] .header{background:rgba(3,17,29,.94)!important;border-bottom:1px solid var(--pa-line)!important;box-shadow:none!important}
 body[class*="v3-"] h1,body[class*="v3-"] h2,body[class*="v3-"] h3{color:var(--pa-text)}
 body[class*="v3-"] p{max-width:100%}
-body[class*="v3-"] .primary-button{background:var(--pa-accent)!important;border-color:var(--pa-accent)!important;color:#fff!important;box-shadow:none!important}
-body[class*="v3-"] .secondary-button{background:rgba(255,255,255,.02)!important;border-color:var(--pa-line)!important;color:#f5f7fa!important}
+body[class*="v3-"] .primary-button{background:linear-gradient(135deg,#5897dd,#2c76b8)!important;border-color:#4286cb!important;color:#fff!important;box-shadow:none!important}
+body[class*="v3-"] .secondary-button{background:rgba(88,151,221,.06)!important;border-color:var(--pa-line)!important;color:var(--pa-text)!important}
