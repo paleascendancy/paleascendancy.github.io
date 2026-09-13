@@ -1,0 +1,137 @@
+/* Pale Ascendancy V5.1 — hotfix mobile, contraste e compatibilidade */
+
+/* A Home nunca pode voltar do bfcache invisível. */
+.v4-home [data-v4-reveal]{
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+  filter:none!important;
+  clip-path:none!important;
+}
+
+/* Contraste de ações: texto sempre legível sobre os fundos atuais. */
+:is(.primary-button,.secondary-button,.account-register,.account-login,.file-button,.filter-button,.card-link,.professional-card-cta,.portfolio-reel-link-button){
+  -webkit-text-fill-color:currentColor!important;
+  text-shadow:none!important;
+}
+:is(.primary-button,.account-register){color:#fff!important}
+:is(.secondary-button,.account-login,.file-button,.card-link,.professional-card-cta,.portfolio-reel-link-button){
+  color:#f6f9fc!important;
+  border-color:rgba(88,151,221,.34)!important;
+  background:rgba(88,151,221,.08)!important;
+}
+.filter-button.active{color:#fff!important;background:#2c76b8!important;border-color:#4286cb!important}
+
+/* Remove resíduos rosa/roxo da personalização sem remover a personalidade do card. */
+.status-dot{background:#5897dd!important;box-shadow:0 0 14px rgba(88,151,221,.62)!important}
+#editorsGrid.pa-personalized-rail{scrollbar-color:#4286cb rgba(88,151,221,.08)!important}
+#editorsGrid.pa-personalized-rail::-webkit-scrollbar-track{background:rgba(88,151,221,.08)!important}
+#editorsGrid.pa-personalized-rail::-webkit-scrollbar-thumb{
+  background:linear-gradient(90deg,#5897dd,#2c76b8,#005493)!important;
+  border-color:rgba(88,151,221,.24)!important;
+  box-shadow:0 0 12px rgba(66,134,203,.28)!important;
+}
+.editor-profile.pa-personalized-card.profile-card-editorial{border-left-color:#4286cb!important}
+.editor-profile.pa-personalized-card.profile-card-glass{background:linear-gradient(145deg,rgba(88,151,221,.10),rgba(6,26,43,.72))!important}
+.editor-profile.pa-personalized-card.profile-card-frame{border-color:rgba(88,151,221,.38)!important}
+.editor-profile.pa-personalized-card.profile-card-frame::before{
+  background:linear-gradient(90deg,rgba(88,151,221,.09) 1px,transparent 1px),linear-gradient(rgba(88,151,221,.04) 1px,transparent 1px)!important;
+  background-size:34px 34px!important;
+}
+.editor-profile.pa-personalized-card.profile-card-spotlight{
+  background:radial-gradient(520px circle at 84% 4%,rgba(88,151,221,.18),transparent 42%),radial-gradient(400px circle at 4% 94%,rgba(0,84,147,.14),transparent 48%),#061a2b!important;
+  border-color:rgba(88,151,221,.34)!important;
+}
+.editor-profile.profile-card-editorial .professional-card-cta{border-left-color:#4286cb!important}
+.editor-profile.profile-card-frame .professional-card-cta{border-color:rgba(88,151,221,.42)!important}
+.editor-profile.profile-card-spotlight .professional-card-cta{background:linear-gradient(100deg,rgba(88,151,221,.10),rgba(0,84,147,.12))!important;box-shadow:0 0 20px rgba(66,134,203,.10)!important}
+.editor-profile .professional-card-cta-arrow{color:#5897dd!important}
+
+@media(max-width:720px){
+  /* Profissionais: cards realmente compactos e navegáveis por swipe. */
+  .v3-editors-page #editorsGrid{
+    display:flex!important;
+    grid-template-columns:none!important;
+    gap:11px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    margin-inline:-18px!important;
+    padding:2px 18px 14px!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-left:18px!important;
+    overscroll-behavior-x:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  .v3-editors-page .editor-profile{
+    flex:0 0 min(76vw,272px)!important;
+    width:min(76vw,272px)!important;
+    min-width:min(76vw,272px)!important;
+    min-height:0!important;
+    height:326px!important;
+    padding:15px 14px 61px!important;
+    border-radius:16px!important;
+    scroll-snap-align:start!important;
+  }
+  .v3-editors-page .editor-profile .editor-status{margin:0 0 11px!important;font-size:.72rem!important}
+  .v3-editors-page .editor-profile .editor-avatar-frame{width:64px!important;height:64px!important;margin:0 0 11px!important;border-radius:16px!important}
+  .v3-editors-page .editor-profile h2{margin:0 0 4px!important;font-size:1.42rem!important;line-height:1!important;letter-spacing:-.04em!important}
+  .v3-editors-page .editor-profile .editor-role{font-size:.68rem!important;letter-spacing:.11em!important}
+  .v3-editors-page .editor-profile .editor-description{
+    margin:9px 0!important;
+    font-size:.76rem!important;
+    line-height:1.4!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    overflow:hidden!important;
+  }
+  .v3-editors-page .editor-profile .editor-tags{display:flex!important;flex-wrap:nowrap!important;gap:5px!important;overflow:hidden!important;margin-top:8px!important}
+  .v3-editors-page .editor-profile .editor-tag{flex:0 0 auto!important;padding:5px 8px!important;font-size:.66rem!important}
+  .v3-editors-page .editor-profile .editor-footer{left:14px!important;right:14px!important;bottom:12px!important;padding-top:9px!important}
+  .v3-editors-page .editor-profile .professional-card-cta{min-height:38px!important;padding:8px 10px!important;font-size:.7rem!important;border-radius:10px!important}
+
+  /* Portfólios: deixa de ser um feed vertical gigante e vira uma rail compacta. */
+  .professional-reels{margin-top:34px!important;padding-top:24px!important}
+  .professional-reels-heading{margin-bottom:12px!important}
+  .professional-reels-heading h2{font-size:clamp(1.5rem,8vw,1.9rem)!important;line-height:1.05!important}
+  .portfolio-reels{
+    display:flex!important;
+    grid-template-columns:none!important;
+    width:auto!important;
+    max-height:none!important;
+    gap:11px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    margin-inline:-18px!important;
+    padding:4px 18px 14px!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-left:18px!important;
+    scrollbar-width:none!important;
+    overscroll-behavior-x:contain!important;
+  }
+  .portfolio-reels::-webkit-scrollbar{display:none!important}
+  .portfolio-reel-card{
+    flex:0 0 min(74vw,264px)!important;
+    width:min(74vw,264px)!important;
+    max-width:264px!important;
+    min-width:min(74vw,264px)!important;
+    justify-self:auto!important;
+    scroll-snap-align:start!important;
+    border-radius:15px!important;
+  }
+  .portfolio-reel-visual{aspect-ratio:16/11!important;max-height:182px!important;min-height:0!important}
+  .portfolio-reel-overlay{left:11px!important;right:11px!important;bottom:10px!important;gap:2px!important}
+  .portfolio-reel-overlay span{font-size:.56rem!important}
+  .portfolio-reel-overlay strong{font-size:.92rem!important}
+  .portfolio-reel-play{top:9px!important;right:9px!important;width:30px!important;height:30px!important}
+  .portfolio-reel-copy{padding:10px 11px 12px!important;gap:2px!important}
+  .portfolio-reel-copy strong{font-size:.82rem!important}
+  .portfolio-reel-copy span,.portfolio-reel-copy p{font-size:.61rem!important}
+  .portfolio-reel-copy p{margin:4px 0!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+  .portfolio-reel-link-button{margin-top:5px!important;padding:7px 9px!important;font-size:.61rem!important;border-radius:9px!important}
+}
+
+@media(max-width:380px){
+  .v3-editors-page .editor-profile{flex-basis:78vw!important;width:78vw!important;min-width:78vw!important}
+  .portfolio-reel-card{flex-basis:76vw!important;width:76vw!important;min-width:76vw!important}
+}
