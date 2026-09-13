@@ -59,6 +59,42 @@
     document.addEventListener('keydown', event => { if (event.key === 'Escape') setOpen(false); });
   }
 
+  /*
+   * O script legado ainda possui navegação parcial (SPA). Isso quebra páginas que
+   * dependem de JS/CSS específicos, principalmente a Home. Links entre arquivos
+   * HTML voltam a usar navegação nativa completa; âncoras da página continuam suaves.
+   */
+  function enforceFullPageNavigation() {
+    if (window.__PA_FULL_PAGE_NAV__) return;
+    window.__PA_FULL_PAGE_NAV__ = true;
+
+    document.addEventListener('click', event => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest('a[href]');
+      if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+
+      const href = link.getAttribute('href') || '';
+      if (!href || href.startsWith('#') || /^(mailto:|tel:|javascript:)/i.test(href)) return;
+
+      let url;
+      try { url = new URL(href, location.href); } catch (_) { return; }
+      if (url.origin !== location.origin) return;
+
+      if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
+
+      const last = url.pathname.split('/').pop() || '';
+      const ext = last.includes('.') ? last.split('.').pop().toLowerCase() : '';
+      if (ext && !['html','htm'].includes(ext)) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      location.assign(url.href);
+    }, true);
+  }
+
   /* V5 vira a camada visual canônica. */
   appendStyle('v47-unified-site.css?v=5', 'v5-unified');
   appendScript('pa-runtime.js?v=1', 'v5-runtime');
@@ -81,14 +117,19 @@
     appendScript('v46-professional-profile.js?v=2', 'v46-professional-profile');
   }
 
-  /* V5.2: camada final mobile/contraste/menu, sempre após os patches legados. */
+  /* V5.3: camada final mobile/contraste/menu, sempre após os patches legados. */
   appendStyle('v51-mobile-hotfix.css?v=2', 'v51-mobile-hotfix');
   appendScript('v51-hotfix.js?v=2', 'v51-hotfix');
 
   removeLegacyMusic();
+  enforceFullPageNavigation();
   bindMenu();
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { removeLegacyMusic(); bindMenu(); }, { once:true });
+    document.addEventListener('DOMContentLoaded', () => {
+      removeLegacyMusic();
+      enforceFullPageNavigation();
+      bindMenu();
+    }, { once:true });
   }
   setTimeout(removeLegacyMusic, 400);
   setTimeout(removeLegacyMusic, 1400);
